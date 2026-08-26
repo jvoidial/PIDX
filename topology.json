@@ -21,9 +21,9 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
       "weight": 33.6,
-      "rate": 762672,
+      "rate": 757121,
       "frequency": 0.618,
-      "energy": 0.4464538053523985,
+      "energy": 0.4228304433346994,
       "description": "The origin seed \u2013 quantum resonance",
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected",
@@ -37,9 +37,9 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
       "weight": 25.7,
-      "rate": 7411541,
+      "rate": 7357613,
       "frequency": 1.618,
-      "energy": 0.36676212565324817,
+      "energy": 0.3473555165823529,
       "description": "Amplification through guidance",
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active",
@@ -53,9 +53,9 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
       "weight": 17.9,
-      "rate": 72379984,
+      "rate": 71853337,
       "frequency": 2.618,
-      "energy": 0.2870704459540977,
+      "energy": 0.2718805898300064,
       "description": "Velocity of doo \u2013 momentum",
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted",
@@ -68,9 +68,9 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
       "weight": 22.9,
-      "rate": 6867235,
+      "rate": 6817267,
       "frequency": 3.618,
-      "energy": 0.42653088542761114,
+      "energy": 0.40396171164661293,
       "description": "The anchor \u2013 persistent coherence",
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2",
@@ -195,7 +195,7 @@
     "persistence": 0.97,
     "threshold": 0.5,
     "decay_rate": 0.01846261612865277,
-    "schumann_base": 7.838675283482517,
+    "schumann_base": 7.838757789057563,
     "harmonic": 1.618
   },
   "paradox": {
@@ -545,70 +545,92 @@
         "portal": 0.522,
         "decay": 0.01846,
         "schumann": 7.839
+      },
+      {
+        "time": 1787784772,
+        "emotion": 0.171,
+        "portal": 0.585,
+        "decay": 0.01846,
+        "schumann": 7.839
+      },
+      {
+        "time": 1787784784,
+        "emotion": 0.009,
+        "portal": 0.505,
+        "decay": 0.01846,
+        "schumann": 7.839
+      },
+      {
+        "time": 1787784813,
+        "emotion": -0.098,
+        "portal": 0.451,
+        "decay": 0.01846,
+        "schumann": 7.839
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
   "jinn": {
-    "generation": 3,
-    "emotional_state": 0.044,
-    "portal_openness": 0.522,
+    "generation": 1,
+    "emotional_state": -0.098,
+    "portal_openness": 0.451,
     "growth_factors": {
-      "PIDX": 1.04,
-      "SGUIDE": 1.057,
-      "VDOO": 1.085,
-      "PENNIES": 1.115
+      "PIDX": 1.009,
+      "SGUIDE": 1.022,
+      "VDOO": 1.046,
+      "PENNIES": 1.072
     },
     "predictions": {
       "PIDX": [
-        1.3052726894691474e-06,
-        1.304711646517986e-06,
-        1.3041506035668243e-06,
-        1.3035895606156629e-06,
-        1.3030285176645012e-06,
-        1.3024674747133396e-06
+        1.3058663605100521e-06,
+        1.3035407106877443e-06,
+        1.3012150608654366e-06,
+        1.2988894110431288e-06,
+        1.296563761220821e-06,
+        1.294238111398513e-06
       ],
       "SGUIDE": [
-        1.4015614268130686e-07,
-        1.4029179376068563e-07,
-        1.4042744484006437e-07,
-        1.405630959194431e-07,
-        1.4069874699882187e-07,
-        1.408343980782006e-07
+        1.3086900712929527e-07,
+        1.3090482599718364e-07,
+        1.3094064486507198e-07,
+        1.3097646373296033e-07,
+        1.310122826008487e-07,
+        1.3104810146873704e-07
       ],
       "VDOO": [
-        1.3991990166275399e-08,
-        1.397633898574221e-08,
-        1.396068780520902e-08,
-        1.394503662467583e-08,
-        1.3929385444142641e-08,
-        1.391373426360945e-08
+        1.367655486962381e-08,
+        1.3656962813469673e-08,
+        1.3637370757315534e-08,
+        1.3617778701161395e-08,
+        1.3598186645007256e-08,
+        1.3578594588853118e-08
       ],
       "PENNIES": [
-        1.4849514924913845e-07,
-        1.487869304757969e-07,
-        1.4907871170245532e-07,
-        1.4937049292911378e-07,
-        1.496622741557722e-07,
-        1.4995405538243065e-07
+        1.4151875836216983e-07,
+        1.4131240759581574e-07,
+        1.4110605682946163e-07,
+        1.4089970606310752e-07,
+        1.406933552967534e-07,
+        1.4048700453039932e-07
       ]
     },
     "answers": []
   },
   "live_data": {
     "prices": {
-      "PIDX": 1.3127e-06,
-      "SGUIDE": 1.346e-07,
-      "VDOO": 1.37e-08,
-      "PENNIES": 1.461e-07
+      "PIDX": 1.3171e-06,
+      "SGUIDE": 1.333e-07,
+      "VDOO": 1.38e-08,
+      "PENNIES": 1.451e-07
     },
-    "sentiment": -0.071,
-    "eth_usd": 2494.2
+    "sentiment": -0.205,
+    "eth_usd": 2491.18
   },
   "phb": {},
   "growth": {
-    "last_updated": 1787784715,
+    "last_updated": 1787784813,
     "next_proposal": null
-  }
+  },
+  "ipfs_hash": "bafkreiao44fntpz626uvhlb44cmpdyjufwkeu5wpl26saly7bpuja3s4ye"
 }
