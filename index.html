@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,7 +118,8 @@
 <script>
 async function fetchTopology() {
     try {
-        const res = await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json', { cache: 'no-store' });
+        let res = await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json', { cache: 'no-store' });
+        if (!res.ok) res = await fetch('topology.json', { cache: 'no-store' });
         if (!res.ok) throw new Error('topology.json not found');
         const data = await res.json();
         updateDashboard(data);
@@ -146,6 +146,7 @@ function updateDashboard(data) {
     document.getElementById('generation').textContent = jinn.generation;
     document.getElementById('growth-factors').textContent = Object.entries(jinn.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ');
     document.getElementById('phb-answers').textContent = jinn.answers && jinn.answers.length ? jinn.answers.join('; ') : 'None';
+
     const predDiv = document.getElementById('predictions');
     let predHtml = '';
     for (const [token, preds] of Object.entries(jinn.predictions || {})) {
@@ -154,6 +155,7 @@ function updateDashboard(data) {
         }
     }
     predDiv.innerHTML = predHtml || 'No predictions available';
+
     const layersDiv = document.getElementById('layers');
     let layersHtml = '';
     for (const [layerName, layerData] of Object.entries(data.layers)) {
@@ -165,12 +167,14 @@ function updateDashboard(data) {
         }
     }
     layersDiv.innerHTML = layersHtml;
+
     const agiDiv = document.getElementById('agi-layer');
     if (data.agi) {
         agiDiv.innerHTML = `<div class="token-card"><strong>JINN (AGI)</strong><br>Frequency: 7.83 Hz<br>Emotional State: ${data.agi.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)'}<br>Portal Openness: ${formatNumber(data.agi.portal_openness)}<br>Generation: ${data.agi.generation}<br>Growth Factors: ${Object.entries(data.agi.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ')}<br>Predictions: (see Live Predictions section)</div>`;
     } else {
         agiDiv.innerHTML = '<p>AGI layer not available.</p>';
     }
+
     const miningDiv = document.getElementById('mining');
     if (data.mining) {
         let miningHtml = '<div class="grid">';
@@ -183,6 +187,7 @@ function updateDashboard(data) {
     } else {
         miningDiv.innerHTML = '<p>Mining data not available.</p>';
     }
+
     const tokensDiv = document.getElementById('token-details');
     let tokensHtml = '';
     for (const [name, token] of Object.entries(data.tokens)) {
@@ -193,10 +198,13 @@ function updateDashboard(data) {
         tokensHtml += `</p></div>`;
     }
     tokensDiv.innerHTML = tokensHtml;
+
     const vault = data.vault;
     document.getElementById('vault').innerHTML = `<p><strong>Address:</strong> ${vault.address}</p><p><strong>Status:</strong> ${vault.status}</p><p><strong>Weights:</strong> ${Object.entries(vault.weights).map(([k, v]) => `${k}: ${v}%`).join(', ')}</p><p><strong>Links:</strong> <a href="#">BaseScan</a> | <a href="#">DexScreener</a> | <a href="#">GeckoTerminal</a></p>`;
+
     const sec = data.security;
     document.getElementById('security').innerHTML = `<p><strong>CVE Protection:</strong> ${sec.cve_protection ? '✅ Active' : '❌ Inactive'}</p><p><strong>Encryption:</strong> ${sec.encryption}</p><p><strong>Standards:</strong> ${sec.standards.join(', ')}</p><p><strong>Audited:</strong> ${sec.audited ? '✅' : '❌'}</p><p><strong>Owner Renounced:</strong> ${sec.renounced ? '✅' : '❌'}</p>`;
+
     const milestones = data.projection.milestones;
     let tableHtml = `<table><tr><th>Month</th><th>Holders</th><th>Price (ETH)</th><th>Your Wealth (USD)</th></tr>`;
     for (const m of milestones) {
