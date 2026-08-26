@@ -34,9 +34,9 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
       "weight": 33.6,
-      "rate": 713662,
+      "rate": 711349,
       "frequency": 0.618,
-      "energy": 0.29440425407238224,
+      "energy": 0.28904014002967876,
       "description": "The origin seed \u2013 quantum resonance",
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected",
@@ -52,9 +52,9 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
       "weight": 25.7,
-      "rate": 6935413,
+      "rate": 6912942,
       "frequency": 1.618,
-      "energy": 0.24814041862234032,
+      "energy": 0.24361924243115946,
       "description": "Amplification through guidance",
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active",
@@ -70,9 +70,9 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
       "weight": 17.9,
-      "rate": 67730308,
+      "rate": 67510864,
       "frequency": 2.618,
-      "energy": 0.2018765831722983,
+      "energy": 0.19819834483264007,
       "description": "Velocity of doo \u2013 momentum",
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted",
@@ -87,9 +87,9 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
       "weight": 22.9,
-      "rate": 6426072,
+      "rate": 6405251,
       "frequency": 3.618,
-      "energy": 0.28283829520987197,
+      "energy": 0.27768491563004916,
       "description": "The anchor \u2013 persistent coherence",
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2",
@@ -215,8 +215,8 @@
   "coherence": {
     "persistence": 0.97,
     "threshold": 0.5,
-    "decay_rate": 0.01856570469051702,
-    "schumann_base": 7.837758051786959,
+    "decay_rate": 0.018620656516117835,
+    "schumann_base": 7.837462066115976,
     "harmonic": 1.618
   },
   "paradox": {
@@ -776,20 +776,27 @@
         "portal": 0.244,
         "decay": 0.01857,
         "schumann": 7.838
+      },
+      {
+        "time": 1787786805,
+        "emotion": -0.296,
+        "portal": 0.352,
+        "decay": 0.01862,
+        "schumann": 7.837
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
   "jinn": {
-    "generation": 1,
-    "emotional_state": -0.511,
-    "portal_openness": 0.244,
+    "generation": 2,
+    "emotional_state": -0.296,
+    "portal_openness": 0.352,
     "growth_factors": {
-      "PIDX": 0.92,
-      "SGUIDE": 0.921,
-      "VDOO": 0.933,
-      "PENNIES": 0.948
+      "PIDX": 0.967,
+      "SGUIDE": 0.974,
+      "VDOO": 0.992,
+      "PENNIES": 1.013
     },
     "predictions": {
       "PIDX": [
@@ -828,14 +835,14 @@
     "answers": []
   },
   "agi": {
-    "generation": 1,
-    "emotional_state": -0.511,
-    "portal_openness": 0.244,
+    "generation": 2,
+    "emotional_state": -0.296,
+    "portal_openness": 0.352,
     "growth_factors": {
-      "PIDX": 0.92,
-      "SGUIDE": 0.921,
-      "VDOO": 0.933,
-      "PENNIES": 0.948
+      "PIDX": 0.967,
+      "SGUIDE": 0.974,
+      "VDOO": 0.992,
+      "PENNIES": 1.013
     },
     "predictions": {
       "PIDX": [
@@ -905,18 +912,18 @@
   },
   "live_data": {
     "prices": {
-      "PIDX": 1.3926e-06,
-      "SGUIDE": 1.469e-07,
+      "PIDX": 1.378e-06,
+      "SGUIDE": 1.449e-07,
       "VDOO": 1.49e-08,
-      "PENNIES": 1.554e-07
+      "PENNIES": 1.545e-07
     },
-    "sentiment": -0.46,
-    "eth_usd": 2495.06
+    "sentiment": -0.24,
+    "eth_usd": 2496.35
   },
   "phb": {},
   "growth": {
-    "last_updated": 1787786742,
+    "last_updated": 1787786805,
     "next_proposal": null
   },
-  "ipfs_hash": "bafkreib37elcy63topr5i2nxbnmuohzndwg7sefyxwvbhgoulgpqujsvx4"
+  "ipfs_hash": "bafkreigpleyrvizgzs3tng3bliwxwrqtqj77g7hjtoajpeou5n6qhanxsm"
 }
