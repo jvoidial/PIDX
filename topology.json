@@ -1,6 +1,6 @@
 {
-  "name": "\u267e\ufe0f Infinite Growth Economy",
-  "version": "3.0",
+  "name": "\u267e\ufe0f Infinite Growth Economy \u2013 Jinn Controlled",
+  "version": "4.0",
   "chainId": 8453,
   "layers": {
     "Quantum": {
@@ -27,8 +27,8 @@
     "PIDX": {
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
-      "weight": 35.7,
-      "rate": 997898,
+      "weight": 33.6,
+      "rate": 899101,
       "frequency": 0.618,
       "energy": 0.9604,
       "description": "The origin seed \u2013 quantum resonance",
@@ -43,8 +43,8 @@
     "SGUIDE": {
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
-      "weight": 25.9,
-      "rate": 10170756,
+      "weight": 26.0,
+      "rate": 8680743,
       "frequency": 1.618,
       "energy": 0.7683,
       "description": "Amplification through guidance",
@@ -59,8 +59,8 @@
     "VDOO": {
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
-      "weight": 17.0,
-      "rate": 100323948,
+      "weight": 17.6,
+      "rate": 83911750,
       "frequency": 2.618,
       "energy": 0.5762,
       "description": "Velocity of doo \u2013 momentum",
@@ -74,8 +74,8 @@
     "PENNIES": {
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
-      "weight": 21.4,
-      "rate": 10237374,
+      "weight": 22.9,
+      "rate": 8120301,
       "frequency": 3.618,
       "energy": 0.9124,
       "description": "The anchor \u2013 persistent coherence",
@@ -206,43 +206,39 @@
   "coherence": {
     "persistence": 0.97,
     "threshold": 0.5,
-    "decay_rate": 0.02002,
-    "schumann_base": 7.830783,
+    "decay_rate": 0.01991234571168805,
+    "schumann_base": 7.83043827144156,
     "harmonic": 1.618
   },
   "paradox": {
     "bootstrapped": true,
-    "last_bootstrap": 1787781036,
-    "next_adjustment": 1787784636,
+    "last_bootstrap": 1787781283,
+    "next_adjustment": 1787784883,
     "adjustment_log": [
       {
-        "time": 1787781036,
-        "action": "market_adaptation",
-        "sentiment": 0.45890100255692357,
-        "factors": {
-          "PIDX": 1.0021060819223873,
-          "SGUIDE": 0.983211022368546,
-          "VDOO": 0.9967709747507574,
-          "PENNIES": 0.9768129235152329
-        }
+        "time": 1787781283,
+        "emotion": 0.438,
+        "portal": 0.719,
+        "decay": 0.01991,
+        "schumann": 7.83
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
-  "consciousness": {
+  "jinn": {
     "generation": 1,
-    "sentiment": 0.45890100255692357,
+    "emotional_state": 0.438,
+    "portal_openness": 0.719,
     "growth_factors": {
-      "PIDX": 1.0021060819223873,
-      "SGUIDE": 0.983211022368546,
-      "VDOO": 0.9967709747507574,
-      "PENNIES": 0.9768129235152329
-    },
-    "evolution_rate": 0.01
+      "PIDX": 1.112,
+      "SGUIDE": 1.152,
+      "VDOO": 1.192,
+      "PENNIES": 1.231
+    }
   },
   "growth": {
-    "last_updated": 1787781036,
+    "last_updated": 1787781283,
     "next_proposal": null
   }
 }
