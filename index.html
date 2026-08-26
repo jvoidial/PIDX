@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,6 +85,11 @@
     </div>
 
     <div class="card">
+        <h2 class="section-title">Mining Operations</h2>
+        <div id="mining"></div>
+    </div>
+
+    <div class="card">
         <h2 class="section-title">Token Details</h2>
         <div id="token-details"></div>
     </div>
@@ -113,11 +119,7 @@
 <script>
 async function fetchTopology() {
     try {
-        // Try absolute URL first, then fallback to relative
-        let res = await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json', { cache: 'no-store' });
-        if (!res.ok) {
-            res = await fetch('topology.json', { cache: 'no-store' });
-        }
+        const res = await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json', { cache: 'no-store' });
         if (!res.ok) throw new Error('topology.json not found');
         const data = await res.json();
         updateDashboard(data);
@@ -126,10 +128,8 @@ async function fetchTopology() {
         document.getElementById('predictions').textContent = 'Unable to load live data. Is the engine running?';
     }
 }
-
 function formatNumber(n, decimals = 2) { return Number(n).toFixed(decimals); }
 function scientificNotation(value) { return Number(value).toExponential(2); }
-
 function updateDashboard(data) {
     document.getElementById('eth-usd').textContent = formatNumber(data.live_data.eth_usd);
     document.getElementById('sentiment').textContent = formatNumber(data.live_data.sentiment);
@@ -146,7 +146,6 @@ function updateDashboard(data) {
     document.getElementById('generation').textContent = jinn.generation;
     document.getElementById('growth-factors').textContent = Object.entries(jinn.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ');
     document.getElementById('phb-answers').textContent = jinn.answers && jinn.answers.length ? jinn.answers.join('; ') : 'None';
-
     const predDiv = document.getElementById('predictions');
     let predHtml = '';
     for (const [token, preds] of Object.entries(jinn.predictions || {})) {
@@ -155,7 +154,6 @@ function updateDashboard(data) {
         }
     }
     predDiv.innerHTML = predHtml || 'No predictions available';
-
     const layersDiv = document.getElementById('layers');
     let layersHtml = '';
     for (const [layerName, layerData] of Object.entries(data.layers)) {
@@ -167,77 +165,47 @@ function updateDashboard(data) {
         }
     }
     layersDiv.innerHTML = layersHtml;
-
     const agiDiv = document.getElementById('agi-layer');
     if (data.agi) {
-        agiDiv.innerHTML = `
-            <div class="token-card">
-                <strong>JINN (AGI)</strong><br>
-                Frequency: 7.83 Hz<br>
-                Emotional State: ${data.agi.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)'}<br>
-                Portal Openness: ${formatNumber(data.agi.portal_openness)}<br>
-                Generation: ${data.agi.generation}<br>
-                Growth Factors: ${Object.entries(data.agi.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ')}<br>
-                Predictions: (see Live Predictions section)
-            </div>
-        `;
+        agiDiv.innerHTML = `<div class="token-card"><strong>JINN (AGI)</strong><br>Frequency: 7.83 Hz<br>Emotional State: ${data.agi.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)'}<br>Portal Openness: ${formatNumber(data.agi.portal_openness)}<br>Generation: ${data.agi.generation}<br>Growth Factors: ${Object.entries(data.agi.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ')}<br>Predictions: (see Live Predictions section)</div>`;
     } else {
         agiDiv.innerHTML = '<p>AGI layer not available.</p>';
     }
-
+    const miningDiv = document.getElementById('mining');
+    if (data.mining) {
+        let miningHtml = '<div class="grid">';
+        const icons = { bitcoin_mining: '₿', asteroid_mining: '☄️', auto_bot_mining: '🤖' };
+        for (const [key, minfo] of Object.entries(data.mining)) {
+            miningHtml += `<div class="token-card"><strong>${icons[key] || ''} ${key.replace(/_/g, ' ').toUpperCase()}</strong><br>Status: ${minfo.status}<br>${key === 'bitcoin_mining' ? `Hash Rate: ${minfo.hash_rate}<br>Reward: ${minfo.reward}` : ''}${key === 'asteroid_mining' ? `Power: ${minfo.power}<br>Reward: ${minfo.reward}` : ''}${key === 'auto_bot_mining' ? `Active Bots: ${minfo.bots}<br>Reward: ${minfo.reward}` : ''}<br>Energy: ${formatNumber(minfo.energy * 100)}%</div>`;
+        }
+        miningHtml += '</div>';
+        miningDiv.innerHTML = miningHtml;
+    } else {
+        miningDiv.innerHTML = '<p>Mining data not available.</p>';
+    }
     const tokensDiv = document.getElementById('token-details');
     let tokensHtml = '';
     for (const [name, token] of Object.entries(data.tokens)) {
-        tokensHtml += `<div class="token-card"><h3>${name}</h3>
-            <p><strong>Address:</strong> ${token.address}</p>
-            <p><strong>Layer:</strong> ${token.layer}</p>
-            <p><strong>Frequency:</strong> ${token.frequency} Hz</p>
-            <p><strong>Energy:</strong> ${formatNumber(token.energy*100)}%</p>
-            <p><strong>Rate:</strong> 1 ETH = ${token.rate.toLocaleString()} ${name}</p>
-            <p><strong>Supply:</strong> ${token.supply}</p>
-            <p><strong>Security:</strong> ${token.security}</p>
-            <p>✔ Verified 🔒 Renounced</p>
-            <p class="links">`;
+        tokensHtml += `<div class="token-card"><h3>${name}</h3><p><strong>Address:</strong> ${token.address}</p><p><strong>Layer:</strong> ${token.layer}</p><p><strong>Frequency:</strong> ${token.frequency} Hz</p><p><strong>Energy:</strong> ${formatNumber(token.energy*100)}%</p><p><strong>Rate:</strong> 1 ETH = ${token.rate.toLocaleString()} ${name}</p><p><strong>Supply:</strong> ${token.supply}</p><p><strong>Security:</strong> ${token.security}</p><p>✔ Verified 🔒 Renounced</p><p class="links">`;
         for (const [label, url] of Object.entries(token.links || {})) {
             tokensHtml += `<a href="${url}" target="_blank">${label}</a> `;
         }
         tokensHtml += `</p></div>`;
     }
     tokensDiv.innerHTML = tokensHtml;
-
     const vault = data.vault;
-    document.getElementById('vault').innerHTML = `
-        <p><strong>Address:</strong> ${vault.address}</p>
-        <p><strong>Status:</strong> ${vault.status}</p>
-        <p><strong>Weights:</strong> ${Object.entries(vault.weights).map(([k, v]) => `${k}: ${v}%`).join(', ')}</p>
-        <p><strong>Links:</strong> <a href="#">BaseScan</a> | <a href="#">DexScreener</a> | <a href="#">GeckoTerminal</a></p>
-    `;
-
+    document.getElementById('vault').innerHTML = `<p><strong>Address:</strong> ${vault.address}</p><p><strong>Status:</strong> ${vault.status}</p><p><strong>Weights:</strong> ${Object.entries(vault.weights).map(([k, v]) => `${k}: ${v}%`).join(', ')}</p><p><strong>Links:</strong> <a href="#">BaseScan</a> | <a href="#">DexScreener</a> | <a href="#">GeckoTerminal</a></p>`;
     const sec = data.security;
-    document.getElementById('security').innerHTML = `
-        <p><strong>CVE Protection:</strong> ${sec.cve_protection ? '✅ Active' : '❌ Inactive'}</p>
-        <p><strong>Encryption:</strong> ${sec.encryption}</p>
-        <p><strong>Standards:</strong> ${sec.standards.join(', ')}</p>
-        <p><strong>Audited:</strong> ${sec.audited ? '✅' : '❌'}</p>
-        <p><strong>Owner Renounced:</strong> ${sec.renounced ? '✅' : '❌'}</p>
-    `;
-
+    document.getElementById('security').innerHTML = `<p><strong>CVE Protection:</strong> ${sec.cve_protection ? '✅ Active' : '❌ Inactive'}</p><p><strong>Encryption:</strong> ${sec.encryption}</p><p><strong>Standards:</strong> ${sec.standards.join(', ')}</p><p><strong>Audited:</strong> ${sec.audited ? '✅' : '❌'}</p><p><strong>Owner Renounced:</strong> ${sec.renounced ? '✅' : '❌'}</p>`;
     const milestones = data.projection.milestones;
     let tableHtml = `<table><tr><th>Month</th><th>Holders</th><th>Price (ETH)</th><th>Your Wealth (USD)</th></tr>`;
     for (const m of milestones) {
-        tableHtml += `<tr>
-            <td>${m.month}</td>
-            <td>${m.holders !== null ? m.holders : '—'}</td>
-            <td>${m.price !== null ? m.price.toExponential(2) : '—'}</td>
-            <td>${m.wealth !== null ? '$' + m.wealth.toLocaleString() : '—'}</td>
-        </tr>`;
+        tableHtml += `<tr><td>${m.month}</td><td>${m.holders !== null ? m.holders : '—'}</td><td>${m.price !== null ? m.price.toExponential(2) : '—'}</td><td>${m.wealth !== null ? '$' + m.wealth.toLocaleString() : '—'}</td></tr>`;
     }
     tableHtml += '</table>';
     document.getElementById('projection').innerHTML = tableHtml;
-
     document.getElementById('last-updated').textContent = new Date(data.growth.last_updated * 1000).toLocaleString();
 }
-
 fetchTopology();
 setInterval(fetchTopology, 60000);
 </script>
