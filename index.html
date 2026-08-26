@@ -10,11 +10,13 @@
 <div class="card"><h2>AGI Layer</h2><div id="agi-layer"></div></div>
 <div class="card"><h2>Mining Operations</h2><div id="mining"></div></div>
 <div class="card"><h2>Token Mining</h2><div id="token-mining"></div></div>
+<div class="card"><h2>Vaults & Pies</h2><div id="vaults-pies"></div></div>
+<div class="card"><h2>Growth Strategy</h2><div id="growth-strategy"></div></div>
 <div class="card"><h2>Token Details</h2><div id="token-details"></div></div>
 <div class="card"><h2>Pennies Index Vault</h2><div id="vault"></div></div>
 <div class="card"><h2>Security & CVE</h2><div id="security"></div></div>
 <div class="card"><h2>Growth Projection</h2><div id="projection"></div></div>
-<footer><p>Last updated: <span id="last-updated">--</span> • Chain ID 8453</p><p>♾️ Neural Engine active</p></footer>
+<footer><p>Last updated: <span id="last-updated">--</span> • Chain ID 8453</p><p>♾️ Neural Engine active – predicts and grows with the world.</p></footer>
 </div>
 <script>
 async function fetchTopology(){try{const r=await fetch('topology.json',{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();update(d)}catch(e){document.getElementById('predictions').textContent='Unable to load data'}}
@@ -42,10 +44,22 @@ function update(d){
  const min=d.mining;let miningHtml='<div class="grid">';const icons={bitcoin_mining:'₿',asteroid_mining:'☄️',auto_bot_mining:'🤖'};for(const [k,m] of Object.entries(min)){miningHtml+=`<div class="token-card"><strong>${icons[k]||'⛏️'} ${k.replace(/_/g,' ').toUpperCase()}</strong><br>`;for(const [f,v] of Object.entries(m)){if(f==='active')continue;let disp=v;if(f==='api_key'&&v)disp=v.substring(0,4)+'****'+v.substring(v.length-4);miningHtml+=`${f.replace(/_/g,' ')}: ${disp}<br>`}miningHtml+='</div>'}miningHtml+='</div>';document.getElementById('mining').innerHTML=miningHtml;
  // token mining
  const tm=d.token_mining;let tmHtml='';if(tm&&Object.keys(tm).length){tmHtml='<div class="grid">';for(const [name,info] of Object.entries(tm)){tmHtml+=`<div class="token-card"><strong>${name} Mining</strong><br>`;for(const [f,v] of Object.entries(info)){if(f==='active')continue;let disp=v;if(f==='hash_key'&&v)disp=v.substring(0,8)+'****'+v.substring(v.length-4);tmHtml+=`${f.replace(/_/g,' ')}: ${disp}<br>`}tmHtml+='</div>'}tmHtml+='</div>'}else tmHtml='<p>Token mining not configured.</p>';document.getElementById('token-mining').innerHTML=tmHtml;
+ // vaults and pies
+ const vpDiv=document.getElementById('vaults-pies');if(d.vaults){let vpHtml=`<div class="token-card"><strong>Total Vaults: ${d.vault_count}</strong><br>Total Pies: ${d.pies}<br>`;for(const v of d.vaults){vpHtml+=`Vault #${v.id} – Pies: ${v.pies}<br>`;}vpHtml+='</div>';vpDiv.innerHTML=vpHtml;}else{vpDiv.innerHTML='<p>Vault data not available.</p>';}
+ // growth strategy
+ const gsDiv=document.getElementById('growth-strategy');if(d.growth_strategy&&Object.keys(d.growth_strategy).length){const gs=d.growth_strategy;let gsHtml=`<div class="token-card"><strong>${gs.strategy_name}</strong><br>Objective: ${gs.objective}<br>`;gsHtml+='Mechanisms:<br>';for(const mech of gs.mechanisms){gsHtml+=`${mech.name} (${mech.allocation}): ${mech.description}<br>`;}gsHtml+='Revenue Sources:<br>';for(const src of gs.revenue_sources){gsHtml+=`${src.source}: ${src.daily}<br>`;}gsHtml+=`Projection: Current value $${gs.projection.current_value.toLocaleString()} → Target $${gs.projection.target_value.toLocaleString()} in ${gs.projection.years_to_target} years (${gs.projection.annual_growth_rate}% annual growth)</div>`;gsDiv.innerHTML=gsHtml;}else{gsDiv.innerHTML='<p>Growth strategy not configured.</p>';}
  // token details
  let tokensHtml='';for(const [name,tk] of Object.entries(d.tokens)){tokensHtml+=`<div class="token-card"><h3>${name}</h3><p>Address: ${tk.address}</p><p>Layer: ${tk.layer}</p><p>Frequency: ${tk.frequency} Hz</p><p>Energy: ${fmt(tk.energy*100)}%</p><p>Rate: 1 ETH = ${tk.rate.toLocaleString()} ${name}</p><p>Supply: ${tk.supply}</p><p>Security: ${tk.security}</p><p>✔ Verified 🔒 Renounced</p><p class="links">`;for(const [l,u] of Object.entries(tk.links||{}))tokensHtml+=`<a href="${u}" target="_blank">${l}</a> `;tokensHtml+='</p></div>'}document.getElementById('token-details').innerHTML=tokensHtml;
- // vault
- const v=d.vault;document.getElementById('vault').innerHTML=`<p>Address: ${v.address}</p><p>Status: ${v.status}</p><p>Weights: ${Object.entries(v.weights).map(([k,val])=>`${k}: ${val}%`).join(', ')}</p>`;
+ // vault (real)
+ const v=d.vault;let vaultHtml=`<p>Address: ${v.address}</p><p>Status: ${v.status}</p><p>Weights: ${Object.entries(v.weights).map(([k,val])=>`${k}: ${val}%`).join(', ')}</p>`;
+ if(d.real_data){
+   vaultHtml+='<h4>Real Vault Balances</h4>';
+   for(const [tkn,data] of Object.entries(d.real_data)){
+     if(data.error){vaultHtml+=`<p>${tkn}: Error - ${data.error}</p>`;continue;}
+     vaultHtml+=`<p>${tkn}: ${(data.vault_balance/1e18).toFixed(4)} (${data.vault_percentage}% of supply)</p>`;
+   }
+ }
+ document.getElementById('vault').innerHTML=vaultHtml;
  // security
  const s=d.security;document.getElementById('security').innerHTML=`<p>CVE: ${s.cve_protection?'✅':'❌'}</p><p>Encryption: ${s.encryption}</p><p>Standards: ${s.standards.join(', ')}</p><p>Audited: ${s.audited?'✅':'❌'}</p><p>Renounced: ${s.renounced?'✅':'❌'}</p>`;
  // projection
