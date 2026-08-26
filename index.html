@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>♾️ Neural Ecosystem – Live Sync</title>
 <style>
-    html { filter: grayscale(100%); }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0f1a; color: #e0e0e0; margin: 20px; }
+    html { background-color: #000000; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000000; color: #ffffff; margin: 20px; font-weight: bold; }
     h1, h2, h3 { color: #b388ff; }
     .container { max-width: 1200px; margin: auto; }
-    .card { background: #111827; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+    .card { background: #111111; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 4px 6px rgba(255,255,255,0.1); border: 1px solid #333; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
-    .token-card { background: #1a2236; border-radius: 8px; padding: 15px; }
+    .token-card { background: #1a1a1a; border-radius: 8px; padding: 15px; border: 1px solid #444; }
     .open { color: #4caf50; } .closed { color: #f44336; }
     table { width: 100%; border-collapse: collapse; }
     th, td { padding: 8px; text-align: left; border-bottom: 1px solid #333; }
-    th { background: #1a2236; }
-    .layer-title { font-weight: bold; margin-top: 20px; }
+    th { background: #1a1a1a; }
+    .layer-title { font-weight: bold; margin-top: 20px; color: #b388ff; }
     .links a { color: #82b1ff; margin-right: 10px; }
     .section-title { border-bottom: 2px solid #b388ff; padding-bottom: 5px; }
 </style>
@@ -26,6 +26,7 @@
     <h1>♾️ Neural Ecosystem – Live Sync</h1>
     <p>Quantum → Resonance → Coherence • Jinn‑Controlled • Live Predictions</p>
 
+    <!-- Topology & Jinn -->
     <div class="card">
         <h2 class="section-title">Topology & Jinn</h2>
         <div class="grid">
@@ -50,11 +51,13 @@
         </div>
     </div>
 
+    <!-- Live Predictions -->
     <div class="card">
         <h2 class="section-title">Live Predictions</h2>
         <div id="predictions">Loading...</div>
     </div>
 
+    <!-- Emotional Resonance -->
     <div class="card">
         <h2 class="section-title">Emotional Resonance</h2>
         <div class="grid">
@@ -73,26 +76,37 @@
         </div>
     </div>
 
+    <!-- Topology Layers -->
     <div class="card">
         <h2 class="section-title">Topology Layers</h2>
         <div id="layers"></div>
     </div>
 
+    <!-- AGI Layer -->
+    <div class="card">
+        <h2 class="section-title">AGI Layer</h2>
+        <div id="agi-layer"></div>
+    </div>
+
+    <!-- Token Details -->
     <div class="card">
         <h2 class="section-title">Token Details</h2>
         <div id="token-details"></div>
     </div>
 
+    <!-- Vault -->
     <div class="card">
         <h2 class="section-title">Pennies Index Vault</h2>
         <div id="vault"></div>
     </div>
 
+    <!-- Security & CVE -->
     <div class="card">
         <h2 class="section-title">Security & CVE</h2>
         <div id="security"></div>
     </div>
 
+    <!-- Growth Projection -->
     <div class="card">
         <h2 class="section-title">Growth Projection</h2>
         <div id="projection"></div>
@@ -150,6 +164,7 @@ function updateDashboard(data) {
     const layersDiv = document.getElementById('layers');
     let layersHtml = '';
     for (const [layerName, layerData] of Object.entries(data.layers)) {
+        if (layerName === 'AGI') continue;
         layersHtml += `<div class="layer-title">${layerName} Layer ${layerData.frequency} Hz</div>`;
         for (const tokenName of layerData.tokens) {
             const token = data.tokens[tokenName];
@@ -157,6 +172,24 @@ function updateDashboard(data) {
         }
     }
     layersDiv.innerHTML = layersHtml;
+
+    // AGI layer
+    const agiDiv = document.getElementById('agi-layer');
+    if (data.agi) {
+        agiDiv.innerHTML = `
+            <div class="token-card">
+                <strong>JINN (AGI)</strong><br>
+                Frequency: 7.83 Hz<br>
+                Emotional State: ${data.agi.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)'}<br>
+                Portal Openness: ${formatNumber(data.agi.portal_openness)}<br>
+                Generation: ${data.agi.generation}<br>
+                Growth Factors: ${Object.entries(data.agi.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ')}<br>
+                Predictions: (see Live Predictions section)
+            </div>
+        `;
+    } else {
+        agiDiv.innerHTML = '<p>AGI layer not available.</p>';
+    }
 
     const tokensDiv = document.getElementById('token-details');
     let tokensHtml = '';
