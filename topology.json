@@ -36,7 +36,7 @@
       "weight": 33.6,
       "rate": 707920,
       "frequency": 0.618,
-      "energy": 0.27866440501489825,
+      "energy": 0.2734754908458475,
       "description": "The origin seed \u2013 quantum resonance",
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected",
@@ -54,7 +54,7 @@
       "weight": 25.7,
       "rate": 6879637,
       "frequency": 1.618,
-      "energy": 0.23487399098024425,
+      "energy": 0.23050048306963136,
       "description": "Amplification through guidance",
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active",
@@ -72,7 +72,7 @@
       "weight": 17.9,
       "rate": 67185617,
       "frequency": 2.618,
-      "energy": 0.19108357694559017,
+      "energy": 0.18752547529341515,
       "description": "Velocity of doo \u2013 momentum",
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted",
@@ -89,7 +89,7 @@
       "weight": 22.9,
       "rate": 6374392,
       "frequency": 3.618,
-      "energy": 0.267716801506235,
+      "energy": 0.2627317389017937,
       "description": "The anchor \u2013 persistent coherence",
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2",
@@ -215,8 +215,8 @@
   "coherence": {
     "persistence": 0.97,
     "threshold": 0.5,
-    "decay_rate": 0.018620656516117835,
-    "schumann_base": 7.837532696659258,
+    "decay_rate": 0.018708461778111755,
+    "schumann_base": 7.8370611490426745,
     "harmonic": 1.618
   },
   "paradox": {
@@ -797,20 +797,27 @@
         "portal": 0.461,
         "decay": 0.01862,
         "schumann": 7.838
+      },
+      {
+        "time": 1787786974,
+        "emotion": -0.472,
+        "portal": 0.264,
+        "decay": 0.01871,
+        "schumann": 7.837
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
   "jinn": {
-    "generation": 1,
-    "emotional_state": -0.077,
-    "portal_openness": 0.461,
+    "generation": 2,
+    "emotional_state": -0.472,
+    "portal_openness": 0.264,
     "growth_factors": {
-      "PIDX": 1.014,
-      "SGUIDE": 1.027,
-      "VDOO": 1.051,
-      "PENNIES": 1.078
+      "PIDX": 0.929,
+      "SGUIDE": 0.931,
+      "VDOO": 0.944,
+      "PENNIES": 0.96
     },
     "predictions": {
       "PIDX": [
@@ -849,14 +856,14 @@
     "answers": []
   },
   "agi": {
-    "generation": 1,
-    "emotional_state": -0.077,
-    "portal_openness": 0.461,
+    "generation": 2,
+    "emotional_state": -0.472,
+    "portal_openness": 0.264,
     "growth_factors": {
-      "PIDX": 1.014,
-      "SGUIDE": 1.027,
-      "VDOO": 1.051,
-      "PENNIES": 1.078
+      "PIDX": 0.929,
+      "SGUIDE": 0.931,
+      "VDOO": 0.944,
+      "PENNIES": 0.96
     },
     "predictions": {
       "PIDX": [
@@ -964,16 +971,16 @@
   },
   "live_data": {
     "prices": {
-      "PIDX": 1.3873316401728384e-06,
-      "SGUIDE": 1.4539427126511508e-07,
-      "VDOO": 1.4567773608951012e-08,
-      "PENNIES": 1.5390287257963704e-07
+      "PIDX": 1.3999622535932518e-06,
+      "SGUIDE": 1.4355963926701852e-07,
+      "VDOO": 1.4597327671200266e-08,
+      "PENNIES": 1.5773864751932643e-07
     },
-    "sentiment": -0.012933246987649083,
-    "eth_usd": 2498.88
+    "sentiment": -0.40191587084697156,
+    "eth_usd": 2498.96
   },
   "growth": {
-    "last_updated": 1787786911
+    "last_updated": 1787786974
   },
-  "ipfs_hash": "bafkreib26bxhpteqs5p7rak3vv4w4tdxn3o3aigr34tzo2qkbd5vcalism"
+  "ipfs_hash": "bafkreiasdzc2evu6o3pxobqh767sgprft7ibr6dnqbuj646wqyv4bagcru"
 }
