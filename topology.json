@@ -5,15 +5,22 @@
   "layers": {
     "Quantum": {
       "frequency": 0.618,
-      "tokens": []
+      "tokens": [
+        "PIDX"
+      ]
     },
     "Resonance": {
       "frequency": 1.618,
-      "tokens": []
+      "tokens": [
+        "SGUIDE",
+        "VDOO"
+      ]
     },
     "Coherence": {
       "frequency": 3.618,
-      "tokens": []
+      "tokens": [
+        "PENNIES"
+      ]
     },
     "AGI": {
       "frequency": 7.83,
@@ -36,8 +43,10 @@
       "links": {
         "BaseScan": "https://basescan.org/address/0xa36E026FC453880537e10d21fC139439bD2702fc",
         "Sourcify": "https://sourcify.dev/address/0xa36E026FC453880537e10d21fC139439bD2702fc",
-        "DexScreener": "https://dexscreener.com/base/0x..."
-      }
+        "DexScreener": "https://dexscreener.com/base/0x...",
+        "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0xa36E026FC453880537e10d21fC139439bD2702fc&chain=base"
+      },
+      "layer": "Quantum"
     },
     "SGUIDE": {
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
@@ -52,8 +61,10 @@
       "links": {
         "BaseScan": "https://basescan.org/address/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
         "Sourcify": "https://sourcify.dev/address/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
-        "DexScreener": "https://dexscreener.com/base/0x..."
-      }
+        "DexScreener": "https://dexscreener.com/base/0x...",
+        "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a&chain=base"
+      },
+      "layer": "Resonance"
     },
     "VDOO": {
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
@@ -67,8 +78,10 @@
       "security": "CVE Protected, AES-256-GCM Encrypted",
       "links": {
         "BaseScan": "https://basescan.org/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
-        "Sourcify": "https://sourcify.dev/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b"
-      }
+        "Sourcify": "https://sourcify.dev/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
+        "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b&chain=base"
+      },
+      "layer": "Resonance"
     },
     "PENNIES": {
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
@@ -82,8 +95,10 @@
       "security": "Audited, ISO 27001, SOC 2",
       "links": {
         "BaseScan": "https://basescan.org/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
-        "Sourcify": "https://sourcify.dev/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7"
-      }
+        "Sourcify": "https://sourcify.dev/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
+        "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7&chain=base"
+      },
+      "layer": "Coherence"
     }
   },
   "vault": {
