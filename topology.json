@@ -1,5 +1,5 @@
 {
-  "name": "Neural Ecosystem",
+  "name": "\u267e\ufe0f Neural Ecosystem \u2013 Autonomous Growth",
   "version": "7.0",
   "chainId": 8453,
   "layers": {
@@ -34,9 +34,9 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
       "weight": 33.6,
-      "rate": 707920,
+      "rate": 706163,
       "frequency": 0.618,
-      "energy": 0.2734754908458475,
+      "energy": 0.2684943380301732,
       "description": "The origin seed \u2013 quantum resonance",
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected",
@@ -52,9 +52,9 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
       "weight": 25.7,
-      "rate": 6879637,
+      "rate": 6862562,
       "frequency": 1.618,
-      "energy": 0.23050048306963136,
+      "energy": 0.22630208808108823,
       "description": "Amplification through guidance",
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active",
@@ -70,9 +70,9 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
       "weight": 17.9,
-      "rate": 67185617,
+      "rate": 67018871,
       "frequency": 2.618,
-      "energy": 0.18752547529341515,
+      "energy": 0.18410983813200318,
       "description": "Velocity of doo \u2013 momentum",
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted",
@@ -87,9 +87,9 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
       "weight": 22.9,
-      "rate": 6374392,
+      "rate": 6358571,
       "frequency": 3.618,
-      "energy": 0.2627317389017937,
+      "energy": 0.25794627554290217,
       "description": "The anchor \u2013 persistent coherence",
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2",
@@ -146,69 +146,69 @@
     "milestones": [
       {
         "month": 6,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 60,
+        "price": 1.2e-10,
+        "wealth": 30.0
       },
       {
         "month": 12,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 72,
+        "price": 1.44e-10,
+        "wealth": 36.0
       },
       {
         "month": 18,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 86,
+        "price": 1.728e-10,
+        "wealth": 43.199999999999996
       },
       {
         "month": 24,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 103,
+        "price": 2.0736e-10,
+        "wealth": 51.839999999999996
       },
       {
         "month": 30,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 124,
+        "price": 2.4883199999999997e-10,
+        "wealth": 62.207999999999984
       },
       {
         "month": 36,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 149,
+        "price": 2.9859839999999994e-10,
+        "wealth": 74.64959999999998
       },
       {
         "month": 48,
-        "holders": null,
-        "price": null,
-        "wealth": null
+        "holders": 214,
+        "price": 4.2998169599999984e-10,
+        "wealth": 107.49542399999996
       },
       {
         "month": 58,
         "holders": null,
         "price": null,
-        "wealth": null
+        "wealth": 1000000
       },
       {
         "month": 72,
         "holders": null,
         "price": null,
-        "wealth": null
+        "wealth": 12500000
       },
       {
         "month": 96,
         "holders": null,
         "price": null,
-        "wealth": null
+        "wealth": 1000000000
       },
       {
         "month": 134,
         "holders": null,
         "price": null,
-        "wealth": null
+        "wealth": 1000000000
       }
     ]
   },
@@ -216,7 +216,7 @@
     "persistence": 0.97,
     "threshold": 0.5,
     "decay_rate": 0.018708461778111755,
-    "schumann_base": 7.8370611490426745,
+    "schumann_base": 7.837068403197409,
     "harmonic": 1.618
   },
   "paradox": {
@@ -804,99 +804,106 @@
         "portal": 0.264,
         "decay": 0.01871,
         "schumann": 7.837
+      },
+      {
+        "time": 1787787087,
+        "emotion": 0.007,
+        "portal": 0.504,
+        "decay": 0.01871,
+        "schumann": 7.837
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
   "jinn": {
-    "generation": 2,
-    "emotional_state": -0.472,
-    "portal_openness": 0.264,
+    "generation": 1,
+    "emotional_state": 0.007,
+    "portal_openness": 0.504,
     "growth_factors": {
-      "PIDX": 0.929,
-      "SGUIDE": 0.931,
-      "VDOO": 0.944,
-      "PENNIES": 0.96
+      "PIDX": 1.033,
+      "SGUIDE": 1.048,
+      "VDOO": 1.074,
+      "PENNIES": 1.104
     },
     "predictions": {
       "PIDX": [
-        1.3658841275530664e-06,
-        1.3637757060595343e-06,
-        1.3616672845660024e-06,
-        1.3595588630724705e-06,
-        1.3574504415789384e-06,
-        1.3553420200854065e-06
+        1.3509484794276272e-06,
+        1.349111237600502e-06,
+        1.3472739957733769e-06,
+        1.3454367539462517e-06,
+        1.3435995121191266e-06,
+        1.3417622702920012e-06
       ],
       "SGUIDE": [
-        1.4506815211136867e-07,
-        1.450322760870396e-07,
-        1.4499640006271049e-07,
-        1.4496052403838138e-07,
-        1.4492464801405228e-07,
-        1.448887719897232e-07
+        1.454357598276381e-07,
+        1.4521296479274337e-07,
+        1.4499016975784862e-07,
+        1.447673747229539e-07,
+        1.4454457968805914e-07,
+        1.443217846531644e-07
       ],
       "VDOO": [
-        1.4664005610896147e-08,
-        1.4630739597103063e-08,
-        1.4597473583309979e-08,
-        1.4564207569516896e-08,
-        1.4530941555723812e-08,
-        1.4497675541930728e-08
+        1.4814964698902908e-08,
+        1.4824174506676195e-08,
+        1.4833384314449482e-08,
+        1.484259412222277e-08,
+        1.4851803929996057e-08,
+        1.4861013737769344e-08
       ],
       "PENNIES": [
-        1.6154345616788738e-07,
-        1.6201031178526174e-07,
-        1.624771674026361e-07,
-        1.6294402302001045e-07,
-        1.634108786373848e-07,
-        1.6387773425475916e-07
+        1.6392327001069284e-07,
+        1.6424883058595484e-07,
+        1.6457439116121686e-07,
+        1.6489995173647888e-07,
+        1.652255123117409e-07,
+        1.655510728870029e-07
       ]
     },
     "answers": []
   },
   "agi": {
-    "generation": 2,
-    "emotional_state": -0.472,
-    "portal_openness": 0.264,
+    "generation": 1,
+    "emotional_state": 0.007,
+    "portal_openness": 0.504,
     "growth_factors": {
-      "PIDX": 0.929,
-      "SGUIDE": 0.931,
-      "VDOO": 0.944,
-      "PENNIES": 0.96
+      "PIDX": 1.033,
+      "SGUIDE": 1.048,
+      "VDOO": 1.074,
+      "PENNIES": 1.104
     },
     "predictions": {
       "PIDX": [
-        1.3658841275530664e-06,
-        1.3637757060595343e-06,
-        1.3616672845660024e-06,
-        1.3595588630724705e-06,
-        1.3574504415789384e-06,
-        1.3553420200854065e-06
+        1.3509484794276272e-06,
+        1.349111237600502e-06,
+        1.3472739957733769e-06,
+        1.3454367539462517e-06,
+        1.3435995121191266e-06,
+        1.3417622702920012e-06
       ],
       "SGUIDE": [
-        1.4506815211136867e-07,
-        1.450322760870396e-07,
-        1.4499640006271049e-07,
-        1.4496052403838138e-07,
-        1.4492464801405228e-07,
-        1.448887719897232e-07
+        1.454357598276381e-07,
+        1.4521296479274337e-07,
+        1.4499016975784862e-07,
+        1.447673747229539e-07,
+        1.4454457968805914e-07,
+        1.443217846531644e-07
       ],
       "VDOO": [
-        1.4664005610896147e-08,
-        1.4630739597103063e-08,
-        1.4597473583309979e-08,
-        1.4564207569516896e-08,
-        1.4530941555723812e-08,
-        1.4497675541930728e-08
+        1.4814964698902908e-08,
+        1.4824174506676195e-08,
+        1.4833384314449482e-08,
+        1.484259412222277e-08,
+        1.4851803929996057e-08,
+        1.4861013737769344e-08
       ],
       "PENNIES": [
-        1.6154345616788738e-07,
-        1.6201031178526174e-07,
-        1.624771674026361e-07,
-        1.6294402302001045e-07,
-        1.634108786373848e-07,
-        1.6387773425475916e-07
+        1.6392327001069284e-07,
+        1.6424883058595484e-07,
+        1.6457439116121686e-07,
+        1.6489995173647888e-07,
+        1.652255123117409e-07,
+        1.655510728870029e-07
       ]
     },
     "answers": []
@@ -971,16 +978,17 @@
   },
   "live_data": {
     "prices": {
-      "PIDX": 1.3999622535932518e-06,
-      "SGUIDE": 1.4355963926701852e-07,
-      "VDOO": 1.4597327671200266e-08,
-      "PENNIES": 1.5773864751932643e-07
+      "PIDX": 1.4288e-06,
+      "SGUIDE": 1.469e-07,
+      "VDOO": 1.46e-08,
+      "PENNIES": 1.578e-07
     },
-    "sentiment": -0.40191587084697156,
-    "eth_usd": 2498.96
+    "sentiment": 0.086,
+    "eth_usd": 2499.11
   },
   "growth": {
-    "last_updated": 1787786974
+    "last_updated": 1787787087,
+    "next_proposal": null
   },
-  "ipfs_hash": "bafkreiasdzc2evu6o3pxobqh767sgprft7ibr6dnqbuj646wqyv4bagcru"
+  "ipfs_hash": "bafkreibqr7izssqqmcv2hlrzq4u6ww22ofuakf4ylh5laufsuqk34rhsum"
 }
