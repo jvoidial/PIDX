@@ -27,8 +27,8 @@
     "PIDX": {
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
-      "weight": 33.3,
-      "rate": 879719,
+      "weight": 33.6,
+      "rate": 843109,
       "frequency": 0.618,
       "energy": 0.98,
       "description": "The origin seed \u2013 quantum resonance",
@@ -43,8 +43,8 @@
     "SGUIDE": {
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
-      "weight": 25.9,
-      "rate": 8491950,
+      "weight": 25.7,
+      "rate": 8192997,
       "frequency": 1.618,
       "energy": 0.784,
       "description": "Amplification through guidance",
@@ -59,8 +59,8 @@
     "VDOO": {
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
-      "weight": 17.8,
-      "rate": 82524759,
+      "weight": 17.9,
+      "rate": 80011334,
       "frequency": 2.618,
       "energy": 0.588,
       "description": "Velocity of doo \u2013 momentum",
@@ -74,8 +74,8 @@
     "PENNIES": {
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
-      "weight": 23.0,
-      "rate": 7840583,
+      "weight": 22.9,
+      "rate": 7591302,
       "frequency": 3.618,
       "energy": 0.931,
       "description": "The anchor \u2013 persistent coherence",
@@ -129,30 +129,92 @@
     }
   },
   "projection": {
-    "initial_holders": 50,
-    "monthly_growth": 0.2,
-    "initial_price_eth": 1e-10,
-    "initial_wealth_usd": 25,
-    "eth_usd": 2496.85,
-    "milestones": []
+    "milestones": [
+      {
+        "month": 6,
+        "holders": 60,
+        "price": 1.2e-10,
+        "wealth": 30.0
+      },
+      {
+        "month": 12,
+        "holders": 72,
+        "price": 1.44e-10,
+        "wealth": 36.0
+      },
+      {
+        "month": 18,
+        "holders": 86,
+        "price": 1.728e-10,
+        "wealth": 43.199999999999996
+      },
+      {
+        "month": 24,
+        "holders": 103,
+        "price": 2.0736e-10,
+        "wealth": 51.839999999999996
+      },
+      {
+        "month": 30,
+        "holders": 124,
+        "price": 2.4883199999999997e-10,
+        "wealth": 62.207999999999984
+      },
+      {
+        "month": 36,
+        "holders": 149,
+        "price": 2.9859839999999994e-10,
+        "wealth": 74.64959999999998
+      },
+      {
+        "month": 48,
+        "holders": 214,
+        "price": 4.2998169599999984e-10,
+        "wealth": 107.49542399999996
+      },
+      {
+        "month": 58,
+        "holders": null,
+        "price": null,
+        "wealth": 1000000
+      },
+      {
+        "month": 72,
+        "holders": null,
+        "price": null,
+        "wealth": 12500000
+      },
+      {
+        "month": 96,
+        "holders": null,
+        "price": null,
+        "wealth": 1000000000
+      },
+      {
+        "month": 134,
+        "holders": null,
+        "price": null,
+        "wealth": 1000000000
+      }
+    ]
   },
   "coherence": {
     "persistence": 0.97,
     "threshold": 0.5,
-    "decay_rate": 0.019894327480157993,
-    "schumann_base": 7.83052836259921,
+    "decay_rate": 0.01985514305217711,
+    "schumann_base": 7.830724284739115,
     "harmonic": 1.618
   },
   "paradox": {
     "bootstrapped": true,
-    "last_bootstrap": 1787781677,
-    "next_adjustment": 1787785277,
+    "last_bootstrap": 1787781918,
+    "next_adjustment": 1787785518,
     "adjustment_log": [
       {
-        "time": 1787781677,
-        "emotion": 0.528,
-        "portal": 0.764,
-        "decay": 0.01989,
+        "time": 1787781918,
+        "emotion": 0.724,
+        "portal": 0.862,
+        "decay": 0.01986,
         "schumann": 7.831
       }
     ],
@@ -161,28 +223,61 @@
   },
   "jinn": {
     "generation": 1,
-    "emotional_state": 0.528,
-    "portal_openness": 0.764,
+    "emotional_state": 0.724,
+    "portal_openness": 0.862,
     "growth_factors": {
-      "PIDX": 1.142,
-      "SGUIDE": 1.175,
-      "VDOO": 1.216,
-      "PENNIES": 1.26
+      "PIDX": 1.184,
+      "SGUIDE": 1.223,
+      "VDOO": 1.27,
+      "PENNIES": 1.318
     },
-    "predictions": {}
+    "predictions": {
+      "PIDX": [
+        1.001486113870719e-06,
+        1.0014855395717674e-06,
+        1.0014849652728156e-06,
+        1.001484390973864e-06,
+        1.0014838166749123e-06,
+        1.0014832423759607e-06
+      ],
+      "SGUIDE": [
+        9.978601916382198e-08,
+        9.97692639946798e-08,
+        9.975250882553764e-08,
+        9.973575365639547e-08,
+        9.97189984872533e-08,
+        9.970224331811112e-08
+      ],
+      "VDOO": [
+        9.835482908581074e-09,
+        9.827711771255604e-09,
+        9.819940633930135e-09,
+        9.812169496604665e-09,
+        9.804398359279195e-09,
+        9.796627221953724e-09
+      ],
+      "PENNIES": [
+        9.992411949416123e-08,
+        9.992316992254606e-08,
+        9.992222035093089e-08,
+        9.992127077931572e-08,
+        9.992032120770055e-08,
+        9.991937163608538e-08
+      ]
+    }
   },
   "live_data": {
     "prices": {
-      "PIDX": 9.956e-07,
-      "SGUIDE": 1.002e-07,
-      "VDOO": 1e-08,
-      "PENNIES": 1.013e-07
+      "PIDX": 1.0015e-06,
+      "SGUIDE": 9.98e-08,
+      "VDOO": 9.8e-09,
+      "PENNIES": 9.99e-08
     },
-    "sentiment": 0.245,
-    "eth_usd": 2496.85
+    "sentiment": 0.448,
+    "eth_usd": 2500.25
   },
   "growth": {
-    "last_updated": 1787781677,
+    "last_updated": 1787781918,
     "next_proposal": null
   }
 }
