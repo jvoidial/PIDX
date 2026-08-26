@@ -180,7 +180,16 @@ function updateDashboard(data) {
         let miningHtml = '<div class="grid">';
         const icons = { bitcoin_mining: '₿', asteroid_mining: '☄️', auto_bot_mining: '🤖' };
         for (const [key, minfo] of Object.entries(data.mining)) {
-            miningHtml += `<div class="token-card"><strong>${icons[key] || ''} ${key.replace(/_/g, ' ').toUpperCase()}</strong><br>Status: ${minfo.status}<br>${key === 'bitcoin_mining' ? `Hash Rate: ${minfo.hash_rate}<br>Reward: ${minfo.reward}` : ''}${key === 'asteroid_mining' ? `Power: ${minfo.power}<br>Reward: ${minfo.reward}` : ''}${key === 'auto_bot_mining' ? `Active Bots: ${minfo.bots}<br>Reward: ${minfo.reward}` : ''}<br>Energy: ${formatNumber(minfo.energy * 100)}%</div>`;
+            miningHtml += `<div class="token-card"><strong>${icons[key] || ''} ${key.replace(/_/g, ' ').toUpperCase()}</strong><br>`;
+            for (const [field, value] of Object.entries(minfo)) {
+                if (field === 'active') continue;
+                let displayValue = value;
+                if (field === 'api_key' && value) {
+                    displayValue = value.substring(0, 4) + '****' + value.substring(value.length - 4);
+                }
+                miningHtml += `${field.replace(/_/g, ' ')}: ${displayValue}<br>`;
+            }
+            miningHtml += '</div>';
         }
         miningHtml += '</div>';
         miningDiv.innerHTML = miningHtml;
