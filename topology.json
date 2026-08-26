@@ -21,9 +21,9 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
       "weight": 33.6,
-      "rate": 773114,
+      "rate": 771974,
       "frequency": 0.618,
-      "energy": 0.476168940862578,
+      "energy": 0.46764504272439633,
       "description": "The origin seed \u2013 quantum resonance",
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected",
@@ -37,9 +37,9 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
       "weight": 25.7,
-      "rate": 7512997,
+      "rate": 7501921,
       "frequency": 1.618,
-      "energy": 0.3873098739646026,
+      "energy": 0.38037664159626333,
       "description": "Amplification through guidance",
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active",
@@ -53,9 +53,9 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
       "weight": 17.9,
-      "rate": 73370747,
+      "rate": 73262586,
       "frequency": 2.618,
-      "energy": 0.2984508070666268,
+      "energy": 0.29310824046812994,
       "description": "Velocity of doo \u2013 momentum",
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted",
@@ -68,9 +68,9 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
       "weight": 22.9,
-      "rate": 6961240,
+      "rate": 6950977,
       "frequency": 3.618,
-      "energy": 0.45395417413808453,
+      "energy": 0.4458279424423635,
       "description": "The anchor \u2013 persistent coherence",
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2",
@@ -194,8 +194,8 @@
   "coherence": {
     "persistence": 0.97,
     "threshold": 0.5,
-    "decay_rate": 0.01859305176589319,
-    "schumann_base": 7.838106528469289,
+    "decay_rate": 0.0185167580300024,
+    "schumann_base": 7.838516863130061,
     "harmonic": 1.618
   },
   "paradox": {
@@ -503,20 +503,27 @@
         "portal": 0.378,
         "decay": 0.01859,
         "schumann": 7.838
+      },
+      {
+        "time": 1787784392,
+        "emotion": 0.41,
+        "portal": 0.705,
+        "decay": 0.01852,
+        "schumann": 7.839
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
   "jinn": {
-    "generation": 4,
-    "emotional_state": -0.244,
-    "portal_openness": 0.378,
+    "generation": 5,
+    "emotional_state": 0.41,
+    "portal_openness": 0.705,
     "growth_factors": {
-      "PIDX": 0.977,
-      "SGUIDE": 0.986,
-      "VDOO": 1.006,
-      "PENNIES": 1.028
+      "PIDX": 1.119,
+      "SGUIDE": 1.146,
+      "VDOO": 1.184,
+      "PENNIES": 1.225
     },
     "predictions": {
       "PIDX": [
@@ -556,17 +563,17 @@
   },
   "live_data": {
     "prices": {
-      "PIDX": 1.2838e-06,
-      "SGUIDE": 1.349e-07,
+      "PIDX": 1.3099e-06,
+      "SGUIDE": 1.35e-07,
       "VDOO": 1.38e-08,
-      "PENNIES": 1.407e-07
+      "PENNIES": 1.422e-07
     },
-    "sentiment": -0.388,
-    "eth_usd": 2496.33
+    "sentiment": 0.271,
+    "eth_usd": 2497.49
   },
   "phb": {},
   "growth": {
-    "last_updated": 1787784331,
+    "last_updated": 1787784392,
     "next_proposal": null
   }
 }
