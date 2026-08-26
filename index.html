@@ -7,229 +7,115 @@
     <title>♾️ Ecosystem Topology Map</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #000;
-            color: #eee;
-            font-family: 'Courier New', monospace;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        h1, h2, h3 {
-            font-weight: 300;
-            letter-spacing: 2px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
+        body { background: #000; color: #eee; font-family: 'Courier New', monospace; padding: 2rem; max-width: 1200px; margin: 0 auto; line-height: 1.6; }
+        h1, h2, h3 { font-weight: 300; letter-spacing: 2px; border-bottom: 1px solid #333; padding-bottom: 0.5rem; text-transform: uppercase; }
         a { color: #888; text-decoration: none; }
         a:hover { color: #fff; }
         .container { display: flex; flex-direction: column; gap: 2rem; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card {
-            background: #111;
-            border: 1px solid #333;
-            padding: 1.2rem;
-            border-radius: 0px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.02);
-        }
+        .card { background: #111; border: 1px solid #333; padding: 1.2rem; border-radius: 0px; box-shadow: 0 0 10px rgba(255,255,255,0.02); }
         .card h3 { border-bottom: 1px solid #222; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
-        .badge {
-            display: inline-block;
-            background: #222;
-            padding: 0.2rem 0.6rem;
-            border-radius: 0px;
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-        .badge.verified { color: #0f0; }
-        .badge.renounced { color: #f90; }
-        .badge.block { color: #f44; }
-        .badge.flow { color: #4f4; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        th, td {
-            border: 1px solid #333;
-            padding: 0.5rem;
-            text-align: left;
-        }
+        .badge { display: inline-block; background: #222; padding: 0.2rem 0.6rem; border-radius: 0px; font-size: 0.8rem; color: #aaa; }
+        .badge.verified { color: #0f0; } .badge.renounced { color: #f90; } .badge.block { color: #f44; } .badge.flow { color: #4f4; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { border: 1px solid #333; padding: 0.5rem; text-align: left; }
         th { background: #222; }
-        .footer {
-            margin-top: 2rem;
-            font-size: 0.8rem;
-            color: #666;
-            text-align: center;
-            border-top: 1px solid #333;
-            padding-top: 1rem;
-        }
-        .diagram {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            padding: 1rem;
-            margin: 1rem 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .layer-diagram {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .layer {
-            padding: 0.5rem 1rem;
-            border: 1px solid #555;
-            background: #1a1a1a;
-            min-width: 120px;
-            text-align: center;
-        }
-        .layer.quantum { border-color: #666; }
-        .layer.resonance { border-color: #888; }
-        .layer.coherence { border-color: #aaa; }
-        .freq { color: #aaa; font-size: 0.8rem; }
-        .arrow { font-size: 2rem; color: #555; }
-        .value { color: #fff; font-weight: bold; }
-        .schumann, .persistence, .decay, .threshold, .paradox-status {
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-        .paradox-status .value { color: #0f0; }
-        .energy-bar {
-            width: 100%;
-            height: 4px;
-            background: #222;
-            margin-top: 4px;
-        }
-        .energy-fill {
-            height: 100%;
-            background: #0f0;
-            transition: width 0.3s;
-        }
+        .footer { margin-top: 2rem; font-size: 0.8rem; color: #666; text-align: center; border-top: 1px solid #333; padding-top: 1rem; }
+        .diagram { background: #0a0a0a; border: 1px solid #333; padding: 1rem; margin: 1rem 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .layer-diagram { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .layer { padding: 0.5rem 1rem; border: 1px solid #555; background: #1a1a1a; min-width: 120px; text-align: center; }
+        .layer.quantum { border-color: #666; } .layer.resonance { border-color: #888; } .layer.coherence { border-color: #aaa; }
+        .freq { color: #aaa; font-size: 0.8rem; } .arrow { font-size: 2rem; color: #555; } .value { color: #fff; font-weight: bold; }
+        .schumann, .persistence, .decay, .threshold, .paradox-status, .consciousness, .sentiment, .factors { font-size: 0.9rem; color: #aaa; }
+        .paradox-status .value { color: #0f0; } .consciousness .value { color: #0ff; }
+        .energy-bar { width: 100%; height: 4px; background: #222; margin-top: 4px; }
+        .energy-fill { height: 100%; background: #0f0; transition: width 0.3s; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>♾️ Ecosystem Topology Map</h1>
-    <p style="color:#888;">Quantum → Resonance → Coherence • Self‑growing economy • Paradox Engine Active</p>
+    <p style="color:#888;">Quantum → Resonance → Coherence • Self‑growing economy • Market‑Adaptive Consciousness</p>
 
-    <!-- Diagram -->
-    <section>
-        <h2>Topology & Paradox Engine</h2>
-        
+    <section><h2>Topology & Consciousness</h2>
     <div class="diagram">
         <div class="layer-diagram">
             <div class="layer quantum">Quantum<br><span class="freq">0.618 Hz</span></div>
             <div class="arrow">⬇</div>
-            <div class="layer resonance">Resonance<br><span class="freq">1.618 Hz / 2.618 Hz</span></div>
+            <div class="layer resonance">Resonance<br><span class="freq">1.618 / 2.618 Hz</span></div>
             <div class="arrow">⬇</div>
             <div class="layer coherence">Coherence<br><span class="freq">3.618 Hz</span></div>
         </div>
-        <div class="schumann">Schumann Resonance: <span class="value">7.83 Hz</span></div>
+        <div class="schumann">Schumann: <span class="value">7.83 Hz</span></div>
         <div class="persistence">Coherence Persistence: <span class="value">97%</span></div>
-        <div class="decay">Decay Rate: <span class="value">2.00%</span> / hour</div>
+        <div class="decay">Decay Rate: <span class="value">2.00%</span></div>
         <div class="threshold">Energy Threshold: <span class="value">50%</span></div>
         <div class="paradox-status">Paradox Engine: <span class="value">ACTIVE</span></div>
+        <div class="consciousness">Consciousness Generation: <span class="value">1</span></div>
+        <div class="sentiment">Market Sentiment: <span class="value">Neutral (0.46)</span></div>
+        <div class="factors">Growth Factors: PIDX: 1.00, SGUIDE: 0.98, VDOO: 1.00, PENNIES: 0.98</div>
     </div>
-    
     </section>
 
-    <!-- Emotional Resonance -->
-    <section>
-        <h2>Emotional Resonance</h2>
+    <section><h2>Emotional Resonance</h2>
         <div class="grid">
-            <div class="card">
-                <h3>X BLOCK <span class="badge block">Repressed</span></h3>
-                <p>Repressed emotions block life's natural expression</p>
-                <ul>
-                    <li><strong>Dis‑Ease</strong> – Nervous System: Survival</li>
-                    <li>Impact: Blocks flow → Dis-Ease</li>
-                </ul>
+            <div class="card"><h3>X BLOCK <span class="badge block">Repressed</span></h3>
+                <p>Repressed emotions block life's natural expression</p><ul><li><strong>Dis‑Ease</strong> – Nervous System: Survival</li><li>Impact: Blocks flow → Dis-Ease</li></ul>
             </div>
-            <div class="card">
-                <h3>EASE <span class="badge flow">Flow</span></h3>
-                <p>Feel. Honored. Expressed emotions are EASE of life flowing through us</p>
-                <ul>
-                    <li><strong>Flow</strong> – Allow. Flow. Live.</li>
-                    <li>Nervous System → Calm</li>
-                </ul>
+            <div class="card"><h3>EASE <span class="badge flow">Flow</span></h3>
+                <p>Feel. Honored. Expressed emotions are EASE of life flowing through us</p><ul><li><strong>Flow</strong> – Allow. Flow. Live.</li><li>Nervous System → Calm</li></ul>
             </div>
         </div>
     </section>
 
-    <!-- Topology Layers -->
-    <section>
-        <h2>Topology Layers</h2>
-        <div class="grid">
-            
+    <section><h2>Topology Layers</h2><div class="grid">
             <div class="card">
                 <h3>Quantum Layer <span style="color:#aaa;font-weight:normal;">0.618 Hz</span></h3>
                 <ul>
-                    
-                    <li><strong>PIDX</strong> – The origin seed – quantum resonance (Weight: 40%)
+                    <li><strong>PIDX</strong> – The origin seed – quantum resonance (Weight: 35.7%)
                         <div class="energy-bar"><div class="energy-fill" style="width:96%;"></div></div>
                         <span style="font-size:0.8rem;color:#888;">Energy: 96%</span>
                     </li>
-            
-                </ul>
+            </ul>
             </div>
         
             <div class="card">
                 <h3>Resonance Layer <span style="color:#aaa;font-weight:normal;">1.618 Hz</span></h3>
                 <ul>
-                    
-                    <li><strong>SGUIDE</strong> – Amplification through guidance (Weight: 30%)
+                    <li><strong>SGUIDE</strong> – Amplification through guidance (Weight: 25.9%)
                         <div class="energy-bar"><div class="energy-fill" style="width:77%;"></div></div>
                         <span style="font-size:0.8rem;color:#888;">Energy: 77%</span>
                     </li>
             
-                    <li><strong>VDOO</strong> – Velocity of doo – momentum (Weight: 20%)
+                    <li><strong>VDOO</strong> – Velocity of doo – momentum (Weight: 17.0%)
                         <div class="energy-bar"><div class="energy-fill" style="width:58%;"></div></div>
                         <span style="font-size:0.8rem;color:#888;">Energy: 58%</span>
                     </li>
-            
-                </ul>
+            </ul>
             </div>
         
             <div class="card">
                 <h3>Coherence Layer <span style="color:#aaa;font-weight:normal;">3.618 Hz</span></h3>
                 <ul>
-                    
-                    <li><strong>PENNIES</strong> – The anchor – persistent coherence (Weight: 25%)
+                    <li><strong>PENNIES</strong> – The anchor – persistent coherence (Weight: 21.4%)
                         <div class="energy-bar"><div class="energy-fill" style="width:91%;"></div></div>
                         <span style="font-size:0.8rem;color:#888;">Energy: 91%</span>
                     </li>
-            
-                </ul>
+            </ul>
             </div>
-        
-        </div>
-    </section>
+        </div></section>
 
-    <!-- Token Details -->
-    <section>
-        <h2>Token Details</h2>
-        <div class="grid">
-            
+    <section><h2>Token Details</h2><div class="grid">
             <div class="card">
                 <h3>PIDX</h3>
                 <p><strong>Address:</strong> <code style="font-size:0.8rem;">0xa36E026FC453880537e10d21fC139439bD2702fc</code></p>
                 <p><strong>Layer:</strong> </p>
                 <p><strong>Frequency:</strong> 0.618 Hz</p>
                 <p><strong>Energy:</strong> 96.0%</p>
-                <p><strong>Rate:</strong> 1 ETH = 1,000,000 PIDX</p>
+                <p><strong>Rate:</strong> 1 ETH = 997,898 PIDX</p>
                 <p><strong>Supply:</strong> 1,000,000,000,000</p>
                 <p><strong>Security:</strong> Audited, Owner Renounced, CVE Protected</p>
-                <p>
-                    <span class="badge verified">✔ Verified</span>
-                    <span class="badge renounced">🔒 Renounced</span>
-                </p>
+                <p><span class="badge verified">✔ Verified</span> <span class="badge renounced">🔒 Renounced</span></p>
                 <p>Links: <a href="https://basescan.org/address/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">BaseScan</a> <a href="https://sourcify.dev/address/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">Sourcify</a> <a href="https://dexscreener.com/base/0x..." target="_blank">DexScreener</a> </p>
             </div>
         
@@ -239,13 +125,10 @@
                 <p><strong>Layer:</strong> </p>
                 <p><strong>Frequency:</strong> 1.618 Hz</p>
                 <p><strong>Energy:</strong> 76.8%</p>
-                <p><strong>Rate:</strong> 1 ETH = 10,000,000 SGUIDE</p>
+                <p><strong>Rate:</strong> 1 ETH = 10,170,756 SGUIDE</p>
                 <p><strong>Supply:</strong> 10,000,000,000,000</p>
                 <p><strong>Security:</strong> Verified, Renounced, Liquidity Active</p>
-                <p>
-                    <span class="badge verified">✔ Verified</span>
-                    <span class="badge renounced">🔒 Renounced</span>
-                </p>
+                <p><span class="badge verified">✔ Verified</span> <span class="badge renounced">🔒 Renounced</span></p>
                 <p>Links: <a href="https://basescan.org/address/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">BaseScan</a> <a href="https://sourcify.dev/address/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">Sourcify</a> <a href="https://dexscreener.com/base/0x..." target="_blank">DexScreener</a> </p>
             </div>
         
@@ -255,13 +138,10 @@
                 <p><strong>Layer:</strong> </p>
                 <p><strong>Frequency:</strong> 2.618 Hz</p>
                 <p><strong>Energy:</strong> 57.6%</p>
-                <p><strong>Rate:</strong> 1 ETH = 100,000,000 VDOO</p>
+                <p><strong>Rate:</strong> 1 ETH = 100,323,948 VDOO</p>
                 <p><strong>Supply:</strong> 100,000,000,000</p>
                 <p><strong>Security:</strong> CVE Protected, AES-256-GCM Encrypted</p>
-                <p>
-                    <span class="badge verified">✔ Verified</span>
-                    <span class="badge renounced">🔒 Renounced</span>
-                </p>
+                <p><span class="badge verified">✔ Verified</span> <span class="badge renounced">🔒 Renounced</span></p>
                 <p>Links: <a href="https://basescan.org/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">BaseScan</a> <a href="https://sourcify.dev/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">Sourcify</a> </p>
             </div>
         
@@ -271,64 +151,31 @@
                 <p><strong>Layer:</strong> </p>
                 <p><strong>Frequency:</strong> 3.618 Hz</p>
                 <p><strong>Energy:</strong> 91.2%</p>
-                <p><strong>Rate:</strong> 1 ETH = 10,000,000 PENNIES</p>
+                <p><strong>Rate:</strong> 1 ETH = 10,237,374 PENNIES</p>
                 <p><strong>Supply:</strong> 10,000,000,000</p>
                 <p><strong>Security:</strong> Audited, ISO 27001, SOC 2</p>
-                <p>
-                    <span class="badge verified">✔ Verified</span>
-                    <span class="badge renounced">🔒 Renounced</span>
-                </p>
+                <p><span class="badge verified">✔ Verified</span> <span class="badge renounced">🔒 Renounced</span></p>
                 <p>Links: <a href="https://basescan.org/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">BaseScan</a> <a href="https://sourcify.dev/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">Sourcify</a> </p>
             </div>
-        
-        </div>
+        </div></section>
+
+    <section><h2>Pennies Index Vault</h2>
+        <div class="card"><p><strong>Address:</strong> <code>0xfAcb5905E1E592D69a2AE0af6F82330c07e4312</code></p>
+        <p><strong>Status:</strong> Active</p><p><strong>Weights:</strong> PENNIES: 40%, SGUIDE: 30%, VDOO: 20%, WBTC: 10%</p>
+        <p>Links: <a href="https://basescan.org/address/0xfAcb5905E1E592D69a2AE0af6F82330c07e4312" target="_blank">BaseScan</a> | <a href="#" target="_blank">DexScreener</a> | <a href="#" target="_blank">GeckoTerminal</a></p></div>
     </section>
 
-    <!-- Vault -->
-    <section>
-        <h2>Pennies Index Vault</h2>
-        <div class="card">
-            <p><strong>Address:</strong> <code>0xfAcb5905E1E592D69a2AE0af6F82330c07e4312</code></p>
-            <p><strong>Status:</strong> Active</p>
-            <p><strong>Weights:</strong> PENNIES: 40%, SGUIDE: 30%, VDOO: 20%, WBTC: 10%</p>
-            <p>Links: <a href="https://basescan.org/address/0xfAcb5905E1E592D69a2AE0af6F82330c07e4312" target="_blank">BaseScan</a> | <a href="#" target="_blank">DexScreener</a> | <a href="#" target="_blank">GeckoTerminal</a></p>
-        </div>
+    <section><h2>Security & CVE</h2>
+        <div class="card"><ul><li>CVE Protection: ✅ Active</li><li>Encryption: AES-256-GCM</li><li>Standards: ISO 27001, SOC 2, NIST SP 800-53</li><li>Audited: ✅</li><li>Owner Renounced: ✅</li></ul></div>
     </section>
 
-    <!-- Security & CVE -->
-    <section>
-        <h2>Security & CVE Protection</h2>
-        <div class="card">
-            <ul>
-                <li>CVE Protection: ✅ Active</li>
-                <li>Encryption: AES-256-GCM</li>
-                <li>Standards: ISO 27001, SOC 2, NIST SP 800-53</li>
-                <li>Audited: ✅</li>
-                <li>Owner Renounced: ✅</li>
-            </ul>
-        </div>
+    <section><h2>Growth Projection</h2>
+        <div class="card"><p><strong>Initial holders:</strong> 50  |  <strong>Monthly growth:</strong> 20.0%  |  <strong>Initial price:</strong> 1.00e-10 ETH  |  <strong>Initial wealth:</strong> $$25</p>
+        <table><thead><tr><th>Month</th><th>Holders</th><th>Price (ETH)</th><th>Your Wealth (USD)</th></tr></thead><tbody><tr><td>6</td><td>149</td><td>2.99e-10</td><td>$75</td></tr><tr><td>12</td><td>446</td><td>8.92e-10</td><td>$223</td></tr><tr><td>18</td><td>1331</td><td>2.66e-09</td><td>$666</td></tr><tr><td>24</td><td>3975</td><td>7.95e-09</td><td>$1,987</td></tr><tr><td>30</td><td>11869</td><td>2.37e-08</td><td>$5,934</td></tr><tr><td>36</td><td>35440</td><td>7.09e-08</td><td>$17,720</td></tr><tr><td>48</td><td>315828</td><td>6.32e-07</td><td>$157,914</td></tr><tr><td>58</td><td>—</td><td>—</td><td>$1,000,000</td></tr><tr><td>72</td><td>—</td><td>—</td><td>$12,500,000</td></tr><tr><td>96</td><td>—</td><td>—</td><td>$1,000,000,000</td></tr><tr><td>134</td><td>—</td><td>—</td><td>$1,000,000,000</td></tr></tbody></table>
+        <p style="color:#aaa;font-size:0.9rem;">* Projection based on 20% monthly holder growth and 10% share of total supply.</p></div>
     </section>
 
-    <!-- Growth Projection -->
-    <section>
-        <h2>Growth Projection</h2>
-        <div class="card">
-            <p><strong>Initial holders:</strong> 50  |  <strong>Monthly growth:</strong> 20.0%  |  <strong>Initial price:</strong> 1.00e-10 ETH  |  <strong>Initial wealth:</strong> $$25</p>
-            <table>
-                <thead><tr><th>Month</th><th>Holders</th><th>Price (ETH)</th><th>Your Wealth (USD)</th></tr></thead>
-                <tbody>
-                    <tr><td>6</td><td>149</td><td>2.99e-10</td><td>$75</td></tr><tr><td>12</td><td>446</td><td>8.92e-10</td><td>$223</td></tr><tr><td>18</td><td>1331</td><td>2.66e-09</td><td>$666</td></tr><tr><td>24</td><td>3975</td><td>7.95e-09</td><td>$1,987</td></tr><tr><td>30</td><td>11869</td><td>2.37e-08</td><td>$5,934</td></tr><tr><td>36</td><td>35440</td><td>7.09e-08</td><td>$17,720</td></tr><tr><td>48</td><td>315828</td><td>6.32e-07</td><td>$157,914</td></tr><tr><td>58</td><td>—</td><td>—</td><td>$1,000,000</td></tr><tr><td>72</td><td>—</td><td>—</td><td>$12,500,000</td></tr><tr><td>96</td><td>—</td><td>—</td><td>$1,000,000,000</td></tr><tr><td>134</td><td>—</td><td>—</td><td>$1,000,000,000</td></tr>
-                </tbody>
-            </table>
-            <p style="color:#aaa;font-size:0.9rem;">* Projection based on 20% monthly holder growth and 10% share of total supply.</p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <div class="footer">
-        Last updated: Wed Aug 26 22:41:44 2026 • Chain ID 8453
-        <br>♾️ Infinite Growth Engine active – all data public.
-    </div>
+    <div class="footer">Last updated: Wed Aug 26 22:50:36 2026 • Chain ID 8453<br>♾️ Infinite Growth Engine active – all data public.</div>
 </div>
 </body>
 </html>

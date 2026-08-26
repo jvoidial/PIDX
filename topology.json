@@ -27,8 +27,8 @@
     "PIDX": {
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
-      "weight": 40,
-      "rate": 1000000,
+      "weight": 35.7,
+      "rate": 997898,
       "frequency": 0.618,
       "energy": 0.9604,
       "description": "The origin seed \u2013 quantum resonance",
@@ -43,8 +43,8 @@
     "SGUIDE": {
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
-      "weight": 30,
-      "rate": 10000000,
+      "weight": 25.9,
+      "rate": 10170756,
       "frequency": 1.618,
       "energy": 0.7683,
       "description": "Amplification through guidance",
@@ -59,8 +59,8 @@
     "VDOO": {
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
-      "weight": 20,
-      "rate": 100000000,
+      "weight": 17.0,
+      "rate": 100323948,
       "frequency": 2.618,
       "energy": 0.5762,
       "description": "Velocity of doo \u2013 momentum",
@@ -74,8 +74,8 @@
     "PENNIES": {
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
-      "weight": 25,
-      "rate": 10000000,
+      "weight": 21.4,
+      "rate": 10237374,
       "frequency": 3.618,
       "energy": 0.9124,
       "description": "The anchor \u2013 persistent coherence",
@@ -212,20 +212,37 @@
   },
   "paradox": {
     "bootstrapped": true,
-    "last_bootstrap": 1787780504,
-    "next_adjustment": 1787784104,
+    "last_bootstrap": 1787781036,
+    "next_adjustment": 1787784636,
     "adjustment_log": [
       {
-        "time": 1787780504,
-        "action": "increased_decay",
-        "avg_energy": 0.804335
+        "time": 1787781036,
+        "action": "market_adaptation",
+        "sentiment": 0.45890100255692357,
+        "factors": {
+          "PIDX": 1.0021060819223873,
+          "SGUIDE": 0.983211022368546,
+          "VDOO": 0.9967709747507574,
+          "PENNIES": 0.9768129235152329
+        }
       }
     ],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
+  "consciousness": {
+    "generation": 1,
+    "sentiment": 0.45890100255692357,
+    "growth_factors": {
+      "PIDX": 1.0021060819223873,
+      "SGUIDE": 0.983211022368546,
+      "VDOO": 0.9967709747507574,
+      "PENNIES": 0.9768129235152329
+    },
+    "evolution_rate": 0.01
+  },
   "growth": {
-    "last_updated": 1787780504,
+    "last_updated": 1787781036,
     "next_proposal": null
   }
 }
