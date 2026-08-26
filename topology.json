@@ -1,0 +1,64 @@
+{
+  "name": "\u267e\ufe0f Infinite Growth Economy",
+  "version": "2.0",
+  "chainId": 8453,
+  "layers": {
+    "Quantum": {
+      "frequency": 0.618,
+      "tokens": [
+        "PIDX"
+      ]
+    },
+    "Resonance": {
+      "frequency": 1.618,
+      "tokens": [
+        "SGUIDE",
+        "VDOO"
+      ]
+    },
+    "Coherence": {
+      "frequency": 3.618,
+      "tokens": [
+        "PENNIES"
+      ]
+    }
+  },
+  "tokens": {
+    "PIDX": {
+      "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
+      "symbol": "PIDX",
+      "weight": 40,
+      "rate": 1000000,
+      "frequency": 0.618,
+      "description": "The origin seed \u2013 quantum resonance"
+    },
+    "SGUIDE": {
+      "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
+      "symbol": "SGUIDE",
+      "weight": 30,
+      "rate": 10000000,
+      "frequency": 1.618,
+      "description": "Amplification through guidance"
+    },
+    "VDOO": {
+      "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
+      "symbol": "VDOO",
+      "weight": 20,
+      "rate": 100000000,
+      "frequency": 2.618,
+      "description": "Velocity of doo \u2013 momentum"
+    },
+    "PENNIES": {
+      "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
+      "symbol": "PENNIES",
+      "weight": 25,
+      "rate": 10000000,
+      "frequency": 3.618,
+      "description": "The anchor \u2013 persistent coherence"
+    }
+  },
+  "growth": {
+    "last_updated": 1787779680,
+    "next_proposal": null
+  }
+}

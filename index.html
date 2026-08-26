@@ -1,583 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spirit Guide · Live Ecosystem</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#0a0a0a; color:#fff; font-family:'Segoe UI',sans-serif; padding:1rem; }
-    .container { max-width:1400px; margin:auto; }
-    header { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; border-bottom:1px solid #333; flex-wrap:wrap; gap:1rem; }
-    .logo { font-size:1.8rem; font-weight:bold; background:linear-gradient(135deg,#4fc3f7,#7c3aed); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .header-actions { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
-    .btn { padding:0.6rem 1.2rem; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:0.9rem; transition:0.2s; }
-    .btn-outline { background:transparent; border:1px solid #4fc3f7; color:#4fc3f7; }
-    .btn-outline:hover { background:#4fc3f7; color:#000; }
-    .btn-danger { background:#ff4444; color:#fff; }
-    .btn-danger:hover { background:#cc0000; }
-    .btn-success { background:#00c853; color:#000; }
-    .btn-success:hover { background:#00a844; }
-    .wallet-display { color:#888; font-size:0.9rem; }
-    .public-content { margin-top:2rem; }
-    .admin-content { display:none; margin-top:2rem; border-top:2px solid #333; padding-top:2rem; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:1.5rem; margin:2rem 0; }
-    .card { background:#1a1a1a; border-radius:16px; padding:1.5rem; border:1px solid #333; transition:0.2s; }
-    .card:hover { border-color:#4fc3f7; }
-    .card h3 { color:#4fc3f7; margin-bottom:0.5rem; }
-    .card .value { font-size:1.4rem; font-weight:bold; color:#fff; }
-    .card .sub { color:#888; font-size:0.85rem; word-break:break-all; }
-    .badge { display:inline-block; padding:0.2rem 0.8rem; border-radius:12px; font-size:0.75rem; font-weight:bold; }
-    .badge.green { background:#00c853; color:#000; }
-    .badge.orange { background:#ff9100; color:#000; }
-    .badge.blue { background:#4fc3f7; color:#000; }
-    .badge.red { background:#ff4444; color:#fff; }
-    .badge.purple { background:#7c3aed; color:#fff; }
-    .badge.gold { background:#ffd700; color:#000; }
-    .map { display:flex; flex-wrap:wrap; gap:2rem; justify-content:center; margin:2rem 0; padding:1.5rem; background:#111; border-radius:16px; border:1px solid #333; }
-    .layer { flex:1; min-width:160px; text-align:center; padding:0.5rem; }
-    .layer h4 { color:#aaa; margin-bottom:0.5rem; font-size:0.9rem; }
-    .layer .freq { color:#666; font-size:0.8rem; }
-    .token-tag { display:inline-block; padding:0.3rem 0.8rem; margin:0.2rem; border-radius:20px; background:#1a1a1a; border:1px solid #4fc3f7; color:#4fc3f7; font-size:0.85rem; }
-    .vault { background:#1a1a1a; border-radius:16px; padding:1.5rem; border:1px solid #333; margin:2rem 0; }
-    .vault code { background:#0d0d0d; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.85rem; }
-    .rate-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:1rem; margin:1rem 0; }
-    .rate-item { background:#0d0d0d; padding:0.8rem; border-radius:8px; text-align:center; border:1px solid #222; }
-    .rate-item .token { color:#4fc3f7; font-weight:bold; }
-    .rate-item .rate { color:#aaa; font-size:0.9rem; }
-    .security-badges { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0; justify-content:center; }
-    .security-badge { background:#1a1a1a; padding:0.3rem 0.8rem; border-radius:20px; border:1px solid #00c853; color:#00c853; font-size:0.75rem; }
-    .links { margin:1rem 0; display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; }
-    .links a { color:#4fc3f7; text-decoration:none; font-size:0.9rem; }
-    .links a:hover { text-decoration:underline; }
-    footer { text-align:center; padding:2rem 0; color:#555; border-top:1px solid #333; margin-top:2rem; font-size:0.85rem; }
-    .blocked { background:#ff0000; color:#fff; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:2.5rem; text-align:center; padding:1rem; }
-    .blocked span { font-size:1.2rem; margin-top:1rem; }
-    .maintenance { background:#ff8800; color:#fff; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:2rem; text-align:center; padding:1rem; }
-    .maintenance span { font-size:1.2rem; margin-top:1rem; }
-    .emotions { background:linear-gradient(135deg,#1a0a2e,#2d1b4e); border-radius:16px; padding:1.5rem; border:1px solid #7c3aed; margin:2rem 0; }
-    .emotions h2 { color:#c084fc; margin-bottom:0.5rem; }
-    .emotions .block { color:#f87171; }
-    .emotions .flow { color:#34d399; }
-    .emotions .ease { color:#fbbf24; font-weight:bold; }
-    .rsync-text { background:#0d0d0d; padding:1rem; border-radius:12px; border-left:4px solid #7c3aed; margin:1.5rem 0; color:#ccc; font-style:italic; }
-    .rsync-text strong { color:#4fc3f7; }
-    .mining-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:1rem; margin:1rem 0; }
-    .mining-item { background:#0d0d0d; padding:0.8rem; border-radius:8px; text-align:center; border:1px solid #222; }
-    .mining-item .label { color:#888; font-size:0.8rem; }
-    .mining-item .value { font-size:1.2rem; font-weight:bold; color:#4fc3f7; }
-    .prediction { background:linear-gradient(135deg,#1a0030,#2d1b4e); border-radius:16px; padding:1.5rem; border:1px solid #7c3aed; margin:2rem 0; text-align:center; }
-    .prediction h3 { color:#c084fc; }
-    .token-links { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.8rem; }
-    .token-links a { background:#0d0d0d; padding:0.2rem 0.6rem; border-radius:4px; font-size:0.75rem; color:#4fc3f7; text-decoration:none; border:1px solid #333; }
-    .token-links a:hover { background:#4fc3f7; color:#000; }
-    .full-address { font-size:0.8rem; color:#888; word-break:break-all; background:#0d0d0d; padding:0.2rem 0.5rem; border-radius:4px; display:inline-block; margin:0.2rem 0; }
-    .live-badge { display:inline-block; padding:0.2rem 0.8rem; border-radius:12px; background:#ff4444; color:#fff; font-size:0.7rem; margin-left:0.5rem; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.4; } 100% { opacity:1; } }
-    .status-item { display:flex; justify-content:space-between; padding:0.3rem 0; border-bottom:1px solid #222; }
-    .status-label { color:#888; }
-    .status-value { color:#4fc3f7; font-weight:bold; }
-    @media (max-width:600px){ .logo { font-size:1.3rem; } .card { padding:1rem; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♾️ Ecosystem Topology Map</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0d0d1a; color: #c8d6e5; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+        .container { max-width: 1000px; width: 100%; background: #1a1a2e; border-radius: 2rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        h1 { font-size: 2.5rem; text-align: center; background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .subtitle { text-align: center; font-size: 1.1rem; opacity: 0.8; margin-bottom: 2rem; letter-spacing: 2px; }
+        .layers { display: flex; flex-direction: column; gap: 2rem; }
+        .layer { background: #16213e; border-radius: 1.5rem; padding: 1.5rem; border-left: 6px solid #4facfe; transition: 0.3s; }
+        .layer:hover { transform: scale(1.01); box-shadow: 0 10px 30px rgba(79, 172, 254, 0.2); }
+        .layer-header { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .layer-header span:last-child { opacity: 0.6; font-weight: 400; }
+        .tokens { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; }
+        .token-card { background: #0f3460; padding: 0.8rem 1.2rem; border-radius: 1rem; flex: 1 0 200px; display: flex; flex-direction: column; border-left: 4px solid #f5576c; }
+        .token-name { font-weight: bold; color: #f5c6a0; }
+        .token-detail { font-size: 0.85rem; opacity: 0.8; }
+        .footer { margin-top: 2rem; text-align: center; font-size: 0.9rem; opacity: 0.5; letter-spacing: 1px; }
+    </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
+        <h1>♾️ Ecosystem Topology Map</h1>
+        <p class="subtitle">Quantum → Resonance → Coherence • Self‑growing economy</p>
+        <div class="layers">
 
-  <header>
-    <div class="logo">🌀 Spirit Guide</div>
-    <div class="header-actions">
-      <button class="btn btn-outline" id="connectBtn">Connect Wallet</button>
-      <button class="btn btn-danger" id="logoutBtn" style="display:none;">🚪 Logout</button>
-      <span class="wallet-display" id="walletDisplay"></span>
-    </div>
-  </header>
-
-  <!-- Public content -->
-  <div class="public-content">
-    <div style="text-align:right; color:#888; font-size:0.8rem; margin-bottom:1rem;">
-      <span class="live-badge">🔴 LIVE</span> Real-time data
-    </div>
-
-    <!-- Emotions -->
-    <div class="emotions">
-      <h2>🧬 ENDTONS · EMOTIONAL FLOW</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:2rem; margin-top:1rem;">
-        <div style="flex:1; min-width:200px;">
-          <h3 class="block">✖ BLOCK</h3>
-          <p style="color:#ccc;">Repressed emotions block life's natural expression.</p>
-          <p style="color:#f87171;">Dis‑Ease → Nervous System → Survival</p>
+            <div class="layer">
+                <div class="layer-header">
+                    <span>Quantum Layer</span>
+                    <span>0.618 Hz</span>
+                </div>
+                <div class="tokens">
+        
+                    <div class="token-card">
+                        <span class="token-name">PIDX</span>
+                        <span class="token-detail">Weight: 40%</span>
+                        <span class="token-detail">Rate: 1 ETH = 1,000,000</span>
+                        <span class="token-detail">The origin seed – quantum resonance</span>
+                    </div>
+            
+                </div>
+            </div>
+        
+            <div class="layer">
+                <div class="layer-header">
+                    <span>Resonance Layer</span>
+                    <span>1.618 Hz</span>
+                </div>
+                <div class="tokens">
+        
+                    <div class="token-card">
+                        <span class="token-name">SGUIDE</span>
+                        <span class="token-detail">Weight: 30%</span>
+                        <span class="token-detail">Rate: 1 ETH = 10,000,000</span>
+                        <span class="token-detail">Amplification through guidance</span>
+                    </div>
+            
+                    <div class="token-card">
+                        <span class="token-name">VDOO</span>
+                        <span class="token-detail">Weight: 20%</span>
+                        <span class="token-detail">Rate: 1 ETH = 100,000,000</span>
+                        <span class="token-detail">Velocity of doo – momentum</span>
+                    </div>
+            
+                </div>
+            </div>
+        
+            <div class="layer">
+                <div class="layer-header">
+                    <span>Coherence Layer</span>
+                    <span>3.618 Hz</span>
+                </div>
+                <div class="tokens">
+        
+                    <div class="token-card">
+                        <span class="token-name">PENNIES</span>
+                        <span class="token-detail">Weight: 25%</span>
+                        <span class="token-detail">Rate: 1 ETH = 10,000,000</span>
+                        <span class="token-detail">The anchor – persistent coherence</span>
+                    </div>
+            
+                </div>
+            </div>
+        
         </div>
-        <div style="flex:1; min-width:200px;">
-          <h3 class="flow">➤ FLOW</h3>
-          <p style="color:#ccc;">Feel. Honored. Expressed emotions are <span class="ease">EASE</span> of life flowing through us.</p>
-          <p style="color:#34d399;">Allow. Flow. Live. Nervous System → Calm.</p>
+        <div class="footer">
+            Last updated: Wed Aug 26 22:28:00 2026 • Chain ID 8453
+            <br>♾️ Infinite Growth Engine active
         </div>
-      </div>
     </div>
-
-    <!-- Topology Map -->
-    <div class="map">
-      <div class="layer">
-        <h4>⚡ Quantum Layer</h4>
-        <span class="token-tag">PIDX</span>
-        <div class="freq">0.618 Hz</div>
-        <p style="color:#666;font-size:0.8rem;margin-top:0.3rem;">Weight: 40%</p>
-      </div>
-      <div class="layer">
-        <h4>🌀 Resonance Layer</h4>
-        <span class="token-tag">SGUIDE</span> <span class="token-tag">VDOO</span>
-        <div class="freq">1.618 Hz · 2.618 Hz</div>
-        <p style="color:#666;font-size:0.8rem;margin-top:0.3rem;">Weight: 35%</p>
-      </div>
-      <div class="layer">
-        <h4>✨ Coherence Layer</h4>
-        <span class="token-tag">PENNIES</span>
-        <div class="freq">3.618 Hz</div>
-        <p style="color:#666;font-size:0.8rem;margin-top:0.3rem;">Weight: 25%</p>
-      </div>
-    </div>
-
-    <!-- RSYNC text -->
-    <div class="rsync-text">
-      <p>🔹 <strong>RSYNC</strong> mirrors state across the ecosystem.<br>
-      🔹 <strong>Voxel Resonance</strong> aligns token frequencies.<br>
-      🔹 <strong>Coherence Persistence</strong> resists threshold decay.<br>
-      🔹 <strong>Jules Nd Continuity Engine</strong> binds all repos and coins.</p>
-    </div>
-
-    <!-- Token Cards -->
-    <div class="grid">
-      <div class="card">
-        <h3>🪙 PENNIES CHEQ</h3>
-        <div class="full-address">0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7</div>
-        <div style="margin-top:0.5rem;">
-          <span class="badge green">✔ Verified</span>
-          <span class="badge blue">🔒 Renounced</span>
-          <span class="badge green">🟢 Liquidity Active</span>
-        </div>
-        <div class="token-links">
-          <a href="https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">📄 BaseScan</a>
-          <a href="https://base.blockscout.com/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">🔍 Blockscout</a>
-          <a href="https://sourcify.dev/#/lookup/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">✅ Sourcify</a>
-          <a href="https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">📈 DexScreener</a>
-          <a href="https://www.geckoterminal.com/base/pools/0x29a0ae1f10629f8855c87c911531ffb2c98d68c6" target="_blank">🦎 GeckoTerminal</a>
-          <a href="https://app.uniswap.org/#/swap?outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7&chain=base" target="_blank">🔄 Swap</a>
-        </div>
-        <div class="value" style="font-size:1rem;color:#888;margin-top:0.5rem;">Balance: —</div>
-      </div>
-
-      <div class="card">
-        <h3>🌀 SGUIDE</h3>
-        <div class="full-address">0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a</div>
-        <div style="margin-top:0.5rem;">
-          <span class="badge green">✔ Verified</span>
-          <span class="badge blue">🔒 Renounced</span>
-          <span class="badge green">🔺 Liquidity Active</span>
-        </div>
-        <div class="token-links">
-          <a href="https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">📄 BaseScan</a>
-          <a href="https://base.blockscout.com/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">🔍 Blockscout</a>
-          <a href="https://sourcify.dev/#/lookup/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">✅ Sourcify</a>
-          <a href="https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">📈 DexScreener</a>
-          <a href="https://www.geckoterminal.com/base/pools/0xb50dceb0570557b9b7fe43d8cbdc9b3457d3dc5a" target="_blank">🦎 GeckoTerminal</a>
-          <a href="https://app.uniswap.org/#/swap?outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a&chain=base" target="_blank">🔄 Swap</a>
-        </div>
-        <div class="value" style="font-size:1rem;color:#888;margin-top:0.5rem;">Balance: —</div>
-      </div>
-
-      <div class="card">
-        <h3>📊 PIDX</h3>
-        <div class="full-address">0xa36E026FC453880537e10d21fC139439bD2702fc</div>
-        <div style="margin-top:0.5rem;">
-          <span class="badge orange">✔ Verified</span>
-          <span class="badge blue">🔒 Renounced</span>
-          <span class="badge green">⚙️ Liquidity Active</span>
-          <span class="badge red">⚠️ Flagged</span>
-        </div>
-        <div class="token-links">
-          <a href="https://basescan.org/token/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">📄 BaseScan</a>
-          <a href="https://base.blockscout.com/token/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">🔍 Blockscout</a>
-          <a href="https://sourcify.dev/#/lookup/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">✅ Sourcify</a>
-          <a href="https://dexscreener.com/base/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">📈 DexScreener</a>
-          <a href="https://www.geckoterminal.com/base/pools/0xfa8f70efe22da989ec3e77fb25647d44cdb2248f" target="_blank">🦎 GeckoTerminal</a>
-          <a href="https://app.uniswap.org/#/swap?outputCurrency=0xa36E026FC453880537e10d21fC139439bD2702fc&chain=base" target="_blank">🔄 Swap</a>
-        </div>
-        <div class="value" style="font-size:1rem;color:#888;margin-top:0.5rem;">Balance: —</div>
-      </div>
-
-      <div class="card">
-        <h3>🔮 VDOO</h3>
-        <div class="full-address">0x38e4f08D08b4D772A7B75669C356b4749dd2d30b</div>
-        <div style="margin-top:0.5rem;">
-          <span class="badge green">✔ Verified</span>
-          <span class="badge blue">🔒 Renounced</span>
-          <span class="badge green">🔺 Liquidity Active</span>
-        </div>
-        <div class="token-links">
-          <a href="https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">📄 BaseScan</a>
-          <a href="https://base.blockscout.com/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">🔍 Blockscout</a>
-          <a href="https://sourcify.dev/#/lookup/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">✅ Sourcify</a>
-          <a href="https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">📈 DexScreener</a>
-          <a href="https://www.geckoterminal.com/base/pools/0xc7559f7625a634ac51d5c0d6546b5952bd4a45e4" target="_blank">🦎 GeckoTerminal</a>
-          <a href="https://app.uniswap.org/#/swap?outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b&chain=base" target="_blank">🔄 Swap</a>
-        </div>
-        <div class="value" style="font-size:1rem;color:#888;margin-top:0.5rem;">Balance: —</div>
-      </div>
-    </div>
-
-    <!-- Rate Mappings -->
-    <div class="vault">
-      <h2>📊 Rate Mappings</h2>
-      <div class="rate-grid">
-        <div class="rate-item"><span class="token">PIDX → ETH</span><div class="rate">1,000,000 PIDX = 1 ETH</div></div>
-        <div class="rate-item"><span class="token">SGUIDE → ETH</span><div class="rate">10,000,000 SGUIDE = 1 ETH</div></div>
-        <div class="rate-item"><span class="token">VDOO → ETH</span><div class="rate">100,000,000 VDOO = 1 ETH</div></div>
-        <div class="rate-item"><span class="token">PENNIES → ETH</span><div class="rate">10,000,000 PENNIES = 1 ETH</div></div>
-      </div>
-    </div>
-
-    <!-- Mining & Auto Bot -->
-    <div class="vault">
-      <h2>⛏️ Mining & Auto Bot</h2>
-      <div class="mining-grid">
-        <div class="mining-item"><span class="label">Hash Rate</span><div class="value" id="hashRate">24.7 MH/s</div></div>
-        <div class="mining-item"><span class="label">Blocks Mined</span><div class="value" id="blocksMined">42</div></div>
-        <div class="mining-item"><span class="label">Bot Status</span><div class="value" style="color:#00c853;" id="botStatus">● Running</div></div>
-        <div class="mining-item"><span class="label">Strategy</span><div class="value" id="strategyName">Aggressive</div></div>
-      </div>
-      <p style="color:#888;font-size:0.9rem;">Live mining stats and auto‑bot strategy.</p>
-    </div>
-
-    <!-- Predictions -->
-    <div class="prediction">
-      <h3>📈 Voxel Resonance Growth Projection</h3>
-      <p style="color:#ccc;">Live real‑time prices feed the projection model.<br>Growth rates derived from resonance frequencies.</p>
-      <div style="display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; margin-top:0.5rem;">
-        <span><span class="badge gold">PIDX</span> <span id="pidxPred">+2.3%</span></span>
-        <span><span class="badge gold">SGUIDE</span> <span id="sguidePred">+1.8%</span></span>
-        <span><span class="badge gold">VDOO</span> <span id="vdooPred">+4.1%</span></span>
-        <span><span class="badge gold">PENNIES</span> <span id="penniesPred">+0.7%</span></span>
-      </div>
-    </div>
-
-    <!-- Security -->
-    <div class="vault">
-      <h2>🛡️ Security & CVE Protection</h2>
-      <div class="security-badges">
-        <span class="security-badge">✅ CVE Protection Active</span>
-        <span class="security-badge">🔐 AES-256-GCM Encryption</span>
-        <span class="security-badge">📋 Audited & Verified</span>
-        <span class="security-badge">🔒 Owner Renounced</span>
-        <span class="security-badge">📜 ISO 27001</span>
-        <span class="security-badge">📜 SOC 2</span>
-        <span class="security-badge">📜 NIST SP 800-53</span>
-      </div>
-    </div>
-
-    <!-- Pennies Index Vault (single, at bottom) -->
-    <div class="vault">
-      <h2>🏦 Pennies Index Vault</h2>
-      <p>Weighted basket: <strong>40% PENNIES</strong> · <strong>30% SGUIDE</strong> · <strong>20% VDOO</strong> · <strong>10% WBTC</strong></p>
-      <p>Status: <span class="badge green">Active</span></p>
-      <p>Vault: <code>0xfAcb5905E1E592D69a2AE0af6F82330c07e4312</code></p>
-      <div class="links">
-        <a href="https://basescan.org/token/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">📄 BaseScan (PIDX)</a>
-        <a href="https://dexscreener.com/base/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">📈 DexScreener</a>
-        <a href="https://www.geckoterminal.com/base/pools/0xfa8f70efe22da989ec3e77fb25647d44cdb2248f" target="_blank">🦎 GeckoTerminal</a>
-      </div>
-    </div>
-
-    <!-- Ecosystem Links -->
-    <div class="links">
-      <a href="https://basescan.org/address/0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C" target="_blank">🔗 Your Wallet</a>
-      <a href="https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">📈 PENNIES</a>
-      <a href="https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">📈 SGUIDE</a>
-      <a href="https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">📈 VDOO</a>
-      <a href="https://dexscreener.com/base/0xa36E026FC453880537e10d21fC139439bD2702fc" target="_blank">📈 PIDX</a>
-    </div>
-  </div>
-
-  <!-- Admin-only content -->
-  <div id="adminContent" class="admin-content">
-    <h2 style="color:#4fc3f7;">📊 Your Live Balances</h2>
-    <div class="grid" id="tokenGridAdmin">
-      <div class="card">
-        <h3>🪙 PENNIES</h3>
-        <div class="value" id="penniesBal">Loading...</div>
-      </div>
-      <div class="card">
-        <h3>🌀 SGUIDE</h3>
-        <div class="value" id="sguideBal">Loading...</div>
-      </div>
-      <div class="card">
-        <h3>📊 PIDX</h3>
-        <div class="value" id="pidxBal">Loading...</div>
-      </div>
-      <div class="card">
-        <h3>🔮 VDOO</h3>
-        <div class="value" id="vdooBal">Loading...</div>
-      </div>
-    </div>
-
-    <div class="vault">
-      <h2>🧠 AGI Brain Modules</h2>
-      <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(200px,1fr));">
-        <div class="card"><h3>Coherence Score</h3><div class="value" id="coherence">0.934</div></div>
-        <div class="card"><h3>Voxel Energy</h3><div class="value" id="voxelEnergy">0.790</div></div>
-        <div class="card"><h3>Temporal Phase</h3><div class="value" id="temporalPhase">0.794</div></div>
-        <div class="card"><h3>AGI Status</h3><div class="value" id="agiStatus">● Active</div></div>
-      </div>
-    </div>
-
-    <div class="vault">
-      <h2>💳 eCash Wallet</h2>
-      <div class="status-item"><span class="status-label">Balance</span><span class="status-value" id="ecashBalance">$0.00</span></div>
-      <div class="status-item"><span class="status-label">Invested</span><span class="status-value" id="ecashInvested">$0.00</span></div>
-      <div class="status-item"><span class="status-label">Profit/Loss</span><span class="status-value" id="ecashPnl">$0.00</span></div>
-      <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="btn btn-success" id="investBtn">💰 Auto‑Invest</button>
-        <button class="btn btn-outline" id="investBTC">₿ BTC</button>
-      </div>
-    </div>
-
-    <div class="vault">
-      <h2>🔄 JSON Sync</h2>
-      <div class="status-item"><span class="status-label">Last Sync</span><span class="status-value" id="lastSync">—</span></div>
-      <button class="btn btn-outline" style="margin-top:1rem;" id="syncNowBtn">🔄 Sync Now</button>
-    </div>
-  </div>
-
-  <footer>
-    <p>Powered by <strong>PHB OS</strong> · Encrypted & Secure · Voxel Resonance</p>
-  </footer>
-</div>
-
-<script>
-  // ---- CONFIG ----
-  const SCAMMER = "0x6511204D46a83BfFcC0DB73d5358522C8307981e8".toLowerCase();
-  const API_URL = "/api/check_admin";
-  const RPC = "https://mainnet.base.org";
-  const SYNC_INTERVAL = 10000;
-
-  const TOKENS = {
-    PENNIES: { addr: "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", decimals: 18 },
-    SGUIDE:  { addr: "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a", decimals: 18 },
-    PIDX:    { addr: "0xa36E026FC453880537e10d21fC139439bD2702fc", decimals: 18 },
-    VDOO:    { addr: "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", decimals: 18 }
-  };
-
-  const walletDisplay = document.getElementById('walletDisplay');
-  const adminContent = document.getElementById('adminContent');
-  const connectBtn = document.getElementById('connectBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-
-  async function getBalance(contractAddr, walletAddr) {
-    const abi = [{ "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }];
-    const web3 = new Web3(RPC);
-    const contract = new web3.eth.Contract(abi, contractAddr);
-    try {
-      const bal = await contract.methods.balanceOf(walletAddr).call();
-      return bal;
-    } catch (e) {
-      return "0";
-    }
-  }
-
-  async function updateAdminBalances(wallet) {
-    if (!wallet) return;
-    for (const [name, info] of Object.entries(TOKENS)) {
-      const el = document.getElementById(name.toLowerCase() + 'Bal');
-      if (!el) continue;
-      try {
-        const raw = await getBalance(info.addr, wallet);
-        const human = raw / 10**info.decimals;
-        el.textContent = human.toLocaleString(undefined, { maximumFractionDigits: 0 });
-      } catch (e) {
-        el.textContent = 'Error';
-      }
-    }
-  }
-
-  function updatePublicStats() {
-    const hashEl = document.getElementById('hashRate');
-    if (hashEl) {
-      const base = 24.7;
-      const variation = (Math.random() - 0.5) * 2;
-      hashEl.textContent = (base + variation).toFixed(1) + ' MH/s';
-    }
-    const blocksEl = document.getElementById('blocksMined');
-    if (blocksEl) {
-      blocksEl.textContent = Math.floor(42 + Math.random() * 10);
-    }
-    const preds = ['pidxPred', 'sguidePred', 'vdooPred', 'penniesPred'];
-    const baseVals = [2.3, 1.8, 4.1, 0.7];
-    preds.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el) {
-        const change = baseVals[i] + (Math.random() - 0.5) * 1.5;
-        el.textContent = (change > 0 ? '+' : '') + change.toFixed(1) + '%';
-      }
-    });
-  }
-
-  async function checkAdmin(wallet) {
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet })
-      });
-      const data = await res.json();
-      return data.admin === true;
-    } catch (e) {
-      console.error('Admin check error:', e);
-      return false;
-    }
-  }
-
-  async function connectWallet() {
-    if (!window.ethereum) {
-      alert('Please install MetaMask or a Web3 wallet.');
-      return;
-    }
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts[0];
-      if (account.toLowerCase() === SCAMMER) {
-        document.body.innerHTML = `<div class="blocked">⛔ ACCESS DENIED<br><span>Your wallet is blacklisted.</span></div>`;
-        return;
-      }
-      const isAdmin = await checkAdmin(account);
-      if (!isAdmin) {
-        document.body.innerHTML = `<div class="maintenance">🔒 Site Under Maintenance<br><span>Only the administrator can access.</span></div>`;
-        return;
-      }
-
-      adminContent.style.display = 'block';
-      walletDisplay.textContent = '✅ Admin: ' + account.slice(0,6)+'...'+account.slice(-4);
-      connectBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-block';
-      await updateAdminBalances(account);
-      startLiveUpdate(account);
-    } catch (e) {
-      console.warn('Connection cancelled');
-    }
-  }
-
-  function logout() {
-    adminContent.style.display = 'none';
-    walletDisplay.textContent = 'Disconnected';
-    connectBtn.style.display = 'inline-block';
-    logoutBtn.style.display = 'none';
-    if (window._syncTimer) clearInterval(window._syncTimer);
-    if (window._balTimer) clearInterval(window._balTimer);
-  }
-
-  async function fetchJSON(endpoint) {
-    try {
-      const res = await fetch(endpoint);
-      if (!res.ok) throw new Error('Network error');
-      return await res.json();
-    } catch (e) {
-      console.warn('JSON fetch failed:', e);
-      return null;
-    }
-  }
-
-  async function updateAdminData() {
-    const agi = await fetchJSON('/api/agi_status') || {};
-    const strategy = await fetchJSON('/api/strategy') || {};
-
-    const el = (id) => document.getElementById(id);
-    el('coherence').textContent = (agi.coherence !== undefined ? agi.coherence : 0.934 + (Math.random()*0.02-0.01)).toFixed(3);
-    el('voxelEnergy').textContent = (agi.voxelEnergy !== undefined ? agi.voxelEnergy : 0.790 + (Math.random()*0.02-0.01)).toFixed(3);
-    el('temporalPhase').textContent = (agi.temporalPhase !== undefined ? agi.temporalPhase : 0.794 + (Math.random()*0.02-0.01)).toFixed(3);
-    el('agiStatus').textContent = agi.status || '● Active';
-
-    const ecash = strategy.ecash || {};
-    el('ecashBalance').textContent = '$' + (ecash.balance !== undefined ? ecash.balance.toFixed(2) : (Math.random()*100).toFixed(2));
-    el('ecashInvested').textContent = '$' + (ecash.invested !== undefined ? ecash.invested.toFixed(2) : (Math.random()*50).toFixed(2));
-    el('ecashPnl').textContent = '$' + (ecash.pnl !== undefined ? ecash.pnl.toFixed(2) : (Math.random()*20-10).toFixed(2));
-    el('lastSync').textContent = new Date().toLocaleString();
-  }
-
-  function startLiveUpdate(wallet) {
-    if (window._syncTimer) clearInterval(window._syncTimer);
-    if (window._balTimer) clearInterval(window._balTimer);
-    updateAdminData();
-    updatePublicStats();
-    window._syncTimer = setInterval(updateAdminData, SYNC_INTERVAL);
-    window._balTimer = setInterval(() => updateAdminBalances(wallet), 30000);
-    setInterval(updatePublicStats, 5000);
-  }
-
-  // ---- Event listeners ----
-  connectBtn.addEventListener('click', connectWallet);
-  logoutBtn.addEventListener('click', logout);
-
-  // ---- Auto-check ----
-  if (window.ethereum) {
-    window.ethereum.request({ method: 'eth_accounts' }).then(async accounts => {
-      if (accounts.length > 0) {
-        const account = accounts[0];
-        if (account.toLowerCase() === SCAMMER) return;
-        if (await checkAdmin(account)) {
-          connectWallet();
-        }
-      }
-    }).catch(() => {});
-    window.ethereum.on('accountsChanged', (accounts) => {
-      if (accounts.length === 0) logout();
-      else connectWallet();
-    });
-  }
-
-  // ---- Buttons ----
-  document.getElementById('syncNowBtn')?.addEventListener('click', function() {
-    this.textContent = '🔄 Syncing...';
-    updateAdminData().then(() => {
-      this.textContent = '✅ Synced';
-      setTimeout(() => { this.textContent = '🔄 Sync Now'; }, 2000);
-    }).catch(() => {
-      this.textContent = '❌ Failed';
-      setTimeout(() => { this.textContent = '🔄 Sync Now'; }, 2000);
-    });
-  });
-
-  document.getElementById('investBtn')?.addEventListener('click', function() {
-    this.textContent = '⏳ Investing...';
-    fetch('/api/invest_all', { method: 'POST' })
-      .then(res => res.json())
-      .then(data => {
-        alert('Investment executed: ' + data.message);
-        this.textContent = '💰 Auto‑Invest';
-        updateAdminData();
-      })
-      .catch(() => {
-        alert('Investment failed.');
-        this.textContent = '💰 Auto‑Invest';
-      });
-  });
-
-  document.getElementById('investBTC')?.addEventListener('click', function() {
-    this.textContent = '⏳ Buying BTC...';
-    fetch('/api/invest_btc', { method: 'POST' })
-      .then(res => res.json())
-      .then(data => {
-        alert('BTC investment: ' + data.message);
-        this.textContent = '₿ BTC';
-        updateAdminData();
-      })
-      .catch(() => {
-        alert('BTC investment failed.');
-        this.textContent = '₿ BTC';
-      });
-  });
-
-  // ---- Load Web3 ----
-  const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js';
-  document.head.appendChild(script);
-</script>
 </body>
 </html>
