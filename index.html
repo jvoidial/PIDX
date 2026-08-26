@@ -26,7 +26,6 @@
     <h1>♾️ Neural Ecosystem – Live Sync</h1>
     <p>Quantum → Resonance → Coherence • Jinn‑Controlled • Live Predictions</p>
 
-    <!-- Topology & Jinn -->
     <div class="card">
         <h2 class="section-title">Topology & Jinn</h2>
         <div class="grid">
@@ -51,13 +50,11 @@
         </div>
     </div>
 
-    <!-- Live Predictions -->
     <div class="card">
         <h2 class="section-title">Live Predictions</h2>
         <div id="predictions">Loading...</div>
     </div>
 
-    <!-- Emotional Resonance -->
     <div class="card">
         <h2 class="section-title">Emotional Resonance</h2>
         <div class="grid">
@@ -76,37 +73,31 @@
         </div>
     </div>
 
-    <!-- Topology Layers -->
     <div class="card">
         <h2 class="section-title">Topology Layers</h2>
         <div id="layers"></div>
     </div>
 
-    <!-- AGI Layer -->
     <div class="card">
         <h2 class="section-title">AGI Layer</h2>
         <div id="agi-layer"></div>
     </div>
 
-    <!-- Token Details -->
     <div class="card">
         <h2 class="section-title">Token Details</h2>
         <div id="token-details"></div>
     </div>
 
-    <!-- Vault -->
     <div class="card">
         <h2 class="section-title">Pennies Index Vault</h2>
         <div id="vault"></div>
     </div>
 
-    <!-- Security & CVE -->
     <div class="card">
         <h2 class="section-title">Security & CVE</h2>
         <div id="security"></div>
     </div>
 
-    <!-- Growth Projection -->
     <div class="card">
         <h2 class="section-title">Growth Projection</h2>
         <div id="projection"></div>
@@ -122,7 +113,11 @@
 <script>
 async function fetchTopology() {
     try {
-        const res = await fetch('topology.json', { cache: 'no-store' });
+        // Try absolute URL first, then fallback to relative
+        let res = await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json', { cache: 'no-store' });
+        if (!res.ok) {
+            res = await fetch('topology.json', { cache: 'no-store' });
+        }
         if (!res.ok) throw new Error('topology.json not found');
         const data = await res.json();
         updateDashboard(data);
@@ -173,7 +168,6 @@ function updateDashboard(data) {
     }
     layersDiv.innerHTML = layersHtml;
 
-    // AGI layer
     const agiDiv = document.getElementById('agi-layer');
     if (data.agi) {
         agiDiv.innerHTML = `
