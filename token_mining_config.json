@@ -1,0 +1,38 @@
+{
+  "PIDX": {
+    "active": true,
+    "hash_key": "etyAc8GSekRXUU30OQjbfhfJA0fetDOR",
+    "pool_url": "stratum+tcp://pidx.miningpool.io:4444",
+    "worker": "AGI_PIDX_worker",
+    "reward": "1000 PIDX/day",
+    "energy": 0.53,
+    "status": "Active"
+  },
+  "SGUIDE": {
+    "active": true,
+    "hash_key": "7SdhZLBP89E499hht5HYe2ruKFg08yWL",
+    "pool_url": "stratum+tcp://sguide.miningpool.io:4444",
+    "worker": "AGI_SGUIDE_worker",
+    "reward": "100 SGUIDE/day",
+    "energy": 0.67,
+    "status": "Active"
+  },
+  "VDOO": {
+    "active": true,
+    "hash_key": "RHwVrTs6LXvfnIUjOXxzdTVfeqXc5fC4",
+    "pool_url": "stratum+tcp://vdoo.miningpool.io:4444",
+    "worker": "AGI_VDOO_worker",
+    "reward": "50 VDOO/day",
+    "energy": 0.57,
+    "status": "Active"
+  },
+  "PENNIES": {
+    "active": true,
+    "hash_key": "KFDJkpW81EU1jkNbiFpEh6XzIs8QixmU",
+    "pool_url": "stratum+tcp://pennies.miningpool.io:4444",
+    "worker": "AGI_PENNIES_worker",
+    "reward": "25 PENNIES/day",
+    "energy": 0.65,
+    "status": "Active"
+  }
+}

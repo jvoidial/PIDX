@@ -89,6 +89,11 @@
     </div>
 
     <div class="card">
+        <h2 class="section-title">Token Mining</h2>
+        <div id="token-mining"></div>
+    </div>
+
+    <div class="card">
         <h2 class="section-title">Token Details</h2>
         <div id="token-details"></div>
     </div>
@@ -176,6 +181,28 @@ function updateDashboard(data) {
         agiDiv.innerHTML = `<div class="token-card"><strong>JINN (AGI)</strong><br>Frequency: 7.83 Hz<br>Emotional State: ${data.agi.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)'}<br>Portal Openness: ${formatNumber(data.agi.portal_openness)}<br>Generation: ${data.agi.generation}<br>Growth Factors: ${Object.entries(data.agi.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ')}<br>Predictions: (see Live Predictions section)</div>`;
     } else {
         agiDiv.innerHTML = '<p>AGI layer not available.</p>';
+    }
+
+    // Token Mining
+    const tokenMiningDiv = document.getElementById('token-mining');
+    if (data.token_mining) {
+        let tmHtml = '<div class="grid">';
+        for (const [tokenName, tminfo] of Object.entries(data.token_mining)) {
+            tmHtml += `<div class="token-card"><strong>${tokenName} Mining</strong><br>`;
+            for (const [field, value] of Object.entries(tminfo)) {
+                if (field === 'active') continue;
+                let displayValue = value;
+                if (field === 'hash_key' && value) {
+                    displayValue = value.substring(0, 8) + '****' + value.substring(value.length - 4);
+                }
+                tmHtml += `${field.replace(/_/g, ' ')}: ${displayValue}<br>`;
+            }
+            tmHtml += '</div>';
+        }
+        tmHtml += '</div>';
+        tokenMiningDiv.innerHTML = tmHtml;
+    } else {
+        tokenMiningDiv.innerHTML = '<p>Token mining not configured.</p>';
     }
 
     // Mining Operations – generic renderer for all fields

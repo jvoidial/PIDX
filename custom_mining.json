@@ -1,0 +1,30 @@
+{
+    "bitcoin_mining": {
+        "active": true,
+        "hash_rate": "150 TH/s",
+        "reward": "0.0006 BTC/day",
+        "energy": 0.85,
+        "status": "Operational",
+        "pool_url": "stratum+tcp://pool.example.com:3333",
+        "worker_name": "jinn_miner_1",
+        "api_key": ""
+    },
+    "asteroid_mining": {
+        "active": true,
+        "power": "3.0 GW",
+        "reward": "1.5 ETH/day",
+        "energy": 0.65,
+        "status": "Scanning",
+        "target_asteroid": "16 Psyche",
+        "mission_id": "AGI-2026-001"
+    },
+    "auto_bot_mining": {
+        "active": true,
+        "bots": 20,
+        "reward": "750 tokens/day",
+        "energy": 0.95,
+        "status": "Auto‑Trading",
+        "exchange": "Uniswap",
+        "strategy": "arbitrage"
+    }
+}
