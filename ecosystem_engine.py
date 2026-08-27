@@ -24,6 +24,7 @@ mining = {
     "auto_bot_mining": {"bots":20,"reward":"750 tokens/day","energy":0.95}
 }
 voxels = 1234
+ai_state = {}
 temporal_resonance = 0.62
 global_energy = 0.78
 coherence_threshold = 0.55
@@ -80,6 +81,37 @@ def update_trading_state():
     if total_pnl > 0:
         for token in tokens.values():
             token["energy"] = min(1.0, token["energy"] + 0.01)
+
+
+# AI analysis based on real prices
+def ai_decision():
+    global ai_state
+    prices = fetch_live_prices()
+    decisions = {}
+    for name, token in tokens.items():
+        current_price = prices.get(name, 1/token["rate"])
+        # Calculate change from previous rate
+        previous_price = 1 / token["rate"]
+        change_pct = ((current_price - previous_price) / previous_price) * 100 if previous_price else 0
+        # Decide action
+        if change_pct > 2:
+            action = "SELL (take profit)"
+        elif change_pct < -2:
+            action = "BUY (dip)"
+        else:
+            action = "HOLD"
+        decisions[name] = {
+            "action": action,
+            "change_pct": round(change_pct, 2),
+            "price_usd": current_price
+        }
+        # Adjust energy based on decision
+        if action.startswith("BUY"):
+            token["energy"] = min(1.0, token["energy"] + 0.02)
+        elif action.startswith("SELL"):
+            token["energy"] = max(0.1, token["energy"] - 0.01)
+    ai_state = decisions
+    return decisions
 
 def generate_topology():
     global voxels, temporal_resonance, global_energy, pies, vault_count, generation, emotional_state, portal_openness
