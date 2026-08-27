@@ -119,7 +119,7 @@ const DEFAULT_DATA = {
 };
 
 async function fetchTopology() {
-  const urls = ['topology.json', 'https://jvoidial.github.io/spirit-guide-token/topology.json'];
+  const urls = ['topology.json', 'https://jvoidial.github.io/spirit-guide-token/topology.json', 'https://gateway.pinata.cloud/ipfs/bafkreifryiyes4atccpabgwnwlzb6zxjmopgywpiznfgq2smodjll5wgum'];
   for (const url of urls) {
     try {
       const res = await fetch(url, { cache: 'no-store' });
