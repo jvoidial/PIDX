@@ -1144,9 +1144,9 @@
   "vaults": [
     {
       "id": 1,
-      "pies": 20,
-      "created": 1787788836,
-      "stacks": 2
+      "pies": 13101,
+      "stacks": 170,
+      "created": 0
     }
   ],
   "pies": 13101,
@@ -1264,5 +1264,6 @@
     "last_updated": 1787789758,
     "next_proposal": null
   },
-  "ipfs_hash": "bafkreidtvbjqafm7ncq3usp6cxzuaftjxhipjcb5fhtnm3ppyjy5ly4uhi"
+  "ipfs_hash": "bafkreidtvbjqafm7ncq3usp6cxzuaftjxhipjcb5fhtnm3ppyjy5ly4uhi",
+  "infinite_vault": true
 }
