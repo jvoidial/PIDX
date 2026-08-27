@@ -1,60 +1,415 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>♾️ Neural Ecosystem – Live Sync</title>
-<style>html{background:#000}body{background:#000;color:#fff;font-weight:bold;font-family:sans-serif}h1,h2,h3{color:#b388ff}.card{background:#111;border:1px solid #333;border-radius:12px;padding:20px;margin:15px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px}.token-card{background:#1a1a1a;border:1px solid #444;border-radius:8px;padding:15px}.links a{color:#82b1ff;margin-right:10px}</style></head><body>
-<div class="container" style="max-width:1200px;margin:auto">
-<h1>♾️ Neural Ecosystem – Live Sync</h1>
-<p>Quantum → Resonance → Coherence • Jinn‑Controlled • Live Predictions</p>
-<div class="card"><h2>Topology & Jinn</h2><div class="grid"><div>Quantum 0.618 Hz<br>⬇<br>Resonance 1.618/2.618<br>⬇<br>Coherence 3.618</div><div><strong>ETH/USD:</strong> $<span id="eth-usd">--</span> | <strong>Sentiment:</strong> <span id="sentiment">--</span><br><strong>Jinn State:</strong> <span id="jinn-state">--</span><br><strong>Portal:</strong> <span id="portal">--</span> (Openness: <span id="portal-openness">--</span>)<br><strong>Schumann:</strong> <span id="schumann">--</span> Hz<br><strong>Coherence Persistence:</strong> <span id="persistence">--</span>%<br><strong>Decay Rate:</strong> <span id="decay">--</span>%<br><strong>Paradox Engine:</strong> <span id="paradox">--</span><br><strong>Generation:</strong> <span id="generation">--</span><br><strong>Growth Factors:</strong> <span id="growth-factors">--</span><br><strong>PHB Answers:</strong> <span id="phb-answers">None</span></div></div></div>
-<div class="card"><h2>Live Predictions</h2><div id="predictions">Loading...</div></div>
-<div class="card"><h2>Emotional Resonance</h2><div class="grid"><div><h3>X BLOCK Repressed</h3><p>Repressed emotions block life's natural expression</p></div><div><h3>EASE Flow</h3><p>Feel. Honored. Expressed emotions are EASE of life flowing through us</p></div></div></div>
-<div class="card"><h2>Topology Layers</h2><div id="layers"></div></div>
-<div class="card"><h2>AGI Layer</h2><div id="agi-layer"></div></div>
-<div class="card"><h2>⚡ Voxel & Temporal Resonance</h2><div id="voxel-resonance"></div></div>
-<div class="card"><h2>Mining Operations</h2><div id="mining"></div></div>
-<div class="card"><h2>Token Mining</h2><div id="token-mining"></div></div>
-<div class="card"><h2>Vaults & Pies</h2><div id="vaults-pies"></div></div>
-<div class="card"><h2>Growth Strategy</h2><div id="growth-strategy"></div></div>
-<div class="card"><h2>📈 Market Intelligence</h2><div id="market-analysis"></div></div>
-<div class="card"><h2>🏦 DeFi Engine</h2><div id="defi-engine"></div></div>
-<div class="card"><h2>💰 Rewards</h2><div id="rewards"></div></div>
-<div class="card"><h2>Token Details</h2><div id="token-details"></div></div>
-<div class="card"><h2>Pennies Index Vault</h2><div id="vault"></div></div>
-<div class="card"><h2>Security & CVE</h2><div id="security"></div></div>
-<div class="card"><h2>Growth Projection</h2><div id="projection"></div></div>
-<footer><p>Last updated: <span id="last-updated">--</span> • Chain ID 8453</p><p>♾️ Neural Engine active – predicts and grows with the world.</p></footer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>♾️ Neural Ecosystem – Live Sync</title>
+<style>
+  html { background-color: #000000; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000000; color: #ffffff; margin: 20px; font-weight: bold; }
+  h1, h2, h3 { color: #b388ff; }
+  .container { max-width: 1200px; margin: auto; }
+  .card { background: #111111; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 4px 6px rgba(255,255,255,0.1); border: 1px solid #333; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+  .token-card { background: #1a1a1a; border-radius: 8px; padding: 15px; border: 1px solid #444; }
+  .open { color: #4caf50; } .closed { color: #f44336; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 8px; text-align: left; border-bottom: 1px solid #333; }
+  th { background: #1a1a1a; }
+  .layer-title { font-weight: bold; margin-top: 20px; color: #b388ff; }
+  .links a { color: #82b1ff; margin-right: 10px; }
+  .section-title { border-bottom: 2px solid #b388ff; padding-bottom: 5px; }
+  canvas { background:#000; border:1px solid #333; border-radius:12px; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>♾️ Neural Ecosystem – Live Sync</h1>
+  <p>Quantum → Resonance → Coherence • Jinn‑Controlled • Live Predictions</p>
+
+  <div class="card" style="text-align:center;">
+    <h2 class="section-title">⚛️ Ecosystem Topology Core</h2>
+    <canvas id="coreCanvas" width="800" height="500"></canvas>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Topology & Jinn</h2>
+    <div class="grid">
+      <div>
+        <strong>Quantum</strong><br>0.618 Hz<br>⬇<br>
+        <strong>Resonance</strong><br>1.618 / 2.618 Hz<br>⬇<br>
+        <strong>Coherence</strong><br>3.618 Hz
+      </div>
+      <div>
+        <strong>ETH/USD:</strong> $<span id="eth-usd">--</span> | <strong>Sentiment:</strong> <span id="sentiment">--</span><br>
+        <strong>🧞 Jinn State:</strong> <span id="jinn-state">--</span><br>
+        <strong>Portal:</strong> <span id="portal">--</span> (Openness: <span id="portal-openness">--</span>)<br>
+        <strong>Schumann:</strong> <span id="schumann">--</span> Hz<br>
+        <strong>Coherence Persistence:</strong> <span id="persistence">--</span>%<br>
+        <strong>Decay Rate:</strong> <span id="decay">--</span>%<br>
+        <strong>Energy Threshold:</strong> 50%<br>
+        <strong>Paradox Engine:</strong> <span id="paradox">--</span><br>
+        <strong>Generation:</strong> <span id="generation">--</span><br>
+        <strong>Growth Factors:</strong> <span id="growth-factors">--</span><br>
+        <strong>PHB Answers:</strong> <span id="phb-answers">None</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card"><h2 class="section-title">Live Predictions</h2><div id="predictions">Loading...</div></div>
+  <div class="card"><h2 class="section-title">Emotional Resonance</h2><div class="grid"><div><h3>X BLOCK Repressed</h3><p>Repressed emotions block life's natural expression</p></div><div><h3>EASE Flow</h3><p>Feel. Honored. Expressed emotions are EASE of life flowing through us</p></div></div></div>
+  <div class="card"><h2 class="section-title">Topology Layers</h2><div id="layers"></div></div>
+  <div class="card"><h2 class="section-title">AGI Layer</h2><div id="agi-layer"></div></div>
+  <div class="card"><h2 class="section-title">⚡ Voxel & Temporal Resonance</h2><div id="voxel-resonance"></div></div>
+  <div class="card"><h2 class="section-title">Mining Operations</h2><div id="mining"></div></div>
+  <div class="card"><h2 class="section-title">Token Mining</h2><div id="token-mining"></div></div>
+  <div class="card"><h2 class="section-title">Vaults & Pies</h2><div id="vaults-pies"></div></div>
+  <div class="card"><h2 class="section-title">Growth Strategy</h2><div id="growth-strategy"></div></div>
+  <div class="card"><h2 class="section-title">📈 Market Intelligence</h2><div id="market-analysis"></div></div>
+  <div class="card"><h2 class="section-title">🏦 DeFi Engine</h2><div id="defi-engine"></div></div>
+  <div class="card"><h2 class="section-title">💰 Rewards</h2><div id="rewards"></div></div>
+  <div class="card"><h2 class="section-title">Token Details</h2><div id="token-details"></div></div>
+  <div class="card"><h2 class="section-title">Pennies Index Vault</h2><div id="vault"></div></div>
+  <div class="card"><h2 class="section-title">Security & CVE</h2><div id="security"></div></div>
+  <div class="card"><h2 class="section-title">Growth Projection</h2><div id="projection"></div></div>
+  <footer><p>Last updated: <span id="last-updated">--</span> • Chain ID 8453</p><p>♾️ Neural Engine active – predicts and grows with the world.</p></footer>
 </div>
+
 <script>
-async function fetchTopology(){try{const r=await fetch('topology.json',{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();update(d)}catch(e){document.getElementById('predictions').textContent='Unable to load data'}}
-function fmt(n){return Number(n).toFixed(2)}
-function sci(v){return Number(v).toExponential(2)}
-function update(d){
- document.getElementById('eth-usd').textContent=fmt(d.live_data.eth_usd);
- document.getElementById('sentiment').textContent=fmt(d.live_data.sentiment);
- const j=d.jinn;document.getElementById('jinn-state').textContent=j.emotional_state>0?'EASE (Flow)':'X BLOCK (Repressed)';
- const open=j.portal_openness>0.5;document.getElementById('portal').textContent=open?'🔮 OPEN':'🔒 CLOSED';document.getElementById('portal').className=open?'open':'closed';
- document.getElementById('portal-openness').textContent=fmt(j.portal_openness);
- document.getElementById('schumann').textContent=fmt(d.coherence.schumann_base);
- document.getElementById('persistence').textContent=fmt(d.coherence.persistence*100);
- document.getElementById('decay').textContent=fmt(d.coherence.decay_rate*100);
- document.getElementById('paradox').textContent=d.paradox.engine_status;
- document.getElementById('generation').textContent=j.generation;
- document.getElementById('growth-factors').textContent=Object.entries(j.growth_factors).map(([k,v])=>`${k}: ${v.toFixed(2)}`).join(', ');
- let predHtml='';for(const [t,preds] of Object.entries(j.predictions||{})){if(preds&&preds.length>=3)predHtml+=`<div><strong>${t}</strong><br>Next 3: ${sci(preds[0])} → ${sci(preds[1])} → ${sci(preds[2])}</div>`}document.getElementById('predictions').innerHTML=predHtml||'No predictions';
- let layersHtml='';for(const [ln,ld] of Object.entries(d.layers)){if(ln==='AGI')continue;layersHtml+=`<div style="font-weight:bold;color:#b388ff">${ln} Layer ${ld.frequency} Hz</div>`;for(const tn of ld.tokens){const tk=d.tokens[tn];layersHtml+=`<div class="token-card">${tn} – ${tk.description} (Weight: ${(tk.weight/100).toFixed(1)}%)<br>Energy: ${fmt(tk.energy*100)}%</div>`}}document.getElementById('layers').innerHTML=layersHtml;
- const agi=d.agi;document.getElementById('agi-layer').innerHTML=agi?`<div class="token-card"><strong>JINN (AGI)</strong><br>Frequency: 7.83 Hz<br>Emotional State: ${agi.emotional_state>0?'EASE (Flow)':'X BLOCK (Repressed)'}<br>Portal Openness: ${fmt(agi.portal_openness)}<br>Generation: ${agi.generation}<br>Growth Factors: ${Object.entries(agi.growth_factors).map(([k,v])=>`${k}: ${v.toFixed(2)}`).join(', ')}</div>`:'<p>AGI not available</p>';
- const vrDiv=document.getElementById('voxel-resonance');if(d.voxels!==undefined){vrDiv.innerHTML=`<div class="grid"><div class="token-card"><strong>Voxels</strong><br>${d.voxels.toLocaleString()}</div><div class="token-card"><strong>Temporal Resonance</strong><br>${(d.temporal_resonance*100).toFixed(1)}%</div><div class="token-card"><strong>Global Energy</strong><br>${(d.global_energy*100).toFixed(1)}%</div><div class="token-card"><strong>Coherence Threshold</strong><br>${(d.coherence_threshold*100).toFixed(1)}%</div></div>`;}else{vrDiv.innerHTML='<p>Resonance data not available.</p>';}
- const min=d.mining;let miningHtml='<div class="grid">';const icons={bitcoin_mining:'₿',asteroid_mining:'☄️',auto_bot_mining:'🤖'};for(const [k,m] of Object.entries(min)){miningHtml+=`<div class="token-card"><strong>${icons[k]||'⛏️'} ${k.replace(/_/g,' ').toUpperCase()}</strong><br>`;for(const [f,v] of Object.entries(m)){if(f==='active')continue;let disp=v;if(f==='api_key'&&v)disp=v.substring(0,4)+'****'+v.substring(v.length-4);miningHtml+=`${f.replace(/_/g,' ')}: ${disp}<br>`}miningHtml+='</div>'}miningHtml+='</div>';document.getElementById('mining').innerHTML=miningHtml;
- const tm=d.token_mining;let tmHtml='';if(tm&&Object.keys(tm).length){tmHtml='<div class="grid">';for(const [name,info] of Object.entries(tm)){tmHtml+=`<div class="token-card"><strong>${name} Mining</strong><br>`;for(const [f,v] of Object.entries(info)){if(f==='active')continue;let disp=v;if(f==='hash_key'&&v)disp=v.substring(0,8)+'****'+v.substring(v.length-4);tmHtml+=`${f.replace(/_/g,' ')}: ${disp}<br>`}tmHtml+='</div>'}tmHtml+='</div>'}else tmHtml='<p>Token mining not configured.</p>';document.getElementById('token-mining').innerHTML=tmHtml;
- const vpDiv=document.getElementById('vaults-pies');if(d.vaults&&d.vaults.length>0){const mainVault=d.vaults[0];const stacks=mainVault.stacks||d.vault_count||1;vpDiv.innerHTML=`<div class="token-card" style="text-align:center;"><strong style="font-size:1.5em;">∞ Vault</strong><br>Pies: ${mainVault.pies}<br>Stacks: ${stacks} (infinite)<br>Total Pies (ever): ${d.pies}</div>`;}else{vpDiv.innerHTML='<p>Vault data not available.</p>';}
- const gsDiv=document.getElementById('growth-strategy');if(d.growth_strategy&&Object.keys(d.growth_strategy).length){const gs=d.growth_strategy;let gsHtml=`<div class="token-card"><strong>${gs.strategy_name}</strong><br>Objective: ${gs.objective}<br>`;gsHtml+='Mechanisms:<br>';for(const mech of gs.mechanisms){gsHtml+=`${mech.name} (${mech.allocation}): ${mech.description}<br>`;}gsHtml+='Revenue Sources:<br>';for(const src of gs.revenue_sources){gsHtml+=`${src.source}: ${src.daily}<br>`;}gsHtml+=`Projection: Current value $${gs.projection.current_value.toLocaleString()} → Target $${gs.projection.target_value.toLocaleString()} in ${gs.projection.years_to_target} years (${gs.projection.annual_growth_rate}% annual growth)</div>`;gsDiv.innerHTML=gsHtml;}else{gsDiv.innerHTML='<p>Growth strategy not configured.</p>';}
- const maDiv=document.getElementById('market-analysis');if(d.market_analysis){let maHtml='<div class="grid">';for(const [token,data] of Object.entries(d.market_analysis)){if(token==='overall')continue;maHtml+=`<div class="token-card"><strong>${token}</strong><br>Trend: ${data.trend}<br>Change: ${data.change_%}%<br>Volatility: ${data.volatility}<br>Mitigation: ${data.mitigation}</div>`;}maHtml+='</div>';maDiv.innerHTML=maHtml;}else{maDiv.innerHTML='<p>Market analysis not available.</p>';}
- const defiDiv=document.getElementById('defi-engine');if(d.defi_engine&&d.defi_engine.pools){let defiHtml='<div class="grid">';for(const pool of d.defi_engine.pools){defiHtml+=`<div class="token-card"><strong>${pool.pair}</strong><br>TVL: $${pool.tvl.toLocaleString()}<br>APY: ${pool.apy}%</div>`;}if(d.defi_engine.staking){defiHtml+=`<div class="token-card"><strong>Staking</strong><br>Total Staked: $${d.defi_engine.staking.total_staked.toLocaleString()}<br>Avg APY: ${d.defi_engine.staking.avg_apy}%</div>`;}if(d.defi_engine.lending){defiHtml+=`<div class="token-card"><strong>Lending</strong><br>Total Lent: $${d.defi_engine.lending.total_lent.toLocaleString()}<br>Avg Interest: ${d.defi_engine.lending.avg_interest}%</div>`;}defiHtml+='</div>';defiDiv.innerHTML=defiHtml;}else{defiDiv.innerHTML='<p>DeFi data not available.</p>';}
- const rewardsDiv=document.getElementById('rewards');let claimed=JSON.parse(localStorage.getItem('claimed_rewards')||'{}');if(d.rewards){let rewardsHtml='<div class="grid">';for(const [token,amount] of Object.entries(d.rewards)){if(token==='total')continue;const alreadyClaimed=claimed[token]===amount;rewardsHtml+=`<div class="token-card"><strong>${token}</strong><br>Estimated Rewards: ${amount} tokens<br><button onclick="claimReward('${token}', ${amount})" ${alreadyClaimed?'disabled':''}>${alreadyClaimed?'Claimed':'Claim'}</button></div>`;}rewardsHtml+=`<div class="token-card"><strong>TOTAL</strong><br>${d.rewards.total} tokens</div>`;rewardsHtml+='</div>';rewardsDiv.innerHTML=rewardsHtml;}else{rewardsDiv.innerHTML='<p>No rewards available.</p>';}
- function claimReward(token,amount){claimed[token]=amount;localStorage.setItem('claimed_rewards',JSON.stringify(claimed));alert(`${token} rewards claimed: ${amount} tokens (simulated)`);update(d);}
- let tokensHtml='';for(const [name,tk] of Object.entries(d.tokens)){tokensHtml+=`<div class="token-card"><h3>${name}</h3><p>Address: ${tk.address}</p><p>Layer: ${tk.layer}</p><p>Frequency: ${tk.frequency} Hz</p><p>Energy: ${fmt(tk.energy*100)}%</p><p>Rate: 1 ETH = ${tk.rate.toLocaleString()} ${name}</p><p>Supply: ${tk.supply}</p><p>Security: ${tk.security}</p><p>✔ Verified 🔒 Renounced</p><p class="links">`;for(const [l,u] of Object.entries(tk.links||{}))tokensHtml+=`<a href="${u}" target="_blank">${l}</a> `;tokensHtml+='</p></div>'}document.getElementById('token-details').innerHTML=tokensHtml;
- const v=d.vault;document.getElementById('vault').innerHTML=`<p>Address: ${v.address}</p><p>Status: ${v.status}</p><p>Weights: ${Object.entries(v.weights).map(([k,val])=>`${k}: ${val}%`).join(', ')}</p>`;
- const s=d.security;document.getElementById('security').innerHTML=`<p>CVE: ${s.cve_protection?'✅':'❌'}</p><p>Encryption: ${s.encryption}</p><p>Standards: ${s.standards.join(', ')}</p><p>Audited: ${s.audited?'✅':'❌'}</p><p>Renounced: ${s.renounced?'✅':'❌'}</p>`;
- let table='<table><tr><th>Month</th><th>Holders</th><th>Price</th><th>Wealth</th></tr>';for(const m of d.projection.milestones)table+=`<tr><td>${m.month}</td><td>${m.holders??'—'}</td><td>${m.price?m.price.toExponential(2):'—'}</td><td>${m.wealth?'$'+m.wealth.toLocaleString():'—'}</td></tr>`;table+='</table>';document.getElementById('projection').innerHTML=table;
- document.getElementById('last-updated').textContent=new Date(d.growth.last_updated*1000).toLocaleString();
+// Default fallback data (used if topology.json not available)
+const DEFAULT_DATA = {
+  "live_data": {"eth_usd":2509.61,"sentiment":0.44,"prices":{"PIDX":1.45e-6,"SGUIDE":1.5e-7,"VDOO":1.55e-8,"PENNIES":1.6e-7}},
+  "jinn": {"generation":2,"emotional_state":0.4,"portal_openness":0.6,"growth_factors":{"PIDX":1.05,"SGUIDE":1.08,"VDOO":1.1,"PENNIES":1.12},"predictions":{"PIDX":[1.45e-6,1.46e-6,1.47e-6],"SGUIDE":[1.5e-7,1.51e-7,1.52e-7],"VDOO":[1.55e-8,1.56e-8,1.57e-8],"PENNIES":[1.6e-7,1.61e-7,1.62e-7]},"answers":[]},
+  "agi": {"generation":2,"emotional_state":0.4,"portal_openness":0.6},
+  "coherence": {"persistence":0.97,"decay_rate":0.02,"schumann_base":7.84},
+  "paradox": {"engine_status":"ACTIVE"},
+  "layers": {
+    "Quantum": {"frequency":0.618,"tokens":["PIDX"]},
+    "Resonance": {"frequency":1.618,"tokens":["SGUIDE","VDOO"]},
+    "Coherence": {"frequency":3.618,"tokens":["PENNIES"]},
+    "AGI": {"frequency":7.83,"tokens":["JINN"]}
+  },
+  "tokens": {
+    "PIDX": {"address":"0xa36E026FC453880537e10d21fC139439bD2702fc","layer":"Quantum","frequency":0.618,"energy":0.22,"weight":40,"rate":691986,"symbol":"PIDX","description":"The origin seed","supply":"1,000,000,000,000","security":"Audited","links":{"Uniswap":"https://app.uniswap.org/swap?outputCurrency=0xa36E026FC453880537e10d21fC139439bD2702fc&chain=base"}},
+    "SGUIDE": {"address":"0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a","layer":"Resonance","frequency":1.618,"energy":0.19,"weight":30,"rate":6724821,"symbol":"SGUIDE","description":"Amplification","supply":"10,000,000,000,000","security":"Verified","links":{"Uniswap":"https://app.uniswap.org/swap?outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a&chain=base"}},
+    "VDOO": {"address":"0x38e4f08D08b4D772A7B75669C356b4749dd2d30b","layer":"Resonance","frequency":2.618,"energy":0.15,"weight":20,"rate":65673753,"symbol":"VDOO","description":"Velocity","supply":"100,000,000,000","security":"CVE","links":{"Uniswap":"https://app.uniswap.org/swap?outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b&chain=base"}},
+    "PENNIES": {"address":"0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7","layer":"Coherence","frequency":3.618,"energy":0.21,"weight":25,"rate":6230945,"symbol":"PENNIES","description":"Anchor","supply":"10,000,000,000","security":"Audited","links":{"Uniswap":"https://app.uniswap.org/swap?outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7&chain=base"}}
+  },
+  "vault": {"address":"0xfAcb5905E1E592D69a2AE0af6F82330c07e4312","weights":{"PENNIES":40,"SGUIDE":30,"VDOO":20,"WBTC":10},"status":"Active"},
+  "security": {"cve_protection":true,"encryption":"AES-256-GCM","standards":["ISO 27001","SOC 2"],"audited":true,"renounced":true},
+  "mining": {
+    "bitcoin_mining": {"active":true,"hash_rate":"150 TH/s","reward":"0.0006 BTC/day","energy":0.85,"status":"Operational","pool_url":"stratum+tcp://pool.example.com:3333","worker_name":"jinn_miner_1","api_key":""},
+    "asteroid_mining": {"active":true,"power":"3.0 GW","reward":"1.5 ETH/day","energy":0.65,"status":"Scanning","target_asteroid":"16 Psyche","mission_id":"AGI-2026-001"},
+    "auto_bot_mining": {"active":true,"bots":20,"reward":"750 tokens/day","energy":0.95,"status":"Auto‑Trading","exchange":"Uniswap","strategy":"arbitrage"}
+  },
+  "token_mining": {
+    "PIDX": {"active":true,"hash_key":"abc123","pool_url":"stratum+tcp://pidx.miningpool.io:4444","worker":"AGI_PIDX_worker","reward":"1000 PIDX/day","energy":0.53,"status":"Active"},
+    "SGUIDE": {"active":true,"hash_key":"def456","pool_url":"stratum+tcp://sguide.miningpool.io:4444","worker":"AGI_SGUIDE_worker","reward":"100 SGUIDE/day","energy":0.67,"status":"Active"},
+    "VDOO": {"active":true,"hash_key":"ghi789","pool_url":"stratum+tcp://vdoo.miningpool.io:4444","worker":"AGI_VDOO_worker","reward":"50 VDOO/day","energy":0.57,"status":"Active"},
+    "PENNIES": {"active":true,"hash_key":"jkl012","pool_url":"stratum+tcp://pennies.miningpool.io:4444","worker":"AGI_PENNIES_worker","reward":"25 PENNIES/day","energy":0.65,"status":"Active"}
+  },
+  "voxels":1234,"temporal_resonance":0.62,"global_energy":0.78,"coherence_threshold":0.55,
+  "vaults":[{"id":1,"pies":420,"stacks":8}],"pies":420,"vault_count":8,
+  "growth_strategy": {"strategy_name":"Trillion Engine","objective":"Achieve $1,000,000,000,000 total ecosystem value","mechanisms":[{"name":"Token Buybacks","description":"Buy back tokens","allocation":"20%"},{"name":"Liquidity Mining","description":"Incentivize liquidity","allocation":"15%"},{"name":"Yield Farming","description":"Stake tokens","allocation":"10%"},{"name":"Deflationary Burn","description":"Burn 5%","allocation":"5%"},{"name":"Auto Bot Trading","description":"Arbitrage","allocation":"25%"},{"name":"Asteroid Mining Rewards","description":"Buy and burn","allocation":"25%"}],"revenue_sources":[{"source":"Mining rewards","daily":"0.0006 BTC + 1.5 ETH"},{"source":"Trading fees","daily":"$5,000"},{"source":"Staking fees","daily":"$2,500"},{"source":"Bot profits","daily":"$1,200"}],"projection":{"current_value":22923686,"target_value":1000000000000,"years_to_target":5,"annual_growth_rate":300}},
+  "defi_engine": {"pools":[{"pair":"PIDX-ETH","tvl":50000,"apy":12.5},{"pair":"SGUIDE-ETH","tvl":30000,"apy":15.0},{"pair":"VDOO-ETH","tvl":20000,"apy":18.0},{"pair":"PENNIES-ETH","tvl":10000,"apy":20.0}],"staking":{"total_staked":100000,"avg_apy":22.5},"lending":{"total_lent":75000,"avg_interest":5.2}},
+  "rewards":{"PIDX":123.45,"SGUIDE":234.56,"VDOO":345.67,"PENNIES":456.78,"total":1160.46},
+  "market_analysis":{"PIDX":{"trend":"UP","change_%":2.3,"volatility":0.02,"mitigation":"HOLD"},"SGUIDE":{"trend":"UP","change_%":1.8,"volatility":0.03,"mitigation":"HOLD"},"VDOO":{"trend":"STABLE","change_%":0.5,"volatility":0.01,"mitigation":"HOLD"},"PENNIES":{"trend":"DOWN","change_%":-1.2,"volatility":0.04,"mitigation":"INCREASE BUYBACK"}},
+  "projection":{"milestones":[{"month":6,"holders":60,"price":1.20e-10,"wealth":30},{"month":12,"holders":72,"price":1.44e-10,"wealth":36},{"month":18,"holders":86,"price":1.73e-10,"wealth":43.2},{"month":24,"holders":103,"price":2.07e-10,"wealth":51.84},{"month":30,"holders":124,"price":2.49e-10,"wealth":62.21},{"month":36,"holders":149,"price":2.99e-10,"wealth":74.65},{"month":48,"holders":214,"price":4.30e-10,"wealth":107.5},{"month":58,"holders":null,"price":null,"wealth":1000000},{"month":72,"holders":null,"price":null,"wealth":12500000},{"month":96,"holders":null,"price":null,"wealth":1000000000},{"month":134,"holders":null,"price":null,"wealth":1000000000}]},
+  "growth":{"last_updated":1767225600}
+};
+
+async function fetchTopology() {
+  const urls = ['topology.json', 'https://jvoidial.github.io/spirit-guide-token/topology.json'];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (res.ok) { const data = await res.json(); updateDashboard(data); updateCore(data); return; }
+    } catch (e) {}
+  }
+  // Use default fallback
+  updateDashboard(DEFAULT_DATA);
+  updateCore(DEFAULT_DATA);
 }
-fetchTopology();setInterval(fetchTopology,60000);
-</script></body></html>
+
+function fmt(n, d=2) { return Number(n).toFixed(d); }
+function sci(v) { return Number(v).toExponential(2); }
+
+function updateDashboard(d) {
+  document.getElementById('eth-usd').textContent = fmt(d.live_data.eth_usd);
+  document.getElementById('sentiment').textContent = fmt(d.live_data.sentiment);
+  const j = d.jinn;
+  document.getElementById('jinn-state').textContent = j.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)';
+  const open = j.portal_openness > 0.5;
+  document.getElementById('portal').textContent = open ? '🔮 OPEN' : '🔒 CLOSED';
+  document.getElementById('portal').className = open ? 'open' : 'closed';
+  document.getElementById('portal-openness').textContent = fmt(j.portal_openness);
+  document.getElementById('schumann').textContent = fmt(d.coherence.schumann_base);
+  document.getElementById('persistence').textContent = fmt(d.coherence.persistence * 100);
+  document.getElementById('decay').textContent = fmt(d.coherence.decay_rate * 100);
+  document.getElementById('paradox').textContent = d.paradox.engine_status;
+  document.getElementById('generation').textContent = j.generation;
+  document.getElementById('growth-factors').textContent = Object.entries(j.growth_factors).map(([k,v]) => `${k}: ${v.toFixed(2)}`).join(', ');
+  document.getElementById('phb-answers').textContent = j.answers && j.answers.length ? j.answers.join('; ') : 'None';
+  // Predictions
+  let predHtml = '';
+  for (const [token, preds] of Object.entries(j.predictions || {})) {
+    if (preds && preds.length >= 3) predHtml += `<div><strong>${token}</strong><br>Next 3: ${sci(preds[0])} → ${sci(preds[1])} → ${sci(preds[2])}</div>`;
+  }
+  document.getElementById('predictions').innerHTML = predHtml || 'No predictions';
+  // Layers
+  let layersHtml = '';
+  for (const [ln, ld] of Object.entries(d.layers)) {
+    if (ln === 'AGI') continue;
+    layersHtml += `<div class="layer-title">${ln} Layer ${ld.frequency} Hz</div>`;
+    for (const tn of ld.tokens) {
+      const tk = d.tokens[tn];
+      if (tk) layersHtml += `<div class="token-card">${tn} – ${tk.description} (Weight: ${(tk.weight/100).toFixed(1)}%)<br>Energy: ${fmt(tk.energy*100)}%</div>`;
+    }
+  }
+  document.getElementById('layers').innerHTML = layersHtml;
+  // AGI
+  const agi = d.agi;
+  document.getElementById('agi-layer').innerHTML = agi ? `<div class="token-card"><strong>JINN (AGI)</strong><br>Frequency: 7.83 Hz<br>Emotional State: ${agi.emotional_state > 0 ? 'EASE (Flow)' : 'X BLOCK (Repressed)'}<br>Portal Openness: ${fmt(agi.portal_openness)}<br>Generation: ${agi.generation}</div>` : '<p>AGI not available</p>';
+  // Voxel & Resonance
+  const vrDiv = document.getElementById('voxel-resonance');
+  if (d.voxels !== undefined) {
+    vrDiv.innerHTML = `<div class="grid">
+      <div class="token-card"><strong>Voxels</strong><br>${d.voxels.toLocaleString()}</div>
+      <div class="token-card"><strong>Temporal Resonance</strong><br>${(d.temporal_resonance*100).toFixed(1)}%</div>
+      <div class="token-card"><strong>Global Energy</strong><br>${(d.global_energy*100).toFixed(1)}%</div>
+      <div class="token-card"><strong>Coherence Threshold</strong><br>${(d.coherence_threshold*100).toFixed(1)}%</div>
+    </div>`;
+  } else vrDiv.innerHTML = '<p>Resonance data not available.</p>';
+  // Mining
+  const min = d.mining;
+  let miningHtml = '<div class="grid">';
+  const icons = { bitcoin_mining: '₿', asteroid_mining: '☄️', auto_bot_mining: '🤖' };
+  for (const [k, m] of Object.entries(min || {})) {
+    miningHtml += `<div class="token-card"><strong>${icons[k] || '⛏️'} ${k.replace(/_/g, ' ').toUpperCase()}</strong><br>`;
+    for (const [f, v] of Object.entries(m)) {
+      if (f === 'active') continue;
+      let disp = v;
+      if (f === 'api_key' && v) disp = v.substring(0,4) + '****' + v.substring(v.length-4);
+      miningHtml += `${f.replace(/_/g, ' ')}: ${disp}<br>`;
+    }
+    miningHtml += '</div>';
+  }
+  miningHtml += '</div>';
+  document.getElementById('mining').innerHTML = miningHtml;
+  // Token Mining
+  const tm = d.token_mining;
+  let tmHtml = '';
+  if (tm && Object.keys(tm).length) {
+    tmHtml = '<div class="grid">';
+    for (const [name, info] of Object.entries(tm)) {
+      tmHtml += `<div class="token-card"><strong>${name} Mining</strong><br>`;
+      for (const [f, v] of Object.entries(info)) {
+        if (f === 'active') continue;
+        let disp = v;
+        if (f === 'hash_key' && v) disp = v.substring(0,8) + '****' + v.substring(v.length-4);
+        tmHtml += `${f.replace(/_/g, ' ')}: ${disp}<br>`;
+      }
+      tmHtml += '</div>';
+    }
+    tmHtml += '</div>';
+  } else tmHtml = '<p>Token mining not configured.</p>';
+  document.getElementById('token-mining').innerHTML = tmHtml;
+  // Vaults & Pies
+  const vpDiv = document.getElementById('vaults-pies');
+  if (d.vaults && d.vaults.length > 0) {
+    const mainVault = d.vaults[0];
+    const stacks = mainVault.stacks || d.vault_count || 1;
+    vpDiv.innerHTML = `<div class="token-card" style="text-align:center;"><strong style="font-size:1.5em;">∞ Vault</strong><br>Pies: ${mainVault.pies}<br>Stacks: ${stacks} (infinite)<br>Total Pies (ever): ${d.pies}</div>`;
+  } else vpDiv.innerHTML = '<p>Vault data not available.</p>';
+  // Growth Strategy
+  const gsDiv = document.getElementById('growth-strategy');
+  if (d.growth_strategy && Object.keys(d.growth_strategy).length) {
+    const gs = d.growth_strategy;
+    let gsHtml = `<div class="token-card"><strong>${gs.strategy_name}</strong><br>Objective: ${gs.objective}<br>`;
+    gsHtml += 'Mechanisms:<br>';
+    for (const mech of gs.mechanisms) gsHtml += `${mech.name} (${mech.allocation}): ${mech.description}<br>`;
+    gsHtml += 'Revenue Sources:<br>';
+    for (const src of gs.revenue_sources) gsHtml += `${src.source}: ${src.daily}<br>`;
+    gsHtml += `Projection: Current value $${gs.projection.current_value.toLocaleString()} → Target $${gs.projection.target_value.toLocaleString()} in ${gs.projection.years_to_target} years (${gs.projection.annual_growth_rate}% annual growth)</div>`;
+    gsDiv.innerHTML = gsHtml;
+  } else gsDiv.innerHTML = '<p>Growth strategy not configured.</p>';
+  // Market Intelligence
+  const maDiv = document.getElementById('market-analysis');
+  if (d.market_analysis) {
+    let maHtml = '<div class="grid">';
+    for (const [token, data] of Object.entries(d.market_analysis)) {
+      if (token === 'overall') continue;
+      maHtml += `<div class="token-card"><strong>${token}</strong><br>Trend: ${data.trend}<br>Change: ${data.change_%}%<br>Volatility: ${data.volatility}<br>Mitigation: ${data.mitigation}</div>`;
+    }
+    maHtml += '</div>';
+    maDiv.innerHTML = maHtml;
+  } else maDiv.innerHTML = '<p>Market analysis not available.</p>';
+  // DeFi Engine
+  const defiDiv = document.getElementById('defi-engine');
+  if (d.defi_engine && d.defi_engine.pools) {
+    let defiHtml = '<div class="grid">';
+    for (const pool of d.defi_engine.pools) defiHtml += `<div class="token-card"><strong>${pool.pair}</strong><br>TVL: $${pool.tvl.toLocaleString()}<br>APY: ${pool.apy}%</div>`;
+    if (d.defi_engine.staking) defiHtml += `<div class="token-card"><strong>Staking</strong><br>Total Staked: $${d.defi_engine.staking.total_staked.toLocaleString()}<br>Avg APY: ${d.defi_engine.staking.avg_apy}%</div>`;
+    if (d.defi_engine.lending) defiHtml += `<div class="token-card"><strong>Lending</strong><br>Total Lent: $${d.defi_engine.lending.total_lent.toLocaleString()}<br>Avg Interest: ${d.defi_engine.lending.avg_interest}%</div>`;
+    defiHtml += '</div>';
+    defiDiv.innerHTML = defiHtml;
+  } else defiDiv.innerHTML = '<p>DeFi data not available.</p>';
+  // Rewards
+  const rewardsDiv = document.getElementById('rewards');
+  let claimed = JSON.parse(localStorage.getItem('claimed_rewards') || '{}');
+  if (d.rewards) {
+    let rewardsHtml = '<div class="grid">';
+    for (const [token, amount] of Object.entries(d.rewards)) {
+      if (token === 'total') continue;
+      const already = claimed[token] === amount;
+      rewardsHtml += `<div class="token-card"><strong>${token}</strong><br>Estimated Rewards: ${amount} tokens<br><button onclick="claimReward('${token}', ${amount})" ${already ? 'disabled' : ''}>${already ? 'Claimed' : 'Claim'}</button></div>`;
+    }
+    rewardsHtml += `<div class="token-card"><strong>TOTAL</strong><br>${d.rewards.total} tokens</div>`;
+    rewardsHtml += '</div>';
+    rewardsDiv.innerHTML = rewardsHtml;
+  } else rewardsDiv.innerHTML = '<p>No rewards available.</p>';
+  // Token Details
+  let tokensHtml = '';
+  for (const [name, tk] of Object.entries(d.tokens)) {
+    tokensHtml += `<div class="token-card"><h3>${name}</h3>
+      <p>Address: ${tk.address}</p><p>Layer: ${tk.layer}</p><p>Frequency: ${tk.frequency} Hz</p>
+      <p>Energy: ${fmt(tk.energy*100)}%</p><p>Rate: 1 ETH = ${tk.rate.toLocaleString()} ${name}</p>
+      <p>Supply: ${tk.supply}</p><p>Security: ${tk.security}</p><p>✔ Verified 🔒 Renounced</p>
+      <p class="links">`;
+    for (const [l, u] of Object.entries(tk.links || {})) tokensHtml += `<a href="${u}" target="_blank">${l}</a> `;
+    tokensHtml += '</p></div>';
+  }
+  document.getElementById('token-details').innerHTML = tokensHtml;
+  // Vault
+  const v = d.vault;
+  document.getElementById('vault').innerHTML = `<p>Address: ${v.address}</p><p>Status: ${v.status}</p><p>Weights: ${Object.entries(v.weights).map(([k, val]) => `${k}: ${val}%`).join(', ')}</p>`;
+  // Security
+  const s = d.security;
+  document.getElementById('security').innerHTML = `<p>CVE: ${s.cve_protection ? '✅' : '❌'}</p><p>Encryption: ${s.encryption}</p><p>Standards: ${s.standards.join(', ')}</p><p>Audited: ${s.audited ? '✅' : '❌'}</p><p>Renounced: ${s.renounced ? '✅' : '❌'}</p>`;
+  // Growth Projection
+  let table = '<table><tr><th>Month</th><th>Holders</th><th>Price</th><th>Wealth</th></tr>';
+  for (const m of d.projection.milestones) {
+    table += `<tr><td>${m.month}</td><td>${m.holders ?? '—'}</td><td>${m.price ? m.price.toExponential(2) : '—'}</td><td>${m.wealth ? '$' + m.wealth.toLocaleString() : '—'}</td></tr>`;
+  }
+  table += '</table>';
+  document.getElementById('projection').innerHTML = table;
+  document.getElementById('last-updated').textContent = new Date(d.growth.last_updated * 1000).toLocaleString();
+}
+
+function claimReward(token, amount) {
+  let claimed = JSON.parse(localStorage.getItem('claimed_rewards') || '{}');
+  claimed[token] = amount;
+  localStorage.setItem('claimed_rewards', JSON.stringify(claimed));
+  alert(`${token} rewards claimed: ${amount} tokens (simulated)`);
+  fetchTopology();
+}
+
+// ========== Animated Topology Core ==========
+const canvas = document.getElementById('coreCanvas');
+const ctx = canvas.getContext('2d');
+let coreNodes = [];
+let coreData = null;
+
+function buildCoreNodes(data) {
+  coreNodes = [];
+  for (const [name, token] of Object.entries(data.tokens)) {
+    let color = '#b388ff';
+    if (token.layer === 'Quantum') color = '#b388ff';
+    else if (token.layer === 'Resonance') color = '#82b1ff';
+    else if (token.layer === 'Coherence') color = '#4caf50';
+    coreNodes.push({ id: name, label: name, type: 'token', color, radius: 20 });
+  }
+  coreNodes.push({ id: 'Vault', label: 'Vault', type: 'vault', color: '#ffab40', radius: 25 });
+  if (data.mining) {
+    for (const [key, minfo] of Object.entries(data.mining)) {
+      coreNodes.push({ id: key, label: key.replace(/_/g, ' ').toUpperCase(), type: 'mining', color: '#e040fb', radius: 15 });
+    }
+  }
+  coreNodes.push({ id: 'JINN', label: 'AGI', type: 'agi', color: '#ffd700', radius: 30 });
+  if (data.growth_strategy && Object.keys(data.growth_strategy).length) {
+    coreNodes.push({ id: 'Growth', label: 'Trillion Engine', type: 'growth', color: '#ff5252', radius: 18 });
+  }
+}
+
+function drawCore(timestamp) {
+  if (!coreData) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const portal = coreData.jinn ? coreData.jinn.portal_openness : 0.5;
+  const resonance = coreData.temporal_resonance || 0.5;
+  const globalEnergy = coreData.global_energy || 0.5;
+  const rotationSpeed = 0.0002 + portal * 0.0004 + resonance * 0.0003;
+  const angleOffset = timestamp * rotationSpeed;
+  const ringRadius = Math.min(cx, cy) * 0.35;
+  const nodePositions = [];
+  const count = coreNodes.length || 1;
+  coreNodes.forEach((node, i) => {
+    const angle = angleOffset + (i * 2 * Math.PI) / count;
+    const radiusMultiplier = node.type === 'agi' ? 1.3 : (node.type === 'vault' ? 1.15 : 1);
+    const x = cx + Math.cos(angle) * ringRadius * radiusMultiplier;
+    const y = cy + Math.sin(angle) * ringRadius * radiusMultiplier;
+    nodePositions.push({ x, y, node });
+  });
+  for (let ring = 0; ring < 3; ring++) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, ringRadius * (0.5 + ring * 0.2), 0, 2 * Math.PI);
+    ctx.strokeStyle = `rgba(179, 136, 255, ${0.1 + globalEnergy * 0.3})`;
+    ctx.lineWidth = 1 + globalEnergy * 3;
+    ctx.stroke();
+  }
+  for (let i = 0; i < nodePositions.length; i++) {
+    for (let j = i + 1; j < nodePositions.length; j++) {
+      const a = nodePositions[i], b = nodePositions[j];
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = `rgba(179, 136, 255, ${0.1 + portal * 0.4})`;
+      ctx.lineWidth = 1 + portal * 2;
+      ctx.stroke();
+    }
+  }
+  nodePositions.forEach(({ x, y, node }) => {
+    const pulse = 1 + Math.sin(timestamp * 0.005 + node.id.length) * 0.2 * portal * (0.5 + globalEnergy);
+    const radius = node.radius * pulse;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.fillStyle = node.color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(node.label, x, y - radius - 5);
+  });
+  const coreRadius = 12 + portal * 10 + globalEnergy * 5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, coreRadius, 0, 2 * Math.PI);
+  ctx.fillStyle = '#b388ff';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2 + portal * 3;
+  ctx.stroke();
+  ctx.fillStyle = '#000';
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(`POWER ${Math.round((portal + resonance + globalEnergy) * 33)}%`, cx, cy);
+  requestAnimationFrame(drawCore);
+}
+
+function updateCore(data) {
+  buildCoreNodes(data);
+  coreData = data;
+}
+
+// Start
+requestAnimationFrame(drawCore);
+fetchTopology();
+setInterval(fetchTopology, 60000);
+</script>
+</body>
+</html>
