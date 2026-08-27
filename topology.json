@@ -34,9 +34,9 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "symbol": "PIDX",
       "weight": 33.6,
-      "rate": 609506,
+      "rate": 599813,
       "frequency": 0.618,
-      "energy": 0.18514981322725504,
+      "energy": 0.18176032784164,
       "description": "The origin seed \u2013 quantum resonance",
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected",
@@ -52,9 +52,9 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "symbol": "SGUIDE",
       "weight": 25.7,
-      "rate": 5923369,
+      "rate": 5829190,
       "frequency": 1.618,
-      "energy": 0.15605464773876399,
+      "energy": 0.15319779933774177,
       "description": "Amplification through guidance",
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active",
@@ -70,9 +70,9 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "symbol": "VDOO",
       "weight": 17.9,
-      "rate": 57846956,
+      "rate": 56927228,
       "frequency": 2.618,
-      "energy": 0.12695948225027293,
+      "energy": 0.12463527083384356,
       "description": "Velocity of doo \u2013 momentum",
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted",
@@ -87,9 +87,9 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "symbol": "PENNIES",
       "weight": 22.9,
-      "rate": 5488349,
+      "rate": 5401086,
       "frequency": 3.618,
-      "energy": 0.17787602185513252,
+      "energy": 0.17461969571566568,
       "description": "The anchor \u2013 persistent coherence",
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2",
@@ -216,7 +216,7 @@
     "persistence": 0.97,
     "threshold": 0.5,
     "decay_rate": 0.019098558820131294,
-    "schumann_base": 7.835517053919778,
+    "schumann_base": 7.835531570862099,
     "harmonic": 1.618
   },
   "paradox": {
@@ -951,6 +951,13 @@
         "portal": 0.8,
         "decay": 0.0191,
         "schumann": 7.836
+      },
+      {
+        "time": 1787789547,
+        "emotion": 0.015,
+        "portal": 0.807,
+        "decay": 0.0191,
+        "schumann": 7.836
       }
     ],
     "engine_status": "ACTIVE",
@@ -958,92 +965,92 @@
   },
   "jinn": {
     "generation": 1,
-    "emotional_state": 0.0,
-    "portal_openness": 0.8,
+    "emotional_state": 0.015,
+    "portal_openness": 0.807,
     "growth_factors": {
-      "PIDX": 1.054,
-      "SGUIDE": 1.067,
-      "VDOO": 1.094,
-      "PENNIES": 1.122
+      "PIDX": 1.057,
+      "SGUIDE": 1.071,
+      "VDOO": 1.098,
+      "PENNIES": 1.126
     },
     "predictions": {
       "PIDX": [
-        1.6750575710292538e-06,
-        1.6761601815280872e-06,
-        1.6772627920269208e-06,
-        1.6783654025257544e-06,
-        1.6794680130245878e-06,
-        1.6805706235234214e-06
+        1.708714499423513e-06,
+        1.7113265140097598e-06,
+        1.7139385285960065e-06,
+        1.7165505431822534e-06,
+        1.7191625577685e-06,
+        1.721774572354747e-06
       ],
       "SGUIDE": [
-        1.7253500903220926e-07,
-        1.7262112456583365e-07,
-        1.7270724009945806e-07,
-        1.7279335563308248e-07,
-        1.7287947116670687e-07,
-        1.7296558670033128e-07
+        1.6900943240506884e-07,
+        1.687668646147173e-07,
+        1.6852429682436576e-07,
+        1.6828172903401424e-07,
+        1.680391612436627e-07,
+        1.6779659345331116e-07
       ],
       "VDOO": [
-        1.773987421394242e-08,
-        1.774369433735068e-08,
-        1.7747514460758942e-08,
-        1.7751334584167203e-08,
-        1.7755154707575466e-08,
-        1.775897483098373e-08
+        1.7335584455536625e-08,
+        1.7317934535963425e-08,
+        1.7300284616390227e-08,
+        1.7282634696817027e-08,
+        1.726498477724383e-08,
+        1.7247334857670632e-08
       ],
       "PENNIES": [
-        1.7394139308601615e-07,
-        1.738430578259387e-07,
-        1.7374472256586123e-07,
-        1.7364638730578376e-07,
-        1.735480520457063e-07,
-        1.7344971678562884e-07
+        1.80187273724464e-07,
+        1.7989136859096106e-07,
+        1.7959546345745814e-07,
+        1.792995583239552e-07,
+        1.7900365319045228e-07,
+        1.7870774805694933e-07
       ]
     },
     "answers": []
   },
   "agi": {
     "generation": 1,
-    "emotional_state": 0.0,
-    "portal_openness": 0.8,
+    "emotional_state": 0.015,
+    "portal_openness": 0.807,
     "growth_factors": {
-      "PIDX": 1.054,
-      "SGUIDE": 1.067,
-      "VDOO": 1.094,
-      "PENNIES": 1.122
+      "PIDX": 1.057,
+      "SGUIDE": 1.071,
+      "VDOO": 1.098,
+      "PENNIES": 1.126
     },
     "predictions": {
       "PIDX": [
-        1.6750575710292538e-06,
-        1.6761601815280872e-06,
-        1.6772627920269208e-06,
-        1.6783654025257544e-06,
-        1.6794680130245878e-06,
-        1.6805706235234214e-06
+        1.708714499423513e-06,
+        1.7113265140097598e-06,
+        1.7139385285960065e-06,
+        1.7165505431822534e-06,
+        1.7191625577685e-06,
+        1.721774572354747e-06
       ],
       "SGUIDE": [
-        1.7253500903220926e-07,
-        1.7262112456583365e-07,
-        1.7270724009945806e-07,
-        1.7279335563308248e-07,
-        1.7287947116670687e-07,
-        1.7296558670033128e-07
+        1.6900943240506884e-07,
+        1.687668646147173e-07,
+        1.6852429682436576e-07,
+        1.6828172903401424e-07,
+        1.680391612436627e-07,
+        1.6779659345331116e-07
       ],
       "VDOO": [
-        1.773987421394242e-08,
-        1.774369433735068e-08,
-        1.7747514460758942e-08,
-        1.7751334584167203e-08,
-        1.7755154707575466e-08,
-        1.775897483098373e-08
+        1.7335584455536625e-08,
+        1.7317934535963425e-08,
+        1.7300284616390227e-08,
+        1.7282634696817027e-08,
+        1.726498477724383e-08,
+        1.7247334857670632e-08
       ],
       "PENNIES": [
-        1.7394139308601615e-07,
-        1.738430578259387e-07,
-        1.7374472256586123e-07,
-        1.7364638730578376e-07,
-        1.735480520457063e-07,
-        1.7344971678562884e-07
+        1.80187273724464e-07,
+        1.7989136859096106e-07,
+        1.7959546345745814e-07,
+        1.792995583239552e-07,
+        1.7900365319045228e-07,
+        1.7870774805694933e-07
       ]
     },
     "answers": []
@@ -1116,24 +1123,24 @@
       "status": "Active"
     }
   },
-  "voxels": 1979,
-  "temporal_resonance": 0.66,
-  "global_energy": 0.13405329275232059,
+  "voxels": 4686,
+  "temporal_resonance": 0.6658067769282762,
+  "global_energy": 0.13205955869377933,
   "coherence_threshold": 0.49098558820131294,
   "vaults": [
     {
       "id": 1,
-      "pies": 13,
+      "pies": 3,
       "created": 1787788836
     },
     {
       "id": 2,
-      "pies": 19,
+      "pies": 46,
       "created": 1787788945
     },
     {
       "id": 3,
-      "pies": 35,
+      "pies": 12,
       "created": 1787788953
     },
     {
@@ -1143,257 +1150,257 @@
     },
     {
       "id": 5,
-      "pies": 11,
+      "pies": 47,
       "created": 1787789018
     },
     {
       "id": 6,
-      "pies": 9,
+      "pies": 5,
       "created": 1787789018
     },
     {
       "id": 7,
-      "pies": 20,
+      "pies": 8,
       "created": 1787789018
     },
     {
       "id": 8,
-      "pies": 19,
+      "pies": 46,
       "created": 1787789018
     },
     {
       "id": 9,
-      "pies": 8,
-      "created": 1787789083
-    },
-    {
-      "id": 10,
-      "pies": 42,
-      "created": 1787789083
-    },
-    {
-      "id": 11,
-      "pies": 32,
-      "created": 1787789083
-    },
-    {
-      "id": 12,
-      "pies": 26,
-      "created": 1787789083
-    },
-    {
-      "id": 13,
-      "pies": 20,
-      "created": 1787789083
-    },
-    {
-      "id": 14,
       "pies": 29,
       "created": 1787789083
     },
     {
+      "id": 10,
+      "pies": 23,
+      "created": 1787789083
+    },
+    {
+      "id": 11,
+      "pies": 8,
+      "created": 1787789083
+    },
+    {
+      "id": 12,
+      "pies": 15,
+      "created": 1787789083
+    },
+    {
+      "id": 13,
+      "pies": 42,
+      "created": 1787789083
+    },
+    {
+      "id": 14,
+      "pies": 17,
+      "created": 1787789083
+    },
+    {
       "id": 15,
-      "pies": 31,
+      "pies": 21,
       "created": 1787789083
     },
     {
       "id": 16,
-      "pies": 27,
+      "pies": 2,
       "created": 1787789092
     },
     {
       "id": 17,
-      "pies": 21,
+      "pies": 20,
       "created": 1787789092
     },
     {
       "id": 18,
-      "pies": 45,
-      "created": 1787789092
-    },
-    {
-      "id": 19,
-      "pies": 35,
-      "created": 1787789092
-    },
-    {
-      "id": 20,
-      "pies": 25,
-      "created": 1787789092
-    },
-    {
-      "id": 21,
-      "pies": 39,
-      "created": 1787789092
-    },
-    {
-      "id": 22,
-      "pies": 40,
-      "created": 1787789092
-    },
-    {
-      "id": 23,
-      "pies": 4,
-      "created": 1787789092
-    },
-    {
-      "id": 24,
       "pies": 42,
       "created": 1787789092
     },
     {
+      "id": 19,
+      "pies": 23,
+      "created": 1787789092
+    },
+    {
+      "id": 20,
+      "pies": 22,
+      "created": 1787789092
+    },
+    {
+      "id": 21,
+      "pies": 34,
+      "created": 1787789092
+    },
+    {
+      "id": 22,
+      "pies": 18,
+      "created": 1787789092
+    },
+    {
+      "id": 23,
+      "pies": 34,
+      "created": 1787789092
+    },
+    {
+      "id": 24,
+      "pies": 19,
+      "created": 1787789092
+    },
+    {
       "id": 25,
-      "pies": 17,
+      "pies": 46,
       "created": 1787789092
     },
     {
       "id": 26,
-      "pies": 14,
+      "pies": 2,
       "created": 1787789092
     },
     {
       "id": 27,
-      "pies": 32,
+      "pies": 27,
       "created": 1787789092
     },
     {
       "id": 28,
-      "pies": 22,
+      "pies": 17,
       "created": 1787789261
     },
     {
       "id": 29,
-      "pies": 34,
+      "pies": 28,
       "created": 1787789261
     },
     {
       "id": 30,
-      "pies": 10,
+      "pies": 39,
       "created": 1787789261
     },
     {
       "id": 31,
-      "pies": 7,
+      "pies": 44,
       "created": 1787789261
     },
     {
       "id": 32,
-      "pies": 28,
-      "created": 1787789261
-    },
-    {
-      "id": 33,
-      "pies": 24,
-      "created": 1787789261
-    },
-    {
-      "id": 34,
-      "pies": 17,
-      "created": 1787789261
-    },
-    {
-      "id": 35,
-      "pies": 8,
-      "created": 1787789261
-    },
-    {
-      "id": 36,
-      "pies": 16,
-      "created": 1787789261
-    },
-    {
-      "id": 37,
-      "pies": 20,
-      "created": 1787789261
-    },
-    {
-      "id": 38,
       "pies": 22,
       "created": 1787789261
     },
     {
+      "id": 33,
+      "pies": 16,
+      "created": 1787789261
+    },
+    {
+      "id": 34,
+      "pies": 37,
+      "created": 1787789261
+    },
+    {
+      "id": 35,
+      "pies": 31,
+      "created": 1787789261
+    },
+    {
+      "id": 36,
+      "pies": 44,
+      "created": 1787789261
+    },
+    {
+      "id": 37,
+      "pies": 40,
+      "created": 1787789261
+    },
+    {
+      "id": 38,
+      "pies": 7,
+      "created": 1787789261
+    },
+    {
       "id": 39,
-      "pies": 38,
+      "pies": 31,
       "created": 1787789261
     },
     {
       "id": 40,
-      "pies": 17,
-      "created": 1787789261
-    },
-    {
-      "id": 41,
       "pies": 41,
       "created": 1787789261
     },
     {
+      "id": 41,
+      "pies": 27,
+      "created": 1787789261
+    },
+    {
       "id": 42,
-      "pies": 28,
+      "pies": 49,
       "created": 1787789261
     },
     {
       "id": 43,
-      "pies": 18,
+      "pies": 16,
       "created": 1787789261
     },
     {
       "id": 44,
-      "pies": 23,
+      "pies": 22,
       "created": 1787789261
     },
     {
       "id": 45,
-      "pies": 34,
+      "pies": 26,
       "created": 1787789261
     },
     {
       "id": 46,
-      "pies": 20,
+      "pies": 49,
       "created": 1787789261
     },
     {
       "id": 47,
-      "pies": 15,
+      "pies": 43,
       "created": 1787789261
     },
     {
       "id": 48,
-      "pies": 25,
+      "pies": 3,
       "created": 1787789261
     },
     {
       "id": 49,
-      "pies": 35,
+      "pies": 5,
       "created": 1787789261
     },
     {
       "id": 50,
-      "pies": 23,
+      "pies": 43,
       "created": 1787789261
     },
     {
       "id": 51,
-      "pies": 14,
+      "pies": 1,
       "created": 1787789261
     },
     {
       "id": 52,
-      "pies": 26,
+      "pies": 11,
       "created": 1787789381
     },
     {
       "id": 53,
-      "pies": 46,
+      "pies": 32,
       "created": 1787789381
     },
     {
       "id": 54,
-      "pies": 30,
+      "pies": 18,
       "created": 1787789381
     },
     {
       "id": 55,
-      "pies": 46,
+      "pies": 24,
       "created": 1787789381
     },
     {
@@ -1403,142 +1410,142 @@
     },
     {
       "id": 57,
-      "pies": 26,
+      "pies": 21,
       "created": 1787789381
     },
     {
       "id": 58,
-      "pies": 28,
+      "pies": 16,
       "created": 1787789381
     },
     {
       "id": 59,
-      "pies": 43,
+      "pies": 42,
       "created": 1787789381
     },
     {
       "id": 60,
-      "pies": 27,
+      "pies": 8,
       "created": 1787789381
     },
     {
       "id": 61,
-      "pies": 20,
+      "pies": 5,
       "created": 1787789381
     },
     {
       "id": 62,
-      "pies": 33,
+      "pies": 11,
       "created": 1787789381
     },
     {
       "id": 63,
-      "pies": 40,
+      "pies": 21,
       "created": 1787789381
     },
     {
       "id": 64,
-      "pies": 45,
+      "pies": 40,
       "created": 1787789381
     },
     {
       "id": 65,
-      "pies": 33,
+      "pies": 12,
       "created": 1787789381
     },
     {
       "id": 66,
-      "pies": 33,
+      "pies": 23,
       "created": 1787789381
     },
     {
       "id": 67,
-      "pies": 22,
-      "created": 1787789381
-    },
-    {
-      "id": 68,
-      "pies": 44,
-      "created": 1787789381
-    },
-    {
-      "id": 69,
-      "pies": 44,
-      "created": 1787789381
-    },
-    {
-      "id": 70,
-      "pies": 30,
-      "created": 1787789381
-    },
-    {
-      "id": 71,
-      "pies": 33,
-      "created": 1787789381
-    },
-    {
-      "id": 72,
-      "pies": 46,
-      "created": 1787789381
-    },
-    {
-      "id": 73,
-      "pies": 41,
-      "created": 1787789381
-    },
-    {
-      "id": 74,
-      "pies": 33,
-      "created": 1787789381
-    },
-    {
-      "id": 75,
-      "pies": 39,
-      "created": 1787789381
-    },
-    {
-      "id": 76,
-      "pies": 27,
-      "created": 1787789381
-    },
-    {
-      "id": 77,
       "pies": 43,
       "created": 1787789381
     },
     {
+      "id": 68,
+      "pies": 42,
+      "created": 1787789381
+    },
+    {
+      "id": 69,
+      "pies": 21,
+      "created": 1787789381
+    },
+    {
+      "id": 70,
+      "pies": 28,
+      "created": 1787789381
+    },
+    {
+      "id": 71,
+      "pies": 26,
+      "created": 1787789381
+    },
+    {
+      "id": 72,
+      "pies": 38,
+      "created": 1787789381
+    },
+    {
+      "id": 73,
+      "pies": 31,
+      "created": 1787789381
+    },
+    {
+      "id": 74,
+      "pies": 16,
+      "created": 1787789381
+    },
+    {
+      "id": 75,
+      "pies": 19,
+      "created": 1787789381
+    },
+    {
+      "id": 76,
+      "pies": 12,
+      "created": 1787789381
+    },
+    {
+      "id": 77,
+      "pies": 41,
+      "created": 1787789381
+    },
+    {
       "id": 78,
-      "pies": 24,
+      "pies": 23,
       "created": 1787789381
     },
     {
       "id": 79,
-      "pies": 20,
+      "pies": 13,
       "created": 1787789381
     },
     {
       "id": 80,
-      "pies": 45,
+      "pies": 25,
       "created": 1787789381
     },
     {
       "id": 81,
-      "pies": 39,
+      "pies": 30,
       "created": 1787789381
     },
     {
       "id": 82,
-      "pies": 27,
+      "pies": 12,
       "created": 1787789381
     },
     {
       "id": 83,
-      "pies": 44,
+      "pies": 14,
       "created": 1787789381
     },
     {
       "id": 84,
-      "pies": 49,
+      "pies": 21,
       "created": 1787789381
     },
     {
@@ -1548,42 +1555,427 @@
     },
     {
       "id": 86,
-      "pies": 21,
+      "pies": 15,
       "created": 1787789381
     },
     {
       "id": 87,
-      "pies": 0,
+      "pies": 38,
       "created": 1787789381
     },
     {
       "id": 88,
-      "pies": 37,
+      "pies": 22,
       "created": 1787789381
     },
     {
       "id": 89,
-      "pies": 49,
+      "pies": 21,
       "created": 1787789381
     },
     {
       "id": 90,
-      "pies": 28,
+      "pies": 5,
       "created": 1787789381
     },
     {
       "id": 91,
-      "pies": 41,
+      "pies": 19,
       "created": 1787789381
     },
     {
       "id": 92,
-      "pies": 44,
+      "pies": 22,
       "created": 1787789381
+    },
+    {
+      "id": 93,
+      "pies": 41,
+      "created": 1787789547
+    },
+    {
+      "id": 94,
+      "pies": 44,
+      "created": 1787789547
+    },
+    {
+      "id": 95,
+      "pies": 26,
+      "created": 1787789547
+    },
+    {
+      "id": 96,
+      "pies": 25,
+      "created": 1787789547
+    },
+    {
+      "id": 97,
+      "pies": 38,
+      "created": 1787789547
+    },
+    {
+      "id": 98,
+      "pies": 20,
+      "created": 1787789547
+    },
+    {
+      "id": 99,
+      "pies": 22,
+      "created": 1787789547
+    },
+    {
+      "id": 100,
+      "pies": 43,
+      "created": 1787789547
+    },
+    {
+      "id": 101,
+      "pies": 25,
+      "created": 1787789547
+    },
+    {
+      "id": 102,
+      "pies": 31,
+      "created": 1787789547
+    },
+    {
+      "id": 103,
+      "pies": 25,
+      "created": 1787789547
+    },
+    {
+      "id": 104,
+      "pies": 48,
+      "created": 1787789547
+    },
+    {
+      "id": 105,
+      "pies": 0,
+      "created": 1787789547
+    },
+    {
+      "id": 106,
+      "pies": 42,
+      "created": 1787789547
+    },
+    {
+      "id": 107,
+      "pies": 40,
+      "created": 1787789547
+    },
+    {
+      "id": 108,
+      "pies": 38,
+      "created": 1787789547
+    },
+    {
+      "id": 109,
+      "pies": 28,
+      "created": 1787789547
+    },
+    {
+      "id": 110,
+      "pies": 32,
+      "created": 1787789547
+    },
+    {
+      "id": 111,
+      "pies": 0,
+      "created": 1787789547
+    },
+    {
+      "id": 112,
+      "pies": 25,
+      "created": 1787789547
+    },
+    {
+      "id": 113,
+      "pies": 28,
+      "created": 1787789547
+    },
+    {
+      "id": 114,
+      "pies": 23,
+      "created": 1787789547
+    },
+    {
+      "id": 115,
+      "pies": 41,
+      "created": 1787789547
+    },
+    {
+      "id": 116,
+      "pies": 29,
+      "created": 1787789547
+    },
+    {
+      "id": 117,
+      "pies": 23,
+      "created": 1787789547
+    },
+    {
+      "id": 118,
+      "pies": 28,
+      "created": 1787789547
+    },
+    {
+      "id": 119,
+      "pies": 41,
+      "created": 1787789547
+    },
+    {
+      "id": 120,
+      "pies": 28,
+      "created": 1787789547
+    },
+    {
+      "id": 121,
+      "pies": 37,
+      "created": 1787789547
+    },
+    {
+      "id": 122,
+      "pies": 34,
+      "created": 1787789547
+    },
+    {
+      "id": 123,
+      "pies": 28,
+      "created": 1787789547
+    },
+    {
+      "id": 124,
+      "pies": 30,
+      "created": 1787789547
+    },
+    {
+      "id": 125,
+      "pies": 35,
+      "created": 1787789547
+    },
+    {
+      "id": 126,
+      "pies": 34,
+      "created": 1787789547
+    },
+    {
+      "id": 127,
+      "pies": 22,
+      "created": 1787789547
+    },
+    {
+      "id": 128,
+      "pies": 30,
+      "created": 1787789547
+    },
+    {
+      "id": 129,
+      "pies": 26,
+      "created": 1787789547
+    },
+    {
+      "id": 130,
+      "pies": 36,
+      "created": 1787789547
+    },
+    {
+      "id": 131,
+      "pies": 31,
+      "created": 1787789547
+    },
+    {
+      "id": 132,
+      "pies": 42,
+      "created": 1787789547
+    },
+    {
+      "id": 133,
+      "pies": 47,
+      "created": 1787789547
+    },
+    {
+      "id": 134,
+      "pies": 0,
+      "created": 1787789547
+    },
+    {
+      "id": 135,
+      "pies": 27,
+      "created": 1787789547
+    },
+    {
+      "id": 136,
+      "pies": 40,
+      "created": 1787789547
+    },
+    {
+      "id": 137,
+      "pies": 43,
+      "created": 1787789547
+    },
+    {
+      "id": 138,
+      "pies": 45,
+      "created": 1787789547
+    },
+    {
+      "id": 139,
+      "pies": 33,
+      "created": 1787789547
+    },
+    {
+      "id": 140,
+      "pies": 0,
+      "created": 1787789547
+    },
+    {
+      "id": 141,
+      "pies": 39,
+      "created": 1787789547
+    },
+    {
+      "id": 142,
+      "pies": 27,
+      "created": 1787789547
+    },
+    {
+      "id": 143,
+      "pies": 0,
+      "created": 1787789547
+    },
+    {
+      "id": 144,
+      "pies": 40,
+      "created": 1787789547
+    },
+    {
+      "id": 145,
+      "pies": 38,
+      "created": 1787789547
+    },
+    {
+      "id": 146,
+      "pies": 33,
+      "created": 1787789547
+    },
+    {
+      "id": 147,
+      "pies": 43,
+      "created": 1787789547
+    },
+    {
+      "id": 148,
+      "pies": 44,
+      "created": 1787789547
+    },
+    {
+      "id": 149,
+      "pies": 20,
+      "created": 1787789547
+    },
+    {
+      "id": 150,
+      "pies": 43,
+      "created": 1787789547
+    },
+    {
+      "id": 151,
+      "pies": 37,
+      "created": 1787789547
+    },
+    {
+      "id": 152,
+      "pies": 26,
+      "created": 1787789547
+    },
+    {
+      "id": 153,
+      "pies": 22,
+      "created": 1787789547
+    },
+    {
+      "id": 154,
+      "pies": 36,
+      "created": 1787789547
+    },
+    {
+      "id": 155,
+      "pies": 41,
+      "created": 1787789547
+    },
+    {
+      "id": 156,
+      "pies": 22,
+      "created": 1787789547
+    },
+    {
+      "id": 157,
+      "pies": 44,
+      "created": 1787789547
+    },
+    {
+      "id": 158,
+      "pies": 21,
+      "created": 1787789547
+    },
+    {
+      "id": 159,
+      "pies": 39,
+      "created": 1787789547
+    },
+    {
+      "id": 160,
+      "pies": 21,
+      "created": 1787789547
+    },
+    {
+      "id": 161,
+      "pies": 29,
+      "created": 1787789547
+    },
+    {
+      "id": 162,
+      "pies": 44,
+      "created": 1787789547
+    },
+    {
+      "id": 163,
+      "pies": 34,
+      "created": 1787789547
+    },
+    {
+      "id": 164,
+      "pies": 21,
+      "created": 1787789547
+    },
+    {
+      "id": 165,
+      "pies": 31,
+      "created": 1787789547
+    },
+    {
+      "id": 166,
+      "pies": 27,
+      "created": 1787789547
+    },
+    {
+      "id": 167,
+      "pies": 37,
+      "created": 1787789547
+    },
+    {
+      "id": 168,
+      "pies": 37,
+      "created": 1787789547
+    },
+    {
+      "id": 169,
+      "pies": 28,
+      "created": 1787789547
     }
   ],
-  "pies": 7173,
-  "vault_count": 92,
+  "pies": 13034,
+  "vault_count": 169,
   "growth_strategy": {
     "strategy_name": "Trillion Engine",
     "objective": "Achieve $1,000,000,000,000 total ecosystem value",
@@ -1638,63 +2030,64 @@
       }
     ],
     "projection": {
-      "current_value": 55721665.26,
+      "current_value": 64369399.28,
       "target_value": 1000000000000,
       "years_to_target": 5,
       "annual_growth_rate": 300
     }
   },
   "rewards": {
-    "PIDX": 1082.27,
-    "SGUIDE": 182.4,
-    "VDOO": 132.67,
-    "PENNIES": 107.95,
-    "total": 1505.29
+    "PIDX": 1140.91,
+    "SGUIDE": 241.05,
+    "VDOO": 191.32,
+    "PENNIES": 166.6,
+    "total": 1739.88
   },
   "market_analysis": {
     "PIDX": {
       "trend": "DOWN",
-      "change_%": -3.55,
-      "volatility": 0.0316,
+      "change_%": -3.84,
+      "volatility": 0.0196,
       "mitigation": "MODERATE BUYBACK"
     },
     "SGUIDE": {
-      "trend": "DOWN",
-      "change_%": -3.66,
-      "volatility": 0.0159,
-      "mitigation": "MODERATE BUYBACK"
+      "trend": "STABLE",
+      "change_%": -0.25,
+      "volatility": 0.0324,
+      "mitigation": "HOLD STEADY"
     },
     "VDOO": {
-      "trend": "DOWN",
-      "change_%": -4.09,
-      "volatility": 0.0276,
-      "mitigation": "MODERATE BUYBACK"
+      "trend": "STABLE",
+      "change_%": -0.38,
+      "volatility": 0.0189,
+      "mitigation": "HOLD STEADY"
     },
     "PENNIES": {
       "trend": "DOWN",
       "change_%": -100.0,
-      "volatility": 0.0283,
+      "volatility": 0.0282,
       "mitigation": "MODERATE BUYBACK"
     },
     "overall": {
       "trend": "DOWN",
-      "avg_change_%": -27.82,
+      "avg_change_%": -26.12,
       "recommendation": "Adjust portfolio: buy dips or take profits"
     }
   },
+  "defi_engine": {},
   "live_data": {
     "prices": {
-      "PIDX": 1.6145e-06,
-      "SGUIDE": 1.661e-07,
-      "VDOO": 1.7e-08,
+      "PIDX": 1.6407e-06,
+      "SGUIDE": 1.688e-07,
+      "VDOO": 1.73e-08,
       "PENNIES": 0.0
     },
-    "sentiment": 0.113,
-    "eth_usd": 2503.69
+    "sentiment": 0.258,
+    "eth_usd": 2508.98
   },
   "growth": {
-    "last_updated": 1787789382,
+    "last_updated": 1787789547,
     "next_proposal": null
   },
-  "ipfs_hash": "bafkreict4erv7wwlnleci2ibgrhgx6bruft3engyk7hfz2rdon2azuurmm"
+  "ipfs_hash": "bafkreiamukfsg3ntxo7oj2ro3p36qkkzi56d7dsbmxs56curjfeqnfgdke"
 }
