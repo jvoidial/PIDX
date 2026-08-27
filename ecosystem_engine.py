@@ -77,6 +77,8 @@ market_analysis = {
 }
 
 def generate_topology():
+    global voxels, temporal_resonance, global_energy, coherence_threshold, vault_state, rewards, market_analysis
+
     # Simulate updates
     vault_state["pies"] += random.randint(20,50)
     vault_state["vaults"][0]["pies"] = vault_state["pies"]
