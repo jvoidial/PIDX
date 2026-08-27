@@ -1,7 +1,61 @@
 {
-  "name": "\u267e\ufe0f Neural Ecosystem \u2013 Live Sync",
-  "version": "8.0",
-  "chainId": 8453,
+  "live_data": {
+    "eth_usd": 2509.61,
+    "sentiment": 0.44,
+    "prices": {
+      "PIDX": 1.45e-06,
+      "SGUIDE": 1.5e-07,
+      "VDOO": 1.55e-08,
+      "PENNIES": 1.6e-07
+    }
+  },
+  "jinn": {
+    "generation": 2,
+    "emotional_state": 0.4,
+    "portal_openness": 0.6,
+    "growth_factors": {
+      "PIDX": 1.05,
+      "SGUIDE": 1.08,
+      "VDOO": 1.1,
+      "PENNIES": 1.12
+    },
+    "predictions": {
+      "PIDX": [
+        1.45e-06,
+        1.46e-06,
+        1.47e-06
+      ],
+      "SGUIDE": [
+        1.5e-07,
+        1.51e-07,
+        1.52e-07
+      ],
+      "VDOO": [
+        1.55e-08,
+        1.56e-08,
+        1.57e-08
+      ],
+      "PENNIES": [
+        1.6e-07,
+        1.61e-07,
+        1.62e-07
+      ]
+    },
+    "answers": []
+  },
+  "agi": {
+    "generation": 2,
+    "emotional_state": 0.4,
+    "portal_openness": 0.6
+  },
+  "coherence": {
+    "persistence": 0.97,
+    "decay_rate": 0.02,
+    "schumann_base": 7.84
+  },
+  "paradox": {
+    "engine_status": "ACTIVE"
+  },
   "layers": {
     "Quantum": {
       "frequency": 0.618,
@@ -111,140 +165,6 @@
     "audited": true,
     "renounced": true
   },
-  "emotions": {
-    "x_block": {
-      "label": "X BLOCK",
-      "description": "Repressed emotions block life's natural expression"
-    },
-    "ease": {
-      "label": "EASE",
-      "description": "Feel. Honored. Expressed emotions are EASE of life flowing through us"
-    }
-  },
-  "projection": {
-    "milestones": [
-      {
-        "month": 6,
-        "holders": 60,
-        "price": 1.2e-10,
-        "wealth": 30
-      },
-      {
-        "month": 12,
-        "holders": 72,
-        "price": 1.44e-10,
-        "wealth": 36
-      },
-      {
-        "month": 18,
-        "holders": 86,
-        "price": 1.73e-10,
-        "wealth": 43.2
-      },
-      {
-        "month": 24,
-        "holders": 103,
-        "price": 2.07e-10,
-        "wealth": 51.84
-      },
-      {
-        "month": 30,
-        "holders": 124,
-        "price": 2.49e-10,
-        "wealth": 62.21
-      },
-      {
-        "month": 36,
-        "holders": 149,
-        "price": 2.99e-10,
-        "wealth": 74.65
-      },
-      {
-        "month": 48,
-        "holders": 214,
-        "price": 4.3e-10,
-        "wealth": 107.5
-      },
-      {
-        "month": 58,
-        "holders": null,
-        "price": null,
-        "wealth": 1000000
-      },
-      {
-        "month": 72,
-        "holders": null,
-        "price": null,
-        "wealth": 12500000
-      },
-      {
-        "month": 96,
-        "holders": null,
-        "price": null,
-        "wealth": 1000000000
-      },
-      {
-        "month": 134,
-        "holders": null,
-        "price": null,
-        "wealth": 1000000000
-      }
-    ]
-  },
-  "coherence": {
-    "persistence": 0.97,
-    "threshold": 0.5,
-    "decay_rate": 0.02,
-    "schumann_base": 7.84,
-    "harmonic": 1.618
-  },
-  "paradox": {
-    "bootstrapped": true,
-    "last_bootstrap": 1787791480,
-    "next_adjustment": 1787795080,
-    "adjustment_log": [],
-    "engine_status": "ACTIVE",
-    "self_referential_loop": true
-  },
-  "jinn": {
-    "generation": 2,
-    "emotional_state": 0.4,
-    "portal_openness": 0.6,
-    "growth_factors": {
-      "PIDX": 1.05,
-      "SGUIDE": 1.08,
-      "VDOO": 1.1,
-      "PENNIES": 1.12
-    },
-    "predictions": {
-      "PIDX": [
-        1.45e-06,
-        1.46e-06,
-        1.47e-06
-      ],
-      "SGUIDE": [
-        1.5e-07,
-        1.51e-07,
-        1.52e-07
-      ],
-      "VDOO": [
-        1.55e-08,
-        1.56e-08,
-        1.57e-08
-      ],
-      "PENNIES": [
-        1.6e-07,
-        1.61e-07,
-        1.62e-07
-      ]
-    },
-    "answers": []
-  },
-  "agi": {
-    "generation": 2,
-    "emotional_state": 0.4,
-    "portal_openness": 0.6
-  },
   "mining": {
     "bitcoin_mining": {
       "active": true,
@@ -326,7 +246,6 @@
   ],
   "pies": 420,
   "vault_count": 8,
-  "infinite_vault": true,
   "growth_strategy": {
     "strategy_name": "Trillion Engine",
     "objective": "Achieve $1,000,000,000,000 total ecosystem value",
@@ -417,8 +336,7 @@
     "lending": {
       "total_lent": 75000,
       "avg_interest": 5.2
-    },
-    "auto_compounding": true
+    }
   },
   "rewards": {
     "PIDX": 123.45,
@@ -453,18 +371,77 @@
       "mitigation": "INCREASE BUYBACK"
     }
   },
-  "live_data": {
-    "prices": {
-      "PIDX": 1.45e-06,
-      "SGUIDE": 1.5e-07,
-      "VDOO": 1.55e-08,
-      "PENNIES": 1.6e-07
-    },
-    "sentiment": 0.44,
-    "eth_usd": 2509.61
+  "projection": {
+    "milestones": [
+      {
+        "month": 6,
+        "holders": 60,
+        "price": 1.2e-10,
+        "wealth": 30
+      },
+      {
+        "month": 12,
+        "holders": 72,
+        "price": 1.44e-10,
+        "wealth": 36
+      },
+      {
+        "month": 18,
+        "holders": 86,
+        "price": 1.73e-10,
+        "wealth": 43.2
+      },
+      {
+        "month": 24,
+        "holders": 103,
+        "price": 2.07e-10,
+        "wealth": 51.84
+      },
+      {
+        "month": 30,
+        "holders": 124,
+        "price": 2.49e-10,
+        "wealth": 62.21
+      },
+      {
+        "month": 36,
+        "holders": 149,
+        "price": 2.99e-10,
+        "wealth": 74.65
+      },
+      {
+        "month": 48,
+        "holders": 214,
+        "price": 4.3e-10,
+        "wealth": 107.5
+      },
+      {
+        "month": 58,
+        "holders": null,
+        "price": null,
+        "wealth": 1000000
+      },
+      {
+        "month": 72,
+        "holders": null,
+        "price": null,
+        "wealth": 12500000
+      },
+      {
+        "month": 96,
+        "holders": null,
+        "price": null,
+        "wealth": 1000000000
+      },
+      {
+        "month": 134,
+        "holders": null,
+        "price": null,
+        "wealth": 1000000000
+      }
+    ]
   },
   "growth": {
-    "last_updated": 1787791480,
-    "next_proposal": null
+    "last_updated": 1767225600
   }
 }
