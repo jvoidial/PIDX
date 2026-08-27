@@ -2,23 +2,23 @@
   "pools": [
     {
       "pair": "PIDX-ETH",
-      "tvl": 52775.54,
-      "apy": 13.12
+      "tvl": 57211.51,
+      "apy": 13.07
     },
     {
       "pair": "SGUIDE-ETH",
-      "tvl": 32233.7,
-      "apy": 16.2
+      "tvl": 32812.93,
+      "apy": 17.63
     },
     {
       "pair": "VDOO-ETH",
-      "tvl": 21422.32,
-      "apy": 18.32
+      "tvl": 23234.29,
+      "apy": 20.48
     },
     {
       "pair": "PENNIES-ETH",
-      "tvl": 10157.41,
-      "apy": 19.81
+      "tvl": 10700.5,
+      "apy": 21.07
     }
   ],
   "staking": {
