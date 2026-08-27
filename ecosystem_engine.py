@@ -33,6 +33,24 @@ generation = 2
 emotional_state = 0.4
 portal_openness = 0.6
 
+def share_rewards():
+    weights = vault.get("weights", {})
+    total_weight = sum(weights.values())
+    rewards = {}
+    for name, weight in weights.items():
+        if name == "WBTC":
+            continue
+        # Reward proportional to weight (1000 total daily)
+        rewards[name] = round(1000 * (weight / total_weight), 2)
+    return rewards
+
+def update_token_links():
+    rewards = share_rewards()
+    for name, reward in rewards.items():
+        if name in tokens:
+            # Energy boost from staking rewards
+            tokens[name]["energy"] = min(1.0, tokens[name]["energy"] + reward / 10000)
+
 def generate_topology():
     global voxels, temporal_resonance, global_energy, pies, vault_count, generation, emotional_state, portal_openness
     # AGI-like adaptation
