@@ -1,5 +1,5 @@
 {
-  "name": "Neural Ecosystem",
+  "name": "\u267e\ufe0f Neural Ecosystem \u2013 Live Sync",
   "version": "8.0",
   "chainId": 8453,
   "layers": {
@@ -34,15 +34,14 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "layer": "Quantum",
       "frequency": 0.618,
-      "energy": 0.3206782975646926,
+      "energy": 0.22,
       "weight": 40,
-      "rate": 686961,
+      "rate": 691986,
       "symbol": "PIDX",
       "description": "The origin seed",
       "supply": "1,000,000,000,000",
       "security": "Audited",
       "links": {
-        "BaseScan": "...",
         "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0xa36E026FC453880537e10d21fC139439bD2702fc&chain=base"
       }
     },
@@ -50,15 +49,14 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "layer": "Resonance",
       "frequency": 1.618,
-      "energy": 0.2705723135702094,
+      "energy": 0.19,
       "weight": 30,
-      "rate": 6670501,
+      "rate": 6724821,
       "symbol": "SGUIDE",
       "description": "Amplification",
       "supply": "10,000,000,000,000",
       "security": "Verified",
       "links": {
-        "BaseScan": "...",
         "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a&chain=base"
       }
     },
@@ -66,15 +64,14 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "layer": "Resonance",
       "frequency": 2.618,
-      "energy": 0.2104451327768295,
+      "energy": 0.15,
       "weight": 20,
-      "rate": 64713829,
+      "rate": 65673753,
       "symbol": "VDOO",
       "description": "Velocity",
       "supply": "100,000,000,000",
       "security": "CVE",
       "links": {
-        "BaseScan": "...",
         "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b&chain=base"
       }
     },
@@ -82,15 +79,14 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "layer": "Coherence",
       "frequency": 3.618,
-      "energy": 0.30063590396689926,
+      "energy": 0.21,
       "weight": 25,
-      "rate": 6172702,
+      "rate": 6230945,
       "symbol": "PENNIES",
       "description": "Anchor",
       "supply": "10,000,000,000",
       "security": "Audited",
       "links": {
-        "BaseScan": "...",
         "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7&chain=base"
       }
     }
@@ -118,13 +114,11 @@
   "emotions": {
     "x_block": {
       "label": "X BLOCK",
-      "description": "Repressed emotions block life's natural expression",
-      "effects": {}
+      "description": "Repressed"
     },
     "ease": {
       "label": "EASE",
-      "description": "Feel. Honored. Expressed emotions are EASE of life flowing through us",
-      "effects": {}
+      "description": "Flow"
     }
   },
   "projection": {
@@ -133,43 +127,43 @@
         "month": 6,
         "holders": 60,
         "price": 1.2e-10,
-        "wealth": 30.0
+        "wealth": 30
       },
       {
         "month": 12,
         "holders": 72,
         "price": 1.44e-10,
-        "wealth": 36.0
+        "wealth": 36
       },
       {
         "month": 18,
         "holders": 86,
-        "price": 1.728e-10,
-        "wealth": 43.199999999999996
+        "price": 1.73e-10,
+        "wealth": 43.2
       },
       {
         "month": 24,
         "holders": 103,
-        "price": 2.0736e-10,
-        "wealth": 51.839999999999996
+        "price": 2.07e-10,
+        "wealth": 51.84
       },
       {
         "month": 30,
         "holders": 124,
-        "price": 2.4883199999999997e-10,
-        "wealth": 62.207999999999984
+        "price": 2.49e-10,
+        "wealth": 62.21
       },
       {
         "month": 36,
         "holders": 149,
-        "price": 2.9859839999999994e-10,
-        "wealth": 74.64959999999998
+        "price": 2.99e-10,
+        "wealth": 74.65
       },
       {
         "month": 48,
         "holders": 214,
-        "price": 4.2998169599999984e-10,
-        "wealth": 107.49542399999996
+        "price": 4.3e-10,
+        "wealth": 107.5
       },
       {
         "month": 58,
@@ -206,102 +200,52 @@
   },
   "paradox": {
     "bootstrapped": true,
-    "last_bootstrap": 1787790297,
-    "next_adjustment": 1787793897,
+    "last_bootstrap": 1787790584,
+    "next_adjustment": 1787794184,
     "adjustment_log": [],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
   },
   "jinn": {
-    "generation": 1,
-    "emotional_state": 0.036,
-    "portal_openness": 0.718,
+    "generation": 2,
+    "emotional_state": 0.4,
+    "portal_openness": 0.6,
     "growth_factors": {
-      "PIDX": 1.04,
-      "SGUIDE": 1.055,
-      "VDOO": 1.082,
-      "PENNIES": 1.112
+      "PIDX": 1.05,
+      "SGUIDE": 1.08,
+      "VDOO": 1.1,
+      "PENNIES": 1.12
     },
     "predictions": {
       "PIDX": [
-        1.4232605890090119e-06,
-        1.4210007203962186e-06,
-        1.4187408517834251e-06,
-        1.4164809831706319e-06,
-        1.4142211145578384e-06,
-        1.4119612459450452e-06
+        1.45e-06,
+        1.46e-06,
+        1.47e-06
       ],
       "SGUIDE": [
-        1.501768415337112e-07,
-        1.5023872319079065e-07,
-        1.5030060484787012e-07,
-        1.5036248650494958e-07,
-        1.5042436816202905e-07,
-        1.5048624981910849e-07
+        1.5e-07,
+        1.51e-07,
+        1.52e-07
       ],
       "VDOO": [
-        1.577949935491188e-08,
-        1.5820916585609042e-08,
-        1.5862333816306202e-08,
-        1.5903751047003362e-08,
-        1.5945168277700525e-08,
-        1.5986585508397685e-08
+        1.55e-08,
+        1.56e-08,
+        1.57e-08
       ],
       "PENNIES": [
-        1.583125934732013e-07,
-        1.5814682146983505e-07,
-        1.579810494664688e-07,
-        1.5781527746310257e-07,
-        1.5764950545973633e-07,
-        1.5748373345637007e-07
+        1.6e-07,
+        1.61e-07,
+        1.62e-07
       ]
     },
     "answers": []
   },
   "agi": {
-    "generation": 1,
-    "emotional_state": 0.036,
-    "portal_openness": 0.718,
-    "growth_factors": {
-      "PIDX": 1.04,
-      "SGUIDE": 1.055,
-      "VDOO": 1.082,
-      "PENNIES": 1.112
-    },
-    "predictions": {
-      "PIDX": [
-        1.4232605890090119e-06,
-        1.4210007203962186e-06,
-        1.4187408517834251e-06,
-        1.4164809831706319e-06,
-        1.4142211145578384e-06,
-        1.4119612459450452e-06
-      ],
-      "SGUIDE": [
-        1.501768415337112e-07,
-        1.5023872319079065e-07,
-        1.5030060484787012e-07,
-        1.5036248650494958e-07,
-        1.5042436816202905e-07,
-        1.5048624981910849e-07
-      ],
-      "VDOO": [
-        1.577949935491188e-08,
-        1.5820916585609042e-08,
-        1.5862333816306202e-08,
-        1.5903751047003362e-08,
-        1.5945168277700525e-08,
-        1.5986585508397685e-08
-      ],
-      "PENNIES": [
-        1.583125934732013e-07,
-        1.5814682146983505e-07,
-        1.579810494664688e-07,
-        1.5781527746310257e-07,
-        1.5764950545973633e-07,
-        1.5748373345637007e-07
-      ]
-    },
+    "generation": 2,
+    "emotional_state": 0.4,
+    "portal_openness": 0.6,
+    "growth_factors": {},
+    "predictions": {},
     "answers": []
   },
   "mining": {
@@ -337,7 +281,7 @@
   "token_mining": {
     "PIDX": {
       "active": true,
-      "hash_key": "etyAc8GSekRXUU30OQjbfhfJA0fetDOR",
+      "hash_key": "abc123",
       "pool_url": "stratum+tcp://pidx.miningpool.io:4444",
       "worker": "AGI_PIDX_worker",
       "reward": "1000 PIDX/day",
@@ -346,7 +290,7 @@
     },
     "SGUIDE": {
       "active": true,
-      "hash_key": "7SdhZLBP89E499hht5HYe2ruKFg08yWL",
+      "hash_key": "def456",
       "pool_url": "stratum+tcp://sguide.miningpool.io:4444",
       "worker": "AGI_SGUIDE_worker",
       "reward": "100 SGUIDE/day",
@@ -355,7 +299,7 @@
     },
     "VDOO": {
       "active": true,
-      "hash_key": "RHwVrTs6LXvfnIUjOXxzdTVfeqXc5fC4",
+      "hash_key": "ghi789",
       "pool_url": "stratum+tcp://vdoo.miningpool.io:4444",
       "worker": "AGI_VDOO_worker",
       "reward": "50 VDOO/day",
@@ -364,7 +308,7 @@
     },
     "PENNIES": {
       "active": true,
-      "hash_key": "KFDJkpW81EU1jkNbiFpEh6XzIs8QixmU",
+      "hash_key": "jkl012",
       "pool_url": "stratum+tcp://pennies.miningpool.io:4444",
       "worker": "AGI_PENNIES_worker",
       "reward": "25 PENNIES/day",
@@ -372,20 +316,20 @@
       "status": "Active"
     }
   },
-  "voxels": 1315,
-  "temporal_resonance": 0.6542178016162978,
-  "global_energy": 0.22793707940073243,
-  "coherence_threshold": 0.5,
+  "voxels": 1246,
+  "temporal_resonance": 0.65,
+  "global_energy": 0.7,
+  "coherence_threshold": 0.55,
   "vaults": [
     {
       "id": 1,
-      "pies": 15,
-      "stacks": 18,
-      "created": 1787790297
+      "pies": 1,
+      "stacks": 17,
+      "created": 1787790584
     }
   ],
-  "pies": 515,
-  "vault_count": 18,
+  "pies": 451,
+  "vault_count": 17,
   "infinite_vault": true,
   "growth_strategy": {
     "strategy_name": "Trillion Engine",
@@ -393,32 +337,32 @@
     "mechanisms": [
       {
         "name": "Token Buybacks",
-        "description": "Use 20% of mining rewards to buy back tokens from the market",
+        "description": "Buy back tokens",
         "allocation": "20%"
       },
       {
         "name": "Liquidity Mining",
-        "description": "Incentivize liquidity provision with token rewards",
+        "description": "Incentivize liquidity",
         "allocation": "15%"
       },
       {
         "name": "Yield Farming",
-        "description": "Stake tokens to earn up to 25% APY",
+        "description": "Stake tokens",
         "allocation": "10%"
       },
       {
         "name": "Deflationary Burn",
-        "description": "Burn 5% of every transaction",
+        "description": "Burn 5%",
         "allocation": "5%"
       },
       {
         "name": "Auto Bot Trading",
-        "description": "Profits from arbitrage and market making",
+        "description": "Arbitrage",
         "allocation": "25%"
       },
       {
         "name": "Asteroid Mining Rewards",
-        "description": "Convert mined ETH to buy and burn tokens",
+        "description": "Buy and burn",
         "allocation": "25%"
       }
     ],
@@ -441,7 +385,7 @@
       }
     ],
     "projection": {
-      "current_value": 182808095.25,
+      "current_value": 22923686,
       "target_value": 1000000000000,
       "years_to_target": 5,
       "annual_growth_rate": 300
@@ -451,23 +395,23 @@
     "pools": [
       {
         "pair": "PIDX-ETH",
-        "tvl": 57211.51,
-        "apy": 13.07
+        "tvl": 50000,
+        "apy": 12.5
       },
       {
         "pair": "SGUIDE-ETH",
-        "tvl": 32812.93,
-        "apy": 17.63
+        "tvl": 30000,
+        "apy": 15.0
       },
       {
         "pair": "VDOO-ETH",
-        "tvl": 23234.29,
-        "apy": 20.48
+        "tvl": 20000,
+        "apy": 18.0
       },
       {
         "pair": "PENNIES-ETH",
-        "tvl": 10700.5,
-        "apy": 21.07
+        "tvl": 10000,
+        "apy": 20.0
       }
     ],
     "staking": {
@@ -481,50 +425,50 @@
     "auto_compounding": true
   },
   "rewards": {
-    "PIDX": 1010.35,
-    "SGUIDE": 110.42,
-    "VDOO": 60.56,
-    "PENNIES": 35.71,
-    "total": 1217.04
+    "PIDX": 123.45,
+    "SGUIDE": 234.56,
+    "VDOO": 345.67,
+    "PENNIES": 456.78,
+    "total": 1160.46
   },
   "market_analysis": {
     "PIDX": {
       "trend": "UP",
-      "change_%": 3.9,
-      "volatility": 0.01,
+      "change_%": 2.3,
+      "volatility": 0.02,
       "mitigation": "HOLD"
     },
     "SGUIDE": {
-      "trend": "STABLE",
-      "change_%": -0.26,
-      "volatility": 0.01,
+      "trend": "UP",
+      "change_%": 1.8,
+      "volatility": 0.03,
       "mitigation": "HOLD"
     },
     "VDOO": {
-      "trend": "DOWN",
-      "change_%": -3.86,
+      "trend": "STABLE",
+      "change_%": 0.5,
       "volatility": 0.01,
       "mitigation": "HOLD"
     },
     "PENNIES": {
-      "trend": "UP",
-      "change_%": 3.3,
-      "volatility": 0.01,
-      "mitigation": "HOLD"
+      "trend": "DOWN",
+      "change_%": -1.2,
+      "volatility": 0.04,
+      "mitigation": "INCREASE BUYBACK"
     }
   },
   "live_data": {
     "prices": {
-      "PIDX": 1.4812e-06,
-      "SGUIDE": 1.497e-07,
-      "VDOO": 1.51e-08,
-      "PENNIES": 1.637e-07
+      "PIDX": 1.45e-06,
+      "SGUIDE": 1.5e-07,
+      "VDOO": 1.55e-08,
+      "PENNIES": 1.6e-07
     },
-    "sentiment": 0.314,
-    "eth_usd": 2502.77
+    "sentiment": 0.44,
+    "eth_usd": 2509.61
   },
   "growth": {
-    "last_updated": 1787790413,
+    "last_updated": 1787790584,
     "next_proposal": null
   }
 }
