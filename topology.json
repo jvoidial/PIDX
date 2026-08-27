@@ -200,8 +200,8 @@
   },
   "paradox": {
     "bootstrapped": true,
-    "last_bootstrap": 1787790584,
-    "next_adjustment": 1787794184,
+    "last_bootstrap": 1787790725,
+    "next_adjustment": 1787794325,
     "adjustment_log": [],
     "engine_status": "ACTIVE",
     "self_referential_loop": true
@@ -316,20 +316,20 @@
       "status": "Active"
     }
   },
-  "voxels": 1246,
+  "voxels": 1251,
   "temporal_resonance": 0.65,
   "global_energy": 0.7,
   "coherence_threshold": 0.55,
   "vaults": [
     {
       "id": 1,
-      "pies": 1,
-      "stacks": 17,
-      "created": 1787790584
+      "pies": 49,
+      "stacks": 16,
+      "created": 1787790725
     }
   ],
-  "pies": 451,
-  "vault_count": 17,
+  "pies": 449,
+  "vault_count": 16,
   "infinite_vault": true,
   "growth_strategy": {
     "strategy_name": "Trillion Engine",
@@ -425,36 +425,36 @@
     "auto_compounding": true
   },
   "rewards": {
-    "PIDX": 123.45,
-    "SGUIDE": 234.56,
-    "VDOO": 345.67,
-    "PENNIES": 456.78,
-    "total": 1160.46
+    "PIDX": 1009.49,
+    "SGUIDE": 109.49,
+    "VDOO": 59.49,
+    "PENNIES": 34.49,
+    "total": 1212.96
   },
   "market_analysis": {
     "PIDX": {
-      "trend": "UP",
-      "change_%": 2.3,
+      "trend": "STABLE",
+      "change_%": 1.0,
       "volatility": 0.02,
       "mitigation": "HOLD"
     },
     "SGUIDE": {
       "trend": "UP",
-      "change_%": 1.8,
-      "volatility": 0.03,
+      "change_%": 1.59,
+      "volatility": 0.02,
       "mitigation": "HOLD"
     },
     "VDOO": {
-      "trend": "STABLE",
-      "change_%": 0.5,
-      "volatility": 0.01,
+      "trend": "UP",
+      "change_%": 1.08,
+      "volatility": 0.02,
       "mitigation": "HOLD"
     },
     "PENNIES": {
-      "trend": "DOWN",
-      "change_%": -1.2,
-      "volatility": 0.04,
-      "mitigation": "INCREASE BUYBACK"
+      "trend": "UP",
+      "change_%": 1.26,
+      "volatility": 0.02,
+      "mitigation": "HOLD"
     }
   },
   "live_data": {
@@ -468,7 +468,7 @@
     "eth_usd": 2509.61
   },
   "growth": {
-    "last_updated": 1787790584,
+    "last_updated": 1787790725,
     "next_proposal": null
   }
 }
