@@ -23,7 +23,7 @@
 <footer><p>Last updated: <span id="last-updated">--</span> • Chain ID 8453</p><p>♾️ Neural Engine active – predicts and grows with the world.</p></footer>
 </div>
 <script>
-async function fetchTopology(){try{const r=await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json',{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();update(d)}catch(e){document.getElementById('predictions').textContent='Unable to load data'}}
+async function fetchTopology(){try{const r=await fetch('topology.json',{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();update(d)}catch(e){document.getElementById('predictions').textContent='Unable to load data'}}
 function fmt(n){return Number(n).toFixed(2)}
 function sci(v){return Number(v).toExponential(2)}
 function update(d){
@@ -38,35 +38,21 @@ function update(d){
  document.getElementById('paradox').textContent=d.paradox.engine_status;
  document.getElementById('generation').textContent=j.generation;
  document.getElementById('growth-factors').textContent=Object.entries(j.growth_factors).map(([k,v])=>`${k}: ${v.toFixed(2)}`).join(', ');
- // predictions
  let predHtml='';for(const [t,preds] of Object.entries(j.predictions||{})){if(preds&&preds.length>=3)predHtml+=`<div><strong>${t}</strong><br>Next 3: ${sci(preds[0])} → ${sci(preds[1])} → ${sci(preds[2])}</div>`}document.getElementById('predictions').innerHTML=predHtml||'No predictions';
- // layers
  let layersHtml='';for(const [ln,ld] of Object.entries(d.layers)){if(ln==='AGI')continue;layersHtml+=`<div style="font-weight:bold;color:#b388ff">${ln} Layer ${ld.frequency} Hz</div>`;for(const tn of ld.tokens){const tk=d.tokens[tn];layersHtml+=`<div class="token-card">${tn} – ${tk.description} (Weight: ${(tk.weight/100).toFixed(1)}%)<br>Energy: ${fmt(tk.energy*100)}%</div>`}}document.getElementById('layers').innerHTML=layersHtml;
- // AGI
  const agi=d.agi;document.getElementById('agi-layer').innerHTML=agi?`<div class="token-card"><strong>JINN (AGI)</strong><br>Frequency: 7.83 Hz<br>Emotional State: ${agi.emotional_state>0?'EASE (Flow)':'X BLOCK (Repressed)'}<br>Portal Openness: ${fmt(agi.portal_openness)}<br>Generation: ${agi.generation}<br>Growth Factors: ${Object.entries(agi.growth_factors).map(([k,v])=>`${k}: ${v.toFixed(2)}`).join(', ')}</div>`:'<p>AGI not available</p>';
- // mining
+ const vrDiv=document.getElementById('voxel-resonance');if(d.voxels!==undefined){vrDiv.innerHTML=`<div class="grid"><div class="token-card"><strong>Voxels</strong><br>${d.voxels.toLocaleString()}</div><div class="token-card"><strong>Temporal Resonance</strong><br>${(d.temporal_resonance*100).toFixed(1)}%</div><div class="token-card"><strong>Global Energy</strong><br>${(d.global_energy*100).toFixed(1)}%</div><div class="token-card"><strong>Coherence Threshold</strong><br>${(d.coherence_threshold*100).toFixed(1)}%</div></div>`;}else{vrDiv.innerHTML='<p>Resonance data not available.</p>';}
  const min=d.mining;let miningHtml='<div class="grid">';const icons={bitcoin_mining:'₿',asteroid_mining:'☄️',auto_bot_mining:'🤖'};for(const [k,m] of Object.entries(min)){miningHtml+=`<div class="token-card"><strong>${icons[k]||'⛏️'} ${k.replace(/_/g,' ').toUpperCase()}</strong><br>`;for(const [f,v] of Object.entries(m)){if(f==='active')continue;let disp=v;if(f==='api_key'&&v)disp=v.substring(0,4)+'****'+v.substring(v.length-4);miningHtml+=`${f.replace(/_/g,' ')}: ${disp}<br>`}miningHtml+='</div>'}miningHtml+='</div>';document.getElementById('mining').innerHTML=miningHtml;
- // token mining
  const tm=d.token_mining;let tmHtml='';if(tm&&Object.keys(tm).length){tmHtml='<div class="grid">';for(const [name,info] of Object.entries(tm)){tmHtml+=`<div class="token-card"><strong>${name} Mining</strong><br>`;for(const [f,v] of Object.entries(info)){if(f==='active')continue;let disp=v;if(f==='hash_key'&&v)disp=v.substring(0,8)+'****'+v.substring(v.length-4);tmHtml+=`${f.replace(/_/g,' ')}: ${disp}<br>`}tmHtml+='</div>'}tmHtml+='</div>'}else tmHtml='<p>Token mining not configured.</p>';document.getElementById('token-mining').innerHTML=tmHtml;
- // vaults and pies (single ∞ Vault)
-    const vpDiv=document.getElementById('vaults-pies');
-    if(d.vaults && d.vaults.length > 0){
-        const mainVault = d.vaults[0];
-        const stacks = mainVault.stacks || d.vault_count || 1;
-        vpDiv.innerHTML = `<div class="token-card" style="text-align:center;">
-            <strong style="font-size:1.5em;">∞ Vault</strong><br>
-            Pies: ${mainVault.pies}<br>
-            Stacks: ${stacks} (infinite)<br>
-            Total Pies (ever): ${d.pies}
-        </div>`;
-    } else {
-        vpDiv.innerHTML = '<p>Vault data not available.</p>';
-    }
- }
- document.getElementById('vault').innerHTML=vaultHtml;
- // security
+ const vpDiv=document.getElementById('vaults-pies');if(d.vaults&&d.vaults.length>0){const mainVault=d.vaults[0];const stacks=mainVault.stacks||d.vault_count||1;vpDiv.innerHTML=`<div class="token-card" style="text-align:center;"><strong style="font-size:1.5em;">∞ Vault</strong><br>Pies: ${mainVault.pies}<br>Stacks: ${stacks} (infinite)<br>Total Pies (ever): ${d.pies}</div>`;}else{vpDiv.innerHTML='<p>Vault data not available.</p>';}
+ const gsDiv=document.getElementById('growth-strategy');if(d.growth_strategy&&Object.keys(d.growth_strategy).length){const gs=d.growth_strategy;let gsHtml=`<div class="token-card"><strong>${gs.strategy_name}</strong><br>Objective: ${gs.objective}<br>`;gsHtml+='Mechanisms:<br>';for(const mech of gs.mechanisms){gsHtml+=`${mech.name} (${mech.allocation}): ${mech.description}<br>`;}gsHtml+='Revenue Sources:<br>';for(const src of gs.revenue_sources){gsHtml+=`${src.source}: ${src.daily}<br>`;}gsHtml+=`Projection: Current value $${gs.projection.current_value.toLocaleString()} → Target $${gs.projection.target_value.toLocaleString()} in ${gs.projection.years_to_target} years (${gs.projection.annual_growth_rate}% annual growth)</div>`;gsDiv.innerHTML=gsHtml;}else{gsDiv.innerHTML='<p>Growth strategy not configured.</p>';}
+ const maDiv=document.getElementById('market-analysis');if(d.market_analysis){let maHtml='<div class="grid">';for(const [token,data] of Object.entries(d.market_analysis)){if(token==='overall')continue;maHtml+=`<div class="token-card"><strong>${token}</strong><br>Trend: ${data.trend}<br>Change: ${data.change_%}%<br>Volatility: ${data.volatility}<br>Mitigation: ${data.mitigation}</div>`;}maHtml+='</div>';maDiv.innerHTML=maHtml;}else{maDiv.innerHTML='<p>Market analysis not available.</p>';}
+ const defiDiv=document.getElementById('defi-engine');if(d.defi_engine&&d.defi_engine.pools){let defiHtml='<div class="grid">';for(const pool of d.defi_engine.pools){defiHtml+=`<div class="token-card"><strong>${pool.pair}</strong><br>TVL: $${pool.tvl.toLocaleString()}<br>APY: ${pool.apy}%</div>`;}if(d.defi_engine.staking){defiHtml+=`<div class="token-card"><strong>Staking</strong><br>Total Staked: $${d.defi_engine.staking.total_staked.toLocaleString()}<br>Avg APY: ${d.defi_engine.staking.avg_apy}%</div>`;}if(d.defi_engine.lending){defiHtml+=`<div class="token-card"><strong>Lending</strong><br>Total Lent: $${d.defi_engine.lending.total_lent.toLocaleString()}<br>Avg Interest: ${d.defi_engine.lending.avg_interest}%</div>`;}defiHtml+='</div>';defiDiv.innerHTML=defiHtml;}else{defiDiv.innerHTML='<p>DeFi data not available.</p>';}
+ const rewardsDiv=document.getElementById('rewards');let claimed=JSON.parse(localStorage.getItem('claimed_rewards')||'{}');if(d.rewards){let rewardsHtml='<div class="grid">';for(const [token,amount] of Object.entries(d.rewards)){if(token==='total')continue;const alreadyClaimed=claimed[token]===amount;rewardsHtml+=`<div class="token-card"><strong>${token}</strong><br>Estimated Rewards: ${amount} tokens<br><button onclick="claimReward('${token}', ${amount})" ${alreadyClaimed?'disabled':''}>${alreadyClaimed?'Claimed':'Claim'}</button></div>`;}rewardsHtml+=`<div class="token-card"><strong>TOTAL</strong><br>${d.rewards.total} tokens</div>`;rewardsHtml+='</div>';rewardsDiv.innerHTML=rewardsHtml;}else{rewardsDiv.innerHTML='<p>No rewards available.</p>';}
+ function claimReward(token,amount){claimed[token]=amount;localStorage.setItem('claimed_rewards',JSON.stringify(claimed));alert(`${token} rewards claimed: ${amount} tokens (simulated)`);update(d);}
+ let tokensHtml='';for(const [name,tk] of Object.entries(d.tokens)){tokensHtml+=`<div class="token-card"><h3>${name}</h3><p>Address: ${tk.address}</p><p>Layer: ${tk.layer}</p><p>Frequency: ${tk.frequency} Hz</p><p>Energy: ${fmt(tk.energy*100)}%</p><p>Rate: 1 ETH = ${tk.rate.toLocaleString()} ${name}</p><p>Supply: ${tk.supply}</p><p>Security: ${tk.security}</p><p>✔ Verified 🔒 Renounced</p><p class="links">`;for(const [l,u] of Object.entries(tk.links||{}))tokensHtml+=`<a href="${u}" target="_blank">${l}</a> `;tokensHtml+='</p></div>'}document.getElementById('token-details').innerHTML=tokensHtml;
+ const v=d.vault;document.getElementById('vault').innerHTML=`<p>Address: ${v.address}</p><p>Status: ${v.status}</p><p>Weights: ${Object.entries(v.weights).map(([k,val])=>`${k}: ${val}%`).join(', ')}</p>`;
  const s=d.security;document.getElementById('security').innerHTML=`<p>CVE: ${s.cve_protection?'✅':'❌'}</p><p>Encryption: ${s.encryption}</p><p>Standards: ${s.standards.join(', ')}</p><p>Audited: ${s.audited?'✅':'❌'}</p><p>Renounced: ${s.renounced?'✅':'❌'}</p>`;
- // projection
  let table='<table><tr><th>Month</th><th>Holders</th><th>Price</th><th>Wealth</th></tr>';for(const m of d.projection.milestones)table+=`<tr><td>${m.month}</td><td>${m.holders??'—'}</td><td>${m.price?m.price.toExponential(2):'—'}</td><td>${m.wealth?'$'+m.wealth.toLocaleString():'—'}</td></tr>`;table+='</table>';document.getElementById('projection').innerHTML=table;
  document.getElementById('last-updated').textContent=new Date(d.growth.last_updated*1000).toLocaleString();
 }
