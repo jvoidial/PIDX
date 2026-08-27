@@ -46,28 +46,6 @@
       "security": "Audited, ISO 27001, SOC 2"
     }
   },
-  "links": {
-    "PIDX": {
-      "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0xa36E026FC453880537e10d21fC139439bD2702fc&chain=base",
-      "Sourcify": "https://sourcify.dev/address/0xa36E026FC453880537e10d21fC139439bD2702fc",
-      "BaseScan": "https://basescan.org/address/0xa36E026FC453880537e10d21fC139439bD2702fc"
-    },
-    "SGUIDE": {
-      "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a&chain=base",
-      "Sourcify": "https://sourcify.dev/address/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
-      "BaseScan": "https://basescan.org/address/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a"
-    },
-    "VDOO": {
-      "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b&chain=base",
-      "Sourcify": "https://sourcify.dev/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
-      "BaseScan": "https://basescan.org/address/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b"
-    },
-    "PENNIES": {
-      "Uniswap": "https://app.uniswap.org/swap?outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7&chain=base",
-      "Sourcify": "https://sourcify.dev/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
-      "BaseScan": "https://basescan.org/address/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7"
-    }
-  },
   "vault": {
     "address": "0xfAcb5905E1E592D69a2AE0af6F82330c07e4312",
     "weights": {
