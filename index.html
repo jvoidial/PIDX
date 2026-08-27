@@ -23,7 +23,7 @@
 <footer><p>Last updated: <span id="last-updated">--</span> • Chain ID 8453</p><p>♾️ Neural Engine active – predicts and grows with the world.</p></footer>
 </div>
 <script>
-async function fetchTopology(){try{const r=await fetch('topology.json',{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();update(d)}catch(e){document.getElementById('predictions').textContent='Unable to load data'}}
+async function fetchTopology(){try{const r=await fetch('https://jvoidial.github.io/spirit-guide-token/topology.json',{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();update(d)}catch(e){document.getElementById('predictions').textContent='Unable to load data'}}
 function fmt(n){return Number(n).toFixed(2)}
 function sci(v){return Number(v).toExponential(2)}
 function update(d){

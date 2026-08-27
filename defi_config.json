@@ -1,17 +1,33 @@
 {
-    "pools": [
-        {"pair": "PIDX-ETH", "tvl": 50000, "apy": 12.5},
-        {"pair": "SGUIDE-ETH", "tvl": 30000, "apy": 15.0},
-        {"pair": "VDOO-ETH", "tvl": 20000, "apy": 18.0},
-        {"pair": "PENNIES-ETH", "tvl": 10000, "apy": 20.0}
-    ],
-    "staking": {
-        "total_staked": 100000,
-        "avg_apy": 22.5
+  "pools": [
+    {
+      "pair": "PIDX-ETH",
+      "tvl": 51707.32,
+      "apy": 12.69
     },
-    "lending": {
-        "total_lent": 75000,
-        "avg_interest": 5.2
+    {
+      "pair": "SGUIDE-ETH",
+      "tvl": 31315.92,
+      "apy": 15.17
     },
-    "auto_compounding": true
+    {
+      "pair": "VDOO-ETH",
+      "tvl": 20471.02,
+      "apy": 19.07
+    },
+    {
+      "pair": "PENNIES-ETH",
+      "tvl": 10036.97,
+      "apy": 20.44
+    }
+  ],
+  "staking": {
+    "total_staked": 100000,
+    "avg_apy": 22.5
+  },
+  "lending": {
+    "total_lent": 75000,
+    "avg_interest": 5.2
+  },
+  "auto_compounding": true
 }
