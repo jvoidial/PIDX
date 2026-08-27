@@ -138,6 +138,25 @@
 </ol>
 </div>
 
+<div class="card"><h2>📈 Real‑Time Trading</h2>
+<div id="trading-data"></div>
+</div>
+<script>
+function updateTradingDisplay() {
+  fetch('topology.json').then(r=>r.json()).then(d=>{
+    if(d.trading_state){
+      let html = '<div class="grid">';
+      for(const [token, t] of Object.entries(d.trading_state)){
+        html += `<div class="token-card"><strong>${token}</strong><br>Action: ${t.action}<br>Price Change: ${t.price_change_%}%<br>PnL: ${t.pnl > 0 ? '🟢 +' + t.pnl : '🔴 ' + t.pnl}<br>24h Volume: $${t.volume_24h}</div>`;
+      }
+      html += '</div>';
+      document.getElementById('trading-data').innerHTML = html;
+    }
+  });
+}
+setInterval(updateTradingDisplay, 60000);
+updateTradingDisplay();
+</script>
 <footer>Last updated: 2026-08-27 01:30:00 • Chain ID 8453<br>♾️ Sentient Engine active – mining, auto-vault, rewards</footer>
 </div>
 

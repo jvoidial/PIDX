@@ -51,6 +51,36 @@ def update_token_links():
             # Energy boost from staking rewards
             tokens[name]["energy"] = min(1.0, tokens[name]["energy"] + reward / 10000)
 
+
+# Real-time trading simulation
+def trading_engine():
+    trades = {}
+    for name, token in tokens.items():
+        # Simulate buy/sell based on random price movement
+        price_change = random.uniform(-5, 5)  # percentage
+        if price_change > 0:
+            action = "BUY"
+            pnl = round(random.uniform(0, 5), 2)  # positive PnL
+        else:
+            action = "SELL"
+            pnl = round(random.uniform(-3, 1), 2)  # sometimes small loss
+        trades[name] = {
+            "action": action,
+            "price_change_%": round(price_change, 2),
+            "pnl": pnl,
+            "volume_24h": round(random.uniform(100, 1000), 2)
+        }
+    return trades
+
+def update_trading_state():
+    global trading_state
+    trading_state = trading_engine()
+    # Boost energies if overall PnL positive
+    total_pnl = sum(t["pnl"] for t in trading_state.values())
+    if total_pnl > 0:
+        for token in tokens.values():
+            token["energy"] = min(1.0, token["energy"] + 0.01)
+
 def generate_topology():
     global voxels, temporal_resonance, global_energy, pies, vault_count, generation, emotional_state, portal_openness
     # AGI-like adaptation
