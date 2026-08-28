@@ -1,17 +1,17 @@
 {
   "live_data": {
-    "eth_usd": 2478.0,
-    "sentiment": 0.39
+    "eth_usd": 2476.21,
+    "sentiment": 0.48
   },
   "jinn": {
-    "generation": 433,
-    "emotional_state": 0.386,
-    "portal_openness": 0.693,
+    "generation": 434,
+    "emotional_state": 0.484,
+    "portal_openness": 0.742,
     "growth_factors": {
-      "PIDX": 1.03,
-      "SGUIDE": 1.04,
-      "VDOO": 1.1,
-      "PENNIES": 1.09
+      "PIDX": 1.07,
+      "SGUIDE": 1.11,
+      "VDOO": 1.14,
+      "PENNIES": 1.14
     }
   },
   "tokens": {
@@ -19,8 +19,8 @@
       "address": "0xa36E026FC453880537e10d21fC139439bD2702fc",
       "layer": "Quantum",
       "frequency": 0.618,
-      "energy": 0.23269514855164983,
-      "rate": 384757,
+      "energy": 0.2380497708961415,
+      "rate": 384260,
       "supply": "1,000,000,000,000",
       "security": "Audited, Owner Renounced, CVE Protected"
     },
@@ -28,8 +28,8 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "layer": "Resonance",
       "frequency": 1.618,
-      "energy": 0.07518829839321517,
-      "rate": 3740577,
+      "energy": 0.06655979705721447,
+      "rate": 3735754,
       "supply": "10,000,000,000,000",
       "security": "Verified, Renounced, Liquidity Active"
     },
@@ -37,8 +37,8 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "layer": "Resonance",
       "frequency": 2.618,
-      "energy": 0.256889253374094,
-      "rate": 36531319,
+      "energy": 0.26560806716152385,
+      "rate": 36484225,
       "supply": "100,000,000,000",
       "security": "CVE Protected, AES-256-GCM Encrypted"
     },
@@ -46,8 +46,8 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "layer": "Coherence",
       "frequency": 3.618,
-      "energy": 0.34060975321737885,
-      "rate": 3465847,
+      "energy": 0.33697321590077806,
+      "rate": 3461379,
       "supply": "10,000,000,000",
       "security": "Audited, ISO 27001, SOC 2"
     }
@@ -78,22 +78,22 @@
       "energy": 0.95
     }
   },
-  "voxels": 6524,
-  "temporal_resonance": 0.754,
-  "global_energy": 0.198,
+  "voxels": 6543,
+  "temporal_resonance": 0.794,
+  "global_energy": 0.203,
   "vaults": [
     {
       "id": 1,
-      "pies": 8065,
+      "pies": 8107,
       "stacks": 162
     }
   ],
-  "pies": 8065,
+  "pies": 8107,
   "vault_count": 162,
   "growth_strategy": {
     "strategy_name": "Trillion Engine",
     "projection": {
-      "current_value": 30988686,
+      "current_value": 31030686,
       "target_value": 1000000000000,
       "annual_growth_rate": 300
     }
@@ -123,30 +123,30 @@
     ]
   },
   "rewards": {
-    "PIDX": 806.5,
-    "SGUIDE": 806.5,
-    "VDOO": 806.5,
-    "PENNIES": 806.5
+    "PIDX": 810.7,
+    "SGUIDE": 810.7,
+    "VDOO": 810.7,
+    "PENNIES": 810.7
   },
   "market_analysis": {
     "PIDX": {
       "trend": "UP",
-      "change_%": 1.93
+      "change_%": 2.42
     },
     "SGUIDE": {
       "trend": "UP",
-      "change_%": 1.93
+      "change_%": 2.42
     },
     "VDOO": {
       "trend": "UP",
-      "change_%": 1.93
+      "change_%": 2.42
     },
     "PENNIES": {
       "trend": "UP",
-      "change_%": 1.93
+      "change_%": 2.42
     }
   },
   "growth": {
-    "last_updated": 1787875672
+    "last_updated": 1787875738
   }
 }
