@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Clean Voxel Bot - no .env, no git push"""
+"""Clean bot - no .env, no push"""
 import subprocess
 
 RPC = "https://mainnet.base.org"
@@ -11,10 +11,7 @@ bal = result.stdout.strip()
 try:
     wei = int(bal, 16) if bal.startswith('0x') else int(bal)
     eth = wei / 10**18
-    print(f"Bot wallet: {eth:.6f} ETH")
-    if eth >= 0.001:
-        print("✅ Ready to trade")
-    else:
-        print(f"⏳ Needs 0.001 ETH (has {eth:.6f})")
+    print(f"Bot: {eth:.6f} ETH")
+    print(f"{'✅ Ready' if eth >= 0.001 else '⏳ Needs 0.001 ETH'}")
 except:
-    print("Error reading balance")
+    print("Could not read balance")

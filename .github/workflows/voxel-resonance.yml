@@ -14,5 +14,4 @@ jobs:
       - name: Run bot
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
         run: python3 bot.py || true
