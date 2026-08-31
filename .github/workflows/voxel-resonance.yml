@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Run bot (secure - no .env)
+      - name: Run bot
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
