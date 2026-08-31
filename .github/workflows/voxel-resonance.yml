@@ -1,15 +1,35 @@
-name: Voxel Monitor
+name: Voxel Resonance Bot
 
 on:
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
-  monitor:
+  run-bot:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Check balance
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set Git identity
         run: |
-          echo "Bot monitor active"
-          echo "Wallet: 0x52De127F9178D1df28F8eEd29899A48C1492F94c"
-          echo "Status: Waiting for ETH"
+          git config user.email "jvoidial@users.noreply.github.com"
+          git config user.name "jvoidial"
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Run bot
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: python3 bot.py
+          
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "Auto-update" || echo "No changes"
+          git push
