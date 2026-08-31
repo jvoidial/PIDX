@@ -11,17 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      
-      - name: Run bot (secure - no .env file)
+      - name: Run bot (secure - no .env)
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
-        run: |
-          python3 bot.py || true
-          echo "Bot cycle complete"
-      # No git push - avoids identity issues
-      # No .env file - keeps secrets secure
+        run: python3 bot.py || true
