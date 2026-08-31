@@ -2,7 +2,7 @@ name: Voxel Resonance Bot
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,9 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set Git identity
+        run: |
+          git config user.email "jvoidial@users.noreply.github.com"
+          git config user.name "jvoidial"
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       
       - name: Run bot
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
-        run: python3 bot.py || true
+        run: python3 bot.py
+          
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "Auto-update" || echo "No changes"
+          git push
