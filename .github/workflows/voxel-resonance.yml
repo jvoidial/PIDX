@@ -1,0 +1,15 @@
+name: Voxel Monitor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check balance
+        run: |
+          echo "Bot monitor active"
+          echo "Wallet: 0x52De127F9178D1df28F8eEd29899A48C1492F94c"
+          echo "Status: Waiting for ETH"
