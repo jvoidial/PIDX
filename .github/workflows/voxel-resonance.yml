@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set Git identity
         run: |
@@ -31,5 +29,6 @@ jobs:
       - name: Commit and push
         run: |
           git add .
-          git commit -m "Auto-update" || echo "No changes"
-          git push
+          git commit -m "Auto-update from Voxel Bot" || echo "No changes"
+          git pull --rebase origin main
+          git push origin main
