@@ -2,7 +2,7 @@ name: Voxel Resonance Bot
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,9 +16,12 @@ jobs:
         with:
           python-version: '3.10'
       
-      - name: Run bot (monitor only, no push)
+      - name: Run bot (secure - no .env file)
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
         run: |
           python3 bot.py || true
-          echo "Bot cycle complete - no push needed"
+          echo "Bot cycle complete"
+      # No git push - avoids identity issues
+      # No .env file - keeps secrets secure
