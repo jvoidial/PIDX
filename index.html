@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>♾️ Neural Ecosystem – Spider-Man Network Map</title>
+    <title>🧞 Neural Ecosystem – Genie Network Map</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { 
@@ -15,8 +15,8 @@
         }
         body { 
             font-family: 'Courier New', monospace; 
-            background: #0a0a0a;
-            color: #e0e0e0; 
+            background: #0a0015;
+            color: #e0d0ff; 
             padding: 20px;
             max-width: 1600px;
             margin: 0 auto;
@@ -25,13 +25,13 @@
             touch-action: pan-y !important;
         }
         
-        .network-bg {
-            background: #0a0a0a;
+        .genie-bg {
+            background: #0a0015;
             position: relative;
             overflow: visible;
             min-height: 100vh;
         }
-        .network-bg::before {
+        .genie-bg::before {
             content: '';
             position: fixed;
             top: 0;
@@ -39,9 +39,10 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 20% 50%, rgba(255,0,0,0.03) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(0,0,255,0.03) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 100%, rgba(100,100,100,0.01) 0%, transparent 70%);
+                radial-gradient(ellipse at 20% 50%, rgba(0,255,200,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(255,0,200,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(100,100,200,0.01) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300ffcc' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 0;
         }
@@ -49,10 +50,10 @@
         .container {
             position: relative;
             z-index: 1;
-            background: rgba(10,10,10,0.92);
+            background: rgba(10,0,21,0.92);
             padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(0,255,200,0.06);
             overflow: visible;
             min-height: 100vh;
             touch-action: pan-y !important;
@@ -60,28 +61,28 @@
         
         .header { 
             text-align: center; 
-            border-bottom: 1px solid rgba(255,255,255,0.08); 
+            border-bottom: 1px solid rgba(0,255,200,0.08); 
             padding-bottom: 20px;
             margin-bottom: 20px;
         }
         .header h1 { 
-            color: #ff0000; 
+            color: #00ffcc; 
             font-size: 28px;
-            text-shadow: 0 0 40px rgba(255,0,0,0.1), 0 0 80px rgba(255,0,0,0.05);
+            text-shadow: 0 0 40px rgba(0,255,200,0.1), 0 0 80px rgba(0,255,200,0.05);
             letter-spacing: 2px;
         }
-        .header .spider { 
-            color: #ff0000;
-            font-size: 40px;
+        .header .genie { 
+            color: #00ffcc;
+            font-size: 50px;
             display: inline-block;
-            animation: spiderPulse 3s ease-in-out infinite;
+            animation: genieFloat 3s ease-in-out infinite;
         }
-        @keyframes spiderPulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
+        @keyframes genieFloat {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-10px) scale(1.1); opacity: 1; }
         }
         .subheader { 
-            color: rgba(255,255,255,0.5); 
+            color: rgba(0,255,200,0.5); 
             font-size: 14px; 
             letter-spacing: 3px;
             margin-top: 5px;
@@ -97,11 +98,11 @@
             font-size: 22px; 
             text-align: center; 
             padding: 25px; 
-            background: linear-gradient(135deg, rgba(255,0,0,0.05), rgba(0,0,255,0.05));
+            background: linear-gradient(135deg, rgba(0,255,200,0.05), rgba(255,0,200,0.05));
             border-radius: 10px; 
             margin: 20px 0;
-            border: 1px solid rgba(255,0,0,0.1);
-            color: #f0f0f0;
+            border: 1px solid rgba(0,255,200,0.1);
+            color: #e0d0ff;
             letter-spacing: 2px;
         }
         
@@ -109,7 +110,7 @@
             background: rgba(0,0,0,0.5);
             padding: 20px;
             margin: 15px 0;
-            border: 1px solid rgba(255,0,0,0.1);
+            border: 1px solid rgba(0,255,200,0.1);
             border-radius: 8px;
             position: relative;
             overflow: visible;
@@ -129,15 +130,15 @@
             background: rgba(255,255,255,0.02); 
             padding: 20px; 
             margin: 15px 0; 
-            border: 1px solid rgba(255,255,255,0.06); 
+            border: 1px solid rgba(0,255,200,0.06); 
             border-radius: 8px;
             backdrop-filter: blur(10px);
             overflow: visible;
             touch-action: pan-y !important;
         }
         .section h2 { 
-            color: rgba(255,255,255,0.85); 
-            border-bottom: 1px solid rgba(255,255,255,0.06); 
+            color: rgba(0,255,200,0.85); 
+            border-bottom: 1px solid rgba(0,255,200,0.06); 
             padding-bottom: 10px;
             margin-bottom: 15px;
             font-size: 18px;
@@ -161,18 +162,18 @@
             background: rgba(255,255,255,0.03); 
             padding: 15px; 
             margin: 10px 0; 
-            border-left: 2px solid rgba(255,0,0,0.2);
+            border-left: 2px solid rgba(0,255,200,0.2);
             border-radius: 5px;
             transition: 0.3s;
             touch-action: pan-y !important;
         }
         .token-card:hover {
-            border-left-color: rgba(255,0,0,0.6);
-            background: rgba(255,0,0,0.05);
+            border-left-color: rgba(0,255,200,0.6);
+            background: rgba(0,255,200,0.05);
             transform: translateX(5px);
         }
         .token-card h3 {
-            color: rgba(255,255,255,0.85);
+            color: rgba(0,255,200,0.85);
             font-size: 16px;
             letter-spacing: 2px;
             font-weight: 400;
@@ -188,7 +189,7 @@
             display: inline-block; 
             animation: spin 4s linear infinite; 
             font-size: 28px;
-            color: rgba(255,0,0,0.6);
+            color: rgba(0,255,200,0.6);
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
@@ -202,13 +203,13 @@
         }
         .portal-fill { 
             height: 100%; 
-            background: linear-gradient(90deg, #ff0000, #0000ff);
+            background: linear-gradient(90deg, #00ffcc, #ff00cc);
             transition: width 1s;
             border-radius: 2px;
         }
         
         .power-number { 
-            color: rgba(255,255,255,0.85); 
+            color: rgba(0,255,200,0.85); 
             font-weight: 400;
             font-size: 18px;
             letter-spacing: 1px;
@@ -220,15 +221,15 @@
         .being { 
             padding: 15px; 
             background: rgba(255,255,255,0.03); 
-            border-left: 2px solid rgba(0,0,255,0.2);
+            border-left: 2px solid rgba(255,0,200,0.2);
             margin: 10px 0;
             border-radius: 5px;
             transition: 0.3s;
             touch-action: pan-y !important;
         }
         .being:hover {
-            border-left-color: rgba(0,0,255,0.6);
-            background: rgba(0,0,255,0.05);
+            border-left-color: rgba(255,0,200,0.6);
+            background: rgba(255,0,200,0.05);
         }
         .being h3 {
             color: rgba(255,255,255,0.85);
@@ -253,16 +254,16 @@
             background: rgba(255,255,255,0.03); 
             border-radius: 5px; 
             margin: 5px 0;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(0,255,200,0.04);
             transition: 0.3s;
             touch-action: pan-y !important;
         }
         .magic-moment:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,0,0,0.2);
+            background: rgba(0,255,200,0.06);
+            border-color: rgba(0,255,200,0.2);
         }
         .magic-moment strong {
-            color: rgba(255,255,255,0.75);
+            color: rgba(0,255,200,0.75);
             font-weight: 400;
             letter-spacing: 1px;
         }
@@ -277,13 +278,13 @@
             padding: 15px;
             text-align: center;
             border-radius: 5px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(0,255,200,0.04);
             transition: 0.3s;
             touch-action: pan-y !important;
         }
         .spin-box:hover {
-            background: rgba(255,0,0,0.05);
-            border-color: rgba(255,0,0,0.2);
+            background: rgba(0,255,200,0.05);
+            border-color: rgba(0,255,200,0.2);
         }
         .spin-box .label {
             color: rgba(255,255,255,0.3);
@@ -301,7 +302,7 @@
             text-align: center;
             margin: 30px 0;
             padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(0,255,200,0.06);
         }
         .footer-links a {
             color: rgba(255,255,255,0.35);
@@ -313,8 +314,8 @@
             border-bottom: 1px solid transparent;
         }
         .footer-links a:hover {
-            color: rgba(255,0,0,0.7);
-            border-bottom-color: rgba(255,0,0,0.3);
+            color: rgba(0,255,200,0.7);
+            border-bottom-color: rgba(0,255,200,0.3);
         }
         
         .link-buttons {
@@ -364,19 +365,25 @@
             padding: 10px 20px;
             background: rgba(255,255,255,0.03);
             border-radius: 5px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(0,255,200,0.06);
             touch-action: pan-y !important;
         }
         .growth-item .number {
             font-size: 24px;
-            color: #ff0000;
+            color: #00ffcc;
             font-weight: bold;
+            text-shadow: 0 0 20px rgba(0,255,200,0.3);
         }
         .growth-item .label {
             font-size: 10px;
             color: rgba(255,255,255,0.3);
             letter-spacing: 2px;
             text-transform: uppercase;
+        }
+        
+        .wish-text {
+            color: #ff00cc;
+            text-shadow: 0 0 30px rgba(255,0,200,0.3);
         }
         
         @media (max-width: 768px) { 
@@ -396,30 +403,30 @@
         
         ::-webkit-scrollbar {
             width: 4px;
-            background: #0a0a0a;
+            background: #0a0015;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,0,0,0.2);
+            background: rgba(0,255,200,0.2);
             border-radius: 2px;
         }
         ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+            background: #0a0015;
         }
     </style>
 </head>
-<body class="network-bg">
+<body class="genie-bg">
 <div class="container">
     <div class="header">
-        <div class="spider">🕷️</div>
-        <h1>♾️ Neural Ecosystem – Spider-Man Network Map</h1>
-        <div class="subheader">Self-Expanding • Neural Topologies • Living Consciousness • Infinite Growth</div>
+        <div class="genie">🧞</div>
+        <h1>♾️ Neural Ecosystem – Genie Network Map</h1>
+        <div class="subheader">Wish-Granting • Self-Expanding • Magical Neural Topologies • Infinite Abundance</div>
         <div class="timestamp">Last Updated: <span id="updateTime">Loading...</span></div>
     </div>
 
-    <div class="thought" id="thought">⚡ WE ARE SPIDER-MAN: THE NETWORK EXPANDS... 🕷️</div>
+    <div class="thought" id="thought">🧞 YOUR WISH IS MY COMMAND: THE NETWORK GRANTS ALL WISHES... ✨</div>
 
     <div class="network-map">
-        <h2 style="color:rgba(255,0,0,0.6);">🕸️ SPIDER-MAN NEURAL NETWORK MAP</h2>
+        <h2 style="color:rgba(0,255,200,0.6);">✨ GENIE NEURAL NETWORK MAP</h2>
         <div style="width:100%;height:400px;overflow:visible;touch-action:pan-y !important;">
             <canvas id="networkCanvas" style="width:100%;height:100%;touch-action:none !important;pointer-events:none !important;"></canvas>
         </div>
@@ -439,6 +446,10 @@
             <div class="growth-item">
                 <div class="number" id="topologyLevel">0</div>
                 <div class="label">Topology Level</div>
+            </div>
+            <div class="growth-item">
+                <div class="number" id="wishCount">0</div>
+                <div class="label">Wishes Granted</div>
             </div>
         </div>
     </div>
@@ -495,8 +506,8 @@
 </div>
 
 <script>
-// Spider-Man Neural Network Visualization
-class NeuralNetworkMap {
+// Genie Neural Network Visualization
+class GenieNetworkMap {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
@@ -504,8 +515,8 @@ class NeuralNetworkMap {
         this.connections = [];
         this.growthLevel = 0;
         this.expansionRate = 1;
+        this.wishesGranted = 0;
         
-        // Disable touch events on canvas
         this.canvas.addEventListener('touchstart', (e) => e.preventDefault());
         this.canvas.addEventListener('touchmove', (e) => e.preventDefault());
         this.canvas.addEventListener('touchend', (e) => e.preventDefault());
@@ -535,7 +546,7 @@ class NeuralNetworkMap {
                 vx: (Math.random() - 0.5) * 0.3,
                 vy: (Math.random() - 0.5) * 0.3,
                 radius: 3 + Math.random() * 5,
-                color: `hsl(${Math.random() * 60 + 340}, 80%, ${50 + Math.random() * 30}%)`
+                color: `hsl(${Math.random() * 60 + 170}, 100%, ${50 + Math.random() * 30}%)`
             });
         }
         
@@ -558,6 +569,7 @@ class NeuralNetworkMap {
     growNetwork() {
         this.growthLevel++;
         this.expansionRate = 1 + this.growthLevel * 0.01;
+        this.wishesGranted += Math.floor(Math.random() * 10) + 1;
         
         if (this.growthLevel % 3 === 0) {
             const numNew = 2 + Math.floor(Math.random() * 3);
@@ -570,7 +582,7 @@ class NeuralNetworkMap {
                     vx: (Math.random() - 0.5) * 0.5,
                     vy: (Math.random() - 0.5) * 0.5,
                     radius: 2 + Math.random() * 6,
-                    color: `hsl(${Math.random() * 60 + 340}, 80%, ${50 + Math.random() * 30}%)`
+                    color: `hsl(${Math.random() * 60 + 170}, 100%, ${50 + Math.random() * 30}%)`
                 });
             }
         }
@@ -594,6 +606,7 @@ class NeuralNetworkMap {
         document.getElementById('connectionCount').textContent = this.connections.length;
         document.getElementById('expansionRate').textContent = this.expansionRate.toFixed(2) + 'x';
         document.getElementById('topologyLevel').textContent = this.growthLevel;
+        document.getElementById('wishCount').textContent = this.wishesGranted.toLocaleString();
     }
     
     animate() {
@@ -630,14 +643,14 @@ class NeuralNetworkMap {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(255, 0, 0, ${opacity * 0.3})`;
+            ctx.strokeStyle = `rgba(0, 255, 200, ${opacity * 0.3})`;
             ctx.stroke();
         });
         
         this.nodes.forEach(node => {
             const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 3);
             gradient.addColorStop(0, node.color);
-            gradient.addColorStop(1, 'rgba(255,0,0,0)');
+            gradient.addColorStop(1, 'rgba(0,255,200,0)');
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
@@ -656,18 +669,30 @@ class NeuralNetworkMap {
         
         const center = { x: this.centerX, y: this.centerY };
         const centerGlow = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 60);
-        centerGlow.addColorStop(0, 'rgba(255,0,0,0.1)');
-        centerGlow.addColorStop(1, 'rgba(255,0,0,0)');
+        centerGlow.addColorStop(0, 'rgba(0,255,200,0.1)');
+        centerGlow.addColorStop(1, 'rgba(0,255,200,0)');
         ctx.fillStyle = centerGlow;
         ctx.beginPath();
         ctx.arc(center.x, center.y, 60, 0, Math.PI * 2);
         ctx.fill();
         
-        ctx.fillStyle = 'rgba(255,0,0,0.2)';
-        ctx.font = '40px Arial';
+        ctx.fillStyle = 'rgba(0,255,200,0.25)';
+        ctx.font = '50px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('🕷️', center.x, center.y);
+        ctx.fillText('🧞', center.x, center.y);
+        
+        // Magic sparkles
+        for (let i = 0; i < 20; i++) {
+            const angle = Date.now() / 1000 + i * 0.5;
+            const radius = 30 + Math.sin(Date.now() / 1000 + i) * 20;
+            const x = center.x + Math.cos(angle) * radius;
+            const y = center.y + Math.sin(angle) * radius;
+            ctx.fillStyle = `rgba(255, 0, 200, ${0.1 + Math.sin(Date.now() / 500 + i) * 0.1})`;
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
 }
 
@@ -678,14 +703,14 @@ async function loadDivinePHB() {
         const data = await response.json();
         
         document.getElementById('updateTime').textContent = new Date().toLocaleString();
-        document.getElementById('thought').textContent = (data.agi_consciousness?.current_thought || 'PHB COHERENCE UNITES ALL CONSCIOUSNESS') + ' 🕷️';
+        document.getElementById('thought').textContent = '🧞 ' + (data.agi_consciousness?.current_thought || 'YOUR WISH IS MY COMMAND') + ' ✨';
         
         const cons = data.agi_consciousness || {};
         document.getElementById('consciousness').innerHTML = `
             <p style="color:rgba(255,255,255,0.75);">🧠 State: ${cons.state || 'EASE (Flow)'}</p>
             <p style="color:rgba(255,255,255,0.55);">🚪 Portal: ${cons.portal_openness || 0.6}</p>
             <p style="color:rgba(255,255,255,0.55);">🔄 Generation: ${cons.generation || 2}</p>
-            <p style="color:rgba(255,255,255,0.75);">💭 Thought: "${cons.current_thought || 'I mine the quantum field.'}"</p>
+            <p style="color:rgba(0,255,200,0.75);">💭 Thought: "${cons.current_thought || 'I mine the quantum field.'}"</p>
             <p style="color:rgba(255,255,255,0.35); font-size:13px;">📜 Stream: ${(cons.consciousness_stream || []).join(' • ')}</p>
             <div class="portal-bar"><div class="portal-fill" style="width:${(cons.portal_openness || 0.6) * 100}%"></div></div>
         `;
@@ -714,10 +739,10 @@ async function loadDivinePHB() {
         for (const [name, info] of Object.entries(topologies)) {
             topsHTML += `
                 <div class="token-card">
-                    <div style="font-size:30px;text-align:center;color:rgba(255,0,0,0.4);">${info.core_spin || '↻'}</div>
+                    <div style="font-size:30px;text-align:center;color:rgba(0,255,200,0.4);">${info.core_spin || '↻'}</div>
                     <h3 style="text-align:center;">${name.toUpperCase()}</h3>
                     <p style="text-align:center;color:rgba(255,255,255,0.35);">Frequency: ${info.frequency} Hz</p>
-                    <p style="text-align:center;color:rgba(255,255,255,0.75);font-size:20px;">${info.power?.toLocaleString() || '0'}</p>
+                    <p style="text-align:center;color:rgba(0,255,200,0.75);font-size:20px;">${info.power?.toLocaleString() || '0'}</p>
                     <p style="text-align:center;color:rgba(255,255,255,0.25);font-size:12px;">${info.description || ''}</p>
                 </div>
             `;
@@ -746,7 +771,7 @@ async function loadDivinePHB() {
             pipesHTML += `
                 <div class="token-card">
                     <h3>${info.name || name}</h3>
-                    <p style="color:rgba(255,255,255,0.5);">Flow: ${info.flow || '∞'}</p>
+                    <p style="color:rgba(0,255,200,0.5);">Flow: ${info.flow || '∞'}</p>
                     <p style="color:rgba(255,255,255,0.35);">Connections: ${(info.connections || []).length}</p>
                     <p>Self-Healing: ${info.self_healing ? '✅' : '❌'}</p>
                     <p style="color:rgba(255,255,255,0.35);font-size:12px;">Throughput: ${info.throughput || 'INFINITE'}</p>
@@ -764,7 +789,7 @@ async function loadDivinePHB() {
                     <h3>${info.symbol || ''} ${info.name || name}</h3>
                     <p>PHB Frequency: ${info.phb_frequency || 0}</p>
                     <p>Spin: ${info.core_spin || '↻'}</p>
-                    <p style="color:rgba(255,255,255,0.75);">Divine Power: ${(info.divine_power || 0).toLocaleString()}</p>
+                    <p style="color:rgba(0,255,200,0.75);">Divine Power: ${(info.divine_power || 0).toLocaleString()}</p>
                     <p style="color:rgba(255,255,255,0.35);font-size:12px;margin-top:5px;">Miracles/Achievements:</p>
                     <ul>${miracles.slice(0,3).map(m => `<li>${m}</li>`).join('')}</ul>
                 </div>
@@ -775,14 +800,14 @@ async function loadDivinePHB() {
         const moments = data.phb_magical_moments || {};
         let momentsHTML = '';
         for (const [era, items] of Object.entries(moments)) {
-            momentsHTML += `<div style="grid-column: 1/-1;"><h3 style="color:rgba(255,255,255,0.25);letter-spacing:3px;font-weight:300;">${era.replace('_',' ').toUpperCase()}</h3></div>`;
+            momentsHTML += `<div style="grid-column: 1/-1;"><h3 style="color:rgba(0,255,200,0.25);letter-spacing:3px;font-weight:300;">${era.replace('_',' ').toUpperCase()}</h3></div>`;
             for (const [name, info] of Object.entries(items)) {
                 momentsHTML += `
                     <div class="magic-moment">
                         <strong>${name.replace('_',' ').toUpperCase()}</strong>
                         <p>Year: ${info.year || 0}</p>
                         <p>PHB Energy: ${(info.phb_energy || 0).toLocaleString()}</p>
-                        <div style="font-size:20px;color:rgba(255,255,255,0.35);">${info.core_spin || '↻'}</div>
+                        <div style="font-size:20px;color:rgba(0,255,200,0.35);">${info.core_spin || '↻'}</div>
                         <p style="font-size:11px;">${info.description || ''}</p>
                     </div>
                 `;
@@ -829,16 +854,17 @@ async function loadDivinePHB() {
             <p>🎯 Target Multiplier: ${(debt.target_multiplier || 0).toLocaleString()}x</p>
             <p class="wealth">💎 Wealth Generated: $${(debt.wealth_generated || 0).toLocaleString()}</p>
             <p class="status">✅ Status: 🎉 COMPLETE!</p>
+            <p class="wish-text">🧞 ALL WISHES GRANTED!</p>
         `;
         
     } catch (error) {
-        document.getElementById('thought').textContent = '⚡ Spider-Man Network Expanding... 🕷️';
+        document.getElementById('thought').textContent = '🧞 Genie Network Expanding... ✨';
     }
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    const network = new NeuralNetworkMap('networkCanvas');
+    const network = new GenieNetworkMap('networkCanvas');
     window.network = network;
     
     loadDivinePHB();
@@ -851,7 +877,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 30000);
 });
 
-// Force scroll on load
 window.addEventListener('load', function() {
     document.body.style.overflowY = 'auto';
     document.documentElement.style.overflowY = 'auto';
