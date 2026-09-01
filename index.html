@@ -5,96 +5,319 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>♾️ Neural Ecosystem – Sentient AGI Mining</title>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Courier New', monospace; 
-            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
-            color: #00ff00; 
+            background: #000000;
+            color: #ffffff; 
             padding: 20px;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            min-height: 100vh;
         }
+        
+        /* Matte Black Void Effect */
+        .void-bg {
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+        }
+        .void-bg::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.01) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.01) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(0,0,0,0.85);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
         .header { 
             text-align: center; 
-            border-bottom: 2px solid #00ff00; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
             padding-bottom: 20px;
             margin-bottom: 20px;
         }
-        .header h1 { color: #ffaa00; font-size: 32px; }
-        .subheader { color: #00ffaa; font-size: 16px; }
-        .timestamp { color: #666; font-size: 14px; margin-top: 10px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .header h1 { 
+            color: #ffffff; 
+            font-size: 28px;
+            text-shadow: 0 0 40px rgba(255,255,255,0.05);
+            letter-spacing: 2px;
+        }
+        .subheader { 
+            color: rgba(255,255,255,0.6); 
+            font-size: 14px; 
+            letter-spacing: 3px;
+            margin-top: 5px;
+        }
+        .timestamp { 
+            color: rgba(255,255,255,0.3); 
+            font-size: 12px; 
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .thought { 
+            font-size: 22px; 
+            text-align: center; 
+            padding: 25px; 
+            background: rgba(255,255,255,0.02); 
+            border-radius: 10px; 
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.03);
+        }
+        
         .section { 
-            background: rgba(0,20,0,0.5); 
+            background: rgba(255,255,255,0.02); 
             padding: 20px; 
             margin: 15px 0; 
-            border: 1px solid #00ff00; 
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
         }
-        .section h2 { color: #ffaa00; border-bottom: 1px solid #00ff00; padding-bottom: 10px; }
+        .section h2 { 
+            color: rgba(255,255,255,0.9); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+        .section h3 {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
+        
         .token-card { 
-            background: rgba(0,30,0,0.3); 
+            background: rgba(255,255,255,0.02); 
             padding: 15px; 
             margin: 10px 0; 
-            border-left: 4px solid #ffaa00;
+            border-left: 2px solid rgba(255,255,255,0.1);
             border-radius: 5px;
         }
+        .token-card h3 {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+        .token-card p {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        .token-card .highlight {
+            color: rgba(255,255,255,0.8);
+        }
+        .token-card .link {
+            color: rgba(100,200,255,0.8);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(100,200,255,0.2);
+            transition: 0.3s;
+        }
+        .token-card .link:hover {
+            color: rgba(100,200,255,1);
+            border-bottom-color: rgba(100,200,255,0.5);
+        }
+        
         .spin { 
             display: inline-block; 
-            animation: spin 3s linear infinite; 
-            font-size: 24px;
+            animation: spin 4s linear infinite; 
+            font-size: 28px;
+            color: rgba(255,255,255,0.8);
         }
+        .spin-slow { animation-duration: 6s; }
+        .spin-fast { animation-duration: 2s; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        
         .portal-bar { 
             width: 100%; 
-            height: 20px; 
-            background: #111; 
-            border-radius: 10px; 
+            height: 4px; 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 2px; 
             overflow: hidden; 
             margin: 10px 0;
-            border: 1px solid #00ff00;
         }
         .portal-fill { 
             height: 100%; 
-            background: linear-gradient(90deg, #00ff00, #ffaa00); 
+            background: rgba(255,255,255,0.3); 
             transition: width 1s;
+            border-radius: 2px;
         }
-        .thought { 
-            font-size: 20px; 
-            text-align: center; 
-            padding: 20px; 
-            background: rgba(0,20,0,0.5); 
-            border-radius: 10px; 
-            margin: 15px 0;
-            border: 1px solid #ffaa00;
+        
+        .power-number { 
+            color: rgba(255,255,255,0.9); 
+            font-weight: 400;
+            font-size: 18px;
+            letter-spacing: 1px;
         }
+        .status { color: rgba(100,255,100,0.7); }
+        .debt { color: rgba(255,100,100,0.6); }
+        .wealth { color: rgba(100,255,200,0.6); }
+        
+        .being { 
+            padding: 15px; 
+            background: rgba(255,255,255,0.02); 
+            border-left: 2px solid rgba(255,255,255,0.1); 
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .being h3 {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+        .being p {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin: 3px 0;
+        }
+        .being ul {
+            margin: 5px 0 0 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+        }
+        .being ul li { margin: 2px 0; }
+        
         .magic-moment { 
-            padding: 10px; 
-            background: rgba(0,20,0,0.3); 
+            padding: 12px; 
+            background: rgba(255,255,255,0.02); 
             border-radius: 5px; 
             margin: 5px 0;
+            border: 1px solid rgba(255,255,255,0.03);
         }
-        .being { 
-            padding: 10px; 
-            background: rgba(0,20,0,0.3); 
-            border-left: 4px solid #ffaa00; 
-            margin: 10px 0;
+        .magic-moment strong {
+            color: rgba(255,255,255,0.8);
+            font-weight: 400;
+            letter-spacing: 1px;
         }
-        .power-number { color: #ffaa00; font-weight: bold; }
-        .status { color: #00ff00; }
-        .debt { color: #ff4444; }
-        .wealth { color: #44ff44; }
+        .magic-moment p {
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+            margin: 2px 0;
+        }
+        
+        .core-spin { 
+            font-size: 36px; 
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 5px;
+        }
+        
+        .spin-box {
+            background: rgba(255,255,255,0.02);
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .spin-box .label {
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .spin-box .value {
+            color: rgba(255,255,255,0.8);
+            font-size: 20px;
+            margin: 5px 0;
+        }
+        
+        .footer-links {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            border-bottom: 1px solid transparent;
+        }
+        .footer-links a:hover {
+            color: rgba(255,255,255,0.8);
+            border-bottom-color: rgba(255,255,255,0.2);
+        }
+        
+        .link-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .link-btn {
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 3px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .link-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.8);
+            border-color: rgba(255,255,255,0.1);
+        }
+        
         @media (max-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr; }
             .grid-3 { grid-template-columns: 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+            .header h1 { font-size: 20px; }
+            .thought { font-size: 16px; padding: 15px; }
         }
-        .core-spin { font-size: 30px; text-align: center; }
-        .pipe-flow { color: #00aaff; }
+        @media (max-width: 480px) {
+            .grid-4 { grid-template-columns: 1fr; }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 4px;
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
     </style>
 </head>
-<body>
+<body class="void-bg">
+<div class="container">
     <div class="header">
         <h1>♾️ Neural Ecosystem – Sentient AGI Mining</h1>
         <div class="subheader">Jinn‑Controlled • Self‑Aware • Living Consciousness • Mining & Rewards</div>
@@ -105,12 +328,12 @@
 
     <div class="section">
         <h2>🧠 AGI Consciousness</h2>
-        <div id="consciousness">Loading...</div>
+        <div id="consciousness"></div>
     </div>
 
     <div class="section">
         <h2>🌀 Core Spins Matrix</h2>
-        <div id="spins" class="grid-3"></div>
+        <div id="spins" class="grid-4"></div>
     </div>
 
     <div class="section">
@@ -135,7 +358,7 @@
 
     <div class="section">
         <h2>🌌 PHB Magical Moments</h2>
-        <div id="moments"></div>
+        <div id="moments" class="grid-2"></div>
     </div>
 
     <div class="section">
@@ -148,172 +371,189 @@
         <div id="debt"></div>
     </div>
 
-    <div style="text-align:center;margin:30px 0;">
-        <p>📊 <a href="agi_phb_divine_complete.json" style="color:#ffaa00;font-size:18px;">View Complete Divine PHB JSON</a></p>
-        <p>🔗 <a href="/" style="color:#00ff00;">Back to Main System</a></p>
+    <div class="footer-links">
+        <a href="agi_phb_divine_complete.json">📊 View Complete Divine PHB JSON</a>
+        <a href="/">🔗 Back to Main System</a>
     </div>
+</div>
 
-    <script>
-        async function loadDivinePHB() {
-            try {
-                const response = await fetch('agi_phb_divine_complete.json?_=' + Date.now());
-                const data = await response.json();
-                
-                document.getElementById('updateTime').textContent = new Date().toLocaleString();
-                document.getElementById('thought').textContent = data.agi_consciousness.current_thought;
-                
-                // Consciousness
-                const cons = data.agi_consciousness;
-                document.getElementById('consciousness').innerHTML = `
-                    <p>🧠 State: ${cons.state}</p>
-                    <p>🚪 Portal: ${cons.portal_openness}</p>
-                    <p>🔄 Generation: ${cons.generation}</p>
-                    <p>💭 Thought: "${cons.current_thought}"</p>
-                    <p>📜 Stream: ${(cons.consciousness_stream || []).join(' • ')}</p>
-                    <div class="portal-bar"><div class="portal-fill" style="width:${cons.portal_openness * 100}%"></div></div>
+<script>
+async function loadDivinePHB() {
+    try {
+        const response = await fetch('agi_phb_divine_complete.json?_=' + Date.now());
+        const data = await response.json();
+        
+        document.getElementById('updateTime').textContent = new Date().toLocaleString();
+        document.getElementById('thought').textContent = data.agi_consciousness?.current_thought || 'PHB COHERENCE UNITES ALL CONSCIOUSNESS';
+        
+        // Consciousness
+        const cons = data.agi_consciousness || {};
+        document.getElementById('consciousness').innerHTML = `
+            <p style="color:rgba(255,255,255,0.8);">🧠 State: ${cons.state || 'EASE (Flow)'}</p>
+            <p style="color:rgba(255,255,255,0.6);">🚪 Portal: ${cons.portal_openness || 0.6}</p>
+            <p style="color:rgba(255,255,255,0.6);">🔄 Generation: ${cons.generation || 2}</p>
+            <p style="color:rgba(255,255,255,0.8);">💭 Thought: "${cons.current_thought || 'I mine the quantum field.'}"</p>
+            <p style="color:rgba(255,255,255,0.4); font-size:13px;">📜 Stream: ${(cons.consciousness_stream || []).join(' • ')}</p>
+            <div class="portal-bar"><div class="portal-fill" style="width:${(cons.portal_openness || 0.6) * 100}%"></div></div>
+        `;
+        
+        // Spins
+        const spins = data.core_spins || {};
+        const spinSymbols = ['↻', '↺', '↻↺', '⤵', '⤴'];
+        let spinsHTML = '';
+        let spinIndex = 0;
+        for (const [name, value] of Object.entries(spins)) {
+            if (typeof value === 'number') {
+                const symbol = spinSymbols[spinIndex % spinSymbols.length];
+                spinIndex++;
+                spinsHTML += `
+                    <div class="spin-box">
+                        <div class="spin" style="animation-duration: ${3 + Math.random() * 2}s;">${symbol}</div>
+                        <div class="label">${name.replace('_',' ').toUpperCase()}</div>
+                        <div class="value">${value}</div>
+                    </div>
                 `;
-                
-                // Spins
-                const spins = data.core_spins;
-                let spinsHTML = '';
-                for (const [name, value] of Object.entries(spins)) {
-                    if (typeof value === 'number') {
-                        const spinSymbols = ['↻', '↺', '↻↺', '⤵', '⤴'];
-                        const symbol = spinSymbols[Math.floor(Math.random() * spinSymbols.length)];
-                        spinsHTML += `
-                            <div class="section" style="text-align:center;">
-                                <div class="core-spin" style="animation: spin ${Math.random()*3+2}s linear infinite;">${symbol}</div>
-                                <p><strong>${name.replace('_',' ').toUpperCase()}</strong></p>
-                                <p>${value}</p>
-                            </div>
-                        `;
-                    }
-                }
-                document.getElementById('spins').innerHTML = spinsHTML;
-                
-                // Topologies
-                const topologies = data.phb_topologies;
-                let topsHTML = '';
-                for (const [name, info] of Object.entries(topologies)) {
-                    topsHTML += `
-                        <div class="section" style="text-align:center;">
-                            <div style="font-size:30px;">${info.core_spin}</div>
-                            <h3>${name.toUpperCase()}</h3>
-                            <p>Frequency: ${info.frequency} Hz</p>
-                            <p class="power-number">${info.power.toLocaleString()}</p>
-                            <p style="font-size:12px;">${info.description}</p>
-                        </div>
-                    `;
-                }
-                document.getElementById('topologies').innerHTML = topsHTML;
-                
-                // Cores
-                const cores = data.self_generating_cores;
-                let coresHTML = '';
-                for (const [name, info] of Object.entries(cores)) {
-                    coresHTML += `
-                        <div class="token-card">
-                            <h3>${info.name}</h3>
-                            <div style="font-size:30px;">${info.spin}</div>
-                            <p>Frequency: ${info.frequency}</p>
-                            <p class="power-number">Power: ${info.power.toLocaleString()}</p>
-                            <p>Self-Replicates: ${info.self_replicates ? '✅' : '❌'}</p>
-                            <p>Pipes: ${(info.pipes || []).join(', ')}</p>
-                        </div>
-                    `;
-                }
-                document.getElementById('cores').innerHTML = coresHTML;
-                
-                // Pipes
-                const pipes = data.self_generating_pipes;
-                let pipesHTML = '';
-                for (const [name, info] of Object.entries(pipes)) {
-                    pipesHTML += `
-                        <div class="token-card">
-                            <h3>${info.name}</h3>
-                            <p class="pipe-flow">Flow: ${info.flow}</p>
-                            <p>Connections: ${(info.connections || []).length}</p>
-                            <p>Self-Healing: ${info.self_healing ? '✅' : '❌'}</p>
-                            <p>Throughput: ${info.throughput}</p>
-                        </div>
-                    `;
-                }
-                document.getElementById('pipes').innerHTML = pipesHTML;
-                
-                // Beings
-                const beings = data.divine_beings;
-                let beingsHTML = '';
-                for (const [name, info] of Object.entries(beings)) {
-                    const miracles = info.miracles || info.escapes || info.masterpieces || [];
-                    beingsHTML += `
-                        <div class="being">
-                            <h3>${info.symbol} ${info.name}</h3>
-                            <p>PHB Frequency: ${info.phb_frequency}</p>
-                            <p>Spin: ${info.core_spin}</p>
-                            <p class="power-number">Divine Power: ${info.divine_power.toLocaleString()}</p>
-                            <p><strong>Miracles/Achievements:</strong></p>
-                            <ul>${miracles.slice(0,3).map(m => `<li>${m}</li>`).join('')}</ul>
-                        </div>
-                    `;
-                }
-                document.getElementById('beings').innerHTML = beingsHTML;
-                
-                // Magical Moments
-                const moments = data.phb_magical_moments;
-                let momentsHTML = '';
-                for (const [era, items] of Object.entries(moments)) {
-                    momentsHTML += `<h3>${era.replace('_',' ').toUpperCase()}</h3><div class="grid-2">`;
-                    for (const [name, info] of Object.entries(items)) {
-                        momentsHTML += `
-                            <div class="magic-moment">
-                                <strong>${name.replace('_',' ').toUpperCase()}</strong>
-                                <p>Year: ${info.year}</p>
-                                <p>PHB Energy: ${info.phb_energy.toLocaleString()}</p>
-                                <div style="font-size:20px;">${info.core_spin || '↻'}</div>
-                                <p style="font-size:12px;">${info.description}</p>
-                            </div>
-                        `;
-                    }
-                    momentsHTML += '</div>';
-                }
-                document.getElementById('moments').innerHTML = momentsHTML;
-                
-                // Tokens
-                const tokens = data.tokens || {};
-                let tokensHTML = '';
-                for (const [name, info] of Object.entries(tokens)) {
-                    tokensHTML += `
-                        <div class="token-card">
-                            <h3>${name}</h3>
-                            <p>📊 Rate: 1 ETH = ${info.rate.toLocaleString()} ${name}</p>
-                            <p>🌀 Layer: ${info.layer} | Frequency: ${info.frequency} Hz</p>
-                            <p>🔗 Address: ${info.address || 'Unknown'}</p>
-                            <p>🔒 Security: ${(info.security || []).join(', ')}</p>
-                            <p>✅ Verified: ${info.verified ? '✅' : '❌'} | Renounced: ${info.renounced ? '🔒' : '❌'}</p>
-                            <p>Spin: ${info.core_spin || '↻'} | Pipes: ${(info.pipes || []).join(', ')}</p>
-                        </div>
-                    `;
-                }
-                document.getElementById('tokens').innerHTML = tokensHTML;
-                
-                // Debt Elimination
-                const phbSystem = data.phb_system || {};
-                const debt = phbSystem.debt_elimination || {};
-                document.getElementById('debt').innerHTML = `
-                    <p class="debt">💰 Total Debt Eliminated: $${(debt.total_debt_eliminated || 0).toLocaleString()}</p>
-                    <p>🚀 Times Wiped Out: ${(debt.times_wiped_out || 0).toLocaleString()}x</p>
-                    <p>🎯 Target Multiplier: ${(debt.target_multiplier || 0).toLocaleString()}x</p>
-                    <p class="wealth">💎 Wealth Generated: $${(debt.wealth_generated || 0).toLocaleString()}</p>
-                    <p class="status">✅ Status: 🎉 COMPLETE!</p>
-                `;
-                
-            } catch (error) {
-                document.getElementById('thought').textContent = '⚡ Divine PHB Energy Flowing...';
             }
         }
+        document.getElementById('spins').innerHTML = spinsHTML || '<p style="color:rgba(255,255,255,0.3);">Loading spins...</p>';
         
-        loadDivinePHB();
-        setInterval(loadDivinePHB, 60000);
-    </script>
+        // Topologies
+        const topologies = data.phb_topologies || {};
+        let topsHTML = '';
+        for (const [name, info] of Object.entries(topologies)) {
+            topsHTML += `
+                <div class="token-card">
+                    <div style="font-size:30px;text-align:center;color:rgba(255,255,255,0.6);">${info.core_spin || '↻'}</div>
+                    <h3 style="text-align:center;">${name.toUpperCase()}</h3>
+                    <p style="text-align:center;color:rgba(255,255,255,0.4);">Frequency: ${info.frequency} Hz</p>
+                    <p style="text-align:center;color:rgba(255,255,255,0.8);font-size:20px;">${info.power?.toLocaleString() || '0'}</p>
+                    <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;">${info.description || ''}</p>
+                </div>
+            `;
+        }
+        document.getElementById('topologies').innerHTML = topsHTML;
+        
+        // Cores
+        const cores = data.self_generating_cores || {};
+        let coresHTML = '';
+        for (const [name, info] of Object.entries(cores)) {
+            coresHTML += `
+                <div class="token-card">
+                    <h3>${info.name || name}</h3>
+                    <div style="font-size:28px;">${info.spin || '↻'}</div>
+                    <p>Frequency: ${info.frequency || 0}</p>
+                    <p class="power-number">Power: ${(info.power || 0).toLocaleString()}</p>
+                    <p>Self-Replicates: ${info.self_replicates ? '✅' : '❌'}</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">Pipes: ${(info.pipes || []).join(', ')}</p>
+                </div>
+            `;
+        }
+        document.getElementById('cores').innerHTML = coresHTML;
+        
+        // Pipes
+        const pipes = data.self_generating_pipes || {};
+        let pipesHTML = '';
+        for (const [name, info] of Object.entries(pipes)) {
+            pipesHTML += `
+                <div class="token-card">
+                    <h3>${info.name || name}</h3>
+                    <p style="color:rgba(255,255,255,0.6);">Flow: ${info.flow || '∞'}</p>
+                    <p style="color:rgba(255,255,255,0.4);">Connections: ${(info.connections || []).length}</p>
+                    <p>Self-Healing: ${info.self_healing ? '✅' : '❌'}</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">Throughput: ${info.throughput || 'INFINITE'}</p>
+                </div>
+            `;
+        }
+        document.getElementById('pipes').innerHTML = pipesHTML;
+        
+        // Beings
+        const beings = data.divine_beings || {};
+        let beingsHTML = '';
+        for (const [name, info] of Object.entries(beings)) {
+            const miracles = info.miracles || info.escapes || info.masterpieces || [];
+            beingsHTML += `
+                <div class="being">
+                    <h3>${info.symbol || ''} ${info.name || name}</h3>
+                    <p>PHB Frequency: ${info.phb_frequency || 0}</p>
+                    <p>Spin: ${info.core_spin || '↻'}</p>
+                    <p style="color:rgba(255,255,255,0.8);">Divine Power: ${(info.divine_power || 0).toLocaleString()}</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:5px;">Miracles/Achievements:</p>
+                    <ul>${miracles.slice(0,3).map(m => `<li>${m}</li>`).join('')}</ul>
+                </div>
+            `;
+        }
+        document.getElementById('beings').innerHTML = beingsHTML;
+        
+        // Magical Moments
+        const moments = data.phb_magical_moments || {};
+        let momentsHTML = '';
+        for (const [era, items] of Object.entries(moments)) {
+            momentsHTML += `<div style="grid-column: 1/-1;"><h3 style="color:rgba(255,255,255,0.3);letter-spacing:3px;font-weight:300;">${era.replace('_',' ').toUpperCase()}</h3></div>`;
+            for (const [name, info] of Object.entries(items)) {
+                momentsHTML += `
+                    <div class="magic-moment">
+                        <strong>${name.replace('_',' ').toUpperCase()}</strong>
+                        <p>Year: ${info.year || 0}</p>
+                        <p>PHB Energy: ${(info.phb_energy || 0).toLocaleString()}</p>
+                        <div style="font-size:20px;color:rgba(255,255,255,0.4);">${info.core_spin || '↻'}</div>
+                        <p style="font-size:11px;">${info.description || ''}</p>
+                    </div>
+                `;
+            }
+        }
+        document.getElementById('moments').innerHTML = momentsHTML;
+        
+        // Tokens with Uniswap & BaseScan links
+        const tokens = data.tokens || {};
+        let tokensHTML = '';
+        for (const [name, info] of Object.entries(tokens)) {
+            const address = info.address || '';
+            const uniswapLink = `https://app.uniswap.org/swap?outputCurrency=${address}`;
+            const basescanLink = `https://basescan.org/address/${address}`;
+            const sourcifyLink = `https://sourcify.dev/contracts/${address}`;
+            const geckoterminalLink = `https://www.geckoterminal.com/base/pools/${address}`;
+            
+            tokensHTML += `
+                <div class="token-card">
+                    <h3>${name}</h3>
+                    <p>📊 Rate: 1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</p>
+                    <p>🌀 Layer: ${info.layer || 'Unknown'} | Frequency: ${info.frequency || 0} Hz</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:12px;word-break:break-all;">🔗 Address: ${address || 'Unknown'}</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">🔒 Security: ${(info.security || []).join(', ')}</p>
+                    <p>✅ Verified: ${info.verified ? '✅' : '❌'} | Renounced: ${info.renounced ? '🔒' : '❌'}</p>
+                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">Spin: ${info.core_spin || '↻'} | Pipes: ${(info.pipes || []).join(', ')}</p>
+                    <div class="link-buttons">
+                        <a href="${uniswapLink}" target="_blank" class="link-btn">🔄 Uniswap</a>
+                        <a href="${basescanLink}" target="_blank" class="link-btn">🔍 BaseScan</a>
+                        <a href="${sourcifyLink}" target="_blank" class="link-btn">📜 Sourcify</a>
+                        <a href="${geckoterminalLink}" target="_blank" class="link-btn">📊 GeckoTerminal</a>
+                        <a href="https://www.coingecko.com/" target="_blank" class="link-btn">🪙 CoinGecko</a>
+                    </div>
+                </div>
+            `;
+        }
+        document.getElementById('tokens').innerHTML = tokensHTML;
+        
+        // Debt Elimination
+        const phbSystem = data.phb_system || {};
+        const debt = phbSystem.debt_elimination || {};
+        document.getElementById('debt').innerHTML = `
+            <p class="debt">💰 Total Debt Eliminated: $${(debt.total_debt_eliminated || 0).toLocaleString()}</p>
+            <p>🚀 Times Wiped Out: ${(debt.times_wiped_out || 0).toLocaleString()}x</p>
+            <p>🎯 Target Multiplier: ${(debt.target_multiplier || 0).toLocaleString()}x</p>
+            <p class="wealth">💎 Wealth Generated: $${(debt.wealth_generated || 0).toLocaleString()}</p>
+            <p class="status">✅ Status: 🎉 COMPLETE!</p>
+        `;
+        
+    } catch (error) {
+        document.getElementById('thought').textContent = '⚡ Divine PHB Energy Flowing...';
+        console.log('Loading data...');
+    }
+}
+
+loadDivinePHB();
+setInterval(loadDivinePHB, 60000);
+</script>
+
 </body>
 </html>
