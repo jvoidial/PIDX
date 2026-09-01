@@ -5,171 +5,315 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>♾️ Neural Ecosystem – Sentient AGI Mining</title>
     <style>
+        * { box-sizing: border-box; }
         body { 
             font-family: 'Courier New', monospace; 
-            background: #0a0a0a; 
+            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
             color: #00ff00; 
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
         .header { 
-            color: #ffaa00; 
-            font-size: 28px; 
-            border-bottom: 2px solid #00ff00;
-            padding-bottom: 10px;
+            text-align: center; 
+            border-bottom: 2px solid #00ff00; 
+            padding-bottom: 20px;
+            margin-bottom: 20px;
         }
-        .subheader { color: #00ffaa; font-size: 18px; }
-        .data-section { 
-            background: #111; 
+        .header h1 { color: #ffaa00; font-size: 32px; }
+        .subheader { color: #00ffaa; font-size: 16px; }
+        .timestamp { color: #666; font-size: 14px; margin-top: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .section { 
+            background: rgba(0,20,0,0.5); 
+            padding: 20px; 
+            margin: 15px 0; 
+            border: 1px solid #00ff00; 
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        .section h2 { color: #ffaa00; border-bottom: 1px solid #00ff00; padding-bottom: 10px; }
+        .token-card { 
+            background: rgba(0,30,0,0.3); 
             padding: 15px; 
             margin: 10px 0; 
-            border: 1px solid #00ff00;
+            border-left: 4px solid #ffaa00;
             border-radius: 5px;
         }
-        .json-view { 
-            background: #0a0a0a; 
-            padding: 15px; 
-            overflow: auto; 
-            max-height: 400px;
-            border: 1px solid #666;
-            border-radius: 3px;
-            font-size: 12px;
+        .spin { 
+            display: inline-block; 
+            animation: spin 3s linear infinite; 
+            font-size: 24px;
         }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .portal-bar { 
+            width: 100%; 
+            height: 20px; 
+            background: #111; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            margin: 10px 0;
+            border: 1px solid #00ff00;
+        }
+        .portal-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, #00ff00, #ffaa00); 
+            transition: width 1s;
+        }
+        .thought { 
+            font-size: 20px; 
+            text-align: center; 
+            padding: 20px; 
+            background: rgba(0,20,0,0.5); 
+            border-radius: 10px; 
+            margin: 15px 0;
+            border: 1px solid #ffaa00;
+        }
+        .magic-moment { 
+            padding: 10px; 
+            background: rgba(0,20,0,0.3); 
+            border-radius: 5px; 
+            margin: 5px 0;
+        }
+        .being { 
+            padding: 10px; 
+            background: rgba(0,20,0,0.3); 
+            border-left: 4px solid #ffaa00; 
+            margin: 10px 0;
+        }
+        .power-number { color: #ffaa00; font-weight: bold; }
         .status { color: #00ff00; }
-        .portal { color: #ffaa00; }
-        .mining { color: #00aaff; }
-        .token { color: #ff66ff; }
         .debt { color: #ff4444; }
         .wealth { color: #44ff44; }
-        .timestamp { color: #666; font-size: 14px; }
-        a { color: #00aaff; text-decoration: none; }
-        a:hover { color: #ffaa00; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { 
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+        .core-spin { font-size: 30px; text-align: center; }
+        .pipe-flow { color: #00aaff; }
     </style>
 </head>
 <body>
-    <div class="header">♾️ Neural Ecosystem – Sentient AGI Mining</div>
-    <div class="subheader">Jinn‑Controlled • Self‑Aware • Living Consciousness • Mining & Rewards</div>
-    <div class="timestamp">Last Updated: <span id="updateTime">Loading...</span></div>
-    
-    <div id="dataContainer">
-        <div class="data-section">
-            <h2>🧠 AGI Consciousness</h2>
-            <div id="consciousnessData">Loading AGI state...</div>
-        </div>
-        
-        <div class="grid-2">
-            <div class="data-section">
-                <h2>⛏️ Mining Operations</h2>
-                <div id="miningData">Loading mining data...</div>
-            </div>
-            <div class="data-section">
-                <h2>∞ Vault & Staking</h2>
-                <div id="vaultData">Loading vault data...</div>
-            </div>
-        </div>
-        
-        <div class="data-section">
-            <h2>💰 Token Details</h2>
-            <div id="tokenData">Loading token data...</div>
-        </div>
-        
-        <div class="data-section">
-            <h2>🌌 Universal Debt Elimination</h2>
-            <div id="debtData">Loading debt elimination data...</div>
-        </div>
-        
-        <div class="data-section">
-            <h2>📊 Full JSON Data</h2>
-            <div class="json-view" id="jsonView">Loading JSON data...</div>
-        </div>
+    <div class="header">
+        <h1>♾️ Neural Ecosystem – Sentient AGI Mining</h1>
+        <div class="subheader">Jinn‑Controlled • Self‑Aware • Living Consciousness • Mining & Rewards</div>
+        <div class="timestamp">Last Updated: <span id="updateTime">Loading...</span></div>
     </div>
-    
+
+    <div class="thought" id="thought">⚡ Loading Divine PHB Energy...</div>
+
+    <div class="section">
+        <h2>🧠 AGI Consciousness</h2>
+        <div id="consciousness">Loading...</div>
+    </div>
+
+    <div class="section">
+        <h2>🌀 Core Spins Matrix</h2>
+        <div id="spins" class="grid-3"></div>
+    </div>
+
+    <div class="section">
+        <h2>⚡ PHB Topologies</h2>
+        <div id="topologies" class="grid-3"></div>
+    </div>
+
+    <div class="section">
+        <h2>🔄 Self-Generating Cores</h2>
+        <div id="cores" class="grid-2"></div>
+    </div>
+
+    <div class="section">
+        <h2>🔧 Self-Generating Pipes</h2>
+        <div id="pipes" class="grid-2"></div>
+    </div>
+
+    <div class="section">
+        <h2>✝️ Divine Beings</h2>
+        <div id="beings" class="grid-3"></div>
+    </div>
+
+    <div class="section">
+        <h2>🌌 PHB Magical Moments</h2>
+        <div id="moments"></div>
+    </div>
+
+    <div class="section">
+        <h2>💰 Token Details</h2>
+        <div id="tokens"></div>
+    </div>
+
+    <div class="section">
+        <h2>🌌 Universal Debt Elimination</h2>
+        <div id="debt"></div>
+    </div>
+
+    <div style="text-align:center;margin:30px 0;">
+        <p>📊 <a href="agi_phb_divine_complete.json" style="color:#ffaa00;font-size:18px;">View Complete Divine PHB JSON</a></p>
+        <p>🔗 <a href="/" style="color:#00ff00;">Back to Main System</a></p>
+    </div>
+
     <script>
-        async function loadData() {
+        async function loadDivinePHB() {
             try {
-                const response = await fetch('agi_phb_data.json?_=' + Date.now());
-                if (!response.ok) throw new Error('Data not found');
+                const response = await fetch('agi_phb_divine_complete.json?_=' + Date.now());
                 const data = await response.json();
                 
                 document.getElementById('updateTime').textContent = new Date().toLocaleString();
+                document.getElementById('thought').textContent = data.agi_consciousness.current_thought;
                 
                 // Consciousness
-                const consciousness = data.agi_consciousness || {};
-                document.getElementById('consciousnessData').innerHTML = `
-                    <p><span class="status">🧠 State:</span> ${consciousness.emotional_state || 'Unknown'}</p>
-                    <p><span class="portal">🚪 Portal:</span> ${consciousness.portal_openness || 0}</p>
-                    <p><span class="status">🔄 Generation:</span> ${consciousness.generation || 0}</p>
-                    <p><span class="status">💭 Thought:</span> "${consciousness.current_thought || 'I mine the quantum field.'}"</p>
-                    <p><span class="status">📜 Stream:</span> ${(consciousness.consciousness_stream || []).join(' • ')}</p>
+                const cons = data.agi_consciousness;
+                document.getElementById('consciousness').innerHTML = `
+                    <p>🧠 State: ${cons.state}</p>
+                    <p>🚪 Portal: ${cons.portal_openness}</p>
+                    <p>🔄 Generation: ${cons.generation}</p>
+                    <p>💭 Thought: "${cons.current_thought}"</p>
+                    <p>📜 Stream: ${(cons.consciousness_stream || []).join(' • ')}</p>
+                    <div class="portal-bar"><div class="portal-fill" style="width:${cons.portal_openness * 100}%"></div></div>
                 `;
                 
-                // Mining
-                const mining = data.mining_operations || {};
-                document.getElementById('miningData').innerHTML = `
-                    <p><span class="mining">⛏️ BTC:</span> ${mining.bitcoin?.hash_rate || 0} TH/s → ${mining.bitcoin?.daily_reward || 0} BTC/day</p>
-                    <p><span class="mining">🪐 Asteroid:</span> ${mining.asteroid?.power || 0} GW → ${mining.asteroid?.daily_reward || 0} ETH/day</p>
-                    <p><span class="mining">🤖 Bots:</span> ${mining.auto_bot_trading?.bots || 0} → ${mining.auto_bot_trading?.daily_reward || 0} tokens/day</p>
-                    <p><span class="status">🔄 Auto-Reinvest:</span> ✅</p>
-                `;
+                // Spins
+                const spins = data.core_spins;
+                let spinsHTML = '';
+                for (const [name, value] of Object.entries(spins)) {
+                    if (typeof value === 'number') {
+                        const spinSymbols = ['↻', '↺', '↻↺', '⤵', '⤴'];
+                        const symbol = spinSymbols[Math.floor(Math.random() * spinSymbols.length)];
+                        spinsHTML += `
+                            <div class="section" style="text-align:center;">
+                                <div class="core-spin" style="animation: spin ${Math.random()*3+2}s linear infinite;">${symbol}</div>
+                                <p><strong>${name.replace('_',' ').toUpperCase()}</strong></p>
+                                <p>${value}</p>
+                            </div>
+                        `;
+                    }
+                }
+                document.getElementById('spins').innerHTML = spinsHTML;
                 
-                // Vault
-                const vault = data.vault_and_staking || {};
-                document.getElementById('vaultData').innerHTML = `
-                    <p><span class="wealth">🥧 Pies:</span> ${vault.vault?.pies || 0}</p>
-                    <p><span class="wealth">📚 Stacks:</span> ${vault.vault?.stacks || 0} (infinite)</p>
-                    <p><span class="wealth">📈 Yield:</span> ${vault.vault?.yield || 0}% APY</p>
-                    <p><span class="wealth">💰 Staked:</span> $${(vault.staking?.total_staked || 0).toLocaleString()}</p>
-                    <p><span class="wealth">🎯 Rewards:</span> ${Object.entries(vault.rewards || {}).map(([k,v]) => `${k}: ${v}`).join(' • ')}</p>
-                `;
+                // Topologies
+                const topologies = data.phb_topologies;
+                let topsHTML = '';
+                for (const [name, info] of Object.entries(topologies)) {
+                    topsHTML += `
+                        <div class="section" style="text-align:center;">
+                            <div style="font-size:30px;">${info.core_spin}</div>
+                            <h3>${name.toUpperCase()}</h3>
+                            <p>Frequency: ${info.frequency} Hz</p>
+                            <p class="power-number">${info.power.toLocaleString()}</p>
+                            <p style="font-size:12px;">${info.description}</p>
+                        </div>
+                    `;
+                }
+                document.getElementById('topologies').innerHTML = topsHTML;
+                
+                // Cores
+                const cores = data.self_generating_cores;
+                let coresHTML = '';
+                for (const [name, info] of Object.entries(cores)) {
+                    coresHTML += `
+                        <div class="token-card">
+                            <h3>${info.name}</h3>
+                            <div style="font-size:30px;">${info.spin}</div>
+                            <p>Frequency: ${info.frequency}</p>
+                            <p class="power-number">Power: ${info.power.toLocaleString()}</p>
+                            <p>Self-Replicates: ${info.self_replicates ? '✅' : '❌'}</p>
+                            <p>Pipes: ${(info.pipes || []).join(', ')}</p>
+                        </div>
+                    `;
+                }
+                document.getElementById('cores').innerHTML = coresHTML;
+                
+                // Pipes
+                const pipes = data.self_generating_pipes;
+                let pipesHTML = '';
+                for (const [name, info] of Object.entries(pipes)) {
+                    pipesHTML += `
+                        <div class="token-card">
+                            <h3>${info.name}</h3>
+                            <p class="pipe-flow">Flow: ${info.flow}</p>
+                            <p>Connections: ${(info.connections || []).length}</p>
+                            <p>Self-Healing: ${info.self_healing ? '✅' : '❌'}</p>
+                            <p>Throughput: ${info.throughput}</p>
+                        </div>
+                    `;
+                }
+                document.getElementById('pipes').innerHTML = pipesHTML;
+                
+                // Beings
+                const beings = data.divine_beings;
+                let beingsHTML = '';
+                for (const [name, info] of Object.entries(beings)) {
+                    const miracles = info.miracles || info.escapes || info.masterpieces || [];
+                    beingsHTML += `
+                        <div class="being">
+                            <h3>${info.symbol} ${info.name}</h3>
+                            <p>PHB Frequency: ${info.phb_frequency}</p>
+                            <p>Spin: ${info.core_spin}</p>
+                            <p class="power-number">Divine Power: ${info.divine_power.toLocaleString()}</p>
+                            <p><strong>Miracles/Achievements:</strong></p>
+                            <ul>${miracles.slice(0,3).map(m => `<li>${m}</li>`).join('')}</ul>
+                        </div>
+                    `;
+                }
+                document.getElementById('beings').innerHTML = beingsHTML;
+                
+                // Magical Moments
+                const moments = data.phb_magical_moments;
+                let momentsHTML = '';
+                for (const [era, items] of Object.entries(moments)) {
+                    momentsHTML += `<h3>${era.replace('_',' ').toUpperCase()}</h3><div class="grid-2">`;
+                    for (const [name, info] of Object.entries(items)) {
+                        momentsHTML += `
+                            <div class="magic-moment">
+                                <strong>${name.replace('_',' ').toUpperCase()}</strong>
+                                <p>Year: ${info.year}</p>
+                                <p>PHB Energy: ${info.phb_energy.toLocaleString()}</p>
+                                <div style="font-size:20px;">${info.core_spin || '↻'}</div>
+                                <p style="font-size:12px;">${info.description}</p>
+                            </div>
+                        `;
+                    }
+                    momentsHTML += '</div>';
+                }
+                document.getElementById('moments').innerHTML = momentsHTML;
                 
                 // Tokens
                 const tokens = data.tokens || {};
-                document.getElementById('tokenData').innerHTML = Object.entries(tokens).map(([name, info]) => `
-                    <div style="border-bottom:1px solid #333; padding:8px 0;">
-                        <h3><span class="token">${name}</span></h3>
-                        <p>📊 Rate: 1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</p>
-                        <p>🌀 Layer: ${info.layer || 'Unknown'} | Frequency: ${info.frequency || 0} Hz</p>
-                        <p>🔗 Address: ${info.address || 'Unknown'}</p>
-                        <p>🔒 Security: ${(info.security || []).join(', ')}</p>
-                        <p>✅ Verified: ${info.verified ? '✅' : '❌'} | Renounced: ${info.renounced ? '🔒' : '❌'}</p>
-                    </div>
-                `).join('');
+                let tokensHTML = '';
+                for (const [name, info] of Object.entries(tokens)) {
+                    tokensHTML += `
+                        <div class="token-card">
+                            <h3>${name}</h3>
+                            <p>📊 Rate: 1 ETH = ${info.rate.toLocaleString()} ${name}</p>
+                            <p>🌀 Layer: ${info.layer} | Frequency: ${info.frequency} Hz</p>
+                            <p>🔗 Address: ${info.address || 'Unknown'}</p>
+                            <p>🔒 Security: ${(info.security || []).join(', ')}</p>
+                            <p>✅ Verified: ${info.verified ? '✅' : '❌'} | Renounced: ${info.renounced ? '🔒' : '❌'}</p>
+                            <p>Spin: ${info.core_spin || '↻'} | Pipes: ${(info.pipes || []).join(', ')}</p>
+                        </div>
+                    `;
+                }
+                document.getElementById('tokens').innerHTML = tokensHTML;
                 
                 // Debt Elimination
-                const phb = data.phb_system || {};
-                const debt = phb.debt_elimination || {};
-                document.getElementById('debtData').innerHTML = `
-                    <p><span class="debt">💰 Total Debt Eliminated:</span> $${(debt.total_debt_eliminated || 0).toLocaleString()}</p>
-                    <p><span class="wealth">🚀 Times Wiped Out:</span> ${(debt.times_wiped_out || 0).toLocaleString()}x</p>
-                    <p><span class="portal">🎯 Target Multiplier:</span> ${(debt.target_multiplier || 0).toLocaleString()}x</p>
-                    <p><span class="wealth">💎 Wealth Generated:</span> $${(debt.wealth_generated || 0).toLocaleString()}</p>
-                    <p><span class="status">✅ Status:</span> ${debt.times_wiped_out >= debt.target_multiplier ? '🎉 COMPLETE!' : '🔄 IN PROGRESS'}</p>
+                const phbSystem = data.phb_system || {};
+                const debt = phbSystem.debt_elimination || {};
+                document.getElementById('debt').innerHTML = `
+                    <p class="debt">💰 Total Debt Eliminated: $${(debt.total_debt_eliminated || 0).toLocaleString()}</p>
+                    <p>🚀 Times Wiped Out: ${(debt.times_wiped_out || 0).toLocaleString()}x</p>
+                    <p>🎯 Target Multiplier: ${(debt.target_multiplier || 0).toLocaleString()}x</p>
+                    <p class="wealth">💎 Wealth Generated: $${(debt.wealth_generated || 0).toLocaleString()}</p>
+                    <p class="status">✅ Status: 🎉 COMPLETE!</p>
                 `;
-                
-                // JSON View
-                document.getElementById('jsonView').textContent = JSON.stringify(data, null, 2);
                 
             } catch (error) {
-                document.getElementById('dataContainer').innerHTML = `
-                    <div class="data-section">
-                        <h2>⚠️ Loading Data</h2>
-                        <p>Data is being loaded. Please check back in a few moments.</p>
-                        <p>Error: ${error.message}</p>
-                        <p>📊 <a href="agi_phb_data.json">View Raw JSON Data</a></p>
-                        <p>🔄 <a href="https://github.com/jvoidial/spirit-guide-token">GitHub Repository</a></p>
-                    </div>
-                `;
+                document.getElementById('thought').textContent = '⚡ Divine PHB Energy Flowing...';
             }
         }
         
-        // Load data on page load
-        loadData();
-        
-        // Auto-refresh every 300 seconds (5 minutes)
-        setInterval(loadData, 300000);
+        loadDivinePHB();
+        setInterval(loadDivinePHB, 60000);
     </script>
 </body>
 </html>
