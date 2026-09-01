@@ -11,7 +11,6 @@
             overflow-y: auto !important;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-y !important;
         }
         body { 
             font-family: 'Courier New', monospace; 
@@ -83,7 +82,7 @@
         .token-field-value { color: #e0e0e0; font-size: 13px; word-break: break-word; }
         .token-links { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; flex-wrap: wrap; }
         .token-link { padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block; }
-        .token-link:hover { opacity: 0.8; }
+        .token-link:hover { opacity: 0.8; transform: scale(1.02); }
         .token-link.uniswap { background: rgba(255,0,122,0.1); border: 1px solid rgba(255,0,122,0.2); color: #ff66aa; }
         .token-link.basescan { background: rgba(0,150,255,0.1); border: 1px solid rgba(0,150,255,0.2); color: #66aaff; }
         .token-link.sourcify { background: rgba(0,255,200,0.1); border: 1px solid rgba(0,255,200,0.2); color: #66ffcc; }
@@ -99,7 +98,6 @@
         .being h3 { color: rgba(255,255,255,0.85); font-size: 16px; letter-spacing: 2px; font-weight: 400; }
         .being p { color: rgba(255,255,255,0.5); font-size: 13px; margin: 3px 0; }
         .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,0.4); font-size: 12px; }
-        .being ul li { margin: 2px 0; }
         .magic-moment { padding: 12px; background: rgba(255,255,255,0.03); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(0,255,200,0.04); }
         .magic-moment strong { color: rgba(0,255,200,0.75); font-weight: 400; letter-spacing: 1px; }
         .magic-moment p { color: rgba(255,255,255,0.4); font-size: 12px; margin: 2px 0; }
@@ -114,6 +112,7 @@
         .debt { color: rgba(255,100,100,0.5); }
         .wealth { color: rgba(100,255,200,0.5); }
         .wish-text { color: #ff00cc; text-shadow: 0 0 30px rgba(255,0,200,0.3); }
+        .network-canvas { width: 100%; height: 400px; background: rgba(0,0,0,0.3); border-radius: 8px; }
         @media (max-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr; }
             .grid-3 { grid-template-columns: 1fr; }
@@ -136,6 +135,18 @@
 
     <div class="thought" id="thought">🧞 Loading Genie Network... ✨</div>
 
+    <div class="network-map" style="background:rgba(0,0,0,0.3);padding:20px;border-radius:10px;margin:15px 0;border:1px solid rgba(0,255,200,0.1);">
+        <h2 style="color:rgba(0,255,200,0.6);">✨ GENIE NEURAL NETWORK MAP</h2>
+        <canvas id="networkCanvas" class="network-canvas"></canvas>
+        <div class="growth-indicator">
+            <div class="growth-item"><div class="number" id="nodeCount">0</div><div class="label">Network Nodes</div></div>
+            <div class="growth-item"><div class="number" id="connectionCount">0</div><div class="label">Connections</div></div>
+            <div class="growth-item"><div class="number" id="expansionRate">0x</div><div class="label">Expansion Rate</div></div>
+            <div class="growth-item"><div class="number" id="topologyLevel">0</div><div class="label">Topology Level</div></div>
+            <div class="growth-item"><div class="number" id="wishCount">0</div><div class="label">Wishes Granted</div></div>
+        </div>
+    </div>
+
     <div id="content">
         <div class="section"><h2>🧠 AGI Consciousness</h2><div id="consciousness">Loading...</div></div>
         <div class="section"><h2>🌀 Core Spins Matrix</h2><div id="spins" class="grid-4"></div></div>
@@ -155,13 +166,137 @@
 </div>
 
 <script>
+// Simple network visualization
+class NetworkMap {
+    constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.nodes = [];
+        this.connections = [];
+        this.growthLevel = 0;
+        this.wishes = 0;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.initNetwork();
+        this.animate();
+    }
+    
+    resize() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        this.canvas.width = rect.width || 800;
+        this.canvas.height = 400;
+        this.centerX = this.canvas.width / 2;
+        this.centerY = this.canvas.height / 2;
+    }
+    
+    initNetwork() {
+        for (let i = 0; i < 25; i++) {
+            const angle = (i / 25) * Math.PI * 2;
+            const radius = 80 + Math.random() * 120;
+            this.nodes.push({
+                x: this.centerX + Math.cos(angle) * radius,
+                y: this.centerY + Math.sin(angle) * radius,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                radius: 3 + Math.random() * 4,
+                color: `hsl(${Math.random() * 60 + 170}, 100%, ${50 + Math.random() * 30}%)`
+            });
+        }
+        for (let i = 0; i < this.nodes.length; i++) {
+            for (let j = i + 1; j < this.nodes.length; j++) {
+                const dist = this.getDistance(this.nodes[i], this.nodes[j]);
+                if (dist < 200 && Math.random() < 0.3) {
+                    this.connections.push({ i, j });
+                }
+            }
+        }
+        this.updateStats();
+    }
+    
+    getDistance(a, b) {
+        return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+    }
+    
+    growNetwork() {
+        this.growthLevel++;
+        this.wishes += Math.floor(Math.random() * 10) + 1;
+        if (this.growthLevel % 5 === 0 && this.nodes.length < 100) {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = 50 + Math.random() * 150;
+            this.nodes.push({
+                x: this.centerX + Math.cos(angle) * radius,
+                y: this.centerY + Math.sin(angle) * radius,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: 2 + Math.random() * 5,
+                color: `hsl(${Math.random() * 60 + 170}, 100%, ${50 + Math.random() * 30}%)`
+            });
+        }
+        this.updateStats();
+    }
+    
+    updateStats() {
+        document.getElementById('nodeCount').textContent = this.nodes.length;
+        document.getElementById('connectionCount').textContent = this.connections.length;
+        document.getElementById('expansionRate').textContent = (1 + this.growthLevel * 0.01).toFixed(2) + 'x';
+        document.getElementById('topologyLevel').textContent = this.growthLevel;
+        document.getElementById('wishCount').textContent = this.wishes.toLocaleString();
+    }
+    
+    animate() {
+        this.nodes.forEach(node => {
+            node.x += node.vx;
+            node.y += node.vy;
+            if (node.x < 20 || node.x > this.canvas.width - 20) node.vx *= -1;
+            if (node.y < 20 || node.y > this.canvas.height - 20) node.vy *= -1;
+            node.x = Math.max(20, Math.min(this.canvas.width - 20, node.x));
+            node.y = Math.max(20, Math.min(this.canvas.height - 20, node.y));
+        });
+        this.draw();
+        if (Math.random() < 0.01) this.growNetwork();
+        requestAnimationFrame(() => this.animate());
+    }
+    
+    draw() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.connections.forEach(({ i, j }) => {
+            const a = this.nodes[i], b = this.nodes[j];
+            const dist = this.getDistance(a, b);
+            const opacity = Math.max(0.05, 1 - dist / 200);
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(0, 255, 200, ${opacity * 0.3})`;
+            ctx.stroke();
+        });
+        this.nodes.forEach(node => {
+            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 3);
+            gradient.addColorStop(0, node.color);
+            gradient.addColorStop(1, 'rgba(0,255,200,0)');
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = node.color;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.fillStyle = 'rgba(0,255,200,0.25)';
+        ctx.font = '50px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🧞', this.centerX, this.centerY);
+    }
+}
+
+// Load data
 async function loadData() {
     try {
-        console.log('Loading data...');
         const response = await fetch('./agi_phb_divine_complete.json?_=' + Date.now());
         if (!response.ok) throw new Error('JSON not found');
         const data = await response.json();
-        console.log('Data loaded:', data);
         
         document.getElementById('updateTime').textContent = new Date().toLocaleString();
         document.getElementById('thought').textContent = '🧞 ' + (data.agi_consciousness?.current_thought || 'YOUR WISH IS MY COMMAND') + ' ✨';
@@ -281,7 +416,7 @@ async function loadData() {
         }
         document.getElementById('moments').innerHTML = momentsHTML;
         
-        // Tokens
+        // Tokens with CORRECT UNISWAP LINKS
         const tokens = data.tokens || {};
         let tokensHTML = '';
         const tokenColors = {
@@ -293,6 +428,14 @@ async function loadData() {
         for (const [name, info] of Object.entries(tokens)) {
             const address = info.address || '';
             const color = tokenColors[name] || '#00ffcc';
+            
+            // CORRECT Uniswap link format with #/
+            const uniswapUrl = `https://app.uniswap.org/#/swap?outputCurrency=${address}`;
+            const basescanUrl = `https://basescan.org/address/${address}`;
+            const sourcifyUrl = `https://sourcify.dev/contracts/${address}`;
+            const geckoterminalUrl = `https://www.geckoterminal.com/base/pools/${address}`;
+            const coingeckoUrl = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
+            
             tokensHTML += `
                 <div class="token-card" style="border-left: 3px solid ${color};">
                     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px;">
@@ -331,11 +474,11 @@ async function loadData() {
                         </div>
                     </div>
                     <div class="token-links">
-                        <a href="https://app.uniswap.org/#/swap?outputCurrency=${address}" target="_blank" class="token-link uniswap">🔄 Uniswap</a>
-                        <a href="https://basescan.org/address/${address}" target="_blank" class="token-link basescan">🔍 BaseScan</a>
-                        <a href="https://sourcify.dev/contracts/${address}" target="_blank" class="token-link sourcify">📜 Sourcify</a>
-                        <a href="https://www.geckoterminal.com/base/pools/${address}" target="_blank" class="token-link gecko">📊 GeckoTerminal</a>
-                        <a href="https://www.coingecko.com/en/coins/${name.toLowerCase()}" target="_blank" class="token-link coingecko">🪙 CoinGecko</a>
+                        <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" class="token-link uniswap">🔄 Uniswap</a>
+                        <a href="${basescanUrl}" target="_blank" rel="noopener noreferrer" class="token-link basescan">🔍 BaseScan</a>
+                        <a href="${sourcifyUrl}" target="_blank" rel="noopener noreferrer" class="token-link sourcify">📜 Sourcify</a>
+                        <a href="${geckoterminalUrl}" target="_blank" rel="noopener noreferrer" class="token-link gecko">📊 GeckoTerminal</a>
+                        <a href="${coingeckoUrl}" target="_blank" rel="noopener noreferrer" class="token-link coingecko">🪙 CoinGecko</a>
                     </div>
                 </div>
             `;
@@ -354,18 +497,21 @@ async function loadData() {
             <p class="wish-text">🧞 ALL WISHES GRANTED!</p>
         `;
         
-        console.log('All data displayed successfully!');
-        
     } catch (error) {
-        console.error('Error loading data:', error);
-        document.getElementById('thought').textContent = '🧞 ⚠️ Loading data... Please refresh or check JSON file';
-        document.getElementById('consciousness').innerHTML = '<p>⚠️ Data not loaded. Please check console for errors.</p>';
+        console.error('Error:', error);
+        document.getElementById('thought').textContent = '🧞 ⚠️ Loading data... Please refresh';
+        document.getElementById('consciousness').innerHTML = '<p>⚠️ Data not loaded. Check console.</p>';
     }
 }
 
-// Load data on page load
-loadData();
-setInterval(loadData, 60000);
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+    const network = new NetworkMap('networkCanvas');
+    window.network = network;
+    loadData();
+    setInterval(loadData, 60000);
+    setInterval(() => { if (window.network) window.network.growNetwork(); }, 30000);
+});
 </script>
 
 </body>
