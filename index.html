@@ -161,8 +161,8 @@
     </div>
 
     <div class="footer-links">
-        <a href="agi_phb_divine_complete.json">📊 View Complete Divine PHB JSON</a>
-        <a href="/">🔗 Back to Main System</a>
+        <a target="_blank" rel="noopener noreferrer" href="agi_phb_divine_complete.json">📊 View Complete Divine PHB JSON</a>
+        <a target="_blank" rel="noopener noreferrer" href="/">🔗 Back to Main System</a>
     </div>
 </div>
 
@@ -418,76 +418,82 @@ async function loadData() {
         document.getElementById('moments').innerHTML = momentsHTML;
         
         // ===== TOKENS WITH WORKING UNISWAP LINKS =====
-        const tokens = data.tokens || {};
-        let tokensHTML = '';
-        const tokenColors = {
-            'PIDX': '#00ff88',
-            'SGUIDE': '#ff66ff',
-            'VDOO': '#66aaff',
-            'PENNIES': '#ffaa44'
-        };
-        
-        // CORRECT UNISWAP LINKS - These will open directly to swap
-        const uniswapUrls = {
-            'PIDX': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-            'SGUIDE': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-            'VDOO': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-            'PENNIES': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
-        };
-        
-        for (const [name, info] of Object.entries(tokens)) {
-            const address = info.address || '';
-            const color = tokenColors[name] || '#00ffcc';
-            const uniswapUrl = uniswapUrls[name] || `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${address}`;
-            
-            tokensHTML += `
-                <div class="token-card" style="border-left: 3px solid ${color};">
-                    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px;">
-                        <h3 style="color:${color};">${name}</h3>
-                        <div>
-                            <span class="token-badge">${info.layer || 'Unknown'}</span>
-                            <span class="token-badge">${info.frequency || 0} Hz</span>
-                            <span class="token-badge" style="color:#66ff66;">${info.verified ? '✅ Verified' : ''}</span>
-                            <span class="token-badge" style="color:#ff8844;">${info.renounced ? '🔒 Renounced' : ''}</span>
-                        </div>
-                    </div>
-                    <div class="token-grid">
-                        <div class="token-field">
-                            <span class="token-field-label">📊 Rate</span>
-                            <div class="token-field-value">1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</div>
-                        </div>
-                        <div class="token-field">
-                            <span class="token-field-label">🌀 Layer</span>
-                            <div class="token-field-value">${info.layer || 'Unknown'} • ${info.frequency || 0} Hz</div>
-                        </div>
-                        <div class="token-field">
-                            <span class="token-field-label">🔗 Address</span>
-                            <div class="token-field-value" style="font-size:11px;font-family:monospace;color:#888;">${address || 'Unknown'}</div>
-                        </div>
-                        <div class="token-field">
-                            <span class="token-field-label">🔒 Security</span>
-                            <div class="token-field-value" style="font-size:11px;">${(info.security || []).join(' • ')}</div>
-                        </div>
-                        <div class="token-field">
-                            <span class="token-field-label">🔄 Spin</span>
-                            <div class="token-field-value" style="color:#00ffcc;font-size:24px;">${info.core_spin || '↻'}</div>
-                        </div>
-                        <div class="token-field">
-                            <span class="token-field-label">🔧 Pipes</span>
-                            <div class="token-field-value" style="font-size:12px;">${(info.pipes || []).join(' → ')}</div>
-                        </div>
-                    </div>
-                    <div class="token-links">
-                        <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" class="token-link uniswap">🔄 Swap on Uniswap</a>
-                        <a href="https://basescan.org/address/${address}" target="_blank" rel="noopener noreferrer" class="token-link basescan">🔍 BaseScan</a>
-                        <a href="https://sourcify.dev/contracts/${address}" target="_blank" rel="noopener noreferrer" class="token-link sourcify">📜 Sourcify</a>
-                        <a href="https://www.geckoterminal.com/base/pools/${address}" target="_blank" rel="noopener noreferrer" class="token-link gecko">📊 GeckoTerminal</a>
-                        <a href="https://www.coingecko.com/en/coins/${name.toLowerCase()}" target="_blank" rel="noopener noreferrer" class="token-link coingecko">🪙 CoinGecko</a>
-                    </div>
+        // ===== FIXED TOKEN RENDERING WITH WORKING UNISWAP LINKS =====
+const tokens = data.tokens || {};
+let tokensHTML = '';
+const tokenColors = {
+    'PIDX': '#00ff88',
+    'SGUIDE': '#ff66ff',
+    'VDOO': '#66aaff',
+    'PENNIES': '#ffaa44'
+};
+
+// CORRECT UNISWAP URLS - These work!
+const uniswapUrls = {
+    'PIDX': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+    'SGUIDE': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+    'VDOO': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+    'PENNIES': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
+};
+
+for (const [name, info] of Object.entries(tokens)) {
+    const address = info.address || '';
+    const color = tokenColors[name] || '#00ffcc';
+    const uniswapUrl = uniswapUrls[name] || `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${address}`;
+    const basescanUrl = `https://basescan.org/address/${address}`;
+    const sourcifyUrl = `https://sourcify.dev/contracts/${address}`;
+    const geckoterminalUrl = `https://www.geckoterminal.com/base/pools/${address}`;
+    const coingeckoUrl = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
+    
+    tokensHTML += `
+        <div class="token-card" style="border-left: 3px solid ${color}; padding: 18px; margin: 15px 0; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+                <h3 style="color: ${color}; font-size: 20px; letter-spacing: 2px; margin: 0;">${name}</h3>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(0,255,200,0.08); color: #00ffcc; border: 1px solid rgba(0,255,200,0.15);">${info.layer || 'Unknown'}</span>
+                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(255,255,255,0.04); color: #aaa; border: 1px solid rgba(255,255,255,0.04);">${info.frequency || 0} Hz</span>
+                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(0,255,100,0.08); color: #66ff66; border: 1px solid rgba(0,255,100,0.15);">${info.verified ? '✅ Verified' : ''}</span>
+                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(255,100,0,0.08); color: #ff8844; border: 1px solid rgba(255,100,0,0.15);">${info.renounced ? '🔒 Renounced' : ''}</span>
                 </div>
-            `;
-        }
-        document.getElementById('tokens').innerHTML = tokensHTML;
+            </div>
+            <div class="token-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">
+                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
+                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">📊 Rate</span>
+                    <div class="token-field-value" style="color: #e0e0e0; font-size: 13px;">1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</div>
+                </div>
+                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
+                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🌀 Layer</span>
+                    <div class="token-field-value" style="color: #e0e0e0; font-size: 13px;">${info.layer || 'Unknown'} • ${info.frequency || 0} Hz</div>
+                </div>
+                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
+                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔗 Address</span>
+                    <div class="token-field-value" style="color: #888; font-size: 11px; word-break: break-all; font-family: monospace;">${address || 'Unknown'}</div>
+                </div>
+                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
+                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔒 Security</span>
+                    <div class="token-field-value" style="color: #aaa; font-size: 11px;">${(info.security || []).join(' • ')}</div>
+                </div>
+                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
+                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔄 Spin</span>
+                    <div class="token-field-value" style="color: #00ffcc; font-size: 24px;">${info.core_spin || '↻'}</div>
+                </div>
+                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
+                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔧 Pipes</span>
+                    <div class="token-field-value" style="color: #aaa; font-size: 12px;">${(info.pipes || []).join(' → ')}</div>
+                </div>
+            </div>
+            <div class="token-links" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" class="token-link uniswap" style="background: rgba(255,0,122,0.12); border: 1px solid rgba(255,0,122,0.25); color: #ff66aa; font-weight: bold; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔄 Swap on Uniswap</a>
+                <a href="${basescanUrl}" target="_blank" rel="noopener noreferrer" class="token-link basescan" style="background: rgba(0,150,255,0.1); border: 1px solid rgba(0,150,255,0.2); color: #66aaff; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔍 BaseScan</a>
+                <a href="${sourcifyUrl}" target="_blank" rel="noopener noreferrer" class="token-link sourcify" style="background: rgba(0,255,200,0.1); border: 1px solid rgba(0,255,200,0.2); color: #66ffcc; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📜 Sourcify</a>
+                <a href="${geckoterminalUrl}" target="_blank" rel="noopener noreferrer" class="token-link gecko" style="background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.2); color: #ffcc44; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📊 GeckoTerminal</a>
+                <a href="${coingeckoUrl}" target="_blank" rel="noopener noreferrer" class="token-link coingecko" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🪙 CoinGecko</a>
+            </div>
+        </div>
+    `;
+}
+document.getElementById('tokens').innerHTML = tokensHTML;
+
         
         // Debt
         const phbSystem = data.phb_system || {};
