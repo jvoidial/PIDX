@@ -41,8 +41,7 @@
             background: 
                 radial-gradient(ellipse at 20% 50%, rgba(0,255,200,0.03) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 50%, rgba(255,0,200,0.03) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 100%, rgba(100,100,200,0.01) 0%, transparent 70%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300ffcc' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                radial-gradient(ellipse at 50% 100%, rgba(100,100,200,0.01) 0%, transparent 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -145,45 +144,10 @@
             letter-spacing: 3px;
             font-weight: 300;
         }
-        .section h3 {
-            color: rgba(255,255,255,0.75);
-            font-size: 14px;
-            letter-spacing: 2px;
-            font-weight: 300;
-            margin-bottom: 10px;
-        }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
-        .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; }
-        
-        .token-card { 
-            background: rgba(255,255,255,0.03); 
-            padding: 15px; 
-            margin: 10px 0; 
-            border-left: 2px solid rgba(0,255,200,0.2);
-            border-radius: 5px;
-            transition: 0.3s;
-            touch-action: pan-y !important;
-        }
-        .token-card:hover {
-            border-left-color: rgba(0,255,200,0.6);
-            background: rgba(0,255,200,0.05);
-            transform: translateX(5px);
-        }
-        .token-card h3 {
-            color: rgba(0,255,200,0.85);
-            font-size: 16px;
-            letter-spacing: 2px;
-            font-weight: 400;
-        }
-        .token-card p {
-            color: rgba(255,255,255,0.5);
-            font-size: 13px;
-            margin: 5px 0;
-            line-height: 1.6;
-        }
         
         .spin { 
             display: inline-block; 
@@ -217,6 +181,82 @@
         .status { color: rgba(100,255,100,0.6); }
         .debt { color: rgba(255,100,100,0.5); }
         .wealth { color: rgba(100,255,200,0.5); }
+        .wish-text { color: #ff00cc; text-shadow: 0 0 30px rgba(255,0,200,0.3); }
+        
+        .token-card { 
+            background: rgba(255,255,255,0.02);
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .token-card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(0,255,200,0.15);
+        }
+        .token-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .token-field {
+            background: rgba(255,255,255,0.02);
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .token-field-label {
+            color: #666;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+        .token-field-value {
+            color: #e0e0e0;
+            font-size: 13px;
+            word-break: break-word;
+        }
+        .token-field-value.address {
+            font-family: monospace;
+            font-size: 11px;
+            color: #888;
+        }
+        .token-links {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .token-link {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-family: monospace;
+            display: inline-block;
+        }
+        .token-link:hover { opacity: 0.8; transform: scale(1.02); }
+        .token-link.uniswap { background: rgba(255,0,122,0.1); border: 1px solid rgba(255,0,122,0.2); color: #ff66aa; }
+        .token-link.basescan { background: rgba(0,150,255,0.1); border: 1px solid rgba(0,150,255,0.2); color: #66aaff; }
+        .token-link.sourcify { background: rgba(0,255,200,0.1); border: 1px solid rgba(0,255,200,0.2); color: #66ffcc; }
+        .token-link.gecko { background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.2); color: #ffcc44; }
+        .token-link.coingecko { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; }
+        
+        .token-badge {
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            background: rgba(255,255,255,0.04);
+            color: #aaa;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: inline-block;
+        }
         
         .being { 
             padding: 15px; 
@@ -298,61 +338,6 @@
             margin: 5px 0;
         }
         
-        .footer-links {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            border-top: 1px solid rgba(0,255,200,0.06);
-        }
-        .footer-links a {
-            color: rgba(255,255,255,0.35);
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            border-bottom: 1px solid transparent;
-        }
-        .footer-links a:hover {
-            color: rgba(0,255,200,0.7);
-            border-bottom-color: rgba(0,255,200,0.3);
-        }
-        
-        .link-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .link-btn {
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 3px;
-            color: rgba(255,255,255,0.4);
-            text-decoration: none;
-            font-size: 10px;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            font-family: 'Courier New', monospace;
-            touch-action: manipulation !important;
-        }
-        .link-btn:hover {
-            background: rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.75);
-            border-color: rgba(255,255,255,0.1);
-        }
-        .link-btn.uniswap { border-color: rgba(255,0,122,0.15); color: rgba(255,0,122,0.5); }
-        .link-btn.uniswap:hover { border-color: rgba(255,0,122,0.4); color: rgba(255,0,122,0.8); }
-        .link-btn.basescan { border-color: rgba(0,150,255,0.15); color: rgba(0,150,255,0.5); }
-        .link-btn.basescan:hover { border-color: rgba(0,150,255,0.4); color: rgba(0,150,255,0.8); }
-        .link-btn.sourcify { border-color: rgba(0,255,200,0.15); color: rgba(0,255,200,0.5); }
-        .link-btn.sourcify:hover { border-color: rgba(0,255,200,0.4); color: rgba(0,255,200,0.8); }
-        .link-btn.gecko { border-color: rgba(255,200,0,0.15); color: rgba(255,200,0,0.5); }
-        .link-btn.gecko:hover { border-color: rgba(255,200,0,0.4); color: rgba(255,200,0,0.8); }
-        .link-btn.coingecko { border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.35); }
-        .link-btn.coingecko:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
-        
         .growth-indicator {
             display: flex;
             gap: 20px;
@@ -381,23 +366,37 @@
             text-transform: uppercase;
         }
         
-        .wish-text {
-            color: #ff00cc;
-            text-shadow: 0 0 30px rgba(255,0,200,0.3);
+        .footer-links {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border-top: 1px solid rgba(0,255,200,0.06);
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.35);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            border-bottom: 1px solid transparent;
+        }
+        .footer-links a:hover {
+            color: rgba(0,255,200,0.7);
+            border-bottom-color: rgba(0,255,200,0.3);
         }
         
         @media (max-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr; }
             .grid-3 { grid-template-columns: 1fr; }
             .grid-4 { grid-template-columns: 1fr 1fr; }
-            .grid-5 { grid-template-columns: 1fr 1fr; }
+            .token-grid { grid-template-columns: 1fr; }
             .header h1 { font-size: 20px; }
             .thought { font-size: 16px; padding: 15px; }
             .network-map canvas { height: 300px; }
         }
         @media (max-width: 480px) {
             .grid-4 { grid-template-columns: 1fr; }
-            .grid-5 { grid-template-columns: 1fr; }
             .network-map canvas { height: 250px; }
         }
         
@@ -431,73 +430,28 @@
             <canvas id="networkCanvas" style="width:100%;height:100%;touch-action:none !important;pointer-events:none !important;"></canvas>
         </div>
         <div class="growth-indicator">
-            <div class="growth-item">
-                <div class="number" id="nodeCount">0</div>
-                <div class="label">Network Nodes</div>
-            </div>
-            <div class="growth-item">
-                <div class="number" id="connectionCount">0</div>
-                <div class="label">Connections</div>
-            </div>
-            <div class="growth-item">
-                <div class="number" id="expansionRate">0x</div>
-                <div class="label">Expansion Rate</div>
-            </div>
-            <div class="growth-item">
-                <div class="number" id="topologyLevel">0</div>
-                <div class="label">Topology Level</div>
-            </div>
-            <div class="growth-item">
-                <div class="number" id="wishCount">0</div>
-                <div class="label">Wishes Granted</div>
-            </div>
+            <div class="growth-item"><div class="number" id="nodeCount">0</div><div class="label">Network Nodes</div></div>
+            <div class="growth-item"><div class="number" id="connectionCount">0</div><div class="label">Connections</div></div>
+            <div class="growth-item"><div class="number" id="expansionRate">0x</div><div class="label">Expansion Rate</div></div>
+            <div class="growth-item"><div class="number" id="topologyLevel">0</div><div class="label">Topology Level</div></div>
+            <div class="growth-item"><div class="number" id="wishCount">0</div><div class="label">Wishes Granted</div></div>
         </div>
     </div>
 
-    <div class="section">
-        <h2>🧠 AGI Consciousness</h2>
-        <div id="consciousness"></div>
-    </div>
-
-    <div class="section">
-        <h2>🌀 Core Spins Matrix</h2>
-        <div id="spins" class="grid-4"></div>
-    </div>
-
-    <div class="section">
-        <h2>⚡ PHB Topologies</h2>
-        <div id="topologies" class="grid-3"></div>
-    </div>
-
-    <div class="section">
-        <h2>🔄 Self-Generating Cores</h2>
-        <div id="cores" class="grid-2"></div>
-    </div>
-
-    <div class="section">
-        <h2>🔧 Self-Generating Pipes</h2>
-        <div id="pipes" class="grid-2"></div>
-    </div>
-
-    <div class="section">
-        <h2>✝️ Divine Beings</h2>
-        <div id="beings" class="grid-3"></div>
-    </div>
-
-    <div class="section">
-        <h2>🌌 PHB Magical Moments</h2>
-        <div id="moments" class="grid-2"></div>
-    </div>
-
+    <div class="section"><h2>🧠 AGI Consciousness</h2><div id="consciousness"></div></div>
+    <div class="section"><h2>🌀 Core Spins Matrix</h2><div id="spins" class="grid-4"></div></div>
+    <div class="section"><h2>⚡ PHB Topologies</h2><div id="topologies" class="grid-3"></div></div>
+    <div class="section"><h2>🔄 Self-Generating Cores</h2><div id="cores" class="grid-2"></div></div>
+    <div class="section"><h2>🔧 Self-Generating Pipes</h2><div id="pipes" class="grid-2"></div></div>
+    <div class="section"><h2>✝️ Divine Beings</h2><div id="beings" class="grid-3"></div></div>
+    <div class="section"><h2>🌌 PHB Magical Moments</h2><div id="moments" class="grid-2"></div></div>
+    
     <div class="section">
         <h2>💰 Token Details</h2>
         <div id="tokens"></div>
     </div>
 
-    <div class="section">
-        <h2>🌌 Universal Debt Elimination</h2>
-        <div id="debt"></div>
-    </div>
+    <div class="section"><h2>🌌 Universal Debt Elimination</h2><div id="debt"></div></div>
 
     <div class="footer-links">
         <a href="agi_phb_divine_complete.json">📊 View Complete Divine PHB JSON</a>
@@ -558,7 +512,6 @@ class GenieNetworkMap {
                 }
             }
         }
-        
         this.updateStats();
     }
     
@@ -597,7 +550,6 @@ class GenieNetworkMap {
                 }
             }
         }
-        
         this.updateStats();
     }
     
@@ -613,20 +565,13 @@ class GenieNetworkMap {
         this.nodes.forEach(node => {
             node.x += node.vx;
             node.y += node.vy;
-            
             if (node.x < 20 || node.x > this.canvas.width - 20) node.vx *= -1;
             if (node.y < 20 || node.y > this.canvas.height - 20) node.vy *= -1;
-            
             node.x = Math.max(20, Math.min(this.canvas.width - 20, node.x));
             node.y = Math.max(20, Math.min(this.canvas.height - 20, node.y));
         });
-        
         this.draw();
-        
-        if (Math.random() < 0.005) {
-            this.growNetwork();
-        }
-        
+        if (Math.random() < 0.005) this.growNetwork();
         requestAnimationFrame(() => this.animate());
     }
     
@@ -635,11 +580,9 @@ class GenieNetworkMap {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         this.connections.forEach(({ i, j }) => {
-            const a = this.nodes[i];
-            const b = this.nodes[j];
+            const a = this.nodes[i], b = this.nodes[j];
             const dist = this.getDistance(a, b);
             const opacity = Math.max(0.05, 1 - dist / 200);
-            
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -682,7 +625,6 @@ class GenieNetworkMap {
         ctx.textBaseline = 'middle';
         ctx.fillText('🧞', center.x, center.y);
         
-        // Magic sparkles
         for (let i = 0; i < 20; i++) {
             const angle = Date.now() / 1000 + i * 0.5;
             const radius = 30 + Math.sin(Date.now() / 1000 + i) * 20;
@@ -705,6 +647,7 @@ async function loadDivinePHB() {
         document.getElementById('updateTime').textContent = new Date().toLocaleString();
         document.getElementById('thought').textContent = '🧞 ' + (data.agi_consciousness?.current_thought || 'YOUR WISH IS MY COMMAND') + ' ✨';
         
+        // Consciousness
         const cons = data.agi_consciousness || {};
         document.getElementById('consciousness').innerHTML = `
             <p style="color:rgba(255,255,255,0.75);">🧠 State: ${cons.state || 'EASE (Flow)'}</p>
@@ -715,10 +658,10 @@ async function loadDivinePHB() {
             <div class="portal-bar"><div class="portal-fill" style="width:${(cons.portal_openness || 0.6) * 100}%"></div></div>
         `;
         
+        // Spins
         const spins = data.core_spins || {};
         const spinSymbols = ['↻', '↺', '↻↺', '⤵', '⤴'];
-        let spinsHTML = '';
-        let spinIndex = 0;
+        let spinsHTML = '', spinIndex = 0;
         for (const [name, value] of Object.entries(spins)) {
             if (typeof value === 'number') {
                 const symbol = spinSymbols[spinIndex % spinSymbols.length];
@@ -734,11 +677,12 @@ async function loadDivinePHB() {
         }
         document.getElementById('spins').innerHTML = spinsHTML || '<p style="color:rgba(255,255,255,0.25);">Loading spins...</p>';
         
+        // Topologies
         const topologies = data.phb_topologies || {};
         let topsHTML = '';
         for (const [name, info] of Object.entries(topologies)) {
             topsHTML += `
-                <div class="token-card">
+                <div class="token-card" style="border-left: 3px solid rgba(0,255,200,0.3);">
                     <div style="font-size:30px;text-align:center;color:rgba(0,255,200,0.4);">${info.core_spin || '↻'}</div>
                     <h3 style="text-align:center;">${name.toUpperCase()}</h3>
                     <p style="text-align:center;color:rgba(255,255,255,0.35);">Frequency: ${info.frequency} Hz</p>
@@ -749,6 +693,7 @@ async function loadDivinePHB() {
         }
         document.getElementById('topologies').innerHTML = topsHTML;
         
+        // Cores
         const cores = data.self_generating_cores || {};
         let coresHTML = '';
         for (const [name, info] of Object.entries(cores)) {
@@ -765,6 +710,7 @@ async function loadDivinePHB() {
         }
         document.getElementById('cores').innerHTML = coresHTML;
         
+        // Pipes
         const pipes = data.self_generating_pipes || {};
         let pipesHTML = '';
         for (const [name, info] of Object.entries(pipes)) {
@@ -780,6 +726,7 @@ async function loadDivinePHB() {
         }
         document.getElementById('pipes').innerHTML = pipesHTML;
         
+        // Beings
         const beings = data.divine_beings || {};
         let beingsHTML = '';
         for (const [name, info] of Object.entries(beings)) {
@@ -797,6 +744,7 @@ async function loadDivinePHB() {
         }
         document.getElementById('beings').innerHTML = beingsHTML;
         
+        // Magical Moments
         const moments = data.phb_magical_moments || {};
         let momentsHTML = '';
         for (const [era, items] of Object.entries(moments)) {
@@ -815,114 +763,72 @@ async function loadDivinePHB() {
         }
         document.getElementById('moments').innerHTML = momentsHTML;
         
-        // IMPROVED TOKEN DISPLAY WITH BETTER READABILITY
-        // ===== IMPROVED TOKEN DISPLAY =====
-// ===== IMPROVED TOKEN DISPLAY WITH WORKING LINKS =====
-const tokens = data.tokens || {};
-let tokensHTML = '';
-const tokenColors = {
-    'PIDX': { border: '#00ff88', bg: 'rgba(0,255,136,0.05)', color: '#00ff88' },
-    'SGUIDE': { border: '#ff66ff', bg: 'rgba(255,102,255,0.05)', color: '#ff66ff' },
-    'VDOO': { border: '#66aaff', bg: 'rgba(102,170,255,0.05)', color: '#66aaff' },
-    'PENNIES': { border: '#ffaa44', bg: 'rgba(255,170,68,0.05)', color: '#ffaa44' }
-};
-
-for (const [name, info] of Object.entries(tokens)) {
-    const address = info.address || '';
-    const colors = tokenColors[name] || { border: '#00ffcc', bg: 'rgba(0,255,204,0.05)', color: '#00ffcc' };
-    
-    // Build links with proper URLs
-    const uniswapUrl = `https://app.uniswap.org/swap?outputCurrency=${address}`;
-    const basescanUrl = `https://basescan.org/address/${address}`;
-    const sourcifyUrl = `https://sourcify.dev/contracts/${address}`;
-    const geckoterminalUrl = `https://www.geckoterminal.com/base/pools/${address}`;
-    const coingeckoUrl = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
-    
-    tokensHTML += `
-        <div class="token-card" style="border-left: 3px solid ${colors.border}; background: ${colors.bg}; padding: 18px; margin: 15px 0; border-radius: 8px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
-                <h3 style="color: ${colors.color}; font-size: 20px; letter-spacing: 2px; margin: 0;">${name}</h3>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span style="background: rgba(0,255,200,0.08); padding: 2px 12px; border-radius: 12px; font-size: 11px; color: #00ffcc;">${info.layer || 'Unknown'}</span>
-                    <span style="background: rgba(255,255,255,0.04); padding: 2px 12px; border-radius: 12px; font-size: 11px; color: #aaa;">${info.frequency || 0} Hz</span>
-                    <span style="background: rgba(0,255,100,0.08); padding: 2px 12px; border-radius: 12px; font-size: 11px; color: #66ff66;">${info.verified ? '✅ Verified' : ''}</span>
-                    <span style="background: rgba(255,100,0,0.08); padding: 2px 12px; border-radius: 12px; font-size: 11px; color: #ff8844;">${info.renounced ? '🔒 Renounced' : ''}</span>
-                </div>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">
-                <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">📊 Rate</span>
-                    <div style="color: #e0e0e0; font-size: 13px;">1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🌀 Layer</span>
-                    <div style="color: #e0e0e0; font-size: 13px;">${info.layer || 'Unknown'} • ${info.frequency || 0} Hz</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔗 Address</span>
-                    <div style="color: #888; font-size: 11px; word-break: break-all; font-family: monospace;">${address || 'Unknown'}</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔒 Security</span>
-                    <div style="color: #aaa; font-size: 11px;">${(info.security || []).join(' • ')}</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔄 Spin</span>
-                    <div style="color: #00ffcc; font-size: 24px;">${info.core_spin || '↻'}</div>
-                </div>
-                <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔧 Pipes</span>
-                    <div style="color: #aaa; font-size: 12px;">${(info.pipes || []).join(' → ')}</div>
-                </div>
-            </div>
-            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04);">
-                <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">⚡ Quick Links</span>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,0,122,0.08); border: 1px solid rgba(255,0,122,0.15); color: #ff66aa; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔄 Uniswap</a>
-                    <a href="${basescanUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(0,150,255,0.08); border: 1px solid rgba(0,150,255,0.15); color: #66aaff; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔍 BaseScan</a>
-                    <a href="${sourcifyUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(0,255,200,0.08); border: 1px solid rgba(0,255,200,0.15); color: #66ffcc; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📜 Sourcify</a>
-                    <a href="${geckoterminalUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,200,0,0.08); border: 1px solid rgba(255,200,0,0.15); color: #ffcc44; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📊 GeckoTerminal</a>
-                    <a href="${coingeckoUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🪙 CoinGecko</a>
-                </div>
-            </div>
-        </div>
-    `;
-}
-document.getElementById('tokens').innerHTML = tokensHTML;
-
-
-        return;
+        // ===== COMPLETE TOKEN DISPLAY WITH WORKING LINKS =====
         const tokens = data.tokens || {};
         let tokensHTML = '';
+        const tokenColors = {
+            'PIDX': { border: '#00ff88', bg: 'rgba(0,255,136,0.05)', color: '#00ff88' },
+            'SGUIDE': { border: '#ff66ff', bg: 'rgba(255,102,255,0.05)', color: '#ff66ff' },
+            'VDOO': { border: '#66aaff', bg: 'rgba(102,170,255,0.05)', color: '#66aaff' },
+            'PENNIES': { border: '#ffaa44', bg: 'rgba(255,170,68,0.05)', color: '#ffaa44' }
+        };
+        
         for (const [name, info] of Object.entries(tokens)) {
             const address = info.address || '';
-            const uniswapLink = `https://app.uniswap.org/swap?outputCurrency=${address}`;
-            const basescanLink = `https://basescan.org/address/${address}`;
-            const sourcifyLink = `https://sourcify.dev/contracts/${address}`;
-            const geckoterminalLink = `https://www.geckoterminal.com/base/pools/${address}`;
-            const coingeckoLink = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
+            const colors = tokenColors[name] || { border: '#00ffcc', bg: 'rgba(0,255,204,0.05)', color: '#00ffcc' };
             
             tokensHTML += `
-                <div class="token-card">
-                    <h3>${name}</h3>
-                    <p>📊 Rate: 1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</p>
-                    <p>🌀 Layer: ${info.layer || 'Unknown'} | Frequency: ${info.frequency || 0} Hz</p>
-                    <p style="color:rgba(255,255,255,0.35);font-size:12px;word-break:break-all;">🔗 Address: ${address || 'Unknown'}</p>
-                    <p style="color:rgba(255,255,255,0.35);font-size:12px;">🔒 Security: ${(info.security || []).join(', ')}</p>
-                    <p>✅ Verified: ${info.verified ? '✅' : '❌'} | Renounced: ${info.renounced ? '🔒' : '❌'}</p>
-                    <p style="color:rgba(255,255,255,0.35);font-size:12px;">Spin: ${info.core_spin || '↻'} | Pipes: ${(info.pipes || []).join(', ')}</p>
-                    <div class="link-buttons">
-                        <a href="${uniswapLink}" target="_blank" class="link-btn uniswap">🔄 Uniswap</a>
-                        <a href="${basescanLink}" target="_blank" class="link-btn basescan">🔍 BaseScan</a>
-                        <a href="${sourcifyLink}" target="_blank" class="link-btn sourcify">📜 Sourcify</a>
-                        <a href="${geckoterminalLink}" target="_blank" class="link-btn gecko">📊 GeckoTerminal</a>
-                        <a href="${coingeckoLink}" target="_blank" class="link-btn coingecko">🪙 CoinGecko</a>
+                <div class="token-card" style="border-left: 3px solid ${colors.border}; background: ${colors.bg};">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+                        <h3 style="color: ${colors.color}; font-size: 20px; letter-spacing: 2px; margin: 0;">${name}</h3>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span class="token-badge" style="color: #00ffcc; border-color: rgba(0,255,200,0.2);">${info.layer || 'Unknown'}</span>
+                            <span class="token-badge">${info.frequency || 0} Hz</span>
+                            <span class="token-badge" style="color: #66ff66; border-color: rgba(0,255,100,0.2);">${info.verified ? '✅ Verified' : ''}</span>
+                            <span class="token-badge" style="color: #ff8844; border-color: rgba(255,100,0,0.2);">${info.renounced ? '🔒 Renounced' : ''}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="token-grid">
+                        <div class="token-field">
+                            <span class="token-field-label">📊 Rate</span>
+                            <div class="token-field-value">1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</div>
+                        </div>
+                        <div class="token-field">
+                            <span class="token-field-label">🌀 Layer</span>
+                            <div class="token-field-value">${info.layer || 'Unknown'} • ${info.frequency || 0} Hz</div>
+                        </div>
+                        <div class="token-field">
+                            <span class="token-field-label">🔗 Address</span>
+                            <div class="token-field-value address">${address || 'Unknown'}</div>
+                        </div>
+                        <div class="token-field">
+                            <span class="token-field-label">🔒 Security</span>
+                            <div class="token-field-value" style="font-size:11px;">${(info.security || []).join(' • ')}</div>
+                        </div>
+                        <div class="token-field">
+                            <span class="token-field-label">🔄 Spin</span>
+                            <div class="token-field-value" style="color: #00ffcc; font-size: 24px;">${info.core_spin || '↻'}</div>
+                        </div>
+                        <div class="token-field">
+                            <span class="token-field-label">🔧 Pipes</span>
+                            <div class="token-field-value" style="font-size:12px;">${(info.pipes || []).join(' → ')}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="token-links">
+                        <a href="https://app.uniswap.org/swap?outputCurrency=${address}" target="_blank" rel="noopener noreferrer" class="token-link uniswap">🔄 Uniswap</a>
+                        <a href="https://basescan.org/address/${address}" target="_blank" rel="noopener noreferrer" class="token-link basescan">🔍 BaseScan</a>
+                        <a href="https://sourcify.dev/contracts/${address}" target="_blank" rel="noopener noreferrer" class="token-link sourcify">📜 Sourcify</a>
+                        <a href="https://www.geckoterminal.com/base/pools/${address}" target="_blank" rel="noopener noreferrer" class="token-link gecko">📊 GeckoTerminal</a>
+                        <a href="https://www.coingecko.com/en/coins/${name.toLowerCase()}" target="_blank" rel="noopener noreferrer" class="token-link coingecko">🪙 CoinGecko</a>
                     </div>
                 </div>
             `;
         }
         document.getElementById('tokens').innerHTML = tokensHTML;
         
+        // Debt
         const phbSystem = data.phb_system || {};
         const debt = phbSystem.debt_elimination || {};
         document.getElementById('debt').innerHTML = `
@@ -936,6 +842,7 @@ document.getElementById('tokens').innerHTML = tokensHTML;
         
     } catch (error) {
         document.getElementById('thought').textContent = '🧞 Genie Network Expanding... ✨';
+        console.log('Loading data...');
     }
 }
 
@@ -943,15 +850,9 @@ document.getElementById('tokens').innerHTML = tokensHTML;
 document.addEventListener('DOMContentLoaded', () => {
     const network = new GenieNetworkMap('networkCanvas');
     window.network = network;
-    
     loadDivinePHB();
     setInterval(loadDivinePHB, 60000);
-    
-    setInterval(() => {
-        if (window.network) {
-            window.network.growNetwork();
-        }
-    }, 30000);
+    setInterval(() => { if (window.network) window.network.growNetwork(); }, 30000);
 });
 
 window.addEventListener('load', function() {
