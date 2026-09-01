@@ -817,6 +817,7 @@ async function loadDivinePHB() {
         
         // IMPROVED TOKEN DISPLAY WITH BETTER READABILITY
         // ===== IMPROVED TOKEN DISPLAY =====
+// ===== IMPROVED TOKEN DISPLAY WITH WORKING LINKS =====
 const tokens = data.tokens || {};
 let tokensHTML = '';
 const tokenColors = {
@@ -825,9 +826,18 @@ const tokenColors = {
     'VDOO': { border: '#66aaff', bg: 'rgba(102,170,255,0.05)', color: '#66aaff' },
     'PENNIES': { border: '#ffaa44', bg: 'rgba(255,170,68,0.05)', color: '#ffaa44' }
 };
+
 for (const [name, info] of Object.entries(tokens)) {
     const address = info.address || '';
     const colors = tokenColors[name] || { border: '#00ffcc', bg: 'rgba(0,255,204,0.05)', color: '#00ffcc' };
+    
+    // Build links with proper URLs
+    const uniswapUrl = `https://app.uniswap.org/swap?outputCurrency=${address}`;
+    const basescanUrl = `https://basescan.org/address/${address}`;
+    const sourcifyUrl = `https://sourcify.dev/contracts/${address}`;
+    const geckoterminalUrl = `https://www.geckoterminal.com/base/pools/${address}`;
+    const coingeckoUrl = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
+    
     tokensHTML += `
         <div class="token-card" style="border-left: 3px solid ${colors.border}; background: ${colors.bg}; padding: 18px; margin: 15px 0; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
@@ -868,17 +878,18 @@ for (const [name, info] of Object.entries(tokens)) {
             <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04);">
                 <span style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">⚡ Quick Links</span>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <a href="https://app.uniswap.org/swap?outputCurrency=${address}" target="_blank" class="link-btn" style="background: rgba(255,0,122,0.08); border: 1px solid rgba(255,0,122,0.15); color: #ff66aa; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace;">🔄 Uniswap</a>
-                    <a href="https://basescan.org/address/${address}" target="_blank" class="link-btn" style="background: rgba(0,150,255,0.08); border: 1px solid rgba(0,150,255,0.15); color: #66aaff; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace;">🔍 BaseScan</a>
-                    <a href="https://sourcify.dev/contracts/${address}" target="_blank" class="link-btn" style="background: rgba(0,255,200,0.08); border: 1px solid rgba(0,255,200,0.15); color: #66ffcc; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace;">📜 Sourcify</a>
-                    <a href="https://www.geckoterminal.com/base/pools/${address}" target="_blank" class="link-btn" style="background: rgba(255,200,0,0.08); border: 1px solid rgba(255,200,0,0.15); color: #ffcc44; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace;">📊 GeckoTerminal</a>
-                    <a href="https://www.coingecko.com/en/coins/${name.toLowerCase()}" target="_blank" class="link-btn" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace;">🪙 CoinGecko</a>
+                    <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,0,122,0.08); border: 1px solid rgba(255,0,122,0.15); color: #ff66aa; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔄 Uniswap</a>
+                    <a href="${basescanUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(0,150,255,0.08); border: 1px solid rgba(0,150,255,0.15); color: #66aaff; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔍 BaseScan</a>
+                    <a href="${sourcifyUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(0,255,200,0.08); border: 1px solid rgba(0,255,200,0.15); color: #66ffcc; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📜 Sourcify</a>
+                    <a href="${geckoterminalUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,200,0,0.08); border: 1px solid rgba(255,200,0,0.15); color: #ffcc44; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📊 GeckoTerminal</a>
+                    <a href="${coingeckoUrl}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; padding: 4px 12px; border-radius: 4px; font-size: 10px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🪙 CoinGecko</a>
                 </div>
             </div>
         </div>
     `;
 }
 document.getElementById('tokens').innerHTML = tokensHTML;
+
 
         return;
         const tokens = data.tokens || {};
