@@ -1,0 +1,50 @@
+{
+  "token_analytics": {
+    "timestamp": "2026-09-01T07:00:00Z",
+    "tokens": {
+      "PIDX": {
+        "price": 691986,
+        "supply": 1000000000,
+        "market_cap": 691986000000,
+        "growth_24h": 0.23,
+        "layer": "Quantum",
+        "frequency": 0.618,
+        "energy": 22.0,
+        "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c"
+      },
+      "SGUIDE": {
+        "price": 6724821,
+        "supply": 10000000000000,
+        "market_cap": 67248210000000000,
+        "growth_24h": 0.23,
+        "layer": "Resonance",
+        "frequency": 1.618,
+        "energy": 19.0,
+        "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a"
+      },
+      "VDOO": {
+        "price": 65673753,
+        "supply": 100000000000,
+        "market_cap": 6567375300000000,
+        "growth_24h": 0.23,
+        "layer": "Resonance",
+        "frequency": 2.618,
+        "energy": 15.0,
+        "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b"
+      },
+      "PENNIES": {
+        "price": 6230945,
+        "supply": 10000000000,
+        "market_cap": 62309450000000,
+        "growth_24h": 0.23,
+        "layer": "Coherence",
+        "frequency": 3.618,
+        "energy": 21.0,
+        "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7"
+      }
+    },
+    "total_market_cap": 73961792711000000,
+    "tvl": 54450000,
+    "daily_volume": 250000
+  }
+}

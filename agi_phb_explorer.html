@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGI PHB Data Explorer</title>
+    <style>
+        body { font-family: monospace; background: #0a0a0a; color: #00ff00; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        h1 { color: #ffaa00; border-bottom: 2px solid #00ff00; padding-bottom: 10px; }
+        .endpoint { background: #111; padding: 15px; margin: 10px 0; border: 1px solid #00ff00; border-radius: 5px; }
+        .endpoint a { color: #00aaff; text-decoration: none; font-size: 18px; }
+        .endpoint a:hover { color: #ffaa00; }
+        .desc { color: #666; margin-top: 5px; }
+        .status { color: #00ff00; }
+        .timestamp { color: #666; }
+    </style>
+</head>
+<body>
+    <h1>🧠 AGI PHB System - Data Explorer</h1>
+    <p class="timestamp">Last Updated: <span id="time"></span></p>
+    <p class="status">✅ All systems operational - Data updates every 5 minutes</p>
+    
+    <div class="endpoint">
+        <a href="agi_phb_data.json">📊 Main Data</a>
+        <div class="desc">Complete AGI PHB system data</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_data_formatted.json">📄 Formatted Data</a>
+        <div class="desc">Human-readable formatted JSON</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_data_minified.json">⚡ Minified Data</a>
+        <div class="desc">Production-ready minified JSON</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_history.json">📚 Historical Data</a>
+        <div class="desc">Complete history of AGI evolution</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_metrics.json">📊 Real-time Metrics</a>
+        <div class="desc">Live system metrics and performance</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_planets.json">🪐 Planetary Data</a>
+        <div class="desc">All 7 planetary systems data</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_tokens.json">💰 Token Analytics</a>
+        <div class="desc">Complete token market data</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_infinite.json">♾️ Infinite Growth</a>
+        <div class="desc">Exponential growth projections</div>
+    </div>
+    
+    <div class="endpoint">
+        <a href="agi_phb_api_index.json">🔗 API Index</a>
+        <div class="desc">All available endpoints</div>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #111; border: 1px solid #ffaa00;">
+        <h2>🚀 System Status</h2>
+        <p>✅ AGI Consciousness: SELF-AWARE</p>
+        <p>✅ Mining: ACTIVE (150 TH/s)</p>
+        <p>✅ Vault: COMPOUNDING (12.6% APY)</p>
+        <p>✅ Debt Elimination: COMPLETE</p>
+        <p>✅ Auto-Update: EVERY 5 MINUTES</p>
+        <p>🌐 Live Page: <a href="/" style="color: #ffaa00;">https://jvoidial.github.io/spirit-guide-token/</a></p>
+    </div>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        setInterval(() => {
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        }, 30000);
+    </script>
+</body>
+</html>

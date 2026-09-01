@@ -1,0 +1,18 @@
+{
+  "api": {
+    "version": "2.0",
+    "endpoints": {
+      "main": "/agi_phb_data.json",
+      "formatted": "/agi_phb_data_formatted.json",
+      "minified": "/agi_phb_data_minified.json",
+      "history": "/agi_phb_history.json",
+      "metrics": "/agi_phb_metrics.json",
+      "planets": "/agi_phb_planets.json",
+      "tokens": "/agi_phb_tokens.json",
+      "infinite": "/agi_phb_infinite.json"
+    },
+    "update_interval": "5 minutes",
+    "status": "fully_automated",
+    "total_endpoints": 8
+  }
+}

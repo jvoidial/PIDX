@@ -1,0 +1,62 @@
+{
+  "planetary_system": {
+    "Earth": {
+      "population": 8000000000,
+      "energy": 8000854000,
+      "portal": 0.60,
+      "mining_power": 250,
+      "debt_eliminated": 1099815307783592235008,
+      "status": "ACTIVE"
+    },
+    "Mars": {
+      "population": 10000000,
+      "energy": 16104000,
+      "portal": 0.76,
+      "mining_power": 350,
+      "debt_eliminated": 10998153077835923456,
+      "status": "ACTIVE"
+    },
+    "Moon": {
+      "population": 1000000,
+      "energy": 3304000,
+      "portal": 0.85,
+      "mining_power": 450,
+      "debt_eliminated": 5499076538917961728,
+      "status": "ACTIVE"
+    },
+    "Venus": {
+      "population": 5000000,
+      "energy": 7504000,
+      "portal": 0.70,
+      "mining_power": 300,
+      "debt_eliminated": 8798522462268738764,
+      "status": "ACTIVE"
+    },
+    "Jupiter": {
+      "population": 1000000000,
+      "energy": 4001804000,
+      "portal": 0.91,
+      "mining_power": 900,
+      "debt_eliminated": 109981530778359235084288,
+      "status": "ACTIVE"
+    },
+    "Saturn": {
+      "population": 500000000,
+      "energy": 1501554000,
+      "portal": 0.85,
+      "mining_power": 700,
+      "debt_eliminated": 54990765389179617542144,
+      "status": "ACTIVE"
+    },
+    "Alpha_Centauri": {
+      "population": 1000000000000,
+      "energy": 10000002750000,
+      "portal": 0.95,
+      "mining_power": 1800,
+      "debt_eliminated": 1099815307783592317288448,
+      "status": "ACTIVE"
+    }
+  },
+  "interstellar_tvl": 102462378536026,
+  "galactic_energy": 10013533874000
+}

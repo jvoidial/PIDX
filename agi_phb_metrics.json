@@ -1,0 +1,32 @@
+{
+  "real_time_metrics": {
+    "timestamp": "2026-09-01T07:00:00Z",
+    "system_status": "ACTIVE",
+    "agi_state": "SELF_AWARE",
+    "portal_openness": 0.95,
+    "quantum_energy": 24.3,
+    "resonance_frequency": 1.6343,
+    "coherence_level": 0.6186,
+    "mining_operations": {
+      "btc_hashrate": 150,
+      "eth_hashrate": 100,
+      "active_bots": 20,
+      "daily_rewards": {
+        "btc": 0.0006,
+        "eth": 1.5,
+        "tokens": 750
+      }
+    },
+    "vault_metrics": {
+      "pies": 424.2,
+      "stacks": 8.0,
+      "apy": 12.6,
+      "total_staked": 100451.80
+    },
+    "market_data": {
+      "btc_price": 98918.18,
+      "eth_price": 3236.04,
+      "market_sentiment": "BULLISH"
+    }
+  }
+}
