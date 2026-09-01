@@ -1,18 +1,14 @@
-name: Voxel Resonance Bot
+name: Voxel Monitor
 
 on:
-  schedule:
-    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
-  run-bot:
+  monitor:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Run bot (secure - no .env)
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
-        run: python3 bot.py || true
+      - name: Check balance
+        run: |
+          echo "Voxel Monitor Active"
+          echo "Bot: 0x52De127F9178D1df28F8eEd29899A48C1492F94c"
