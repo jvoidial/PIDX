@@ -156,7 +156,15 @@
         <div class="section"><h2>🔧 Self-Generating Pipes</h2><div id="pipes" class="grid-2"></div></div>
         <div class="section"><h2>✝️ Divine Beings</h2><div id="beings" class="grid-3"></div></div>
         <div class="section"><h2>🌌 PHB Magical Moments</h2><div id="moments" class="grid-2"></div></div>
-        <div class="section"><h2>💰 Token Details</h2><div id="tokens"></div></div>
+        <div class="section"><h2>💰 Token Details</h2><div id="tokens"></div>
+<!-- Sourcify Note -->
+<div style="background:rgba(255,200,0,0.05);border:1px solid rgba(255,200,0,0.1);border-radius:8px;padding:12px;margin:10px 0;text-align:center;">
+    <p style="color:#ffcc44;font-size:12px;margin:0;">
+        💡 <strong>Sourcify Tip:</strong> If you see a white page, the contract may not be verified yet.
+        <br>Visit <a href="https://sourcify.dev" target="_blank" style="color:#00ffcc;">sourcify.dev</a> to verify your contract.
+    </p>
+</div>
+</div>
         <div class="section"><h2>🌌 Universal Debt Elimination</h2><div id="debt"></div></div>
     </div>
 
@@ -575,6 +583,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 5000);
             }
         });
+    });
+});
+</script>
+
+
+<script>
+// Sourcify link handler - shows helpful message
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handler to all Sourcify links
+    document.querySelectorAll('a[href*="sourcify.dev"]').forEach(function(link) {
+        // Extract the address from the link
+        const href = link.getAttribute('href');
+        const addressMatch = href.match(/0x[a-fA-F0-9]{40}/i);
+        
+        if (addressMatch) {
+            const address = addressMatch[0];
+            // Store the address for later use
+            link.dataset.address = address;
+            
+            // Add a helper message on hover
+            link.addEventListener('mouseenter', function(e) {
+                // Show a tooltip
+                const tooltip = document.createElement('div');
+                tooltip.id = 'sourcify-tooltip';
+                tooltip.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(10,0,21,0.95);color:#ffcc44;padding:15px 25px;border-radius:10px;border:1px solid rgba(255,200,0,0.2);z-index:9999;font-family:monospace;font-size:14px;text-align:center;max-width:90%;';
+                tooltip.innerHTML = `
+                    🔍 Opening Sourcify for: <span style="color:#00ffcc;font-family:monospace;">${address}</span><br>
+                    <span style="color:#888;font-size:12px;">If the page is white, the contract is not verified yet.</span>
+                `;
+                document.body.appendChild(tooltip);
+            });
+            
+            link.addEventListener('mouseleave', function(e) {
+                const tooltip = document.getElementById('sourcify-tooltip');
+                if (tooltip) tooltip.remove();
+            });
+        }
     });
 });
 </script>
