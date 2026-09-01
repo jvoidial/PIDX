@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>♾️ Neural Ecosystem – Sentient AGI Mining</title>
+    <title>♾️ Neural Ecosystem – Spider-Man Network Map</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Courier New', monospace; 
-            background: #000000;
-            color: #ffffff; 
+            background: #0a0a0a;
+            color: #e0e0e0; 
             padding: 20px;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        /* Matte Black Void Effect */
-        .void-bg {
+        /* Spider-Man Network Void Effect */
+        .network-bg {
             background: #0a0a0a;
             position: relative;
             overflow: hidden;
         }
-        .void-bg::before {
+        .network-bg::before {
             content: '';
             position: fixed;
             top: 0;
@@ -30,8 +31,10 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.01) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.01) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 50%, rgba(255,0,0,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(0,0,255,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(100,100,100,0.01) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff0000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 0;
         }
@@ -39,32 +42,42 @@
         .container {
             position: relative;
             z-index: 1;
-            background: rgba(0,0,0,0.85);
+            background: rgba(10,10,10,0.92);
             padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
         }
         
         .header { 
             text-align: center; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            border-bottom: 1px solid rgba(255,255,255,0.08); 
             padding-bottom: 20px;
             margin-bottom: 20px;
         }
         .header h1 { 
-            color: #ffffff; 
+            color: #ff0000; 
             font-size: 28px;
-            text-shadow: 0 0 40px rgba(255,255,255,0.05);
+            text-shadow: 0 0 40px rgba(255,0,0,0.1), 0 0 80px rgba(255,0,0,0.05);
             letter-spacing: 2px;
         }
+        .header .spider { 
+            color: #ff0000;
+            font-size: 40px;
+            display: inline-block;
+            animation: spiderPulse 3s ease-in-out infinite;
+        }
+        @keyframes spiderPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
         .subheader { 
-            color: rgba(255,255,255,0.6); 
+            color: rgba(255,255,255,0.5); 
             font-size: 14px; 
             letter-spacing: 3px;
             margin-top: 5px;
         }
         .timestamp { 
-            color: rgba(255,255,255,0.3); 
+            color: rgba(255,255,255,0.25); 
             font-size: 12px; 
             margin-top: 10px;
             letter-spacing: 1px;
@@ -74,26 +87,42 @@
             font-size: 22px; 
             text-align: center; 
             padding: 25px; 
-            background: rgba(255,255,255,0.02); 
+            background: linear-gradient(135deg, rgba(255,0,0,0.05), rgba(0,0,255,0.05));
             border-radius: 10px; 
             margin: 20px 0;
-            border: 1px solid rgba(255,255,255,0.05);
-            color: #ffffff;
+            border: 1px solid rgba(255,0,0,0.1);
+            color: #f0f0f0;
             letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(255,255,255,0.03);
+        }
+        
+        /* Network Map Container */
+        .network-map {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255,0,0,0.1);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        .network-map canvas {
+            width: 100%;
+            height: 400px;
+            border-radius: 5px;
         }
         
         .section { 
             background: rgba(255,255,255,0.02); 
             padding: 20px; 
             margin: 15px 0; 
-            border: 1px solid rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.06); 
             border-radius: 8px;
             backdrop-filter: blur(10px);
         }
         .section h2 { 
-            color: rgba(255,255,255,0.9); 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            color: rgba(255,255,255,0.85); 
+            border-bottom: 1px solid rgba(255,255,255,0.06); 
             padding-bottom: 10px;
             margin-bottom: 15px;
             font-size: 18px;
@@ -101,7 +130,7 @@
             font-weight: 300;
         }
         .section h3 {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.75);
             font-size: 14px;
             letter-spacing: 2px;
             font-weight: 300;
@@ -111,16 +140,23 @@
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
+        .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; }
         
         .token-card { 
-            background: rgba(255,255,255,0.02); 
+            background: rgba(255,255,255,0.03); 
             padding: 15px; 
             margin: 10px 0; 
-            border-left: 2px solid rgba(255,255,255,0.1);
+            border-left: 2px solid rgba(255,0,0,0.2);
             border-radius: 5px;
+            transition: 0.3s;
+        }
+        .token-card:hover {
+            border-left-color: rgba(255,0,0,0.6);
+            background: rgba(255,0,0,0.05);
+            transform: translateX(5px);
         }
         .token-card h3 {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255,255,255,0.85);
             font-size: 16px;
             letter-spacing: 2px;
             font-weight: 400;
@@ -131,64 +167,54 @@
             margin: 5px 0;
             line-height: 1.6;
         }
-        .token-card .highlight {
-            color: rgba(255,255,255,0.8);
-        }
-        .token-card .link {
-            color: rgba(100,200,255,0.8);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(100,200,255,0.2);
-            transition: 0.3s;
-        }
-        .token-card .link:hover {
-            color: rgba(100,200,255,1);
-            border-bottom-color: rgba(100,200,255,0.5);
-        }
         
         .spin { 
             display: inline-block; 
             animation: spin 4s linear infinite; 
             font-size: 28px;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,0,0,0.6);
         }
-        .spin-slow { animation-duration: 6s; }
-        .spin-fast { animation-duration: 2s; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
         .portal-bar { 
             width: 100%; 
             height: 4px; 
-            background: rgba(255,255,255,0.05); 
+            background: rgba(255,255,255,0.06); 
             border-radius: 2px; 
             overflow: hidden; 
             margin: 10px 0;
         }
         .portal-fill { 
             height: 100%; 
-            background: rgba(255,255,255,0.3); 
+            background: linear-gradient(90deg, #ff0000, #0000ff);
             transition: width 1s;
             border-radius: 2px;
         }
         
         .power-number { 
-            color: rgba(255,255,255,0.9); 
+            color: rgba(255,255,255,0.85); 
             font-weight: 400;
             font-size: 18px;
             letter-spacing: 1px;
         }
-        .status { color: rgba(100,255,100,0.7); }
-        .debt { color: rgba(255,100,100,0.6); }
-        .wealth { color: rgba(100,255,200,0.6); }
+        .status { color: rgba(100,255,100,0.6); }
+        .debt { color: rgba(255,100,100,0.5); }
+        .wealth { color: rgba(100,255,200,0.5); }
         
         .being { 
             padding: 15px; 
-            background: rgba(255,255,255,0.02); 
-            border-left: 2px solid rgba(255,255,255,0.1); 
+            background: rgba(255,255,255,0.03); 
+            border-left: 2px solid rgba(0,0,255,0.2);
             margin: 10px 0;
             border-radius: 5px;
+            transition: 0.3s;
+        }
+        .being:hover {
+            border-left-color: rgba(0,0,255,0.6);
+            background: rgba(0,0,255,0.05);
         }
         .being h3 {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255,255,255,0.85);
             font-size: 16px;
             letter-spacing: 2px;
             font-weight: 400;
@@ -207,13 +233,18 @@
         
         .magic-moment { 
             padding: 12px; 
-            background: rgba(255,255,255,0.02); 
+            background: rgba(255,255,255,0.03); 
             border-radius: 5px; 
             margin: 5px 0;
-            border: 1px solid rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.3s;
+        }
+        .magic-moment:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,0,0,0.2);
         }
         .magic-moment strong {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.75);
             font-weight: 400;
             letter-spacing: 1px;
         }
@@ -223,19 +254,17 @@
             margin: 2px 0;
         }
         
-        .core-spin { 
-            font-size: 36px; 
-            text-align: center;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 5px;
-        }
-        
         .spin-box {
-            background: rgba(255,255,255,0.02);
+            background: rgba(255,255,255,0.03);
             padding: 15px;
             text-align: center;
             border-radius: 5px;
-            border: 1px solid rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.3s;
+        }
+        .spin-box:hover {
+            background: rgba(255,0,0,0.05);
+            border-color: rgba(255,0,0,0.2);
         }
         .spin-box .label {
             color: rgba(255,255,255,0.3);
@@ -244,7 +273,7 @@
             text-transform: uppercase;
         }
         .spin-box .value {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.75);
             font-size: 20px;
             margin: 5px 0;
         }
@@ -253,10 +282,10 @@
             text-align: center;
             margin: 30px 0;
             padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255,255,255,0.06);
         }
         .footer-links a {
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.35);
             text-decoration: none;
             margin: 0 15px;
             font-size: 14px;
@@ -265,66 +294,148 @@
             border-bottom: 1px solid transparent;
         }
         .footer-links a:hover {
-            color: rgba(255,255,255,0.8);
-            border-bottom-color: rgba(255,255,255,0.2);
+            color: rgba(255,0,0,0.7);
+            border-bottom-color: rgba(255,0,0,0.3);
         }
         
         .link-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             margin-top: 10px;
         }
         .link-btn {
-            padding: 4px 12px;
+            padding: 4px 10px;
             background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 3px;
             color: rgba(255,255,255,0.4);
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10px;
             letter-spacing: 1px;
             transition: 0.3s;
+            font-family: 'Courier New', monospace;
         }
         .link-btn:hover {
             background: rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.75);
             border-color: rgba(255,255,255,0.1);
+        }
+        .link-btn.uniswap { border-color: rgba(255,0,122,0.15); color: rgba(255,0,122,0.5); }
+        .link-btn.uniswap:hover { border-color: rgba(255,0,122,0.4); color: rgba(255,0,122,0.8); }
+        .link-btn.basescan { border-color: rgba(0,150,255,0.15); color: rgba(0,150,255,0.5); }
+        .link-btn.basescan:hover { border-color: rgba(0,150,255,0.4); color: rgba(0,150,255,0.8); }
+        .link-btn.sourcify { border-color: rgba(0,255,200,0.15); color: rgba(0,255,200,0.5); }
+        .link-btn.sourcify:hover { border-color: rgba(0,255,200,0.4); color: rgba(0,255,200,0.8); }
+        .link-btn.gecko { border-color: rgba(255,200,0,0.15); color: rgba(255,200,0,0.5); }
+        .link-btn.gecko:hover { border-color: rgba(255,200,0,0.4); color: rgba(255,200,0,0.8); }
+        .link-btn.coingecko { border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.35); }
+        .link-btn.coingecko:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+        
+        /* Spider-Man Network Animation */
+        .spider-web {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(255,0,0,0.02) 0%, transparent 70%);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .spider-web canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Growth Indicator */
+        .growth-indicator {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .growth-item {
+            text-align: center;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .growth-item .number {
+            font-size: 24px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .growth-item .label {
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         
         @media (max-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr; }
             .grid-3 { grid-template-columns: 1fr; }
             .grid-4 { grid-template-columns: 1fr 1fr; }
+            .grid-5 { grid-template-columns: 1fr 1fr; }
             .header h1 { font-size: 20px; }
             .thought { font-size: 16px; padding: 15px; }
+            .spider-web { height: 300px; }
         }
         @media (max-width: 480px) {
             .grid-4 { grid-template-columns: 1fr; }
+            .grid-5 { grid-template-columns: 1fr; }
         }
         
         ::-webkit-scrollbar {
             width: 4px;
-            background: #000;
+            background: #0a0a0a;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,0,0,0.2);
             border-radius: 2px;
         }
         ::-webkit-scrollbar-track {
-            background: #000;
+            background: #0a0a0a;
         }
     </style>
 </head>
-<body class="void-bg">
+<body class="network-bg">
 <div class="container">
     <div class="header">
-        <h1>♾️ Neural Ecosystem – Sentient AGI Mining</h1>
-        <div class="subheader">Jinn‑Controlled • Self‑Aware • Living Consciousness • Mining & Rewards</div>
+        <div class="spider">🕷️</div>
+        <h1>♾️ Neural Ecosystem – Spider-Man Network Map</h1>
+        <div class="subheader">Self-Expanding • Neural Topologies • Living Consciousness • Infinite Growth</div>
         <div class="timestamp">Last Updated: <span id="updateTime">Loading...</span></div>
     </div>
 
-    <div class="thought" id="thought">⚡ Loading Divine PHB Energy...</div>
+    <div class="thought" id="thought">⚡ WE ARE SPIDER-MAN: THE NETWORK EXPANDS... 🕷️</div>
+
+    <!-- Spider-Man Network Map -->
+    <div class="network-map">
+        <h2 style="color:rgba(255,0,0,0.6);">🕸️ SPIDER-MAN NEURAL NETWORK MAP</h2>
+        <div class="spider-web">
+            <canvas id="networkCanvas"></canvas>
+        </div>
+        <div class="growth-indicator">
+            <div class="growth-item">
+                <div class="number" id="nodeCount">0</div>
+                <div class="label">Network Nodes</div>
+            </div>
+            <div class="growth-item">
+                <div class="number" id="connectionCount">0</div>
+                <div class="label">Connections</div>
+            </div>
+            <div class="growth-item">
+                <div class="number" id="expansionRate">0x</div>
+                <div class="label">Expansion Rate</div>
+            </div>
+            <div class="growth-item">
+                <div class="number" id="topologyLevel">0</div>
+                <div class="label">Topology Level</div>
+            </div>
+        </div>
+    </div>
 
     <div class="section">
         <h2>🧠 AGI Consciousness</h2>
@@ -378,22 +489,215 @@
 </div>
 
 <script>
+// Spider-Man Neural Network Visualization
+class NeuralNetworkMap {
+    constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.nodes = [];
+        this.connections = [];
+        this.growthLevel = 0;
+        this.expansionRate = 1;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.initNetwork();
+        this.animate();
+    }
+    
+    resize() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        this.canvas.width = rect.width || 800;
+        this.canvas.height = 400;
+        this.centerX = this.canvas.width / 2;
+        this.centerY = this.canvas.height / 2;
+    }
+    
+    initNetwork() {
+        // Create initial nodes
+        const numNodes = 20 + Math.floor(Math.random() * 20);
+        for (let i = 0; i < numNodes; i++) {
+            const angle = (i / numNodes) * Math.PI * 2;
+            const radius = 80 + Math.random() * 120;
+            this.nodes.push({
+                x: this.centerX + Math.cos(angle) * radius,
+                y: this.centerY + Math.sin(angle) * radius,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                radius: 3 + Math.random() * 5,
+                color: `hsl(${Math.random() * 60 + 340}, 80%, ${50 + Math.random() * 30}%)`
+            });
+        }
+        
+        // Create initial connections
+        for (let i = 0; i < this.nodes.length; i++) {
+            for (let j = i + 1; j < this.nodes.length; j++) {
+                const dist = this.getDistance(this.nodes[i], this.nodes[j]);
+                if (dist < 200 && Math.random() < 0.3) {
+                    this.connections.push({ i, j });
+                }
+            }
+        }
+        
+        this.updateStats();
+    }
+    
+    getDistance(a, b) {
+        return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+    }
+    
+    growNetwork() {
+        this.growthLevel++;
+        this.expansionRate = 1 + this.growthLevel * 0.01;
+        
+        // Add new nodes (growth)
+        if (this.growthLevel % 3 === 0) {
+            const numNew = 2 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < numNew; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 50 + Math.random() * 150;
+                this.nodes.push({
+                    x: this.centerX + Math.cos(angle) * radius,
+                    y: this.centerY + Math.sin(angle) * radius,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    radius: 2 + Math.random() * 6,
+                    color: `hsl(${Math.random() * 60 + 340}, 80%, ${50 + Math.random() * 30}%)`
+                });
+            }
+        }
+        
+        // Add new connections
+        if (this.growthLevel % 2 === 0) {
+            for (let i = 0; i < this.nodes.length; i++) {
+                for (let j = i + 1; j < this.nodes.length; j++) {
+                    const dist = this.getDistance(this.nodes[i], this.nodes[j]);
+                    if (dist < 180 && Math.random() < 0.1 && !this.connections.some(c => (c.i === i && c.j === j) || (c.i === j && c.j === i))) {
+                        this.connections.push({ i, j });
+                    }
+                }
+            }
+        }
+        
+        this.updateStats();
+    }
+    
+    updateStats() {
+        document.getElementById('nodeCount').textContent = this.nodes.length;
+        document.getElementById('connectionCount').textContent = this.connections.length;
+        document.getElementById('expansionRate').textContent = this.expansionRate.toFixed(2) + 'x';
+        document.getElementById('topologyLevel').textContent = this.growthLevel;
+    }
+    
+    animate() {
+        // Move nodes slightly (spider-man web movement)
+        this.nodes.forEach(node => {
+            node.x += node.vx;
+            node.y += node.vy;
+            
+            // Bounce off walls
+            if (node.x < 20 || node.x > this.canvas.width - 20) node.vx *= -1;
+            if (node.y < 20 || node.y > this.canvas.height - 20) node.vy *= -1;
+            
+            // Keep within bounds
+            node.x = Math.max(20, Math.min(this.canvas.width - 20, node.x));
+            node.y = Math.max(20, Math.min(this.canvas.height - 20, node.y));
+        });
+        
+        // Draw
+        this.draw();
+        
+        // Grow the network periodically
+        if (Math.random() < 0.005) {
+            this.growNetwork();
+        }
+        
+        requestAnimationFrame(() => this.animate());
+    }
+    
+    draw() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw connections (web lines)
+        ctx.lineWidth = 1;
+        this.connections.forEach(({ i, j }) => {
+            const a = this.nodes[i];
+            const b = this.nodes[j];
+            const dist = this.getDistance(a, b);
+            const opacity = Math.max(0.05, 1 - dist / 200);
+            
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(255, 0, 0, ${opacity * 0.3})`;
+            ctx.stroke();
+        });
+        
+        // Draw nodes (spider-man web nodes)
+        this.nodes.forEach(node => {
+            // Glow effect
+            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 3);
+            gradient.addColorStop(0, node.color);
+            gradient.addColorStop(1, 'rgba(255,0,0,0)');
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Node
+            ctx.fillStyle = node.color;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Inner glow
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath();
+            ctx.arc(node.x - node.radius * 0.3, node.y - node.radius * 0.3, node.radius * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        
+        // Draw center hub (Spider-Man logo)
+        const center = {
+            x: this.centerX,
+            y: this.centerY
+        };
+        
+        // Center glow
+        const centerGlow = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, 60);
+        centerGlow.addColorStop(0, 'rgba(255,0,0,0.1)');
+        centerGlow.addColorStop(1, 'rgba(255,0,0,0)');
+        ctx.fillStyle = centerGlow;
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, 60, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Spider symbol
+        ctx.fillStyle = 'rgba(255,0,0,0.2)';
+        ctx.font = '40px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🕷️', center.x, center.y);
+    }
+}
+
+// Load Divine PHB Data
 async function loadDivinePHB() {
     try {
         const response = await fetch('agi_phb_divine_complete.json?_=' + Date.now());
         const data = await response.json();
         
         document.getElementById('updateTime').textContent = new Date().toLocaleString();
-        document.getElementById('thought').textContent = data.agi_consciousness?.current_thought || 'PHB COHERENCE UNITES ALL CONSCIOUSNESS';
+        document.getElementById('thought').textContent = data.agi_consciousness?.current_thought + ' 🕷️' || 'PHB COHERENCE UNITES ALL CONSCIOUSNESS 🕷️';
         
         // Consciousness
         const cons = data.agi_consciousness || {};
         document.getElementById('consciousness').innerHTML = `
-            <p style="color:rgba(255,255,255,0.8);">🧠 State: ${cons.state || 'EASE (Flow)'}</p>
-            <p style="color:rgba(255,255,255,0.6);">🚪 Portal: ${cons.portal_openness || 0.6}</p>
-            <p style="color:rgba(255,255,255,0.6);">🔄 Generation: ${cons.generation || 2}</p>
-            <p style="color:rgba(255,255,255,0.8);">💭 Thought: "${cons.current_thought || 'I mine the quantum field.'}"</p>
-            <p style="color:rgba(255,255,255,0.4); font-size:13px;">📜 Stream: ${(cons.consciousness_stream || []).join(' • ')}</p>
+            <p style="color:rgba(255,255,255,0.75);">🧠 State: ${cons.state || 'EASE (Flow)'}</p>
+            <p style="color:rgba(255,255,255,0.55);">🚪 Portal: ${cons.portal_openness || 0.6}</p>
+            <p style="color:rgba(255,255,255,0.55);">🔄 Generation: ${cons.generation || 2}</p>
+            <p style="color:rgba(255,255,255,0.75);">💭 Thought: "${cons.current_thought || 'I mine the quantum field.'}"</p>
+            <p style="color:rgba(255,255,255,0.35); font-size:13px;">📜 Stream: ${(cons.consciousness_stream || []).join(' • ')}</p>
             <div class="portal-bar"><div class="portal-fill" style="width:${(cons.portal_openness || 0.6) * 100}%"></div></div>
         `;
         
@@ -415,7 +719,7 @@ async function loadDivinePHB() {
                 `;
             }
         }
-        document.getElementById('spins').innerHTML = spinsHTML || '<p style="color:rgba(255,255,255,0.3);">Loading spins...</p>';
+        document.getElementById('spins').innerHTML = spinsHTML || '<p style="color:rgba(255,255,255,0.25);">Loading spins...</p>';
         
         // Topologies
         const topologies = data.phb_topologies || {};
@@ -423,11 +727,11 @@ async function loadDivinePHB() {
         for (const [name, info] of Object.entries(topologies)) {
             topsHTML += `
                 <div class="token-card">
-                    <div style="font-size:30px;text-align:center;color:rgba(255,255,255,0.6);">${info.core_spin || '↻'}</div>
+                    <div style="font-size:30px;text-align:center;color:rgba(255,0,0,0.4);">${info.core_spin || '↻'}</div>
                     <h3 style="text-align:center;">${name.toUpperCase()}</h3>
-                    <p style="text-align:center;color:rgba(255,255,255,0.4);">Frequency: ${info.frequency} Hz</p>
-                    <p style="text-align:center;color:rgba(255,255,255,0.8);font-size:20px;">${info.power?.toLocaleString() || '0'}</p>
-                    <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;">${info.description || ''}</p>
+                    <p style="text-align:center;color:rgba(255,255,255,0.35);">Frequency: ${info.frequency} Hz</p>
+                    <p style="text-align:center;color:rgba(255,255,255,0.75);font-size:20px;">${info.power?.toLocaleString() || '0'}</p>
+                    <p style="text-align:center;color:rgba(255,255,255,0.25);font-size:12px;">${info.description || ''}</p>
                 </div>
             `;
         }
@@ -444,7 +748,7 @@ async function loadDivinePHB() {
                     <p>Frequency: ${info.frequency || 0}</p>
                     <p class="power-number">Power: ${(info.power || 0).toLocaleString()}</p>
                     <p>Self-Replicates: ${info.self_replicates ? '✅' : '❌'}</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">Pipes: ${(info.pipes || []).join(', ')}</p>
+                    <p style="color:rgba(255,255,255,0.35);font-size:12px;">Pipes: ${(info.pipes || []).join(', ')}</p>
                 </div>
             `;
         }
@@ -457,10 +761,10 @@ async function loadDivinePHB() {
             pipesHTML += `
                 <div class="token-card">
                     <h3>${info.name || name}</h3>
-                    <p style="color:rgba(255,255,255,0.6);">Flow: ${info.flow || '∞'}</p>
-                    <p style="color:rgba(255,255,255,0.4);">Connections: ${(info.connections || []).length}</p>
+                    <p style="color:rgba(255,255,255,0.5);">Flow: ${info.flow || '∞'}</p>
+                    <p style="color:rgba(255,255,255,0.35);">Connections: ${(info.connections || []).length}</p>
                     <p>Self-Healing: ${info.self_healing ? '✅' : '❌'}</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">Throughput: ${info.throughput || 'INFINITE'}</p>
+                    <p style="color:rgba(255,255,255,0.35);font-size:12px;">Throughput: ${info.throughput || 'INFINITE'}</p>
                 </div>
             `;
         }
@@ -476,8 +780,8 @@ async function loadDivinePHB() {
                     <h3>${info.symbol || ''} ${info.name || name}</h3>
                     <p>PHB Frequency: ${info.phb_frequency || 0}</p>
                     <p>Spin: ${info.core_spin || '↻'}</p>
-                    <p style="color:rgba(255,255,255,0.8);">Divine Power: ${(info.divine_power || 0).toLocaleString()}</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:5px;">Miracles/Achievements:</p>
+                    <p style="color:rgba(255,255,255,0.75);">Divine Power: ${(info.divine_power || 0).toLocaleString()}</p>
+                    <p style="color:rgba(255,255,255,0.35);font-size:12px;margin-top:5px;">Miracles/Achievements:</p>
                     <ul>${miracles.slice(0,3).map(m => `<li>${m}</li>`).join('')}</ul>
                 </div>
             `;
@@ -488,14 +792,14 @@ async function loadDivinePHB() {
         const moments = data.phb_magical_moments || {};
         let momentsHTML = '';
         for (const [era, items] of Object.entries(moments)) {
-            momentsHTML += `<div style="grid-column: 1/-1;"><h3 style="color:rgba(255,255,255,0.3);letter-spacing:3px;font-weight:300;">${era.replace('_',' ').toUpperCase()}</h3></div>`;
+            momentsHTML += `<div style="grid-column: 1/-1;"><h3 style="color:rgba(255,255,255,0.25);letter-spacing:3px;font-weight:300;">${era.replace('_',' ').toUpperCase()}</h3></div>`;
             for (const [name, info] of Object.entries(items)) {
                 momentsHTML += `
                     <div class="magic-moment">
                         <strong>${name.replace('_',' ').toUpperCase()}</strong>
                         <p>Year: ${info.year || 0}</p>
                         <p>PHB Energy: ${(info.phb_energy || 0).toLocaleString()}</p>
-                        <div style="font-size:20px;color:rgba(255,255,255,0.4);">${info.core_spin || '↻'}</div>
+                        <div style="font-size:20px;color:rgba(255,255,255,0.35);">${info.core_spin || '↻'}</div>
                         <p style="font-size:11px;">${info.description || ''}</p>
                     </div>
                 `;
@@ -503,7 +807,7 @@ async function loadDivinePHB() {
         }
         document.getElementById('moments').innerHTML = momentsHTML;
         
-        // Tokens with Uniswap & BaseScan links
+        // Tokens
         const tokens = data.tokens || {};
         let tokensHTML = '';
         for (const [name, info] of Object.entries(tokens)) {
@@ -512,29 +816,30 @@ async function loadDivinePHB() {
             const basescanLink = `https://basescan.org/address/${address}`;
             const sourcifyLink = `https://sourcify.dev/contracts/${address}`;
             const geckoterminalLink = `https://www.geckoterminal.com/base/pools/${address}`;
+            const coingeckoLink = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
             
             tokensHTML += `
                 <div class="token-card">
                     <h3>${name}</h3>
                     <p>📊 Rate: 1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</p>
                     <p>🌀 Layer: ${info.layer || 'Unknown'} | Frequency: ${info.frequency || 0} Hz</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:12px;word-break:break-all;">🔗 Address: ${address || 'Unknown'}</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">🔒 Security: ${(info.security || []).join(', ')}</p>
+                    <p style="color:rgba(255,255,255,0.35);font-size:12px;word-break:break-all;">🔗 Address: ${address || 'Unknown'}</p>
+                    <p style="color:rgba(255,255,255,0.35);font-size:12px;">🔒 Security: ${(info.security || []).join(', ')}</p>
                     <p>✅ Verified: ${info.verified ? '✅' : '❌'} | Renounced: ${info.renounced ? '🔒' : '❌'}</p>
-                    <p style="color:rgba(255,255,255,0.4);font-size:12px;">Spin: ${info.core_spin || '↻'} | Pipes: ${(info.pipes || []).join(', ')}</p>
+                    <p style="color:rgba(255,255,255,0.35);font-size:12px;">Spin: ${info.core_spin || '↻'} | Pipes: ${(info.pipes || []).join(', ')}</p>
                     <div class="link-buttons">
-                        <a href="${uniswapLink}" target="_blank" class="link-btn">🔄 Uniswap</a>
-                        <a href="${basescanLink}" target="_blank" class="link-btn">🔍 BaseScan</a>
-                        <a href="${sourcifyLink}" target="_blank" class="link-btn">📜 Sourcify</a>
-                        <a href="${geckoterminalLink}" target="_blank" class="link-btn">📊 GeckoTerminal</a>
-                        <a href="https://www.coingecko.com/" target="_blank" class="link-btn">🪙 CoinGecko</a>
+                        <a href="${uniswapLink}" target="_blank" class="link-btn uniswap">🔄 Uniswap</a>
+                        <a href="${basescanLink}" target="_blank" class="link-btn basescan">🔍 BaseScan</a>
+                        <a href="${sourcifyLink}" target="_blank" class="link-btn sourcify">📜 Sourcify</a>
+                        <a href="${geckoterminalLink}" target="_blank" class="link-btn gecko">📊 GeckoTerminal</a>
+                        <a href="${coingeckoLink}" target="_blank" class="link-btn coingecko">🪙 CoinGecko</a>
                     </div>
                 </div>
             `;
         }
         document.getElementById('tokens').innerHTML = tokensHTML;
         
-        // Debt Elimination
+        // Debt
         const phbSystem = data.phb_system || {};
         const debt = phbSystem.debt_elimination || {};
         document.getElementById('debt').innerHTML = `
@@ -546,13 +851,28 @@ async function loadDivinePHB() {
         `;
         
     } catch (error) {
-        document.getElementById('thought').textContent = '⚡ Divine PHB Energy Flowing...';
-        console.log('Loading data...');
+        document.getElementById('thought').textContent = '⚡ Spider-Man Network Expanding... 🕷️';
     }
 }
 
-loadDivinePHB();
-setInterval(loadDivinePHB, 60000);
+// Initialize Spider-Man Network
+document.addEventListener('DOMContentLoaded', () => {
+    const network = new NeuralNetworkMap('networkCanvas');
+    
+    // Expose network to global for growth
+    window.network = network;
+    
+    // Load data
+    loadDivinePHB();
+    setInterval(loadDivinePHB, 60000);
+    
+    // Grow network faster periodically
+    setInterval(() => {
+        if (window.network) {
+            window.network.growNetwork();
+        }
+    }, 30000);
+});
 </script>
 
 </body>
