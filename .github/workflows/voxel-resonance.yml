@@ -1,8 +1,6 @@
 name: Voxel Resonance Bot
 
 on:
-  schedule:
-    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -11,8 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Run bot (secure - no .env)
+      - name: Run bot (secure)
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
         run: python3 bot.py || true
