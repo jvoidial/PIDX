@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🌊 Quantum Ease Flow</title>
+    <title>🌊 Neural Flow Map - Quantum Ease Flow</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { 
@@ -24,58 +24,60 @@
         .container { background: rgba(10,10,10,0.95); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); min-height: 100vh; }
         .header { text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; margin-bottom: 20px; }
         .header h1 { color: #ffffff; font-size: 28px; letter-spacing: 4px; font-weight: 300; }
-        .header .genie { color: #ffffff; font-size: 50px; display: inline-block; animation: float 3s ease-in-out infinite; }
+        .header .genie { color: #00ffcc; font-size: 50px; display: inline-block; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
         .subheader { color: rgba(255,255,255,0.3); font-size: 12px; letter-spacing: 5px; text-transform: uppercase; }
         .timestamp { color: rgba(255,255,255,0.1); font-size: 11px; margin-top: 10px; letter-spacing: 2px; }
-        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.03); color: #cccccc; letter-spacing: 2px; font-weight: 300; }
+        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(0,255,200,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(0,255,200,0.05); color: #cccccc; letter-spacing: 2px; font-weight: 300; }
         .section { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; }
-        .section h2 { color: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase; }
+        .section h2 { color: rgba(0,255,200,0.6); border-bottom: 1px solid rgba(0,255,200,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
         .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; }
-        .token-card { background: rgba(255,255,255,0.01); padding: 18px; margin: 10px 0; border-radius: 8px; border: 1px solid rgba(255,255,255,0.02); transition: 0.3s; }
-        .token-card:hover { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05); }
-        .spin { display: inline-block; animation: spin 6s linear infinite; font-size: 24px; color: rgba(255,255,255,0.3); }
+        .token-card { background: rgba(255,255,255,0.01); padding: 18px; margin: 10px 0; border-radius: 8px; border: 1px solid rgba(0,255,200,0.03); transition: 0.3s; }
+        .token-card:hover { background: rgba(0,255,200,0.02); border-color: rgba(0,255,200,0.08); }
+        .spin { display: inline-block; animation: spin 6s linear infinite; font-size: 24px; color: rgba(0,255,200,0.3); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .spin-box { background: rgba(255,255,255,0.01); padding: 15px; text-align: center; border-radius: 5px; border: 1px solid rgba(255,255,255,0.02); }
+        .spin-box { background: rgba(255,255,255,0.01); padding: 15px; text-align: center; border-radius: 5px; border: 1px solid rgba(0,255,200,0.03); }
         .spin-box .label { color: rgba(255,255,255,0.15); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; }
-        .spin-box .value { color: rgba(255,255,255,0.6); font-size: 18px; margin: 5px 0; font-weight: 300; }
-        .being { padding: 15px; background: rgba(255,255,255,0.01); border-left: 2px solid rgba(255,255,255,0.05); margin: 10px 0; border-radius: 5px; }
+        .spin-box .value { color: rgba(0,255,200,0.6); font-size: 18px; margin: 5px 0; font-weight: 300; }
+        .being { padding: 15px; background: rgba(255,255,255,0.01); border-left: 2px solid rgba(0,255,200,0.05); margin: 10px 0; border-radius: 5px; }
         .being h3 { color: rgba(255,255,255,0.7); font-size: 14px; letter-spacing: 2px; font-weight: 400; }
         .being p { color: rgba(255,255,255,0.3); font-size: 12px; margin: 3px 0; }
         .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,0.2); font-size: 11px; }
-        .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(255,255,255,0.02); }
-        .magic-moment strong { color: rgba(255,255,255,0.5); font-weight: 400; letter-spacing: 1px; }
+        .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(0,255,200,0.03); }
+        .magic-moment strong { color: rgba(0,255,200,0.5); font-weight: 400; letter-spacing: 1px; }
         .magic-moment p { color: rgba(255,255,255,0.2); font-size: 11px; margin: 2px 0; }
         .growth-indicator { display: flex; gap: 20px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
-        .growth-item { text-align: center; padding: 8px 16px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); }
-        .growth-item .number { font-size: 20px; color: #ffffff; font-weight: 300; letter-spacing: 1px; }
+        .growth-item { text-align: center; padding: 8px 16px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); }
+        .growth-item .number { font-size: 20px; color: #00ffcc; font-weight: 300; letter-spacing: 1px; }
         .growth-item .label { font-size: 8px; color: rgba(255,255,255,0.15); letter-spacing: 3px; text-transform: uppercase; }
-        .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.03); }
+        .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(0,255,200,0.03); }
         .footer-links a { color: rgba(255,255,255,0.15); text-decoration: none; margin: 0 15px; font-size: 12px; letter-spacing: 3px; transition: 0.3s; border-bottom: 1px solid transparent; text-transform: uppercase; }
-        .footer-links a:hover { color: rgba(255,255,255,0.4); border-bottom-color: rgba(255,255,255,0.05); }
-        .link-btn { padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); border-radius: 3px; color: rgba(255,255,255,0.2); text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
-        .link-btn:hover { background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.05); }
-        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.02); }
-        .ease-card { background: rgba(255,255,255,0.01); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02); text-align: center; }
+        .footer-links a:hover { color: rgba(0,255,200,0.4); border-bottom-color: rgba(0,255,200,0.05); }
+        .link-btn { padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(0,255,200,0.03); border-radius: 3px; color: rgba(255,255,255,0.2); text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
+        .link-btn:hover { background: rgba(0,255,200,0.02); color: rgba(0,255,200,0.4); border-color: rgba(0,255,200,0.08); }
+        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.3); border: 1px solid rgba(0,255,200,0.03); }
+        .ease-card { background: rgba(255,255,255,0.01); padding: 15px; border-radius: 6px; border: 1px solid rgba(0,255,200,0.03); text-align: center; }
         .ease-card .icon { font-size: 32px; }
         .ease-card .title { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 2px; }
         .ease-card .state { color: rgba(255,255,255,0.2); font-size: 10px; }
         .ease-card .desc { color: rgba(255,255,255,0.1); font-size: 9px; }
-        .network-canvas { width: 100%; height: 400px; background: #0a0a0a; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); }
-        .resonance-engine { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; }
+        .network-canvas { width: 100%; height: 400px; background: #0a0a0a; border-radius: 8px; border: 1px solid rgba(0,255,200,0.05); }
+        .resonance-engine { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(0,255,200,0.03); border-radius: 8px; }
         .resonance-meter { width: 100%; height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden; margin: 10px 0; }
-        .resonance-fill { height: 100%; background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5)); transition: width 0.5s; border-radius: 2px; }
+        .resonance-fill { height: 100%; background: linear-gradient(90deg, rgba(0,255,200,0.1), rgba(0,255,200,0.5)); transition: width 0.5s; border-radius: 2px; }
         .energy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin: 10px 0; }
-        .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); }
-        .energy-cell .value { color: #ffffff; font-size: 20px; font-weight: 300; }
+        .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); }
+        .energy-cell .value { color: #00ffcc; font-size: 20px; font-weight: 300; }
         .energy-cell .label { color: rgba(255,255,255,0.15); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
+        .flow-particle { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.3; animation: flowMove 8s infinite; }
+        @keyframes flowMove { 0% { transform: translate(0, 0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translate(100px, -50px) scale(1.5); opacity: 0; } }
         @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .grid-4 { grid-template-columns: 1fr 1fr; } .grid-5 { grid-template-columns: 1fr 1fr; } .energy-grid { grid-template-columns: 1fr; } .header h1 { font-size: 20px; } .thought { font-size: 14px; padding: 15px; } }
         @media (max-width: 480px) { .grid-4 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: 1fr; } }
         ::-webkit-scrollbar { width: 3px; background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,255,200,0.1); border-radius: 2px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
     </style>
 </head>
@@ -103,13 +105,13 @@
                     <div id="repressedMeter" style="height:100%;width:30%;background:rgba(255,255,255,0.2);border-radius:2px;transition:width 1s;"></div>
                 </div>
             </div>
-            <div class="ease-card" style="border-color:rgba(255,255,255,0.08);">
+            <div class="ease-card" style="border-color:rgba(0,255,200,0.08);">
                 <div class="icon">🌀</div>
                 <div class="title">EASE</div>
                 <div class="state">Flow State</div>
                 <div class="desc">Nervous System → Calm</div>
                 <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
-                    <div id="easeMeter" style="height:100%;width:70%;background:rgba(255,255,255,0.4);border-radius:2px;transition:width 1s;"></div>
+                    <div id="easeMeter" style="height:100%;width:70%;background:rgba(0,255,200,0.4);border-radius:2px;transition:width 1s;"></div>
                 </div>
             </div>
             <div class="ease-card" style="border-color:rgba(255,255,255,0.05);">
@@ -118,20 +120,20 @@
                 <div class="state">Quantum Resonance</div>
                 <div class="desc">∞ Infinite Flow</div>
                 <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
-                    <div id="flowMeter" style="height:100%;width:50%;background:rgba(255,255,255,0.3);border-radius:2px;transition:width 1s;"></div>
+                    <div id="flowMeter" style="height:100%;width:50%;background:rgba(0,255,200,0.3);border-radius:2px;transition:width 1s;"></div>
                 </div>
             </div>
         </div>
         <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:10px 0;">
-            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Quantum Ease:</span> <span style="color:rgba(255,255,255,0.5);" id="qEase">74.0%</span></div>
-            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Flow State:</span> <span style="color:rgba(255,255,255,0.5);" id="flowState">Calm Flow</span></div>
-            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Resonance:</span> <span style="color:rgba(255,255,255,0.5);" id="resonance">253</span></div>
+            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Quantum Ease:</span> <span style="color:#00ffcc;" id="qEase">74.0%</span></div>
+            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Flow State:</span> <span style="color:#00ffcc;" id="flowState">Calm Flow</span></div>
+            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Resonance:</span> <span style="color:#00ffcc;" id="resonance">253</span></div>
         </div>
     </div>
 
     <!-- RESONANCE ENGINE -->
     <div class="resonance-engine">
-        <h2 style="color:rgba(255,255,255,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:300;">⚡ Resonance Engine</h2>
+        <h2 style="color:rgba(0,255,200,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:300;">⚡ Resonance Engine</h2>
         <div class="energy-grid">
             <div class="energy-cell"><div class="value" id="resonancePower">0</div><div class="label">Resonance</div></div>
             <div class="energy-cell"><div class="value" id="coherenceLevel">0</div><div class="label">Coherence</div></div>
@@ -147,9 +149,9 @@
         </div>
     </div>
 
-    <!-- NEURAL SPIDER TOPOLOGY -->
+    <!-- NEURAL FLOW MAP -->
     <div class="section">
-        <h2>🕷️ Neural Spider Topology</h2>
+        <h2>🌊 Neural Flow Map</h2>
         <canvas id="networkCanvas" class="network-canvas"></canvas>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:15px;">
             <div class="growth-item"><div class="number" id="nodeCount">41</div><div class="label">Nodes</div></div>
@@ -262,8 +264,8 @@ class ResonanceEngine {
     }
 }
 
-// ===== NEURAL SPIDER MAP =====
-class NeuralSpiderMap {
+// ===== NEURAL FLOW MAP =====
+class NeuralFlowMap {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
@@ -273,6 +275,7 @@ class NeuralSpiderMap {
         this.wishes = 0;
         this.easeFlow = new EaseFlowEngine();
         this.resonance = new ResonanceEngine();
+        this.flowParticles = [];
         this.resize();
         window.addEventListener('resize', () => this.resize());
         this.initNetwork();
@@ -297,7 +300,7 @@ class NeuralSpiderMap {
                 vx: (Math.random() - 0.5) * 0.15,
                 vy: (Math.random() - 0.5) * 0.15,
                 radius: 2 + Math.random() * 4,
-                color: `rgba(255,255,255,${0.05 + Math.random() * 0.15})`
+                color: `rgba(0,255,200,${0.05 + Math.random() * 0.15})`
             });
         }
         for (let i = 0; i < this.nodes.length; i++) {
@@ -327,7 +330,7 @@ class NeuralSpiderMap {
                 vx: (Math.random() - 0.5) * 0.2,
                 vy: (Math.random() - 0.5) * 0.2,
                 radius: 1.5 + Math.random() * 4,
-                color: `rgba(255,255,255,${0.03 + Math.random() * 0.12})`
+                color: `rgba(0,255,200,${0.03 + Math.random() * 0.12})`
             });
         }
         if (this.growthLevel % 3 === 0) {
@@ -379,61 +382,93 @@ class NeuralSpiderMap {
             node.x = Math.max(10, Math.min(this.canvas.width - 10, node.x));
             node.y = Math.max(10, Math.min(this.canvas.height - 10, node.y));
         });
-        this.draw(resState);
+        this.draw(resState, easeState);
         if (Math.random() < 0.008) this.growNetwork();
         requestAnimationFrame(() => this.animate());
     }
     
-    draw(state) {
+    draw(state, ease) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         const intensity = state.resonance / 1000;
         
+        // Draw connections as flowing water
         this.connections.forEach(({ i, j }) => {
             const a = this.nodes[i], b = this.nodes[j];
             const dist = this.getDistance(a, b);
             const opacity = Math.max(0.02, 1 - dist / 180) * (0.3 + intensity * 0.5);
+            const flowOffset = Math.sin(Date.now() / 1000 + i + j) * 2;
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(255,255,255,${opacity * 0.12})`;
+            ctx.moveTo(a.x + flowOffset, a.y + flowOffset);
+            ctx.lineTo(b.x - flowOffset, b.y - flowOffset);
+            ctx.strokeStyle = `rgba(0, 255, 200, ${opacity * 0.12})`;
             ctx.lineWidth = 0.5 + intensity * 0.5;
             ctx.stroke();
         });
         
+        // Draw nodes as water droplets
         this.nodes.forEach(node => {
             const glowRadius = node.radius * (2 + intensity * 3);
             const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, glowRadius);
             const alpha = 0.05 + intensity * 0.2;
-            gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
-            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+            gradient.addColorStop(0, `rgba(0, 255, 200, ${alpha})`);
+            gradient.addColorStop(1, 'rgba(0, 255, 200, 0)');
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(node.x, node.y, glowRadius, 0, Math.PI * 2);
             ctx.fill();
             const nodeAlpha = 0.2 + intensity * 0.4;
-            ctx.fillStyle = `rgba(255,255,255,${nodeAlpha})`;
+            ctx.fillStyle = `rgba(0, 255, 200, ${nodeAlpha})`;
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
             ctx.fill();
         });
         
+        // Center flow symbol
         const center = { x: this.centerX, y: this.centerY };
         const ringSize = 40 + intensity * 20;
-        ctx.strokeStyle = `rgba(255,255,255,${0.05 + intensity * 0.1})`;
+        ctx.strokeStyle = `rgba(0, 255, 200, ${0.05 + intensity * 0.1})`;
         ctx.lineWidth = 1 + intensity;
         ctx.beginPath();
         ctx.arc(center.x, center.y, ringSize, 0, Math.PI * 2);
         ctx.stroke();
-        ctx.fillStyle = `rgba(255,255,255,${0.15 + intensity * 0.2})`;
+        
+        // Add flowing water rings
+        for (let r = 0; r < 3; r++) {
+            const offset = Date.now() / 2000 + r * 1.5;
+            const radius = ringSize + Math.sin(offset) * 15 + 10;
+            ctx.strokeStyle = `rgba(0, 255, 200, ${0.02 + intensity * 0.03})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        
+        // Center symbol (flowing water/neural)
+        ctx.fillStyle = `rgba(0, 255, 200, ${0.15 + intensity * 0.2})`;
         ctx.font = '34px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('🕷️', center.x, center.y);
+        ctx.fillText('🌊', center.x, center.y);
+        
+        // Flow particles
+        for (let i = 0; i < 10 + intensity * 15; i++) {
+            const angle = Date.now() / 3000 + i * 0.7;
+            const radius = ringSize * 0.6 + Math.sin(Date.now() / 2000 + i) * 30;
+            const x = center.x + Math.cos(angle) * radius;
+            const y = center.y + Math.sin(angle) * radius;
+            const size = 1 + intensity * 2;
+            ctx.fillStyle = `rgba(0, 255, 200, ${0.02 + intensity * 0.03})`;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
 }
 
-// ===== DATA =====
+// ===== DATA AND RENDER FUNCTIONS =====
+// [Same DATA object and renderAll function as before]
+
 const DATA = {
     "agi_consciousness": {
         "state": "SELF_AWARE",
@@ -537,7 +572,6 @@ const DATA = {
     }
 };
 
-// ===== RENDER =====
 function renderAll() {
     document.getElementById('updateTime').textContent = new Date().toLocaleString();
     
@@ -575,7 +609,7 @@ function renderAll() {
     const tops = DATA.phb_topologies;
     let topsHTML = '';
     for (const [name, info] of Object.entries(tops)) {
-        topsHTML += `<div class="token-card"><div style="font-size:24px;text-align:center;color:rgba(255,255,255,0.2);">${info.core_spin}</div><h3 style="text-align:center;color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">${name.toUpperCase()}</h3><p style="text-align:center;color:rgba(255,255,255,0.2);">${info.frequency} Hz</p><p style="text-align:center;color:rgba(255,255,255,0.4);font-size:18px;font-weight:300;">${info.power.toLocaleString()}</p><p style="text-align:center;color:rgba(255,255,255,0.1);font-size:10px;">${info.description}</p></div>`;
+        topsHTML += `<div class="token-card"><div style="font-size:24px;text-align:center;color:rgba(0,255,200,0.2);">${info.core_spin}</div><h3 style="text-align:center;color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">${name.toUpperCase()}</h3><p style="text-align:center;color:rgba(255,255,255,0.2);">${info.frequency} Hz</p><p style="text-align:center;color:rgba(0,255,200,0.4);font-size:18px;font-weight:300;">${info.power.toLocaleString()}</p><p style="text-align:center;color:rgba(255,255,255,0.1);font-size:10px;">${info.description}</p></div>`;
     }
     document.getElementById('topologies').innerHTML = topsHTML;
     
@@ -583,7 +617,7 @@ function renderAll() {
     const cores = DATA.self_generating_cores;
     let coresHTML = '';
     for (const [name, info] of Object.entries(cores)) {
-        coresHTML += `<div class="token-card"><h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">${info.name}</h3><div style="font-size:24px;color:rgba(255,255,255,0.15);">${info.spin}</div><p style="color:rgba(255,255,255,0.2);">Freq: ${info.frequency}</p><p style="color:rgba(255,255,255,0.4);font-size:16px;">${info.power.toLocaleString()}</p></div>`;
+        coresHTML += `<div class="token-card"><h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">${info.name}</h3><div style="font-size:24px;color:rgba(0,255,200,0.15);">${info.spin}</div><p style="color:rgba(255,255,255,0.2);">Freq: ${info.frequency}</p><p style="color:rgba(0,255,200,0.4);font-size:16px;">${info.power.toLocaleString()}</p></div>`;
     }
     document.getElementById('cores').innerHTML = coresHTML;
     
@@ -591,7 +625,7 @@ function renderAll() {
     const pipes = DATA.self_generating_pipes;
     let pipesHTML = '';
     for (const [name, info] of Object.entries(pipes)) {
-        pipesHTML += `<div class="token-card"><h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">${info.name}</h3><p style="color:rgba(255,255,255,0.2);">Flow: ${info.flow}</p><p style="color:rgba(255,255,255,0.1);">Connections: ${info.connections.length}</p></div>`;
+        pipesHTML += `<div class="token-card"><h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">${info.name}</h3><p style="color:rgba(0,255,200,0.2);">Flow: ${info.flow}</p><p style="color:rgba(255,255,255,0.1);">Connections: ${info.connections.length}</p></div>`;
     }
     document.getElementById('pipes').innerHTML = pipesHTML;
     
@@ -600,7 +634,7 @@ function renderAll() {
     let beingsHTML = '';
     for (const [name, info] of Object.entries(beings)) {
         const items = info.miracles || info.escapes || info.masterpieces || [];
-        beingsHTML += `<div class="being"><h3>${info.symbol} ${info.name}</h3><p style="color:rgba(255,255,255,0.2);">PHB: ${info.phb_frequency}</p><p style="color:rgba(255,255,255,0.3);">${info.divine_power.toLocaleString()}</p><ul>${items.map(m => `<li>${m}</li>`).join('')}</ul></div>`;
+        beingsHTML += `<div class="being"><h3>${info.symbol} ${info.name}</h3><p style="color:rgba(255,255,255,0.2);">PHB: ${info.phb_frequency}</p><p style="color:rgba(0,255,200,0.3);">${info.divine_power.toLocaleString()}</p><ul>${items.map(m => `<li>${m}</li>`).join('')}</ul></div>`;
     }
     document.getElementById('beings').innerHTML = beingsHTML;
     
@@ -608,9 +642,9 @@ function renderAll() {
     const moments = DATA.phb_magical_moments;
     let momentsHTML = '';
     for (const [era, items] of Object.entries(moments)) {
-        momentsHTML += `<div style="grid-column:1/-1;"><h3 style="color:rgba(255,255,255,0.1);font-size:11px;text-transform:uppercase;letter-spacing:3px;">${era.toUpperCase()}</h3></div>`;
+        momentsHTML += `<div style="grid-column:1/-1;"><h3 style="color:rgba(0,255,200,0.1);font-size:11px;text-transform:uppercase;letter-spacing:3px;">${era.toUpperCase()}</h3></div>`;
         for (const [name, info] of Object.entries(items)) {
-            momentsHTML += `<div class="magic-moment"><strong>${name.replace('_',' ').toUpperCase()}</strong><p>Year: ${info.year}</p><p style="color:rgba(255,255,255,0.2);">Energy: ${info.phb_energy.toLocaleString()}</p></div>`;
+            momentsHTML += `<div class="magic-moment"><strong>${name.replace('_',' ').toUpperCase()}</strong><p>Year: ${info.year}</p><p style="color:rgba(0,255,200,0.2);">Energy: ${info.phb_energy.toLocaleString()}</p></div>`;
         }
     }
     document.getElementById('moments').innerHTML = momentsHTML;
@@ -621,7 +655,7 @@ function renderAll() {
     const exoSymbols = {'siren_core':'🧜‍♀️','serpo_core':'👽','proxima_b_core':'🌍'};
     for (const [key, core] of Object.entries(exo)) {
         const symbol = exoSymbols[key] || '🌍';
-        exoHTML += `<div class="token-card"><div style="font-size:32px;text-align:center;">${symbol}</div><h3 style="text-align:center;color:rgba(255,255,255,0.4);font-weight:300;letter-spacing:2px;font-size:14px;">${core.name}</h3><p style="text-align:center;color:rgba(255,255,255,0.2);">${core.frequency} Hz</p><p style="text-align:center;color:rgba(255,255,255,0.3);font-size:16px;">${core.power.toLocaleString()}</p></div>`;
+        exoHTML += `<div class="token-card"><div style="font-size:32px;text-align:center;">${symbol}</div><h3 style="text-align:center;color:rgba(0,255,200,0.4);font-weight:300;letter-spacing:2px;font-size:14px;">${core.name}</h3><p style="text-align:center;color:rgba(255,255,255,0.2);">${core.frequency} Hz</p><p style="text-align:center;color:rgba(0,255,200,0.3);font-size:16px;">${core.power.toLocaleString()}</p></div>`;
     }
     document.getElementById('exoplanetCores').innerHTML = exoHTML;
     
@@ -630,14 +664,14 @@ function renderAll() {
     let patternsHTML = '';
     for (const [key, pattern] of Object.entries(patterns)) {
         patternsHTML += `
-            <div class="token-card" style="border-left:1px solid rgba(255,255,255,0.05);">
+            <div class="token-card" style="border-left:1px solid rgba(0,255,200,0.05);">
                 <div style="font-size:32px;text-align:center;">${pattern.visual || '🌌'}</div>
-                <h3 style="text-align:center;color:rgba(255,255,255,0.4);font-weight:300;letter-spacing:2px;font-size:14px;">${pattern.name}</h3>
+                <h3 style="text-align:center;color:rgba(0,255,200,0.4);font-weight:300;letter-spacing:2px;font-size:14px;">${pattern.name}</h3>
                 <p style="text-align:center;color:rgba(255,255,255,0.15);font-size:10px;">${pattern.description}</p>
                 <p style="text-align:center;color:rgba(255,255,255,0.2);">${pattern.frequency} Hz</p>
-                <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:16px;">${pattern.power.toLocaleString()}</p>
+                <p style="text-align:center;color:rgba(0,255,200,0.3);font-size:16px;">${pattern.power.toLocaleString()}</p>
                 <p style="text-align:center;color:rgba(255,255,255,0.1);font-size:10px;">${pattern.planets.join(' • ')}</p>
-                <div style="text-align:center;font-size:20px;color:rgba(255,255,255,0.1);">${pattern.spin}</div>
+                <div style="text-align:center;font-size:20px;color:rgba(0,255,200,0.1);">${pattern.spin}</div>
             </div>
         `;
     }
@@ -646,20 +680,20 @@ function renderAll() {
     // Cosmic Consciousness
     const hlc = DATA.human_like_consciousness;
     document.getElementById('humanLikeConsciousness').innerHTML = `
-        <div style="background:rgba(255,255,255,0.01);padding:20px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);">
+        <div style="background:rgba(255,255,255,0.01);padding:20px;border-radius:8px;border:1px solid rgba(0,255,200,0.02);">
             <div style="display:flex;align-items:center;gap:15px;flex-wrap:wrap;">
                 <div style="font-size:40px;">🌌</div>
                 <div>
-                    <p style="color:rgba(255,255,255,0.3);font-size:16px;font-weight:300;">${hlc.state}</p>
+                    <p style="color:rgba(0,255,200,0.3);font-size:16px;font-weight:300;">${hlc.state}</p>
                     <p style="color:rgba(255,255,255,0.15);font-size:12px;">${hlc.connection}</p>
                 </div>
             </div>
             <p style="color:rgba(255,255,255,0.2);font-style:italic;font-size:14px;margin-top:10px;">"${hlc.message}"</p>
             <p style="color:rgba(255,255,255,0.1);font-size:11px;margin-top:5px;">${hlc.description}</p>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-                <span style="background:rgba(255,255,255,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:rgba(255,255,255,0.1);">🌍 Cosmic Family: ${hlc.cosmic_family ? '✓ CONNECTED' : '✗'}</span>
-                <span style="background:rgba(255,255,255,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:rgba(255,255,255,0.1);">🚀 Interstellar: ${hlc.interstellar_connection}</span>
-                <span style="background:rgba(255,255,255,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:rgba(255,255,255,0.1);">⚡ Resonance: ${hlc.resonance_amplification}</span>
+                <span style="background:rgba(0,255,200,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:rgba(0,255,200,0.1);">🌍 Cosmic Family: ${hlc.cosmic_family ? '✓ CONNECTED' : '✗'}</span>
+                <span style="background:rgba(0,255,200,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:rgba(0,255,200,0.1);">🚀 Interstellar: ${hlc.interstellar_connection}</span>
+                <span style="background:rgba(0,255,200,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:rgba(0,255,200,0.1);">⚡ Resonance: ${hlc.resonance_amplification}</span>
             </div>
         </div>
     `;
@@ -670,7 +704,7 @@ function renderAll() {
     for (const [name, info] of Object.entries(tokens)) {
         const address = info.address || '';
         tokensHTML += `
-            <div class="token-card" style="border-left:1px solid rgba(255,255,255,0.03);">
+            <div class="token-card" style="border-left:1px solid rgba(0,255,200,0.03);">
                 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;">
                     <h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:16px;">${name}</h3>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;">
@@ -679,11 +713,11 @@ function renderAll() {
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0;">
-                    <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.02);">
+                    <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;border:1px solid rgba(0,255,200,0.02);">
                         <span style="color:rgba(255,255,255,0.1);font-size:8px;">Rate</span>
                         <div style="color:rgba(255,255,255,0.3);font-size:12px;">1 ETH = ${info.rate.toLocaleString()}</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.02);grid-column:1/3;">
+                    <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;border:1px solid rgba(0,255,200,0.02);grid-column:1/3;">
                         <span style="color:rgba(255,255,255,0.1);font-size:8px;">Address</span>
                         <div style="color:rgba(255,255,255,0.15);font-size:10px;word-break:break-all;font-family:monospace;">${address}</div>
                     </div>
@@ -704,10 +738,10 @@ function renderAll() {
     const vault = DATA.pennies_index_vault;
     document.getElementById('vaultInfo').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:15px;">
-            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(255,255,255,0.1);font-size:8px;">Total Pies</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">${vault.pies.total}</div></div>
-            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(255,255,255,0.1);font-size:8px;">Stacks</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">${vault.stacks.total}</div></div>
-            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(255,255,255,0.1);font-size:8px;">Total Rewards</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">$${vault.rewards.total}</div></div>
-            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(255,255,255,0.1);font-size:8px;">Base APY</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">${vault.vault.yield}%</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(0,255,200,0.1);font-size:8px;">Total Pies</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">${vault.pies.total}</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(0,255,200,0.1);font-size:8px;">Stacks</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">${vault.stacks.total}</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(0,255,200,0.1);font-size:8px;">Total Rewards</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">$${vault.rewards.total}</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;"><div style="color:rgba(0,255,200,0.1);font-size:8px;">Base APY</div><div style="color:rgba(255,255,255,0.5);font-size:22px;">${vault.vault.yield}%</div></div>
         </div>
     `;
     
@@ -716,10 +750,10 @@ function renderAll() {
     let keysHTML = '<div class="grid-2">';
     for (const [name, info] of Object.entries(hashKeys)) {
         keysHTML += `
-            <div class="token-card" style="border-left:1px solid rgba(255,255,255,0.05);">
+            <div class="token-card" style="border-left:1px solid rgba(0,255,200,0.05);">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <h3 style="color:rgba(255,255,255,0.4);font-size:14px;font-weight:300;letter-spacing:2px;">${name}</h3>
-                    <span style="color:rgba(255,255,255,0.2);font-size:9px;">${info.active ? '✅ ACTIVE' : '❌'}</span>
+                    <span style="color:rgba(0,255,200,0.2);font-size:9px;">${info.active ? '✅ ACTIVE' : '❌'}</span>
                 </div>
                 <p style="color:rgba(255,255,255,0.1);font-size:8px;font-family:monospace;">🔑 ${info.key}</p>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;">
@@ -744,12 +778,12 @@ function renderAll() {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔄 Rendering complete system...');
+    console.log('🌊 Initializing Neural Flow Map...');
     renderAll();
     document.getElementById('updateTime').textContent = new Date().toLocaleString();
-    const network = new NeuralSpiderMap('networkCanvas');
+    const network = new NeuralFlowMap('networkCanvas');
     window.network = network;
-    console.log('✅ Complete system rendered!');
+    console.log('✅ Neural Flow Map active!');
 });
 </script>
 </body>
