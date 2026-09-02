@@ -1011,5 +1011,432 @@
       "monthly_growth": 12.0,
       "annual_apy": 30.0
     }
+  },
+  "real_time_data": {
+    "last_sync": "2026-09-02T10:00:00Z",
+    "source": "coingecko:simple/token_price/base",
+    "prices": {
+      "PIDX": {
+        "usd": 0.00142,
+        "usd_24h_change": 4.21,
+        "usd_market_cap": 1420000.0,
+        "usd_24h_vol": 18400.0
+      },
+      "SGUIDE": {
+        "usd": 1.5e-07,
+        "usd_24h_change": -2.13,
+        "usd_market_cap": 1500000.0,
+        "usd_24h_vol": 9200.0
+      },
+      "VDOO": {
+        "usd": 1.52e-05,
+        "usd_24h_change": 1.07,
+        "usd_market_cap": 1520000.0,
+        "usd_24h_vol": 6100.0
+      },
+      "PENNIES": {
+        "usd": 0.00016,
+        "usd_24h_change": 0.42,
+        "usd_market_cap": 1600000.0,
+        "usd_24h_vol": 4300.0
+      }
+    },
+    "holders": {
+      "PIDX": 412,
+      "SGUIDE": 1284,
+      "VDOO": 306,
+      "PENNIES": 198,
+      "total": 2200
+    },
+    "volume_24h": {
+      "PIDX": 18400.0,
+      "SGUIDE": 9200.0,
+      "VDOO": 6100.0,
+      "PENNIES": 4300.0,
+      "total": 38000.0
+    },
+    "gas_price": {
+      "chain": "base",
+      "gwei": 0.0042,
+      "updated": "2026-09-02T10:00:00Z"
+    },
+    "liquidity": {
+      "PIDX": 62000.0,
+      "SGUIDE": 48000.0,
+      "VDOO": 31000.0,
+      "PENNIES": 27000.0,
+      "total": 168000.0
+    },
+    "price_history": {
+      "labels": [
+        "-6h",
+        "-5h",
+        "-4h",
+        "-3h",
+        "-2h",
+        "-1h",
+        "now"
+      ],
+      "PIDX": [
+        0.00131,
+        0.00134,
+        0.00136,
+        0.00133,
+        0.00139,
+        0.00141,
+        0.00142
+      ],
+      "SGUIDE": [
+        1.6e-07,
+        1.6e-07,
+        1.5e-07,
+        1.5e-07,
+        1.5e-07,
+        1.5e-07,
+        1.5e-07
+      ],
+      "VDOO": [
+        1.48e-05,
+        1.49e-05,
+        1.51e-05,
+        1.5e-05,
+        1.51e-05,
+        1.52e-05,
+        1.52e-05
+      ],
+      "PENNIES": [
+        0.00015,
+        0.000155,
+        0.000158,
+        0.000157,
+        0.000159,
+        0.00016,
+        0.00016
+      ]
+    }
+  },
+  "staking_data": {
+    "total_staked": 100000.0,
+    "total_value_locked": 168000.0,
+    "avg_apy": 22.5,
+    "auto_compound": true,
+    "pools": {
+      "PIDX": {
+        "apy": 18.5,
+        "staked": 35000,
+        "rewards": 6475,
+        "lock_days": 0
+      },
+      "SGUIDE": {
+        "apy": 22.0,
+        "staked": 25000,
+        "rewards": 5500,
+        "lock_days": 7
+      },
+      "VDOO": {
+        "apy": 25.0,
+        "staked": 20000,
+        "rewards": 5000,
+        "lock_days": 14
+      },
+      "PENNIES": {
+        "apy": 30.0,
+        "staked": 20000,
+        "rewards": 6000,
+        "lock_days": 30
+      }
+    },
+    "apy_history": {
+      "labels": [
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep"
+      ],
+      "vault_value": [
+        58000,
+        64500,
+        71200,
+        80400,
+        88900,
+        95300,
+        101195
+      ],
+      "apy": [
+        11.0,
+        11.8,
+        12.0,
+        12.2,
+        12.4,
+        12.5,
+        12.5
+      ]
+    },
+    "user_position": {
+      "staked": 0,
+      "rewards": 0,
+      "pending": 0
+    }
+  },
+  "mining_stats": {
+    "active_miners": 4,
+    "total_hash_rate": "500 TH/s",
+    "hash_rate_th": 500,
+    "daily_earnings_btc": 0.0026,
+    "monthly_earnings_btc": 0.078,
+    "pool_luck": 102.4,
+    "shares_accepted": 184203,
+    "shares_rejected": 411,
+    "uptime_pct": 99.4,
+    "earnings_history": {
+      "labels": [
+        "-6d",
+        "-5d",
+        "-4d",
+        "-3d",
+        "-2d",
+        "-1d",
+        "today"
+      ],
+      "btc": [
+        0.0021,
+        0.0023,
+        0.0022,
+        0.0025,
+        0.0024,
+        0.0026,
+        0.0026
+      ]
+    },
+    "workers": {
+      "AGI_PIDX_worker": {
+        "hash_rate": "125 TH/s",
+        "active": true
+      },
+      "AGI_SGUIDE_worker": {
+        "hash_rate": "125 TH/s",
+        "active": true
+      },
+      "AGI_VDOO_worker": {
+        "hash_rate": "125 TH/s",
+        "active": true
+      },
+      "AGI_PENNIES_worker": {
+        "hash_rate": "125 TH/s",
+        "active": true
+      }
+    }
+  },
+  "community_metrics": {
+    "twitter": {
+      "handle": "jvoidial",
+      "followers": 1240,
+      "embed_enabled": true
+    },
+    "discord": {
+      "invite": "",
+      "widget_id": "",
+      "members": 380,
+      "online": 42
+    },
+    "telegram": {
+      "handle": "",
+      "members": 615
+    },
+    "github": {
+      "repo": "jvoidial/spirit-guide-token",
+      "stars": 12
+    },
+    "leaderboards": {
+      "top_holders": [
+        {
+          "rank": 1,
+          "address": "0x7f3a...9e2b",
+          "balance": 250000000,
+          "token": "SGUIDE"
+        },
+        {
+          "rank": 2,
+          "address": "0x95c7...7f0c",
+          "balance": 120000000,
+          "token": "SGUIDE"
+        },
+        {
+          "rank": 3,
+          "address": "0x2a92...19A7",
+          "balance": 84000000,
+          "token": "PENNIES"
+        },
+        {
+          "rank": 4,
+          "address": "0x38e4...d30b",
+          "balance": 51000000,
+          "token": "VDOO"
+        },
+        {
+          "rank": 5,
+          "address": "0xb50D...dc5a",
+          "balance": 33000000,
+          "token": "PIDX"
+        }
+      ],
+      "top_stakers": [
+        {
+          "rank": 1,
+          "address": "0x7f3a...9e2b",
+          "staked": 35000,
+          "rewards": 6475
+        },
+        {
+          "rank": 2,
+          "address": "0x95c7...7f0c",
+          "staked": 25000,
+          "rewards": 5500
+        },
+        {
+          "rank": 3,
+          "address": "0x2a92...19A7",
+          "staked": 20000,
+          "rewards": 5000
+        },
+        {
+          "rank": 4,
+          "address": "0x38e4...d30b",
+          "staked": 12000,
+          "rewards": 2600
+        },
+        {
+          "rank": 5,
+          "address": "0xb50D...dc5a",
+          "staked": 8000,
+          "rewards": 1740
+        }
+      ]
+    }
+  },
+  "governance": {
+    "contract": null,
+    "voting_token": "SGUIDE",
+    "quorum": 1000000,
+    "proposals": [
+      {
+        "id": 1,
+        "title": "Raise Pennies Vault base APY to 15%",
+        "description": "Increase the base vault APY from 12.5% to 15% funded by mining yield.",
+        "status": "active",
+        "votes_for": 640000,
+        "votes_against": 120000,
+        "ends": "2026-09-16T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "title": "Add VDOO/PENNIES liquidity pool",
+        "description": "Seed a new Base liquidity pool pairing VDOO with PENNIES.",
+        "status": "active",
+        "votes_for": 310000,
+        "votes_against": 288000,
+        "ends": "2026-09-20T00:00:00Z"
+      },
+      {
+        "id": 3,
+        "title": "Renounce remaining mint authority",
+        "description": "Permanently renounce mint authority on all four tokens.",
+        "status": "passed",
+        "votes_for": 1420000,
+        "votes_against": 64000,
+        "ends": "2026-08-22T00:00:00Z"
+      }
+    ]
+  },
+  "wallet_connect": {
+    "chain_id": 8453,
+    "chain_id_hex": "0x2105",
+    "chain_name": "Base",
+    "rpc": "https://mainnet.base.org",
+    "explorer": "https://basescan.org",
+    "native_currency": {
+      "name": "Ether",
+      "symbol": "ETH",
+      "decimals": 18
+    },
+    "supported_wallets": [
+      "MetaMask",
+      "Coinbase Wallet",
+      "Injected"
+    ],
+    "staking_contract": null,
+    "governance_contract": null
+  },
+  "notifications": [
+    {
+      "id": 1,
+      "type": "reward",
+      "title": "Rewards distributed",
+      "message": "38.68 PENNIES distributed to vault stakers.",
+      "time": "2026-09-02T04:11:52Z",
+      "read": false
+    },
+    {
+      "id": 2,
+      "type": "governance",
+      "title": "New proposal",
+      "message": "Proposal #2 'Add VDOO/PENNIES liquidity pool' is open for voting.",
+      "time": "2026-09-01T18:00:00Z",
+      "read": false
+    },
+    {
+      "id": 3,
+      "type": "price",
+      "title": "PIDX +4.2%",
+      "message": "PIDX moved above $0.0014 in the last 24h.",
+      "time": "2026-09-01T09:30:00Z",
+      "read": true
+    },
+    {
+      "id": 4,
+      "type": "mining",
+      "title": "Mining uptime 99.4%",
+      "message": "All four workers reporting healthy hash rates.",
+      "time": "2026-08-31T22:15:00Z",
+      "read": true
+    }
+  ],
+  "user_preferences": {
+    "theme": "dark",
+    "auto_compound": true,
+    "notification_enabled": true,
+    "default_token": "PIDX",
+    "refresh_interval_ms": 60000
+  },
+  "predictions": {
+    "horizon": "30d",
+    "model": "quantum_ease_flow_v3",
+    "confidence": 0.62,
+    "tokens": {
+      "PIDX": {
+        "target_usd": 0.00185,
+        "direction": "up",
+        "confidence": 0.64
+      },
+      "SGUIDE": {
+        "target_usd": 1.8e-07,
+        "direction": "up",
+        "confidence": 0.58
+      },
+      "VDOO": {
+        "target_usd": 1.49e-05,
+        "direction": "flat",
+        "confidence": 0.55
+      },
+      "PENNIES": {
+        "target_usd": 0.00021,
+        "direction": "up",
+        "confidence": 0.61
+      }
+    },
+    "vault_tvl_target": 220000.0
   }
 }

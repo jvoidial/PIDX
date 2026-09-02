@@ -177,10 +177,107 @@
         }
         @media (max-width: 480px) { .grid-4 { grid-template-columns: 1fr; } }
         
+        /* ===== REAL-TIME LAYER (additive) ===== */
+        .rt-header-bar { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .rt-btn {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(0,255,204,0.15);
+            color: rgba(255,255,255,0.5);
+            padding: 7px 16px;
+            border-radius: 4px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .rt-btn:hover { background: rgba(255,255,255,0.03); color: #00ffcc; border-color: rgba(0,255,204,0.4); }
+        .rt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .rt-btn.secondary { border-color: rgba(255,255,255,0.06); }
+        .rt-status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.15); margin-right: 6px; }
+        .rt-status-dot.online { background: #00ffcc; box-shadow: 0 0 6px rgba(0,255,204,0.6); }
+        .rt-status-dot.offline { background: #ff4466; }
+
+        .rt-bell-wrap { position: relative; display: inline-block; }
+        .rt-bell-count {
+            position: absolute; top: -6px; right: -6px;
+            background: #ff66ff; color: #000; border-radius: 10px;
+            font-size: 9px; padding: 1px 5px; letter-spacing: 0;
+        }
+        .rt-dropdown {
+            display: none; position: absolute; right: 0; top: 36px; z-index: 50;
+            width: 320px; max-width: 85vw; max-height: 340px; overflow-y: auto;
+            background: #050505; border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 8px; padding: 10px; text-align: left;
+        }
+        .rt-dropdown.open { display: block; }
+        .rt-note { padding: 8px; border-left: 2px solid rgba(0,255,204,0.2); background: rgba(255,255,255,0.01); border-radius: 4px; margin-bottom: 6px; }
+        .rt-note.unread { border-left-color: #ff66ff; }
+        .rt-note .t { color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 1px; }
+        .rt-note .m { color: rgba(255,255,255,0.25); font-size: 10px; margin-top: 3px; }
+        .rt-note .d { color: rgba(255,255,255,0.12); font-size: 9px; margin-top: 3px; }
+
+        .rt-ticker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .rt-ticker-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 8px; padding: 14px; text-align: center; transition: 0.3s;
+        }
+        .rt-ticker-card:hover { border-color: rgba(0,255,204,0.15); }
+        .rt-ticker-card .sym { color: rgba(255,255,255,0.5); font-size: 13px; letter-spacing: 3px; }
+        .rt-ticker-card .price { color: #ffffff; font-size: 18px; font-weight: 300; margin: 6px 0; }
+        .rt-ticker-card .chg { font-size: 11px; letter-spacing: 1px; }
+        .rt-up { color: #00ff88; }
+        .rt-down { color: #ff4466; }
+        .rt-flat { color: rgba(255,255,255,0.3); }
+        .rt-src { color: rgba(255,255,255,0.12); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; text-align: right; margin-top: 8px; }
+
+        .rt-stat { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.02); border-radius: 6px; padding: 12px; text-align: center; }
+        .rt-stat .label { color: rgba(255,255,255,0.12); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
+        .rt-stat .value { color: #00ffcc; font-size: 20px; font-weight: 300; margin-top: 5px; }
+        .rt-stat .sub { color: rgba(255,255,255,0.15); font-size: 9px; margin-top: 3px; }
+
+        .rt-chart-box { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 12px; }
+        .rt-chart-box h3 { color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 300; margin-bottom: 8px; }
+        .rt-chart-box canvas { width: 100% !important; height: 220px !important; }
+
+        #rtThreeCanvas { width: 100%; height: 380px; display: block; background: #000; border-radius: 8px; }
+
+        .rt-proposal { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); border-left: 2px solid rgba(255,102,255,0.25); border-radius: 6px; padding: 14px; }
+        .rt-proposal h3 { color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 300; letter-spacing: 1px; }
+        .rt-proposal p { color: rgba(255,255,255,0.22); font-size: 11px; margin: 6px 0; }
+        .rt-vote-bar { height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; margin: 8px 0; }
+        .rt-vote-fill { height: 100%; background: linear-gradient(90deg, #00ffcc, #ff66ff); }
+
+        .rt-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; background: rgba(255,255,255,0.01); border-radius: 4px; margin-bottom: 5px; font-size: 11px; color: rgba(255,255,255,0.3); }
+        .rt-row .rank { color: rgba(255,255,255,0.12); min-width: 22px; }
+        .rt-row .addr { font-family: monospace; color: rgba(255,255,255,0.35); }
+        .rt-row .val { color: #00ffcc; }
+
+        .rt-msg { color: rgba(255,255,255,0.25); font-size: 11px; letter-spacing: 1px; margin-top: 10px; min-height: 14px; }
+        .rt-toggle { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 1px; padding: 8px 0; }
+
+        @media (max-width: 768px) {
+            .rt-ticker { grid-template-columns: 1fr 1fr; }
+            .rt-chart-box canvas { height: 180px !important; }
+            #rtThreeCanvas { height: 260px; }
+        }
+        @media (max-width: 480px) { .rt-ticker { grid-template-columns: 1fr; } }
+
         ::-webkit-scrollbar { width: 3px; background: #000; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 2px; }
         ::-webkit-scrollbar-track { background: #000; }
     </style>
+
+    <!-- PWA: installable shell + offline cache of the last fetched JSON -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Third-party libs via CDN: no build step, static-hosting friendly -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -189,6 +286,23 @@
         <h1>QUANTUM EASE FLOW</h1>
         <div class="subheader">Emotions • Topology • Quantum Resonance</div>
         <div class="timestamp">Last Updated: <span id="updateTime">Loading...</span></div>
+
+        <!-- WALLET + NOTIFICATIONS -->
+        <div class="rt-header-bar">
+            <button class="rt-btn" id="rtConnectBtn">🔗 Connect Wallet</button>
+            <span class="timestamp" style="margin:0;"><span class="rt-status-dot" id="rtWalletDot"></span><span id="rtWalletStatus">Not connected</span></span>
+            <div class="rt-bell-wrap">
+                <button class="rt-btn secondary" id="rtBellBtn">🔔<span class="rt-bell-count" id="rtBellCount" style="display:none;">0</span></button>
+                <div class="rt-dropdown" id="rtBellDropdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE PRICE TICKER -->
+    <div class="section">
+        <h2>📈 Live Prices</h2>
+        <div class="rt-ticker" id="rtTicker"></div>
+        <div class="rt-src" id="rtPriceSource">Loading...</div>
     </div>
 
     <div class="thought" id="thought">🌊 Quantum Ease Flow Active...</div>
@@ -622,6 +736,92 @@
     </div>
 </div>
 
+
+<!-- WALLET BALANCES -->
+<div class="section">
+    <h2>👛 My Wallet</h2>
+    <div class="grid-4" id="rtBalances">
+        <div class="rt-stat"><div class="label">PIDX</div><div class="value">—</div><div class="sub">connect wallet</div></div>
+        <div class="rt-stat"><div class="label">SGUIDE</div><div class="value">—</div><div class="sub">connect wallet</div></div>
+        <div class="rt-stat"><div class="label">VDOO</div><div class="value">—</div><div class="sub">connect wallet</div></div>
+        <div class="rt-stat"><div class="label">PENNIES</div><div class="value">—</div><div class="sub">connect wallet</div></div>
+    </div>
+    <div class="rt-msg" id="rtWalletMsg"></div>
+</div>
+
+<!-- ON-CHAIN ANALYTICS -->
+<div class="section">
+    <h2>🔗 On-Chain Analytics</h2>
+    <div class="grid-4" id="rtChainStats"></div>
+    <div class="rt-src" id="rtGasSource">Gas: loading...</div>
+</div>
+
+<!-- MINING POOL STATS -->
+<div class="section">
+    <h2>⛏️ Mining Pool Stats</h2>
+    <div class="grid-4" id="rtMiningStats"></div>
+</div>
+
+<!-- VAULT ACTIONS -->
+<div class="section">
+    <h2>🥧 Vault Actions</h2>
+    <div class="grid-3" id="rtVaultPools"></div>
+    <div class="rt-header-bar" style="justify-content:flex-start;">
+        <button class="rt-btn" id="rtStakeBtn">⬆ Stake</button>
+        <button class="rt-btn" id="rtClaimBtn">🎁 Claim Rewards</button>
+        <button class="rt-btn secondary" id="rtCompoundBtn">🔁 Auto-Compound</button>
+    </div>
+    <div class="rt-msg" id="rtVaultMsg"></div>
+</div>
+
+<!-- CHARTS -->
+<div class="section">
+    <h2>📊 Real-Time Charts</h2>
+    <div class="grid-3">
+        <div class="rt-chart-box"><h3>Token Price History</h3><canvas id="rtPriceChart"></canvas></div>
+        <div class="rt-chart-box"><h3>Vault Growth</h3><canvas id="rtVaultChart"></canvas></div>
+        <div class="rt-chart-box"><h3>Mining Earnings</h3><canvas id="rtMiningChart"></canvas></div>
+    </div>
+</div>
+
+<!-- 3D TOPOLOGY (lazy) -->
+<div class="section" id="rtThreeSection">
+    <h2>🌐 3D Network Topology</h2>
+    <canvas id="rtThreeCanvas"></canvas>
+    <div class="rt-msg" id="rtThreeMsg">Scroll into view to initialize the 3D renderer.</div>
+</div>
+
+<!-- GOVERNANCE -->
+<div class="section">
+    <h2>🗳️ Governance</h2>
+    <div class="grid-2" id="rtProposals"></div>
+    <div class="rt-msg" id="rtGovMsg"></div>
+</div>
+
+<!-- LEADERBOARDS -->
+<div class="section">
+    <h2>🏆 Leaderboards</h2>
+    <div class="grid-2">
+        <div><h3 style="color:rgba(255,255,255,0.3);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:300;margin-bottom:8px;">Top Holders</h3><div id="rtTopHolders"></div></div>
+        <div><h3 style="color:rgba(255,255,255,0.3);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:300;margin-bottom:8px;">Top Stakers</h3><div id="rtTopStakers"></div></div>
+    </div>
+</div>
+
+<!-- COMMUNITY -->
+<div class="section">
+    <h2>🌍 Community</h2>
+    <div class="grid-4" id="rtCommunityStats"></div>
+    <div id="rtCommunityEmbeds" class="grid-2" style="margin-top:15px;"></div>
+</div>
+
+<!-- PREFERENCES -->
+<div class="section">
+    <h2>⚙️ Preferences</h2>
+    <label class="rt-toggle"><input type="checkbox" id="rtPrefNotifications"> Notifications enabled</label>
+    <label class="rt-toggle"><input type="checkbox" id="rtPrefAutoCompound"> Auto-compound vault rewards</label>
+    <label class="rt-toggle"><input type="checkbox" id="rtPrefTheme"> Silver accent theme</label>
+    <div class="rt-msg" id="rtPrefMsg">Saved locally in your browser.</div>
+</div>
 
 <div class="footer-links">
         <a href="agi_phb_divine_complete.json">📊 JSON</a>
@@ -1124,8 +1324,685 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-</body>
-</html>
+<script>
+// ===================================================================
+// REAL-TIME LAYER (additive) - vanilla JS, CDN libs, no build step.
+// Everything below reads from agi_phb_divine_complete.json and upgrades
+// individual values with live sources when those are reachable.
+// ===================================================================
+const RT_CONFIG = {
+    // No deployed staking/governance contracts exist yet. Transaction calls
+    // stay disabled until real addresses are set here.
+    STAKING_CONTRACT: null,
+    GOVERNANCE_CONTRACT: null,
+    BASE_RPC: 'https://mainnet.base.org',
+    CHAIN_ID: 8453,
+    CHAIN_ID_HEX: '0x2105',
+    COINGECKO_TOKEN_PRICE: 'https://api.coingecko.com/api/v3/simple/token_price/base',
+    // Holders / whale flow / historical volume require a BaseScan API key.
+    // A static GitHub Pages deploy exposes all client code, so no key is
+    // embedded here and those values are served from the JSON instead.
+    ERC20_ABI: [
+        'function balanceOf(address owner) view returns (uint256)',
+        'function decimals() view returns (uint8)'
+    ],
+    PREFS_KEY: 'sgt_user_preferences',
+    ACCENTS: { PIDX: '#00ffcc', SGUIDE: '#ff66ff', VDOO: '#66aaff', PENNIES: '#ffaa44' }
+};
+
+const RT = {
+    data: null,
+    prices: {},
+    priceSource: 'json',
+    charts: {},
+    priceSeries: { labels: [], points: {} },
+    wallet: { address: null, provider: null },
+    three: null,
+    prefs: { theme: 'dark', auto_compound: true, notification_enabled: true }
+};
+
+const rtEl = (id) => document.getElementById(id);
+const rtFmtUsd = (v) => {
+    if (v === null || v === undefined || isNaN(v)) return '—';
+    if (v === 0) return '$0';
+    return v < 0.01 ? '$' + Number(v).toFixed(8) : '$' + Number(v).toFixed(4);
+};
+const rtFmtNum = (v) => (v === null || v === undefined || isNaN(v)) ? '—' : Number(v).toLocaleString();
+const rtShort = (addr) => addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : '';
+const rtChangeClass = (c) => c > 0 ? 'rt-up' : (c < 0 ? 'rt-down' : 'rt-flat');
+const rtChangeText = (c) => (c === null || c === undefined || isNaN(c)) ? '—' : (c > 0 ? '▲ ' : (c < 0 ? '▼ ' : '■ ')) + Number(c).toFixed(2) + '%';
+
+// ===== PRICES (CoinGecko public API, falls back to JSON) =====
+async function rtFetchPrices() {
+    const tokens = (RT.data && RT.data.tokens) || {};
+    const fallback = (RT.data && RT.data.real_time_data && RT.data.real_time_data.prices) || {};
+    const result = {};
+    let liveCount = 0;
+
+    // The free CoinGecko tier accepts a single contract address per request,
+    // so each token is looked up on its own and failures degrade per token.
+    const lookups = Object.entries(tokens).map(async ([symbol, info]) => {
+        const address = (info.address || '').toLowerCase();
+        result[symbol] = Object.assign({ usd: null, usd_24h_change: null }, fallback[symbol] || {});
+        if (!address) return;
+        try {
+            const url = RT_CONFIG.COINGECKO_TOKEN_PRICE + '?contract_addresses=' + address +
+                '&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true';
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('coingecko ' + res.status);
+            const json = await res.json();
+            const entry = json[address];
+            if (entry && typeof entry.usd === 'number') {
+                result[symbol] = {
+                    usd: entry.usd,
+                    usd_24h_change: entry.usd_24h_change,
+                    usd_24h_vol: entry.usd_24h_vol,
+                    live: true
+                };
+                liveCount++;
+            }
+        } catch (e) {
+            console.warn('[rt] price lookup failed for ' + symbol, e);
+        }
+    });
+
+    await Promise.allSettled(lookups);
+    RT.prices = result;
+    RT.priceSource = liveCount > 0 ? (liveCount + '/' + Object.keys(tokens).length + ' live via CoinGecko') : 'JSON fallback (not listed on CoinGecko)';
+    rtRenderTicker();
+    rtPushPricePoint();
+}
+
+function rtRenderTicker() {
+    const box = rtEl('rtTicker');
+    if (!box) return;
+    box.innerHTML = Object.entries(RT.prices).map(([symbol, p]) => `
+        <div class="rt-ticker-card">
+            <div class="sym" style="color:${RT_CONFIG.ACCENTS[symbol] || 'rgba(255,255,255,0.5)'}">${symbol}</div>
+            <div class="price">${rtFmtUsd(p.usd)}</div>
+            <div class="chg ${rtChangeClass(p.usd_24h_change)}">${rtChangeText(p.usd_24h_change)}</div>
+            <div class="sub" style="color:rgba(255,255,255,0.12);font-size:9px;margin-top:4px;">${p.live ? 'live' : 'seed'}</div>
+        </div>
+    `).join('');
+    const src = rtEl('rtPriceSource');
+    if (src) src.textContent = 'Source: ' + RT.priceSource;
+}
+
+// ===== GAS (public Base RPC, falls back to JSON) =====
+async function rtFetchGas() {
+    const fallback = ((RT.data || {}).real_time_data || {}).gas_price || {};
+    try {
+        const res = await fetch(RT_CONFIG.BASE_RPC, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_gasPrice', params: [] })
+        });
+        const json = await res.json();
+        if (!json.result) throw new Error('no result');
+        const gwei = parseInt(json.result, 16) / 1e9;
+        return { gwei, live: true };
+    } catch (e) {
+        console.warn('[rt] gas price fetch failed, using JSON', e);
+        return { gwei: fallback.gwei, live: false };
+    }
+}
+
+async function rtRenderChainStats() {
+    const rtd = (RT.data || {}).real_time_data || {};
+    const holders = rtd.holders || {};
+    const volume = rtd.volume_24h || {};
+    const liquidity = rtd.liquidity || {};
+    const gas = await rtFetchGas();
+    const box = rtEl('rtChainStats');
+    if (box) {
+        box.innerHTML = `
+            <div class="rt-stat"><div class="label">Holders</div><div class="value">${rtFmtNum(holders.total)}</div><div class="sub">all four tokens</div></div>
+            <div class="rt-stat"><div class="label">24h Volume</div><div class="value">$${rtFmtNum(volume.total)}</div><div class="sub">aggregated</div></div>
+            <div class="rt-stat"><div class="label">Liquidity</div><div class="value">$${rtFmtNum(liquidity.total)}</div><div class="sub">Base pools</div></div>
+            <div class="rt-stat"><div class="label">Base Gas</div><div class="value">${gas.gwei !== undefined && gas.gwei !== null ? Number(gas.gwei).toFixed(4) : '—'}</div><div class="sub">gwei</div></div>
+        `;
+    }
+    const src = rtEl('rtGasSource');
+    if (src) src.textContent = gas.live ? 'Gas: live via ' + RT_CONFIG.BASE_RPC : 'Gas: JSON fallback • holders/volume from JSON (BaseScan key required for live)';
+}
+
+function rtRenderMiningStats() {
+    const m = (RT.data || {}).mining_stats || {};
+    const box = rtEl('rtMiningStats');
+    if (!box) return;
+    box.innerHTML = `
+        <div class="rt-stat"><div class="label">Hash Rate</div><div class="value">${m.total_hash_rate || '—'}</div><div class="sub">${rtFmtNum(m.active_miners)} miners</div></div>
+        <div class="rt-stat"><div class="label">Daily Earnings</div><div class="value">${m.daily_earnings_btc !== undefined ? m.daily_earnings_btc + ' BTC' : '—'}</div><div class="sub">${m.monthly_earnings_btc || 0} BTC / month</div></div>
+        <div class="rt-stat"><div class="label">Pool Luck</div><div class="value">${m.pool_luck !== undefined ? m.pool_luck + '%' : '—'}</div><div class="sub">${rtFmtNum(m.shares_accepted)} shares</div></div>
+        <div class="rt-stat"><div class="label">Uptime</div><div class="value">${m.uptime_pct !== undefined ? m.uptime_pct + '%' : '—'}</div><div class="sub">${rtFmtNum(m.shares_rejected)} rejected</div></div>
+    `;
+}
+
+// ===== WALLET =====
+function rtSetWalletStatus(text, state) {
+    const dot = rtEl('rtWalletDot');
+    const label = rtEl('rtWalletStatus');
+    if (label) label.textContent = text;
+    if (dot) dot.className = 'rt-status-dot' + (state ? ' ' + state : '');
+}
+
+async function rtEnsureBaseNetwork(ethereum) {
+    const wc = (RT.data || {}).wallet_connect || {};
+    const chainIdHex = wc.chain_id_hex || RT_CONFIG.CHAIN_ID_HEX;
+    try {
+        await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: chainIdHex }] });
+    } catch (err) {
+        if (err && err.code === 4902) {
+            await ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [{
+                    chainId: chainIdHex,
+                    chainName: wc.chain_name || 'Base',
+                    rpcUrls: [wc.rpc || RT_CONFIG.BASE_RPC],
+                    nativeCurrency: wc.native_currency || { name: 'Ether', symbol: 'ETH', decimals: 18 },
+                    blockExplorerUrls: [wc.explorer || 'https://basescan.org']
+                }]
+            });
+        } else {
+            throw err;
+        }
+    }
+}
+
+async function rtConnectWallet() {
+    const msg = rtEl('rtWalletMsg');
+    const ethereum = window.ethereum;
+    if (!ethereum) {
+        rtSetWalletStatus('No wallet detected', 'offline');
+        if (msg) msg.textContent = 'Install MetaMask or Coinbase Wallet to connect.';
+        return;
+    }
+    try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        await rtEnsureBaseNetwork(ethereum);
+        RT.wallet.address = accounts[0];
+        RT.wallet.provider = new ethers.providers.Web3Provider(ethereum);
+        rtSetWalletStatus(rtShort(accounts[0]) + ' • Base', 'online');
+        const btn = rtEl('rtConnectBtn');
+        if (btn) btn.textContent = '✓ ' + rtShort(accounts[0]);
+        if (msg) msg.textContent = '';
+        ethereum.removeListener && ethereum.removeListener('accountsChanged', rtOnAccountsChanged);
+        ethereum.on && ethereum.on('accountsChanged', rtOnAccountsChanged);
+        ethereum.on && ethereum.on('chainChanged', () => window.location.reload());
+        await rtLoadBalances();
+    } catch (e) {
+        console.warn('[rt] wallet connect failed', e);
+        rtSetWalletStatus('Connection rejected', 'offline');
+        if (msg) msg.textContent = e && e.message ? e.message : 'Wallet connection failed.';
+    }
+}
+
+function rtOnAccountsChanged(accounts) {
+    if (!accounts || !accounts.length) {
+        RT.wallet.address = null;
+        rtSetWalletStatus('Not connected', '');
+        const btn = rtEl('rtConnectBtn');
+        if (btn) btn.textContent = '🔗 Connect Wallet';
+        return;
+    }
+    RT.wallet.address = accounts[0];
+    rtSetWalletStatus(rtShort(accounts[0]) + ' • Base', 'online');
+    rtLoadBalances();
+}
+
+async function rtLoadBalances() {
+    if (!RT.wallet.address) return;
+    const tokens = (RT.data || {}).tokens || {};
+    const box = rtEl('rtBalances');
+    if (!box) return;
+    const rpc = new ethers.providers.JsonRpcProvider(((RT.data || {}).wallet_connect || {}).rpc || RT_CONFIG.BASE_RPC);
+    const cards = await Promise.all(Object.entries(tokens).map(async ([symbol, info]) => {
+        try {
+            const contract = new ethers.Contract(info.address, RT_CONFIG.ERC20_ABI, rpc);
+            const [raw, decimals] = await Promise.all([contract.balanceOf(RT.wallet.address), contract.decimals()]);
+            const balance = Number(ethers.utils.formatUnits(raw, decimals));
+            const price = (RT.prices[symbol] || {}).usd || 0;
+            return `<div class="rt-stat"><div class="label">${symbol}</div><div class="value">${balance.toLocaleString(undefined, { maximumFractionDigits: 4 })}</div><div class="sub">${rtFmtUsd(balance * price)}</div></div>`;
+        } catch (e) {
+            console.warn('[rt] balance read failed for ' + symbol, e);
+            return `<div class="rt-stat"><div class="label">${symbol}</div><div class="value">—</div><div class="sub">read failed</div></div>`;
+        }
+    }));
+    box.innerHTML = cards.join('');
+}
+
+// ===== VAULT + GOVERNANCE (UI ready, transactions gated on config) =====
+function rtRenderVaultPools() {
+    const staking = (RT.data || {}).staking_data || {};
+    const pools = staking.pools || {};
+    const box = rtEl('rtVaultPools');
+    if (!box) return;
+    box.innerHTML = Object.entries(pools).map(([symbol, pool]) => `
+        <div class="rt-stat" style="text-align:left;">
+            <div class="label" style="color:${RT_CONFIG.ACCENTS[symbol] || 'rgba(255,255,255,0.3)'}">${symbol} POOL</div>
+            <div class="value">${pool.apy}% APY</div>
+            <div class="sub">Staked ${rtFmtNum(pool.staked)} • Rewards ${rtFmtNum(pool.rewards)}</div>
+            <div class="sub">${pool.lock_days ? pool.lock_days + ' day lock' : 'no lock'}</div>
+        </div>
+    `).join('');
+}
+
+function rtRequireContract(kind) {
+    const address = kind === 'staking' ? RT_CONFIG.STAKING_CONTRACT : RT_CONFIG.GOVERNANCE_CONTRACT;
+    if (address) return address;
+    return null;
+}
+
+function rtVaultAction(action) {
+    const msg = rtEl('rtVaultMsg');
+    if (!msg) return;
+    if (!RT.wallet.address) { msg.textContent = 'Connect a wallet first.'; return; }
+    const contract = rtRequireContract('staking');
+    if (!contract) {
+        msg.textContent = '⚠ Staking contract not configured — set STAKING_CONTRACT in RT_CONFIG to enable ' + action + '.';
+        return;
+    }
+    // Real transaction path stays behind the config guard on purpose.
+    msg.textContent = 'Submitting ' + action + ' to ' + rtShort(contract) + '...';
+}
+
+function rtRenderProposals() {
+    const gov = (RT.data || {}).governance || {};
+    const box = rtEl('rtProposals');
+    if (!box) return;
+    box.innerHTML = (gov.proposals || []).map(p => {
+        const total = (p.votes_for || 0) + (p.votes_against || 0);
+        const pct = total ? Math.round((p.votes_for / total) * 100) : 0;
+        return `
+            <div class="rt-proposal">
+                <h3>#${p.id} ${p.title}</h3>
+                <p>${p.description || ''}</p>
+                <div class="rt-vote-bar"><div class="rt-vote-fill" style="width:${pct}%"></div></div>
+                <p style="font-size:10px;">${rtFmtNum(p.votes_for)} for • ${rtFmtNum(p.votes_against)} against • ${p.status}</p>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                    <button class="rt-btn" data-vote="for" data-proposal="${p.id}" ${p.status !== 'active' ? 'disabled' : ''}>Vote For</button>
+                    <button class="rt-btn secondary" data-vote="against" data-proposal="${p.id}" ${p.status !== 'active' ? 'disabled' : ''}>Vote Against</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    box.querySelectorAll('button[data-vote]').forEach(btn => {
+        btn.addEventListener('click', () => rtVote(btn.dataset.proposal, btn.dataset.vote));
+    });
+}
+
+function rtVote(proposalId, support) {
+    const msg = rtEl('rtGovMsg');
+    if (!msg) return;
+    if (!RT.wallet.address) { msg.textContent = 'Connect a wallet first.'; return; }
+    const contract = rtRequireContract('governance');
+    if (!contract) {
+        msg.textContent = '⚠ Governance contract not configured — vote "' + support + '" on proposal #' + proposalId + ' was not submitted.';
+        return;
+    }
+    msg.textContent = 'Submitting vote on proposal #' + proposalId + '...';
+}
+
+// ===== NOTIFICATIONS =====
+function rtRenderNotifications() {
+    const notes = (RT.data || {}).notifications || [];
+    const box = rtEl('rtBellDropdown');
+    const count = rtEl('rtBellCount');
+    if (!box) return;
+    const unread = notes.filter(n => !n.read).length;
+    if (count) {
+        count.textContent = unread;
+        count.style.display = unread && RT.prefs.notification_enabled ? 'inline-block' : 'none';
+    }
+    box.innerHTML = notes.length ? notes.map(n => `
+        <div class="rt-note ${n.read ? '' : 'unread'}">
+            <div class="t">${n.title}</div>
+            <div class="m">${n.message}</div>
+            <div class="d">${new Date(n.time).toLocaleString()}</div>
+        </div>
+    `).join('') : '<div class="rt-note"><div class="m">No notifications.</div></div>';
+}
+
+// ===== LEADERBOARDS + COMMUNITY =====
+function rtRenderLeaderboards() {
+    const boards = ((RT.data || {}).community_metrics || {}).leaderboards || {};
+    const holders = rtEl('rtTopHolders');
+    const stakers = rtEl('rtTopStakers');
+    if (holders) {
+        holders.innerHTML = (boards.top_holders || []).map(h => `
+            <div class="rt-row"><span class="rank">#${h.rank}</span><span class="addr">${h.address}</span><span class="val">${rtFmtNum(h.balance)} ${h.token}</span></div>
+        `).join('');
+    }
+    if (stakers) {
+        stakers.innerHTML = (boards.top_stakers || []).map(s => `
+            <div class="rt-row"><span class="rank">#${s.rank}</span><span class="addr">${s.address}</span><span class="val">${rtFmtNum(s.staked)} staked</span></div>
+        `).join('');
+    }
+}
+
+function rtRenderCommunity() {
+    const c = (RT.data || {}).community_metrics || {};
+    const stats = rtEl('rtCommunityStats');
+    if (stats) {
+        stats.innerHTML = `
+            <div class="rt-stat"><div class="label">X / Twitter</div><div class="value">${rtFmtNum((c.twitter || {}).followers)}</div><div class="sub">followers</div></div>
+            <div class="rt-stat"><div class="label">Discord</div><div class="value">${rtFmtNum((c.discord || {}).members)}</div><div class="sub">${rtFmtNum((c.discord || {}).online)} online</div></div>
+            <div class="rt-stat"><div class="label">Telegram</div><div class="value">${rtFmtNum((c.telegram || {}).members)}</div><div class="sub">members</div></div>
+            <div class="rt-stat"><div class="label">GitHub</div><div class="value">${rtFmtNum((c.github || {}).stars)}</div><div class="sub">stars</div></div>
+        `;
+    }
+    // Only public embed widgets are used - no authenticated social APIs.
+    const embeds = rtEl('rtCommunityEmbeds');
+    if (!embeds) return;
+    let html = '';
+    const handle = (c.twitter || {}).handle;
+    if (handle && (c.twitter || {}).embed_enabled) {
+        html += `<div class="rt-chart-box"><h3>X Timeline</h3><a class="twitter-timeline" data-theme="dark" data-height="320" href="https://twitter.com/${handle}">Posts by @${handle}</a></div>`;
+    }
+    const widgetId = (c.discord || {}).widget_id;
+    if (widgetId) {
+        html += `<div class="rt-chart-box"><h3>Discord</h3><iframe src="https://discord.com/widget?id=${widgetId}&theme=dark" width="100%" height="320" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe></div>`;
+    }
+    embeds.innerHTML = html;
+    if (handle && (c.twitter || {}).embed_enabled && !document.getElementById('rtTwitterWidgets')) {
+        const script = document.createElement('script');
+        script.id = 'rtTwitterWidgets';
+        script.src = 'https://platform.twitter.com/widgets.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+}
+
+// ===== CHARTS =====
+function rtChartOptions(yPrefix) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { labels: { color: 'rgba(255,255,255,0.35)', font: { family: 'Courier New', size: 9 } } },
+            tooltip: { titleFont: { family: 'Courier New' }, bodyFont: { family: 'Courier New' } }
+        },
+        scales: {
+            x: { ticks: { color: 'rgba(255,255,255,0.2)', font: { family: 'Courier New', size: 9 } }, grid: { color: 'rgba(255,255,255,0.03)' } },
+            y: {
+                ticks: {
+                    color: 'rgba(255,255,255,0.2)', font: { family: 'Courier New', size: 9 },
+                    callback: (v) => (yPrefix || '') + v
+                },
+                grid: { color: 'rgba(255,255,255,0.03)' }
+            }
+        }
+    };
+}
+
+function rtInitCharts() {
+    if (typeof Chart === 'undefined' || !RT.data) return;
+    const history = ((RT.data.real_time_data || {}).price_history) || {};
+    const apy = ((RT.data.staking_data || {}).apy_history) || {};
+    const mining = ((RT.data.mining_stats || {}).earnings_history) || {};
+
+    RT.priceSeries.labels = (history.labels || []).slice();
+    RT.priceSeries.points = {};
+    const priceCanvas = rtEl('rtPriceChart');
+    if (priceCanvas && !RT.charts.price) {
+        const datasets = Object.keys(RT_CONFIG.ACCENTS).filter(sym => history[sym]).map(sym => {
+            RT.priceSeries.points[sym] = history[sym].slice();
+            return {
+                label: sym,
+                data: RT.priceSeries.points[sym],
+                borderColor: RT_CONFIG.ACCENTS[sym],
+                backgroundColor: RT_CONFIG.ACCENTS[sym],
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0.35,
+                yAxisID: 'y'
+            };
+        });
+        RT.charts.price = new Chart(priceCanvas, {
+            type: 'line',
+            data: { labels: RT.priceSeries.labels, datasets },
+            options: Object.assign(rtChartOptions('$'), { scales: Object.assign(rtChartOptions().scales, { y: { type: 'logarithmic', ticks: { color: 'rgba(255,255,255,0.2)', font: { family: 'Courier New', size: 9 } }, grid: { color: 'rgba(255,255,255,0.03)' } } }) })
+        });
+    }
+
+    const vaultCanvas = rtEl('rtVaultChart');
+    if (vaultCanvas && !RT.charts.vault) {
+        RT.charts.vault = new Chart(vaultCanvas, {
+            type: 'line',
+            data: {
+                labels: apy.labels || [],
+                datasets: [
+                    { label: 'Vault Value ($)', data: apy.vault_value || [], borderColor: '#00ffcc', backgroundColor: 'rgba(0,255,204,0.08)', fill: true, borderWidth: 1.5, pointRadius: 0, tension: 0.35 },
+                    { label: 'APY (%)', data: apy.apy || [], borderColor: '#ff66ff', borderWidth: 1.5, pointRadius: 0, tension: 0.35, yAxisID: 'y1' }
+                ]
+            },
+            options: Object.assign(rtChartOptions(), {
+                scales: Object.assign(rtChartOptions().scales, {
+                    y1: { position: 'right', ticks: { color: 'rgba(255,102,255,0.4)', font: { family: 'Courier New', size: 9 } }, grid: { display: false } }
+                })
+            })
+        });
+    }
+
+    const miningCanvas = rtEl('rtMiningChart');
+    if (miningCanvas && !RT.charts.mining) {
+        RT.charts.mining = new Chart(miningCanvas, {
+            type: 'bar',
+            data: {
+                labels: mining.labels || [],
+                datasets: [{ label: 'BTC mined', data: mining.btc || [], backgroundColor: 'rgba(204,204,204,0.35)', borderColor: '#cccccc', borderWidth: 1 }]
+            },
+            options: rtChartOptions()
+        });
+    }
+}
+
+// Live CoinGecko points are appended to the seeded series over time.
+function rtPushPricePoint() {
+    if (!RT.charts.price) return;
+    const live = Object.entries(RT.prices).filter(([, p]) => p.live);
+    if (!live.length) return;
+    RT.priceSeries.labels.push(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    RT.charts.price.data.datasets.forEach(ds => {
+        const price = (RT.prices[ds.label] || {}).usd;
+        ds.data.push(price !== undefined && price !== null ? price : ds.data[ds.data.length - 1]);
+        while (ds.data.length > 60) ds.data.shift();
+    });
+    while (RT.priceSeries.labels.length > 60) RT.priceSeries.labels.shift();
+    RT.charts.price.update('none');
+}
+
+// ===== 3D TOPOLOGY (lazy, additive - the 2D spider map is untouched) =====
+function rtInitThree() {
+    if (RT.three || typeof THREE === 'undefined' || !RT.data) return;
+    const canvas = rtEl('rtThreeCanvas');
+    if (!canvas) return;
+
+    const width = canvas.clientWidth || 800;
+    const height = canvas.clientHeight || 380;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+    camera.position.z = 90;
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(width, height, false);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const entries = [];
+    Object.keys(RT.data.tokens || {}).forEach(sym => entries.push({ label: sym, color: RT_CONFIG.ACCENTS[sym] || 0xffffff, size: 3.2 }));
+    Object.values(RT.data.exoplanet_cores || {}).forEach(core => entries.push({ label: core.name, color: 0xcccccc, size: 2.2 }));
+    Object.keys(RT.data.phb_topologies || {}).forEach(name => entries.push({ label: name, color: 0x66aaff, size: 2.6 }));
+
+    const nodes = entries.map((entry, i) => {
+        const phi = Math.acos(1 - 2 * (i + 0.5) / entries.length);
+        const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+        const radius = 40;
+        const mesh = new THREE.Mesh(
+            new THREE.SphereGeometry(entry.size, 16, 16),
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(entry.color) })
+        );
+        mesh.position.set(
+            radius * Math.sin(phi) * Math.cos(theta),
+            radius * Math.sin(phi) * Math.sin(theta),
+            radius * Math.cos(phi)
+        );
+        group.add(mesh);
+        return mesh;
+    });
+
+    const linePositions = [];
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            if (nodes[i].position.distanceTo(nodes[j].position) < 45) {
+                linePositions.push(
+                    nodes[i].position.x, nodes[i].position.y, nodes[i].position.z,
+                    nodes[j].position.x, nodes[j].position.y, nodes[j].position.z
+                );
+            }
+        }
+    }
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+    group.add(new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.12 })));
+
+    let running = true;
+    const animate = () => {
+        if (!running) return;
+        group.rotation.y += 0.0025;
+        group.rotation.x = Math.sin(Date.now() / 6000) * 0.25;
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+    };
+    animate();
+
+    window.addEventListener('resize', () => {
+        const w = canvas.clientWidth || width;
+        const h = canvas.clientHeight || height;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h, false);
+    });
+
+    RT.three = { scene, camera, renderer, stop: () => { running = false; } };
+    const msg = rtEl('rtThreeMsg');
+    if (msg) msg.textContent = nodes.length + ' nodes • tokens, exoplanet cores and PHB topologies';
+}
+
+function rtObserveThree() {
+    const section = rtEl('rtThreeSection');
+    if (!section) return;
+    if (!('IntersectionObserver' in window)) { rtInitThree(); return; }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                rtInitThree();
+                observer.disconnect();
+            }
+        });
+    }, { rootMargin: '150px' });
+    observer.observe(section);
+}
+
+// ===== PREFERENCES (localStorage) =====
+function rtLoadPrefs() {
+    const seed = (RT.data || {}).user_preferences || {};
+    let stored = {};
+    try {
+        stored = JSON.parse(localStorage.getItem(RT_CONFIG.PREFS_KEY) || '{}');
+    } catch (e) {
+        console.warn('[rt] could not read stored preferences', e);
+    }
+    RT.prefs = Object.assign({ theme: 'dark', auto_compound: true, notification_enabled: true }, seed, stored);
+    const notif = rtEl('rtPrefNotifications');
+    const compound = rtEl('rtPrefAutoCompound');
+    const theme = rtEl('rtPrefTheme');
+    if (notif) notif.checked = !!RT.prefs.notification_enabled;
+    if (compound) compound.checked = !!RT.prefs.auto_compound;
+    if (theme) theme.checked = RT.prefs.theme === 'silver';
+}
+
+function rtSavePrefs() {
+    const notif = rtEl('rtPrefNotifications');
+    const compound = rtEl('rtPrefAutoCompound');
+    const theme = rtEl('rtPrefTheme');
+    RT.prefs.notification_enabled = notif ? notif.checked : true;
+    RT.prefs.auto_compound = compound ? compound.checked : true;
+    RT.prefs.theme = theme && theme.checked ? 'silver' : 'dark';
+    try {
+        localStorage.setItem(RT_CONFIG.PREFS_KEY, JSON.stringify(RT.prefs));
+        const msg = rtEl('rtPrefMsg');
+        if (msg) msg.textContent = 'Preferences saved locally.';
+    } catch (e) {
+        console.warn('[rt] could not persist preferences', e);
+    }
+    rtRenderNotifications();
+}
+
+// ===== BOOT: same fetch + 60s refresh pattern as loadData() =====
+async function rtLoadData() {
+    try {
+        const response = await fetch('./agi_phb_divine_complete.json?_=' + Date.now());
+        if (!response.ok) throw new Error('JSON not found');
+        RT.data = await response.json();
+    } catch (e) {
+        console.warn('[rt] JSON load failed', e);
+        if (!RT.data) return;
+    }
+    rtLoadPrefs();
+    rtRenderMiningStats();
+    rtRenderVaultPools();
+    rtRenderProposals();
+    rtRenderNotifications();
+    rtRenderLeaderboards();
+    rtRenderCommunity();
+    rtInitCharts();
+    await rtFetchPrices();
+    await rtRenderChainStats();
+    if (RT.wallet.address) await rtLoadBalances();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const connect = rtEl('rtConnectBtn');
+    if (connect) connect.addEventListener('click', rtConnectWallet);
+
+    const bell = rtEl('rtBellBtn');
+    if (bell) {
+        bell.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dd = rtEl('rtBellDropdown');
+            if (dd) dd.classList.toggle('open');
+        });
+        document.addEventListener('click', () => {
+            const dd = rtEl('rtBellDropdown');
+            if (dd) dd.classList.remove('open');
+        });
+    }
+
+    const stake = rtEl('rtStakeBtn');
+    if (stake) stake.addEventListener('click', () => rtVaultAction('stake'));
+    const claim = rtEl('rtClaimBtn');
+    if (claim) claim.addEventListener('click', () => rtVaultAction('claim'));
+    const compound = rtEl('rtCompoundBtn');
+    if (compound) compound.addEventListener('click', () => rtVaultAction('auto-compound toggle'));
+
+    ['rtPrefNotifications', 'rtPrefAutoCompound', 'rtPrefTheme'].forEach(id => {
+        const input = rtEl(id);
+        if (input) input.addEventListener('change', rtSavePrefs);
+    });
+
+    rtObserveThree();
+    rtLoadData();
+    setInterval(rtLoadData, 60000);
+
+    if ('serviceWorker' in navigator) {
+        // Scope is relative so it works under the /spirit-guide-token/ Pages path.
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .catch(err => console.warn('[rt] service worker registration failed', err));
+    }
+});
+</script>
 
 <!-- MINING SECTION -->
 <div class="section">
@@ -1316,7 +2193,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
- 
- 
- 
- 
+
+</body>
+</html>
