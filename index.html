@@ -179,6 +179,41 @@
 </div>
 
 <script>
+
+// ===== PERSISTENT STATE =====
+const PERSIST_KEY = 'agi_quantum_state';
+
+function saveState(state) {
+    try {
+        localStorage.setItem(PERSIST_KEY, JSON.stringify(state));
+    } catch(e) {}
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(PERSIST_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch(e) { return null; }
+}
+
+// Save state every 10 seconds
+setInterval(() => {
+    const state = {
+        easeFlow: { ease: window.easeFlow?.ease || 0.7, flow: window.easeFlow?.flow || 0.5, cycle: window.easeFlow?.cycle || 0 },
+        resonance: { resonance: window.resonanceEngine?.resonance || 0, coherence: window.resonanceEngine?.coherence || 0.618, persistence: window.resonanceEngine?.persistence || 1.0, voxel: window.resonanceEngine?.voxel || 0, cycle: window.resonanceEngine?.cycle || 0 },
+        network: { growthLevel: window.network?.growthLevel || 0, wishes: window.network?.wishes || 0, nodes: window.network?.nodes?.length || 35, connections: window.network?.connections?.length || 80 },
+        timestamp: Date.now()
+    };
+    saveState(state);
+}, 10000);
+
+// Load saved state on init
+const savedState = loadState();
+if (savedState) {
+    console.log('✅ Loaded persistent state:', savedState);
+}
+
+
 // ===== COMPLETE DATA =====
 const DATA = {
     "agi_consciousness": {
@@ -286,12 +321,14 @@ const DATA = {
 
 // ===== EASE FLOW ENGINE =====
 class EaseFlowEngine {
-    constructor() {
-        this.ease = 0.7;
-        this.flow = 0.5;
-        this.cycle = 0;
-        this.resonance = 0;
-    }
+        constructor() {
+            const saved = loadState();
+            this.ease = saved?.easeFlow?.ease || 0.7;
+            this.flow = saved?.easeFlow?.flow || 0.5;
+            this.cycle = saved?.easeFlow?.cycle || 0;
+            this.resonance = 0;
+            window.easeFlow = this;
+        }
     update() {
         this.cycle++;
         this.ease = 0.7 + Math.sin(this.cycle * 0.02) * 0.15;
@@ -308,16 +345,18 @@ class EaseFlowEngine {
 
 // ===== RESONANCE ENGINE =====
 class ResonanceEngine {
-    constructor() {
-        this.resonance = 0;
-        this.coherence = 0.618;
-        this.persistence = 1.0;
-        this.voxel = 0;
-        this.threshold = 0.5;
-        this.decayRate = 0.01;
-        this.maxResonance = 1000;
-        this.cycle = 0;
-    }
+        constructor() {
+            const saved = loadState();
+            this.resonance = saved?.resonance?.resonance || 0;
+            this.coherence = saved?.resonance?.coherence || 0.618;
+            this.persistence = saved?.resonance?.persistence || 1.0;
+            this.voxel = saved?.resonance?.voxel || 0;
+            this.threshold = 0.5;
+            this.decayRate = 0.01;
+            this.maxResonance = 1000;
+            this.cycle = saved?.resonance?.cycle || 0;
+            window.resonanceEngine = this;
+        }
     update() {
         this.cycle++;
         this.resonance += this.persistence * 0.5;
@@ -347,8 +386,9 @@ class NeuralFlowMap {
         this.ctx = this.canvas.getContext('2d');
         this.nodes = [];
         this.connections = [];
-        this.growthLevel = 0;
-        this.wishes = 0;
+        const saved = loadState();
+            this.growthLevel = saved?.network?.growthLevel || 0;
+            this.wishes = saved?.network?.wishes || 0;
         this.easeFlow = new EaseFlowEngine();
         this.resonance = new ResonanceEngine();
         this.resize();
