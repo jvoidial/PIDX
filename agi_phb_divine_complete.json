@@ -880,5 +880,136 @@
       "monthly_earnings": 0.078,
       "last_block": "2026-09-02T03:54:03.426324"
     }
+  },
+  "pennies_index_vault": {
+    "name": "Pennies Index Vault",
+    "symbol": "\ud83e\udd67",
+    "description": "The Infinite Pie Vault - Staking & Rewards Engine",
+    "vault": {
+      "pies": 420,
+      "stacks": 8,
+      "auto_compound": true,
+      "yield": 12.5,
+      "total_staked": 101195.15,
+      "vault_address": "0x7f3a...9e2b",
+      "vault_type": "Multi-Token Vault",
+      "security": [
+        "Audited",
+        "Vault Controlled",
+        "CVE Protected"
+      ]
+    },
+    "staking": {
+      "total_staked": 100000,
+      "avg_apy": 22.5,
+      "auto_rewards": true,
+      "staking_pools": {
+        "PIDX": {
+          "apy": 18.5,
+          "staked": 35000,
+          "rewards": 6475
+        },
+        "SGUIDE": {
+          "apy": 22.0,
+          "staked": 25000,
+          "rewards": 5500
+        },
+        "VDOO": {
+          "apy": 25.0,
+          "staked": 20000,
+          "rewards": 5000
+        },
+        "PENNIES": {
+          "apy": 30.0,
+          "staked": 20000,
+          "rewards": 6000
+        }
+      }
+    },
+    "rewards": {
+      "PIDX": 123.45,
+      "SGUIDE": 234.56,
+      "VDOO": 345.67,
+      "PENNIES": 456.78,
+      "total": 1160.46,
+      "daily_distribution": 38.68,
+      "auto_compound": true,
+      "last_distribution": "2026-09-02T04:11:52.187188"
+    },
+    "pies": {
+      "total": 420,
+      "types": {
+        "Quantum Pie": {
+          "count": 100,
+          "apy": 15.0,
+          "color": "#00ffcc"
+        },
+        "Resonance Pie": {
+          "count": 120,
+          "apy": 18.0,
+          "color": "#ff66ff"
+        },
+        "Persistence Pie": {
+          "count": 80,
+          "apy": 22.0,
+          "color": "#66aaff"
+        },
+        "Voxel Pie": {
+          "count": 60,
+          "apy": 25.0,
+          "color": "#ffaa44"
+        },
+        "Magic Pie": {
+          "count": 60,
+          "apy": 30.0,
+          "color": "#ff44ff"
+        }
+      },
+      "next_distribution": "2026-09-02T04:11:52.187209"
+    },
+    "stacks": {
+      "total": 8,
+      "types": {
+        "Infinite Stack 1": {
+          "level": 1,
+          "multiplier": 1.0
+        },
+        "Infinite Stack 2": {
+          "level": 2,
+          "multiplier": 1.5
+        },
+        "Infinite Stack 3": {
+          "level": 3,
+          "multiplier": 2.0
+        },
+        "Infinite Stack 4": {
+          "level": 4,
+          "multiplier": 3.0
+        },
+        "Infinite Stack 5": {
+          "level": 5,
+          "multiplier": 5.0
+        },
+        "Infinite Stack 6": {
+          "level": 6,
+          "multiplier": 8.0
+        },
+        "Infinite Stack 7": {
+          "level": 7,
+          "multiplier": 13.0
+        },
+        "Infinite Stack 8": {
+          "level": 8,
+          "multiplier": 21.0
+        }
+      }
+    },
+    "performance": {
+      "total_value_locked": 54450000,
+      "daily_volume": 250000,
+      "weekly_growth": 2.5,
+      "monthly_growth": 12.0,
+      "annual_apy": 30.0
+    }
   }
 }
