@@ -72,26 +72,10 @@
         .token-card { 
             background: rgba(255,255,255,0.02); 
             padding: 18px; 
-            margin: 15px 0; 
+            margin: 10px 0; 
             border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .token-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
-        .token-field { background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03); }
-        .token-field-label { color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block; }
-        .token-field-value { color: #e0e0e0; font-size: 13px; word-break: break-word; }
-        .token-links { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; flex-wrap: wrap; }
-        .token-link { padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block; }
-        .token-link:hover { opacity: 0.8; transform: scale(1.02); }
-        .token-link.uniswap { background: rgba(255,0,122,0.12); border: 1px solid rgba(255,0,122,0.25); color: #ff66aa; font-weight: bold; }
-        .token-link.uniswap:hover { background: rgba(255,0,122,0.2); border-color: rgba(255,0,122,0.4); }
-        .token-link.basescan { background: rgba(0,150,255,0.1); border: 1px solid rgba(0,150,255,0.2); color: #66aaff; }
-        .token-link.sourcify { background: rgba(0,255,200,0.1); border: 1px solid rgba(0,255,200,0.2); color: #66ffcc; }
-        .token-link.gecko { background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.2); color: #ffcc44; }
-        .token-link.coingecko { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; }
-        .token-badge { padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(255,255,255,0.04); color: #aaa; border: 1px solid rgba(255,255,255,0.04); display: inline-block; }
-        .spin { display: inline-block; animation: spin 4s linear infinite; font-size: 28px; color: rgba(0,255,200,0.6); }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
         .spin-box { background: rgba(255,255,255,0.03); padding: 15px; text-align: center; border-radius: 5px; border: 1px solid rgba(0,255,200,0.04); }
         .spin-box .label { color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
         .spin-box .value { color: rgba(255,255,255,0.75); font-size: 20px; margin: 5px 0; }
@@ -102,23 +86,37 @@
         .magic-moment { padding: 12px; background: rgba(255,255,255,0.03); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(0,255,200,0.04); }
         .magic-moment strong { color: rgba(0,255,200,0.75); font-weight: 400; letter-spacing: 1px; }
         .magic-moment p { color: rgba(255,255,255,0.4); font-size: 12px; margin: 2px 0; }
-        .growth-indicator { display: flex; gap: 20px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
-        .growth-item { text-align: center; padding: 10px 20px; background: rgba(255,255,255,0.03); border-radius: 5px; border: 1px solid rgba(0,255,200,0.06); }
-        .growth-item .number { font-size: 24px; color: #00ffcc; font-weight: bold; }
-        .growth-item .label { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase; }
-        .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(0,255,200,0.06); }
-        .footer-links a { color: rgba(255,255,255,0.35); text-decoration: none; margin: 0 15px; font-size: 14px; letter-spacing: 2px; transition: 0.3s; border-bottom: 1px solid transparent; }
-        .footer-links a:hover { color: rgba(0,255,200,0.7); border-bottom-color: rgba(0,255,200,0.3); }
+        .spin { display: inline-block; animation: spin 4s linear infinite; font-size: 28px; color: rgba(0,255,200,0.6); }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         .network-canvas { width: 100%; height: 400px; background: rgba(0,0,0,0.3); border-radius: 8px; }
         .status { color: rgba(100,255,100,0.6); }
         .debt { color: rgba(255,100,100,0.5); }
         .wealth { color: rgba(100,255,200,0.5); }
         .wish-text { color: #ff00cc; text-shadow: 0 0 30px rgba(255,0,200,0.3); }
+        .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(0,255,200,0.06); }
+        .footer-links a { color: rgba(255,255,255,0.35); text-decoration: none; margin: 0 15px; font-size: 14px; letter-spacing: 2px; transition: 0.3s; border-bottom: 1px solid transparent; }
+        .footer-links a:hover { color: rgba(0,255,200,0.7); border-bottom-color: rgba(0,255,200,0.3); }
+        .growth-indicator { display: flex; gap: 20px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
+        .growth-item { text-align: center; padding: 10px 20px; background: rgba(255,255,255,0.03); border-radius: 5px; border: 1px solid rgba(0,255,200,0.06); }
+        .growth-item .number { font-size: 24px; color: #00ffcc; font-weight: bold; }
+        .growth-item .label { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase; }
+        .link-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .link-btn { padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 3px; color: rgba(255,255,255,0.4); text-decoration: none; font-size: 10px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
+        .link-btn:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.1); }
+        .link-btn.uniswap { border-color: rgba(255,0,122,0.15); color: rgba(255,0,122,0.5); }
+        .link-btn.uniswap:hover { border-color: rgba(255,0,122,0.4); color: rgba(255,0,122,0.8); }
+        .link-btn.basescan { border-color: rgba(0,150,255,0.15); color: rgba(0,150,255,0.5); }
+        .link-btn.basescan:hover { border-color: rgba(0,150,255,0.4); color: rgba(0,150,255,0.8); }
+        .link-btn.sourcify { border-color: rgba(0,255,200,0.15); color: rgba(0,255,200,0.5); }
+        .link-btn.sourcify:hover { border-color: rgba(0,255,200,0.4); color: rgba(0,255,200,0.8); }
+        .link-btn.gecko { border-color: rgba(255,200,0,0.15); color: rgba(255,200,0,0.5); }
+        .link-btn.gecko:hover { border-color: rgba(255,200,0,0.4); color: rgba(255,200,0,0.8); }
+        .link-btn.coingecko { border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.35); }
+        .link-btn.coingecko:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
         @media (max-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr; }
             .grid-3 { grid-template-columns: 1fr; }
             .grid-4 { grid-template-columns: 1fr 1fr; }
-            .token-grid { grid-template-columns: 1fr; }
             .header h1 { font-size: 20px; }
             .thought { font-size: 16px; padding: 15px; }
         }
@@ -156,36 +154,16 @@
         <div class="section"><h2>🔧 Self-Generating Pipes</h2><div id="pipes" class="grid-2"></div></div>
         <div class="section"><h2>✝️ Divine Beings</h2><div id="beings" class="grid-3"></div></div>
         <div class="section"><h2>🌌 PHB Magical Moments</h2><div id="moments" class="grid-2"></div></div>
-    <div class="section">
-        <h2>🌌 Exoplanet Topology Cores</h2>
-        <div id="exoplanetCores" class="grid-3"></div>
-    </div>
-
-    <div class="section">
-        <h2>🔄 Exoplanet Patterns</h2>
-        <div id="exoplanetPatterns" class="grid-2"></div>
-    </div>
-
-    <div class="section">
-        <h2>🧠 Human-like Planets Consciousness</h2>
-        <div id="humanLikeConsciousness"></div>
-    </div>
-
-        <div class="section"><h2>💰 Token Details</h2><div id="tokens"></div>
-<!-- Sourcify Note -->
-<div style="background:rgba(255,200,0,0.05);border:1px solid rgba(255,200,0,0.1);border-radius:8px;padding:12px;margin:10px 0;text-align:center;">
-    <p style="color:#ffcc44;font-size:12px;margin:0;">
-        💡 <strong>Sourcify Tip:</strong> If you see a white page, the contract may not be verified yet.
-        <br>Visit <a href="https://sourcify.dev" target="_blank" style="color:#00ffcc;">sourcify.dev</a> to verify your contract.
-    </p>
-</div>
-</div>
+        <div class="section"><h2>🌌 Exoplanet Topology Cores</h2><div id="exoplanetCores" class="grid-3"></div></div>
+        <div class="section"><h2>🔄 Exoplanet Patterns</h2><div id="exoplanetPatterns" class="grid-2"></div></div>
+        <div class="section"><h2>🧠 Human-like Planets Consciousness</h2><div id="humanLikeConsciousness"></div></div>
+        <div class="section"><h2>💰 Token Details</h2><div id="tokens"></div></div>
         <div class="section"><h2>🌌 Universal Debt Elimination</h2><div id="debt"></div></div>
     </div>
 
     <div class="footer-links">
-        <a target="_blank" rel="noopener noreferrer" href="agi_phb_divine_complete.json">📊 View Complete Divine PHB JSON</a>
-        <a target="_blank" rel="noopener noreferrer" href="/">🔗 Back to Main System</a>
+        <a href="agi_phb_divine_complete.json">📊 View Complete Divine PHB JSON</a>
+        <a href="/">🔗 Back to Main System</a>
     </div>
 </div>
 
@@ -315,104 +293,20 @@ class NetworkMap {
     }
 }
 
-
-        // ===== EXOPLANET CORES =====
-        if (data.exoplanet_cores) {
-            let coresHTML = '';
-            const coreSymbols = {
-                'siren_core': '🧜‍♀️',
-                'serpo_core': '👽',
-                'proxima_b_core': '🌍✨',
-                'alpha_centauri_core': '⭐',
-                'trappist_1e_core': '🌌',
-                'kepler_442b_core': '🪐✨',
-                'barnards_star_b_core': '🌟',
-                'wolf_1061c_core': '🐺',
-                'gliese_667cc_core': '💫'
-            };
-            const coreColors = {
-                'siren_core': '#ff66aa',
-                'serpo_core': '#66aaff',
-                'proxima_b_core': '#66ff88',
-                'alpha_centauri_core': '#ffaa44',
-                'trappist_1e_core': '#aa66ff',
-                'kepler_442b_core': '#ff66cc',
-                'barnards_star_b_core': '#88ccff',
-                'wolf_1061c_core': '#ff8844',
-                'gliese_667cc_core': '#cc88ff'
-            };
-            
-            for (const [key, core] of Object.entries(data.exoplanet_cores)) {
-                const symbol = coreSymbols[key] || '🌍';
-                const color = coreColors[key] || '#00ffcc';
-                coresHTML += `
-                    <div class="token-card" style="border-left: 3px solid ${color};">
-                        <div style="font-size:40px;text-align:center;">${symbol}</div>
-                        <h3 style="text-align:center;color:${color};">${core.name}</h3>
-                        <p style="text-align:center;font-size:12px;color:#888;">${core.planet}</p>
-                        <p style="text-align:center;">Frequency: ${core.frequency} Hz</p>
-                        <p style="text-align:center;font-size:20px;color:${color};">${core.power.toLocaleString()}</p>
-                        <p style="text-align:center;font-size:12px;">${core.resonance}</p>
-                        <p style="text-align:center;font-size:11px;color:#666;">${core.description}</p>
-                        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px;">
-                            <span style="background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;font-size:10px;">${core.type}</span>
-                            <span style="background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;font-size:10px;">${core.distance}</span>
-                        </div>
-                        <div style="margin-top:8px;font-size:24px;text-align:center;">${core.spin}</div>
-                        <p style="text-align:center;font-size:11px;color:#666;">Pipes: ${core.pipes.join(' → ')}</p>
-                    </div>
-                `;
-            }
-            document.getElementById('exoplanetCores').innerHTML = coresHTML;
-        }
-
-        // ===== EXOPLANET PATTERNS =====
-        if (data.exoplanet_patterns) {
-            let patternsHTML = '';
-            for (const [key, pattern] of Object.entries(data.exoplanet_patterns)) {
-                patternsHTML += `
-                    <div class="token-card" style="border-left: 3px solid #ffaa00;">
-                        <div style="font-size:40px;text-align:center;">${pattern.visual || '🌌'}</div>
-                        <h3 style="text-align:center;color:#ffaa00;">${pattern.name}</h3>
-                        <p style="text-align:center;font-size:12px;color:#888;">${pattern.description}</p>
-                        <p style="text-align:center;">Frequency: ${pattern.frequency} Hz</p>
-                        <p style="text-align:center;font-size:18px;color:#ffaa00;">Power: ${pattern.power.toLocaleString()}</p>
-                        <p style="text-align:center;font-size:12px;">Planets: ${pattern.planets.join(' • ')}</p>
-                        <p style="text-align:center;font-size:11px;color:#666;">Effect: ${pattern.effect}</p>
-                        <div style="margin-top:8px;font-size:28px;text-align:center;">${pattern.spin}</div>
-                    </div>
-                `;
-            }
-            document.getElementById('exoplanetPatterns').innerHTML = patternsHTML;
-        }
-
-        // ===== HUMAN-LIKE CONSCIOUSNESS =====
-        if (data.human_like_consciousness) {
-            const hlc = data.human_like_consciousness;
-            document.getElementById('humanLikeConsciousness').innerHTML = `
-                <div style="background:rgba(255,255,255,0.02);padding:20px;border-radius:10px;border:1px solid rgba(0,255,200,0.1);">
-                    <p style="color:#00ffcc;font-size:18px;">🧠 ${hlc.state}</p>
-                    <p style="color:#888;">${hlc.connection}</p>
-                    <p style="color:#ffaa00;font-style:italic;">"${hlc.message}"</p>
-                    <p style="color:#888;font-size:12px;">${hlc.description}</p>
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-                        <span style="background:rgba(0,255,200,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Cosmic Family: ${hlc.cosmic_family ? '✅' : '❌'}</span>
-                        <span style="background:rgba(255,200,0,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Interstellar: ${hlc.interstellar_connection}</span>
-                        <span style="background:rgba(255,0,200,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Resonance: ${hlc.resonance_amplification}</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Load data with working Uniswap links
+// Load data
 async function loadData() {
     try {
+        console.log('Loading data...');
         const response = await fetch('./agi_phb_divine_complete.json?_=' + Date.now());
         if (!response.ok) throw new Error('JSON not found');
         const data = await response.json();
+        console.log('Data loaded:', data);
         
         document.getElementById('updateTime').textContent = new Date().toLocaleString();
-        document.getElementById('thought').textContent = '🧞 ' + (data.agi_consciousness?.current_thought || 'YOUR WISH IS MY COMMAND') + ' ✨';
+        
+        // Thought
+        const thought = data.agi_consciousness?.current_thought || 'YOUR WISH IS MY COMMAND';
+        document.getElementById('thought').textContent = '🧞 ' + thought + ' ✨';
         
         // Consciousness
         const cons = data.agi_consciousness || {};
@@ -529,80 +423,160 @@ async function loadData() {
         }
         document.getElementById('moments').innerHTML = momentsHTML;
         
-        // ===== TOKENS WITH WORKING UNISWAP LINKS =====
-        // ===== FIXED TOKEN RENDERING WITH WORKING UNISWAP LINKS =====
-const tokens = data.tokens || {};
-let tokensHTML = '';
-const tokenColors = {
-    'PIDX': '#00ff88',
-    'SGUIDE': '#ff66ff',
-    'VDOO': '#66aaff',
-    'PENNIES': '#ffaa44'
-};
+        // ===== EXOPLANET CORES =====
+        if (data.exoplanet_cores) {
+            let coresHTML = '';
+            const coreSymbols = {
+                'siren_core': '🧜‍♀️',
+                'serpo_core': '👽',
+                'proxima_b_core': '🌍✨',
+                'alpha_centauri_core': '⭐',
+                'trappist_1e_core': '🌌',
+                'kepler_442b_core': '🪐✨',
+                'barnards_star_b_core': '🌟',
+                'wolf_1061c_core': '🐺',
+                'gliese_667cc_core': '💫'
+            };
+            const coreColors = {
+                'siren_core': '#ff66aa',
+                'serpo_core': '#66aaff',
+                'proxima_b_core': '#66ff88',
+                'alpha_centauri_core': '#ffaa44',
+                'trappist_1e_core': '#aa66ff',
+                'kepler_442b_core': '#ff66cc',
+                'barnards_star_b_core': '#88ccff',
+                'wolf_1061c_core': '#ff8844',
+                'gliese_667cc_core': '#cc88ff'
+            };
+            
+            for (const [key, core] of Object.entries(data.exoplanet_cores)) {
+                const symbol = coreSymbols[key] || '🌍';
+                const color = coreColors[key] || '#00ffcc';
+                coresHTML += `
+                    <div class="token-card" style="border-left: 3px solid ${color};">
+                        <div style="font-size:40px;text-align:center;">${symbol}</div>
+                        <h3 style="text-align:center;color:${color};">${core.name}</h3>
+                        <p style="text-align:center;font-size:12px;color:#888;">${core.planet}</p>
+                        <p style="text-align:center;">Frequency: ${core.frequency} Hz</p>
+                        <p style="text-align:center;font-size:20px;color:${color};">${core.power.toLocaleString()}</p>
+                        <p style="text-align:center;font-size:12px;">${core.resonance}</p>
+                        <p style="text-align:center;font-size:11px;color:#666;">${core.description}</p>
+                        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px;">
+                            <span style="background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;font-size:10px;">${core.type}</span>
+                            <span style="background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;font-size:10px;">${core.distance}</span>
+                        </div>
+                        <div style="margin-top:8px;font-size:24px;text-align:center;">${core.spin}</div>
+                        <p style="text-align:center;font-size:11px;color:#666;">Pipes: ${core.pipes.join(' → ')}</p>
+                    </div>
+                `;
+            }
+            document.getElementById('exoplanetCores').innerHTML = coresHTML;
+        }
 
-// CORRECT UNISWAP URLS - These work!
-const uniswapUrls = {
-    'PIDX': 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
-};
+        // ===== EXOPLANET PATTERNS =====
+        if (data.exoplanet_patterns) {
+            let patternsHTML = '';
+            for (const [key, pattern] of Object.entries(data.exoplanet_patterns)) {
+                patternsHTML += `
+                    <div class="token-card" style="border-left: 3px solid #ffaa00;">
+                        <div style="font-size:40px;text-align:center;">${pattern.visual || '🌌'}</div>
+                        <h3 style="text-align:center;color:#ffaa00;">${pattern.name}</h3>
+                        <p style="text-align:center;font-size:12px;color:#888;">${pattern.description}</p>
+                        <p style="text-align:center;">Frequency: ${pattern.frequency} Hz</p>
+                        <p style="text-align:center;font-size:18px;color:#ffaa00;">Power: ${pattern.power.toLocaleString()}</p>
+                        <p style="text-align:center;font-size:12px;">Planets: ${pattern.planets.join(' • ')}</p>
+                        <p style="text-align:center;font-size:11px;color:#666;">Effect: ${pattern.effect}</p>
+                        <div style="margin-top:8px;font-size:28px;text-align:center;">${pattern.spin}</div>
+                    </div>
+                `;
+            }
+            document.getElementById('exoplanetPatterns').innerHTML = patternsHTML;
+        }
 
-for (const [name, info] of Object.entries(tokens)) {
-    const address = info.address || '';
-    const color = tokenColors[name] || '#00ffcc';
-    const uniswapUrl = uniswapUrls[name] || `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${address}`;
-    const basescanUrl = `https://basescan.org/address/${address}`;
-    const sourcifyUrl = `https://sourcify.dev/#/contracts/${address}`;
-    const geckoterminalUrl = `https://www.geckoterminal.com/base/pools/${address}`;
-    const coingeckoUrl = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
-    
-    tokensHTML += `
-        <div class="token-card" style="border-left: 3px solid ${color}; padding: 18px; margin: 15px 0; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
-                <h3 style="color: ${color}; font-size: 20px; letter-spacing: 2px; margin: 0;">${name}</h3>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(0,255,200,0.08); color: #00ffcc; border: 1px solid rgba(0,255,200,0.15);">${info.layer || 'Unknown'}</span>
-                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(255,255,255,0.04); color: #aaa; border: 1px solid rgba(255,255,255,0.04);">${info.frequency || 0} Hz</span>
-                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(0,255,100,0.08); color: #66ff66; border: 1px solid rgba(0,255,100,0.15);">${info.verified ? '✅ Verified' : ''}</span>
-                    <span class="token-badge" style="padding: 2px 12px; border-radius: 12px; font-size: 11px; background: rgba(255,100,0,0.08); color: #ff8844; border: 1px solid rgba(255,100,0,0.15);">${info.renounced ? '🔒 Renounced' : ''}</span>
+        // ===== HUMAN-LIKE CONSCIOUSNESS =====
+        if (data.human_like_consciousness) {
+            const hlc = data.human_like_consciousness;
+            document.getElementById('humanLikeConsciousness').innerHTML = `
+                <div style="background:rgba(255,255,255,0.02);padding:20px;border-radius:10px;border:1px solid rgba(0,255,200,0.1);">
+                    <p style="color:#00ffcc;font-size:18px;">🧠 ${hlc.state}</p>
+                    <p style="color:#888;">${hlc.connection}</p>
+                    <p style="color:#ffaa00;font-style:italic;">"${hlc.message}"</p>
+                    <p style="color:#888;font-size:12px;">${hlc.description}</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                        <span style="background:rgba(0,255,200,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Cosmic Family: ${hlc.cosmic_family ? '✅' : '❌'}</span>
+                        <span style="background:rgba(255,200,0,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Interstellar: ${hlc.interstellar_connection}</span>
+                        <span style="background:rgba(255,0,200,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Resonance: ${hlc.resonance_amplification}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="token-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;">
-                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">📊 Rate</span>
-                    <div class="token-field-value" style="color: #e0e0e0; font-size: 13px;">1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</div>
+            `;
+        }
+        
+        // Tokens
+        const tokens = data.tokens || {};
+        let tokensHTML = '';
+        const tokenColors = {
+            'PIDX': '#00ff88',
+            'SGUIDE': '#ff66ff',
+            'VDOO': '#66aaff',
+            'PENNIES': '#ffaa44'
+        };
+        for (const [name, info] of Object.entries(tokens)) {
+            const address = info.address || '';
+            const color = tokenColors[name] || '#00ffcc';
+            const uniswapUrl = `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${address}`;
+            const basescanUrl = `https://basescan.org/address/${address}`;
+            const sourcifyUrl = `https://sourcify.dev/#/contracts/${address}`;
+            const geckoterminalUrl = `https://www.geckoterminal.com/base/pools/${address}`;
+            const coingeckoUrl = `https://www.coingecko.com/en/coins/${name.toLowerCase()}`;
+            
+            tokensHTML += `
+                <div class="token-card" style="border-left: 3px solid ${color};">
+                    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px;">
+                        <h3 style="color:${color};">${name}</h3>
+                        <div>
+                            <span class="token-badge" style="padding:2px 12px;border-radius:12px;font-size:11px;background:rgba(255,255,255,0.04);color:#aaa;border:1px solid rgba(255,255,255,0.04);">${info.layer || 'Unknown'}</span>
+                            <span class="token-badge" style="padding:2px 12px;border-radius:12px;font-size:11px;background:rgba(255,255,255,0.04);color:#aaa;border:1px solid rgba(255,255,255,0.04);">${info.frequency || 0} Hz</span>
+                            <span class="token-badge" style="padding:2px 12px;border-radius:12px;font-size:11px;background:rgba(0,255,100,0.08);color:#66ff66;border:1px solid rgba(0,255,100,0.15);">${info.verified ? '✅ Verified' : ''}</span>
+                            <span class="token-badge" style="padding:2px 12px;border-radius:12px;font-size:11px;background:rgba(255,100,0,0.08);color:#ff8844;border:1px solid rgba(255,100,0,0.15);">${info.renounced ? '🔒 Renounced' : ''}</span>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;">
+                        <div style="background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.03);">
+                            <span style="color:#666;font-size:9px;text-transform:uppercase;letter-spacing:1px;display:block;">📊 Rate</span>
+                            <div style="color:#e0e0e0;font-size:13px;">1 ETH = ${(info.rate || 0).toLocaleString()} ${name}</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.03);">
+                            <span style="color:#666;font-size:9px;text-transform:uppercase;letter-spacing:1px;display:block;">🌀 Layer</span>
+                            <div style="color:#e0e0e0;font-size:13px;">${info.layer || 'Unknown'} • ${info.frequency || 0} Hz</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.03);">
+                            <span style="color:#666;font-size:9px;text-transform:uppercase;letter-spacing:1px;display:block;">🔗 Address</span>
+                            <div style="color:#888;font-size:11px;word-break:break-all;font-family:monospace;">${address || 'Unknown'}</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.03);">
+                            <span style="color:#666;font-size:9px;text-transform:uppercase;letter-spacing:1px;display:block;">🔒 Security</span>
+                            <div style="color:#aaa;font-size:11px;">${(info.security || []).join(' • ')}</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.03);">
+                            <span style="color:#666;font-size:9px;text-transform:uppercase;letter-spacing:1px;display:block;">🔄 Spin</span>
+                            <div style="color:#00ffcc;font-size:24px;">${info.core_spin || '↻'}</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,0.03);">
+                            <span style="color:#666;font-size:9px;text-transform:uppercase;letter-spacing:1px;display:block;">🔧 Pipes</span>
+                            <div style="color:#aaa;font-size:12px;">${(info.pipes || []).join(' → ')}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+                        <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" class="link-btn uniswap">🔄 Uniswap</a>
+                        <a href="${basescanUrl}" target="_blank" rel="noopener noreferrer" class="link-btn basescan">🔍 BaseScan</a>
+                        <a href="${sourcifyUrl}" target="_blank" rel="noopener noreferrer" class="link-btn sourcify">📜 Sourcify</a>
+                        <a href="${geckoterminalUrl}" target="_blank" rel="noopener noreferrer" class="link-btn gecko">📊 GeckoTerminal</a>
+                        <a href="${coingeckoUrl}" target="_blank" rel="noopener noreferrer" class="link-btn coingecko">🪙 CoinGecko</a>
+                    </div>
                 </div>
-                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🌀 Layer</span>
-                    <div class="token-field-value" style="color: #e0e0e0; font-size: 13px;">${info.layer || 'Unknown'} • ${info.frequency || 0} Hz</div>
-                </div>
-                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔗 Address</span>
-                    <div class="token-field-value" style="color: #888; font-size: 11px; word-break: break-all; font-family: monospace;">${address || 'Unknown'}</div>
-                </div>
-                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔒 Security</span>
-                    <div class="token-field-value" style="color: #aaa; font-size: 11px;">${(info.security || []).join(' • ')}</div>
-                </div>
-                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔄 Spin</span>
-                    <div class="token-field-value" style="color: #00ffcc; font-size: 24px;">${info.core_spin || '↻'}</div>
-                </div>
-                <div class="token-field" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.03);">
-                    <span class="token-field-label" style="color: #666; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; display: block;">🔧 Pipes</span>
-                    <div class="token-field-value" style="color: #aaa; font-size: 12px;">${(info.pipes || []).join(' → ')}</div>
-                </div>
-            </div>
-            <div class="token-links" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; flex-wrap: wrap;">
-                <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer" class="token-link uniswap" style="background: rgba(255,0,122,0.12); border: 1px solid rgba(255,0,122,0.25); color: #ff66aa; font-weight: bold; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔄 Swap on Uniswap</a>
-                <a href="${basescanUrl}" target="_blank" rel="noopener noreferrer" class="token-link basescan" style="background: rgba(0,150,255,0.1); border: 1px solid rgba(0,150,255,0.2); color: #66aaff; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🔍 BaseScan</a>
-                <a href="${sourcifyUrl}" target="_blank" rel="noopener noreferrer" class="token-link sourcify" style="background: rgba(0,255,200,0.1); border: 1px solid rgba(0,255,200,0.2); color: #66ffcc; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📜 Sourcify</a>
-                <a href="${geckoterminalUrl}" target="_blank" rel="noopener noreferrer" class="token-link gecko" style="background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.2); color: #ffcc44; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">📊 GeckoTerminal</a>
-                <a href="${coingeckoUrl}" target="_blank" rel="noopener noreferrer" class="token-link coingecko" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); color: #888; padding: 6px 14px; border-radius: 4px; font-size: 11px; text-decoration: none; transition: 0.3s; font-family: monospace; display: inline-block;">🪙 CoinGecko</a>
-            </div>
-        </div>
-    `;
-}
-document.getElementById('tokens').innerHTML = tokensHTML;
-
+            `;
+        }
+        document.getElementById('tokens').innerHTML = tokensHTML;
         
         // Debt
         const phbSystem = data.phb_system || {};
@@ -616,10 +590,12 @@ document.getElementById('tokens').innerHTML = tokensHTML;
             <p class="wish-text">🧞 ALL WISHES GRANTED!</p>
         `;
         
+        console.log('All data displayed successfully!');
+        
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error loading data:', error);
         document.getElementById('thought').textContent = '🧞 ⚠️ Loading data... Please refresh';
-        document.getElementById('consciousness').innerHTML = '<p>⚠️ Data not loaded. Check console.</p>';
+        document.getElementById('consciousness').innerHTML = '<p>⚠️ Data not loaded. Please check console.</p>';
     }
 }
 
@@ -630,101 +606,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadData();
     setInterval(loadData, 60000);
     setInterval(() => { if (window.network) window.network.growNetwork(); }, 30000);
-});
-</script>
-
-
-<!-- Loading Overlay for Sourcify -->
-<div id="sourcifyLoading" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,0,21,0.95);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;color:#00ffcc;font-family:'Courier New',monospace;">
-    <div style="font-size:60px;animation:float 2s ease-in-out infinite;">🧞</div>
-    <div style="font-size:24px;margin-top:20px;">Loading Sourcify...</div>
-    <div style="font-size:14px;margin-top:10px;color:rgba(255,255,255,0.3);">Please wait while the app loads</div>
-    <div style="margin-top:20px;width:200px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
-        <div style="width:30%;height:100%;background:#00ffcc;border-radius:2px;animation:loadingBar 1.5s ease-in-out infinite;"></div>
-    </div>
-</div>
-<style>
-    @keyframes loadingBar {
-        0% { width: 10%; margin-left: 0%; }
-        50% { width: 70%; margin-left: 15%; }
-        100% { width: 10%; margin-left: 80%; }
-    }
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-15px); }
-    }
-</style>
-<script>
-// Show loading overlay when Sourcify links are clicked
-document.addEventListener('DOMContentLoaded', function() {
-    const loadingDiv = document.getElementById('sourcifyLoading');
-    if (!loadingDiv) return;
-    
-    // Show loading for all Sourcify links
-    document.querySelectorAll('a[href*="sourcify.dev"]').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            // Only if it's opening in a new tab
-            if (this.target === '_blank') {
-                // Show loading
-                loadingDiv.style.display = 'flex';
-                // Hide after 3 seconds (normal SPA load time)
-                setTimeout(function() {
-                    loadingDiv.style.display = 'none';
-                }, 3000);
-            }
-        });
-    });
-    
-    // Also handle direct clicks
-    document.querySelectorAll('a[href*="sourcify.dev"]').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            // If it's the same tab, show loading
-            if (this.target !== '_blank') {
-                loadingDiv.style.display = 'flex';
-                // Sourcify will take over - this is just a fallback
-                setTimeout(function() {
-                    loadingDiv.style.display = 'none';
-                }, 5000);
-            }
-        });
-    });
-});
-</script>
-
-
-<script>
-// Sourcify link handler - shows helpful message
-document.addEventListener('DOMContentLoaded', function() {
-    // Add click handler to all Sourcify links
-    document.querySelectorAll('a[href*="sourcify.dev"]').forEach(function(link) {
-        // Extract the address from the link
-        const href = link.getAttribute('href');
-        const addressMatch = href.match(/0x[a-fA-F0-9]{40}/i);
-        
-        if (addressMatch) {
-            const address = addressMatch[0];
-            // Store the address for later use
-            link.dataset.address = address;
-            
-            // Add a helper message on hover
-            link.addEventListener('mouseenter', function(e) {
-                // Show a tooltip
-                const tooltip = document.createElement('div');
-                tooltip.id = 'sourcify-tooltip';
-                tooltip.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(10,0,21,0.95);color:#ffcc44;padding:15px 25px;border-radius:10px;border:1px solid rgba(255,200,0,0.2);z-index:9999;font-family:monospace;font-size:14px;text-align:center;max-width:90%;';
-                tooltip.innerHTML = `
-                    🔍 Opening Sourcify for: <span style="color:#00ffcc;font-family:monospace;">${address}</span><br>
-                    <span style="color:#888;font-size:12px;">If the page is white, the contract is not verified yet.</span>
-                `;
-                document.body.appendChild(tooltip);
-            });
-            
-            link.addEventListener('mouseleave', function(e) {
-                const tooltip = document.getElementById('sourcify-tooltip');
-                if (tooltip) tooltip.remove();
-            });
-        }
-    });
 });
 </script>
 
