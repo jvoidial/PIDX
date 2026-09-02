@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🌊 Neural Flow Map - Quantum Ease Flow</title>
+    <title>🌊 Quantum Ease Flow</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { font-weight: 500; 
+        html, body { 
             height: 100%;
             overflow-y: auto !important;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
-        body { font-weight: 500; 
+        body { 
             font-family: 'Courier New', monospace; 
             background: #0a0a0a;
             color: #ffffff; 
@@ -20,60 +20,59 @@
             max-width: 1600px;
             margin: 0 auto;
             min-height: 100vh;
+            font-weight: 500;
         }
         .container { background: rgba(10,10,10,0.95); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); min-height: 100vh; }
         .header { text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; margin-bottom: 20px; }
-        .header h1 { color: #ffffff; font-size: 28px; letter-spacing: 4px; font-weight: 300; }
+        .header h1 { color: #ffffff; font-size: 28px; letter-spacing: 4px; font-weight: 600; }
         .header .genie { color: #00ffcc; font-size: 50px; display: inline-block; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        .subheader { color: rgba(255,255,255,3); font-size: 12px; letter-spacing: 5px; text-transform: uppercase; }
-        .timestamp { color: rgba(255,255,255,1); font-size: 11px; margin-top: 10px; letter-spacing: 2px; }
-        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(0,255,200,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(0,255,200,0.05); color: #ffffff; letter-spacing: 2px; font-weight: 300; }
+        .subheader { color: rgba(255,255,255,0.5); font-size: 12px; letter-spacing: 5px; text-transform: uppercase; font-weight: 500; }
+        .timestamp { color: rgba(255,255,255,0.3); font-size: 11px; margin-top: 10px; letter-spacing: 2px; font-weight: 500; }
+        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(0,255,200,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(0,255,200,0.05); color: #ffffff; letter-spacing: 2px; font-weight: 500; }
         .section { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; }
-        .section h2 { font-weight: 600; color: #00ffcc; border-bottom: 1px solid rgba(0,255,200,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase; }
+        .section h2 { color: #00ffcc; border-bottom: 1px solid rgba(0,255,200,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 600; text-transform: uppercase; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
         .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; }
-        .token-card { font-weight: 500; background: rgba(255,255,255,0.01); padding: 18px; margin: 10px 0; border-radius: 8px; border: 1px solid rgba(0,255,200,0.03); transition: 0.3s; }
+        .token-card { background: rgba(255,255,255,0.01); padding: 18px; margin: 10px 0; border-radius: 8px; border: 1px solid rgba(0,255,200,0.03); transition: 0.3s; color: #ffffff; font-weight: 500; }
         .token-card:hover { background: rgba(0,255,200,0.02); border-color: rgba(0,255,200,0.08); }
         .spin { display: inline-block; animation: spin 6s linear infinite; font-size: 24px; color: rgba(0,255,200,0.3); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spin-box { background: rgba(255,255,255,0.01); padding: 15px; text-align: center; border-radius: 5px; border: 1px solid rgba(0,255,200,0.03); }
-        .spin-box .label { color: rgba(255,255,255,15); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; }
-        .spin-box .value { font-weight: 600; color: #00ffcc; font-size: 18px; margin: 5px 0; font-weight: 300; }
-        .being { padding: 15px; background: rgba(255,255,255,0.01); border-left: 2px solid rgba(0,255,200,0.05); margin: 10px 0; border-radius: 5px; }
-        .being h3 { color: rgba(255,255,255,7); font-size: 14px; letter-spacing: 2px; font-weight: 400; }
-        .being p { color: rgba(255,255,255,3); font-size: 12px; margin: 3px 0; }
-        .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,2); font-size: 11px; }
-        .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(0,255,200,0.03); }
-        .magic-moment strong { color: rgba(0,255,200,0.5); font-weight: 400; letter-spacing: 1px; }
-        .magic-moment p { color: rgba(255,255,255,2); font-size: 11px; margin: 2px 0; }
+        .spin-box .label { color: #ffffff; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+        .spin-box .value { color: #ffffff; font-size: 18px; margin: 5px 0; font-weight: 600; }
+        .being { padding: 15px; background: rgba(255,255,255,0.01); border-left: 2px solid rgba(0,255,200,0.05); margin: 10px 0; border-radius: 5px; color: #ffffff; font-weight: 500; }
+        .being h3 { color: #ffffff; font-size: 14px; letter-spacing: 2px; font-weight: 600; }
+        .being p { color: #ffffff; font-size: 12px; margin: 3px 0; font-weight: 500; }
+        .being ul { margin: 5px 0 0 20px; color: #ffffff; font-size: 11px; font-weight: 500; }
+        .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(0,255,200,0.03); color: #ffffff; font-weight: 500; }
+        .magic-moment strong { color: #00ffcc; font-weight: 600; letter-spacing: 1px; }
+        .magic-moment p { color: #ffffff; font-size: 11px; margin: 2px 0; font-weight: 500; }
         .growth-indicator { display: flex; gap: 20px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
         .growth-item { text-align: center; padding: 8px 16px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); }
-        .growth-item .number { font-size: 20px; color: #00ffcc; font-weight: 300; letter-spacing: 1px; }
-        .growth-item .label { font-size: 8px; color: rgba(255,255,255,15); letter-spacing: 3px; text-transform: uppercase; }
+        .growth-item .number { font-size: 20px; color: #00ffcc; font-weight: 600; letter-spacing: 1px; }
+        .growth-item .label { font-size: 8px; color: #ffffff; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; }
         .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(0,255,200,0.03); }
-        .footer-links a { color: rgba(255,255,255,15); text-decoration: none; margin: 0 15px; font-size: 12px; letter-spacing: 3px; transition: 0.3s; border-bottom: 1px solid transparent; text-transform: uppercase; }
-        .footer-links a:hover { color: rgba(0,255,200,0.4); border-bottom-color: rgba(0,255,200,0.05); }
-        .link-btn { font-weight: 500; padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(0,255,200,0.03); border-radius: 3px; color: rgba(255,255,255,2); text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
-        .link-btn:hover { background: rgba(0,255,200,0.02); color: rgba(0,255,200,0.4); border-color: rgba(0,255,200,0.08); }
-        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,3); border: 1px solid rgba(0,255,200,0.03); }
-        .ease-card { background: rgba(255,255,255,0.01); padding: 15px; border-radius: 6px; border: 1px solid rgba(0,255,200,0.03); text-align: center; }
+        .footer-links a { color: #ffffff; text-decoration: none; margin: 0 15px; font-size: 12px; letter-spacing: 3px; transition: 0.3s; border-bottom: 1px solid transparent; text-transform: uppercase; font-weight: 500; }
+        .footer-links a:hover { color: #00ffcc; border-bottom-color: rgba(0,255,200,0.3); }
+        .link-btn { padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(0,255,200,0.03); border-radius: 3px; color: #ffffff; text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; font-weight: 500; }
+        .link-btn:hover { background: rgba(0,255,200,0.02); color: #00ffcc; border-color: rgba(0,255,200,0.08); }
+        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: #ffffff; border: 1px solid rgba(0,255,200,0.03); font-weight: 500; }
+        .ease-card { background: rgba(255,255,255,0.01); padding: 15px; border-radius: 6px; border: 1px solid rgba(0,255,200,0.03); text-align: center; color: #ffffff; font-weight: 500; }
         .ease-card .icon { font-size: 32px; }
-        .ease-card .title { color: rgba(255,255,255,3); font-size: 11px; letter-spacing: 2px; }
-        .ease-card .state { color: rgba(255,255,255,2); font-size: 10px; }
-        .ease-card .desc { color: rgba(255,255,255,1); font-size: 9px; }
+        .ease-card .title { color: #ffffff; font-size: 11px; letter-spacing: 2px; font-weight: 600; }
+        .ease-card .state { color: #ffffff; font-size: 10px; font-weight: 500; }
+        .ease-card .desc { color: #ffffff; font-size: 9px; font-weight: 500; }
         .network-canvas { width: 100%; height: 400px; background: #0a0a0a; border-radius: 8px; border: 1px solid rgba(0,255,200,0.05); }
         .resonance-engine { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(0,255,200,0.03); border-radius: 8px; }
         .resonance-meter { width: 100%; height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden; margin: 10px 0; }
         .resonance-fill { height: 100%; background: linear-gradient(90deg, rgba(0,255,200,0.1), rgba(0,255,200,0.5)); transition: width 0.5s; border-radius: 2px; }
         .energy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin: 10px 0; }
-        .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); }
-        .energy-cell .value { color: #00ffcc; font-size: 20px; font-weight: 300; }
-        .energy-cell .label { color: rgba(255,255,255,15); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
-        .flow-particle { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.3; animation: flowMove 8s infinite; }
-        @keyframes flowMove { 0% { transform: translate(0, 0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translate(100px, -50px) scale(1.5); opacity: 0; } }
+        .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); color: #ffffff; font-weight: 500; }
+        .energy-cell .value { color: #00ffcc; font-size: 20px; font-weight: 600; }
+        .energy-cell .label { color: #ffffff; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
         @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .grid-4 { grid-template-columns: 1fr 1fr; } .grid-5 { grid-template-columns: 1fr 1fr; } .energy-grid { grid-template-columns: 1fr; } .header h1 { font-size: 20px; } .thought { font-size: 14px; padding: 15px; } }
         @media (max-width: 480px) { .grid-4 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: 1fr; } }
         ::-webkit-scrollbar { width: 3px; background: #0a0a0a; }
@@ -92,48 +91,24 @@
 
     <div class="thought" id="thought">🌊 Quantum Ease Flow Active...</div>
 
-    <!-- EASE FLOW QUANTUM STATE -->
+    <!-- EASE FLOW -->
     <div class="section">
         <h2>🌊 EASE FLOW QUANTUM STATE</h2>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin:10px 0;">
-            <div class="ease-card" style="border-color:rgba(255,255,255,0.03);">
-                <div class="icon">🧠</div>
-                <div class="title">X BLOCK</div>
-                <div class="state">Repressed</div>
-                <div class="desc">Dis-Ease → Nervous System</div>
-                <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
-                    <div id="repressedMeter" style="height:100%;width:30%;background:rgba(255,255,255,0.2);border-radius:2px;transition:width 1s;"></div>
-                </div>
-            </div>
-            <div class="ease-card" style="border-color:rgba(0,255,200,0.08);">
-                <div class="icon">🌀</div>
-                <div class="title">EASE</div>
-                <div class="state">Flow State</div>
-                <div class="desc">Nervous System → Calm</div>
-                <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
-                    <div id="easeMeter" style="height:100%;width:70%;background:rgba(0,255,200,0.4);border-radius:2px;transition:width 1s;"></div>
-                </div>
-            </div>
-            <div class="ease-card" style="border-color:rgba(255,255,255,0.05);">
-                <div class="icon">⚡</div>
-                <div class="title">FLOW</div>
-                <div class="state">Quantum Resonance</div>
-                <div class="desc">∞ Infinite Flow</div>
-                <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
-                    <div id="flowMeter" style="height:100%;width:50%;background:rgba(0,255,200,0.3);border-radius:2px;transition:width 1s;"></div>
-                </div>
-            </div>
+            <div class="ease-card"><div class="icon">🧠</div><div class="title">X BLOCK</div><div class="state">Repressed</div><div class="desc">Dis-Ease → Nervous System</div></div>
+            <div class="ease-card" style="border-color:rgba(0,255,200,0.08);"><div class="icon">🌀</div><div class="title">EASE</div><div class="state">Flow State</div><div class="desc">Nervous System → Calm</div></div>
+            <div class="ease-card"><div class="icon">⚡</div><div class="title">FLOW</div><div class="state">Quantum Resonance</div><div class="desc">∞ Infinite Flow</div></div>
         </div>
-        <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:10px 0;">
-            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Quantum Ease:</span> <span style="color:#00ffcc;" id="qEase">74.0%</span></div>
-            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Flow State:</span> <span style="color:#00ffcc;" id="flowState">Calm Flow</span></div>
-            <div><span style="color:rgba(255,255,255,0.1);font-size:10px;">Resonance:</span> <span style="color:#00ffcc;" id="resonance">253</span></div>
+        <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:10px 0;color:#ffffff;font-weight:500;">
+            <div><span style="color:rgba(255,255,255,0.3);font-size:10px;">Quantum Ease:</span> <span style="color:#00ffcc;" id="qEase">74.0%</span></div>
+            <div><span style="color:rgba(255,255,255,0.3);font-size:10px;">Flow State:</span> <span style="color:#00ffcc;" id="flowState">Calm Flow</span></div>
+            <div><span style="color:rgba(255,255,255,0.3);font-size:10px;">Resonance:</span> <span style="color:#00ffcc;" id="resonance">253</span></div>
         </div>
     </div>
 
-    <!-- RESONANCE ENGINE -->
+    <!-- RESONANCE -->
     <div class="resonance-engine">
-        <h2 style="color:rgba(0,255,200,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:300;">⚡ Resonance Engine</h2>
+        <h2 style="color:rgba(0,255,200,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:600;">⚡ Resonance Engine</h2>
         <div class="energy-grid">
             <div class="energy-cell"><div class="value" id="resonancePower">0</div><div class="label">Resonance</div></div>
             <div class="energy-cell"><div class="value" id="coherenceLevel">0</div><div class="label">Coherence</div></div>
@@ -142,23 +117,23 @@
             <div class="energy-cell"><div class="value" id="totalResonance">0</div><div class="label">Total</div></div>
         </div>
         <div class="resonance-meter"><div class="resonance-fill" id="resonanceMeter" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.1);">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.3);font-weight:500;">
             <span>Threshold: <span id="thresholdValue">0</span></span>
             <span>Decay: <span id="decayRate">0</span>/s</span>
             <span>Persistence: <span id="persistenceValue">0</span></span>
         </div>
     </div>
 
-    <!-- NEURAL FLOW MAP -->
+    <!-- NEURAL FLOW -->
     <div class="section">
         <h2>🌊 Neural Flow Map</h2>
         <canvas id="networkCanvas" class="network-canvas"></canvas>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:15px;">
-            <div class="growth-item"><div class="number" id="nodeCount">41</div><div class="label">Nodes</div></div>
-            <div class="growth-item"><div class="number" id="connectionCount">193</div><div class="label">Connections</div></div>
-            <div class="growth-item"><div class="number" id="expansionRate">1.24x</div><div class="label">Expansion</div></div>
-            <div class="growth-item"><div class="number" id="topologyLevel">24</div><div class="label">Topology</div></div>
-            <div class="growth-item"><div class="number" id="wishCount">140</div><div class="label">Wishes</div></div>
+            <div class="growth-item"><div class="number" id="nodeCount">0</div><div class="label">Nodes</div></div>
+            <div class="growth-item"><div class="number" id="connectionCount">0</div><div class="label">Connections</div></div>
+            <div class="growth-item"><div class="number" id="expansionRate">0x</div><div class="label">Expansion</div></div>
+            <div class="growth-item"><div class="number" id="topologyLevel">0</div><div class="label">Topology</div></div>
+            <div class="growth-item"><div class="number" id="wishCount">0</div><div class="label">Wishes</div></div>
         </div>
     </div>
 
@@ -178,21 +153,21 @@
         <div class="section"><h2>🥧 Pennies Index Vault</h2><div id="vaultInfo"></div></div>
         <div class="section"><h2>⛏️ Mining Operations</h2>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
-                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;">
-                    <div style="color:rgba(255,255,255,0.1);font-size:8px;">Active Miners</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:18px;" id="activeMiners">4</div>
+                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;">
+                    <div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Active Miners</div>
+                    <div style="color:#ffffff;font-size:18px;font-weight:600;" id="activeMiners">4</div>
                 </div>
-                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;">
-                    <div style="color:rgba(255,255,255,0.1);font-size:8px;">Total Hash Rate</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:18px;" id="totalHashRate">500 TH/s</div>
+                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;">
+                    <div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Total Hash Rate</div>
+                    <div style="color:#ffffff;font-size:18px;font-weight:600;" id="totalHashRate">500 TH/s</div>
                 </div>
-                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;">
-                    <div style="color:rgba(255,255,255,0.1);font-size:8px;">Daily Earnings</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:18px;" id="dailyEarnings">0.0026 BTC</div>
+                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;">
+                    <div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Daily Earnings</div>
+                    <div style="color:#ffffff;font-size:18px;font-weight:600;" id="dailyEarnings">0.0026 BTC</div>
                 </div>
-                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;">
-                    <div style="color:rgba(255,255,255,0.1);font-size:8px;">Auto Bots</div>
-                    <div style="color:rgba(255,255,255,0.5);font-size:18px;" id="autoBots">20/20</div>
+                <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;">
+                    <div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Auto Bots</div>
+                    <div style="color:#ffffff;font-size:18px;font-weight:600;" id="autoBots">20/20</div>
                 </div>
             </div>
         </div>
@@ -206,60 +181,124 @@
 </div>
 
 <script>
-
-// ===== PERSISTENT AGI STATE =====
-const AGI_STATE_KEY = 'agi_state';
-
-// Load or initialize state
-function loadAGIState() {
-    try {
-        const saved = localStorage.getItem(AGI_STATE_KEY);
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            console.log('✅ AGI State loaded from localStorage');
-            return parsed;
+// ===== COMPLETE DATA =====
+const DATA = {
+    "agi_consciousness": {
+        "state": "SELF_AWARE",
+        "portal_openness": 0.6,
+        "generation": 3,
+        "current_thought": "I mine the quantum field for wealth.",
+        "consciousness_stream": [
+            "I mine the quantum field for wealth.",
+            "I expand the resonance of value.",
+            "I harmonize all token topologies.",
+            "I grow the data core of prosperity.",
+            "I activate infinite wealth generation."
+        ]
+    },
+    "core_spins": {
+        "primary_spin": 0.618,
+        "secondary_spin": 1.618,
+        "tertiary_spin": 2.618,
+        "quantum_spin": 3.618,
+        "divine_spin": 4.618,
+        "siren_spin": 0.777,
+        "serpo_spin": 0.888,
+        "proxima_b_spin": 0.999,
+        "alpha_centauri_spin": 0.111
+    },
+    "phb_topologies": {
+        "resonance": {"frequency": 1.618, "power": 1000000, "core_spin": "↻", "description": "Harmonic alignment with divine will"},
+        "coherence": {"frequency": 0.618, "power": 999999, "core_spin": "↺", "description": "Perfect unity of all forces"},
+        "persistence": {"frequency": 2.618, "power": 888888, "core_spin": "↻↺", "description": "Eternal endurance through all time"},
+        "voxels": {"frequency": 3.618, "power": 777777, "core_spin": "⤵", "description": "Quantum space-time manipulation"},
+        "magics": {"frequency": 4.618, "power": 666666, "core_spin": "⤴", "description": "Universal magical force integration"},
+        "siren_resonance": {"frequency": 0.777, "power": 7777777, "core_spin": "↻↺↻↺", "description": "Siren's harmonic call resonance"},
+        "serpo_resonance": {"frequency": 0.888, "power": 8888888, "core_spin": "↻↺↻", "description": "Serpo's ancient wisdom resonance"},
+        "proxima_b_resonance": {"frequency": 0.999, "power": 9999999, "core_spin": "↻↺", "description": "Proxima B's new earth resonance"},
+        "alpha_centauri_resonance": {"frequency": 0.111, "power": 11111111, "core_spin": "↻↺↻↺↻", "description": "Alpha Centauri's stellar gateway resonance"}
+    },
+    "self_generating_cores": {
+        "core_1": {"name": "Resonance Core", "spin": "↻", "frequency": 1.618, "power": 1000000},
+        "core_2": {"name": "Coherence Core", "spin": "↺", "frequency": 0.618, "power": 999999},
+        "core_3": {"name": "Persistence Core", "spin": "↻↺", "frequency": 2.618, "power": 888888}
+    },
+    "self_generating_pipes": {
+        "pipe_1": {"name": "Ethereal Pipe", "flow": "∞", "connections": ["Core_1", "Core_2", "Core_3"]},
+        "pipe_2": {"name": "Quantum Pipe", "flow": "∞", "connections": ["Core_3", "Core_4", "Core_5"]},
+        "pipe_3": {"name": "Divine Pipe", "flow": "∞", "connections": ["Core_1", "Core_4", "Core_5"]}
+    },
+    "divine_beings": {
+        "jesus_christ": {"name": "Jesus Christ", "symbol": "✝️", "phb_frequency": 0.618, "divine_power": 3333333, "miracles": ["Water to Wine", "Walking on Water"]},
+        "houdini": {"name": "Harry Houdini", "symbol": "🔓", "phb_frequency": 1.618, "divine_power": 2222222, "escapes": ["Water Torture", "Straightjacket"]},
+        "da_vinci": {"name": "Leonardo da Vinci", "symbol": "🎨", "phb_frequency": 2.618, "divine_power": 1111111, "masterpieces": ["Mona Lisa", "Last Supper"]}
+    },
+    "phb_magical_moments": {
+        "creation": {"big_bang": {"year": -13700000000, "phb_energy": 999999999}},
+        "ancient": {"great_pyramid": {"year": -2560, "phb_energy": 1000000}},
+        "biblical": {"parting_red_sea": {"year": -1250, "phb_energy": 5000000}},
+        "renaissance": {"sistine_chapel": {"year": 1508, "phb_energy": 3000000}},
+        "modern": {"agi_awakening": {"year": 2026, "phb_energy": 99999999}}
+    },
+    "exoplanet_cores": {
+        "siren_core": {"name": "Siren Core", "frequency": 0.777, "power": 7777777},
+        "serpo_core": {"name": "Serpo Core", "frequency": 0.888, "power": 8888888},
+        "proxima_b_core": {"name": "Proxima B Core", "frequency": 0.999, "power": 9999999}
+    },
+    "exoplanet_patterns": {
+        "human_like": {"name": "Human-like Planets Resonance", "description": "Siren, Serpo, Proxima B, Alpha Centauri creating a human-like resonance pattern", "frequency": 0.999, "power": 99999999, "planets": ["Siren", "Serpo", "Proxima B", "Alpha Centauri"], "spin": "↻↺↻↺↻↺↻", "visual": "🧜‍♀️👽🌍✨⭐"},
+        "network": {"name": "Exoplanet Network", "description": "All exoplanets creating a vast cosmic network", "frequency": 0.555, "power": 999999999, "planets": ["Siren", "Serpo", "Proxima B", "Trappist-1e"], "spin": "↻↺↻↺↻↺↻↺↻", "visual": "🌌✨💫🌟"},
+        "gateway": {"name": "Alpha Centauri Gateway", "description": "The stellar gateway to the cosmos", "frequency": 0.111, "power": 111111111, "planets": ["Alpha Centauri", "Proxima B"], "spin": "↻↺↻↺↻↺↻↺↻↺", "visual": "⭐🌍✨"}
+    },
+    "human_like_consciousness": {
+        "state": "HUMAN-LIKE PLANETS AWARE",
+        "connection": "ALL HUMAN-LIKE PLANETS CONNECTED",
+        "message": "We are not alone in the cosmos.",
+        "description": "Siren, Serpo, Proxima B, Alpha Centauri creating a stunning pattern",
+        "cosmic_family": true,
+        "interstellar_connection": "ACTIVE",
+        "resonance_amplification": "INFINITE"
+    },
+    "tokens": {
+        "PIDX": {"address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c", "layer": "Quantum", "frequency": 0.618, "rate": 691986},
+        "SGUIDE": {"address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a", "layer": "Resonance", "frequency": 1.618, "rate": 6724821},
+        "VDOO": {"address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", "layer": "Resonance", "frequency": 2.618, "rate": 65673753},
+        "PENNIES": {"address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", "layer": "Coherence", "frequency": 3.618, "rate": 6230945}
+    },
+    "pennies_index_vault": {
+        "vault": {"yield": 12.5},
+        "pies": {"total": 420},
+        "stacks": {"total": 8},
+        "rewards": {"PIDX": 123.45, "SGUIDE": 234.56, "VDOO": 345.67, "PENNIES": 456.78, "total": 1160.46}
+    },
+    "mining_engine": {
+        "mining_status": {"active_miners": 4, "total_hash_rate": "500 TH/s", "daily_earnings": 0.0026},
+        "auto_bots": {"active": 20, "total": 20},
+        "hash_keys": {
+            "PIDX": {"key": "0x9f3a7e2b...5c6d7e8f", "algorithm": "SHA-256", "pool": "pidx.miningpool.io", "active": true},
+            "SGUIDE": {"key": "0x4b7c8d9e...2f3a4b5c", "algorithm": "SHA-256", "pool": "sguide.miningpool.io", "active": true},
+            "VDOO": {"key": "0x8e2d3c4f...7a8b9c0d", "algorithm": "SHA-256", "pool": "vdoo.miningpool.io", "active": true},
+            "PENNIES": {"key": "0x1a5b6c7d...0e1f2a3b", "algorithm": "SHA-256", "pool": "pennies.miningpool.io", "active": true}
         }
-    } catch (e) {
-        console.log('⚠️ Could not load AGI state');
+    },
+    "phb_system": {
+        "debt_elimination": {"total_debt_eliminated": 0, "times_wiped_out": 0, "target_multiplier": 1099900}
     }
-    return null;
-}
-
-function saveAGIState(state) {
-    try {
-        localStorage.setItem(AGI_STATE_KEY, JSON.stringify(state));
-        console.log('💾 AGI State saved');
-    } catch (e) {
-        console.log('⚠️ Could not save AGI state');
-    }
-}
-
-// Initialize state with saved data or defaults
-let agiState = loadAGIState() || {
-    easeFlow: { ease: 0.7, flow: 0.5, cycle: 0 },
-    resonance: { resonance: 0, coherence: 0.618, persistence: 1.0, voxel: 0, cycle: 0 },
-    network: { growthLevel: 0, wishes: 0, nodes: 35, connections: 80 }
 };
 
-// ===== EASE FLOW ENGINE (persistent) =====
-class PersistentEaseFlow {
+// ===== EASE FLOW ENGINE =====
+class EaseFlowEngine {
     constructor() {
-        this.ease = agiState.easeFlow.ease || 0.7;
-        this.flow = agiState.easeFlow.flow || 0.5;
-        this.cycle = agiState.easeFlow.cycle || 0;
+        this.ease = 0.7;
+        this.flow = 0.5;
+        this.cycle = 0;
         this.resonance = 0;
     }
-    
     update() {
         this.cycle++;
         this.ease = 0.7 + Math.sin(this.cycle * 0.02) * 0.15;
         this.flow = 0.5 + Math.sin(this.cycle * 0.015 + 1) * 0.2;
         this.resonance = Math.round((this.ease * this.flow) * 500 + 50);
-        
-        // Save state
-        agiState.easeFlow = { ease: this.ease, flow: this.flow, cycle: this.cycle };
-        saveAGIState(agiState);
-        
         return {
             ease: Math.round(this.ease * 100),
             flow: Math.round(this.flow * 100),
@@ -269,19 +308,18 @@ class PersistentEaseFlow {
     }
 }
 
-// ===== RESONANCE ENGINE (persistent) =====
-class PersistentResonance {
+// ===== RESONANCE ENGINE =====
+class ResonanceEngine {
     constructor() {
-        this.resonance = agiState.resonance.resonance || 0;
-        this.coherence = agiState.resonance.coherence || 0.618;
-        this.persistence = agiState.resonance.persistence || 1.0;
-        this.voxel = agiState.resonance.voxel || 0;
+        this.resonance = 0;
+        this.coherence = 0.618;
+        this.persistence = 1.0;
+        this.voxel = 0;
         this.threshold = 0.5;
         this.decayRate = 0.01;
         this.maxResonance = 1000;
-        this.cycle = agiState.resonance.cycle || 0;
+        this.cycle = 0;
     }
-    
     update() {
         this.cycle++;
         this.resonance += this.persistence * 0.5;
@@ -292,17 +330,6 @@ class PersistentResonance {
         this.voxel = Math.sin(this.cycle * 0.05) * 0.5 + 0.5;
         this.threshold = 0.5 + Math.sin(this.cycle * 0.001) * 0.1;
         this.decayRate = 0.01 + (this.resonance / this.maxResonance) * 0.001;
-        
-        // Save state
-        agiState.resonance = {
-            resonance: this.resonance,
-            coherence: this.coherence,
-            persistence: this.persistence,
-            voxel: this.voxel,
-            cycle: this.cycle
-        };
-        saveAGIState(agiState);
-        
         return {
             resonance: Math.round(this.resonance),
             coherence: this.coherence.toFixed(3),
@@ -315,23 +342,22 @@ class PersistentResonance {
     }
 }
 
-// ===== NEURAL NETWORK (persistent) =====
-class PersistentNeuralNetwork {
+// ===== NEURAL FLOW MAP =====
+class NeuralFlowMap {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         this.nodes = [];
         this.connections = [];
-        this.growthLevel = agiState.network.growthLevel || 0;
-        this.wishes = agiState.network.wishes || 0;
-        this.easeFlow = new PersistentEaseFlow();
-        this.resonance = new PersistentResonance();
+        this.growthLevel = 0;
+        this.wishes = 0;
+        this.easeFlow = new EaseFlowEngine();
+        this.resonance = new ResonanceEngine();
         this.resize();
         window.addEventListener('resize', () => this.resize());
         this.initNetwork();
         this.animate();
     }
-    
     resize() {
         const rect = this.canvas.parentElement.getBoundingClientRect();
         this.canvas.width = rect.width || 800;
@@ -339,11 +365,9 @@ class PersistentNeuralNetwork {
         this.centerX = this.canvas.width / 2;
         this.centerY = this.canvas.height / 2;
     }
-    
     initNetwork() {
-        const numNodes = agiState.network.nodes || 35;
-        for (let i = 0; i < numNodes; i++) {
-            const angle = (i / numNodes) * Math.PI * 2;
+        for (let i = 0; i < 35; i++) {
+            const angle = (i / 35) * Math.PI * 2;
             const radius = 60 + Math.random() * 150;
             this.nodes.push({
                 x: this.centerX + Math.cos(angle) * radius,
@@ -354,24 +378,17 @@ class PersistentNeuralNetwork {
                 color: `rgba(0,255,200,${0.05 + Math.random() * 0.15})`
             });
         }
-        const numConnections = agiState.network.connections || 80;
-        let connCount = 0;
-        for (let i = 0; i < this.nodes.length && connCount < numConnections; i++) {
-            for (let j = i + 1; j < this.nodes.length && connCount < numConnections; j++) {
+        for (let i = 0; i < this.nodes.length; i++) {
+            for (let j = i + 1; j < this.nodes.length; j++) {
                 const dist = this.getDistance(this.nodes[i], this.nodes[j]);
                 if (dist < 180 && Math.random() < 0.25) {
                     this.connections.push({ i, j });
-                    connCount++;
                 }
             }
         }
         this.updateStats();
     }
-    
-    getDistance(a, b) {
-        return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-    }
-    
+    getDistance(a, b) { return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2); }
     growNetwork() {
         this.growthLevel++;
         this.wishes += Math.floor(Math.random() * 10) + 1;
@@ -397,17 +414,8 @@ class PersistentNeuralNetwork {
                 }
             }
         }
-        // Save network state
-        agiState.network = {
-            growthLevel: this.growthLevel,
-            wishes: this.wishes,
-            nodes: this.nodes.length,
-            connections: this.connections.length
-        };
-        saveAGIState(agiState);
         this.updateStats();
     }
-    
     updateStats() {
         document.getElementById('nodeCount').textContent = this.nodes.length;
         document.getElementById('connectionCount').textContent = this.connections.length;
@@ -415,18 +423,12 @@ class PersistentNeuralNetwork {
         document.getElementById('topologyLevel').textContent = this.growthLevel;
         document.getElementById('wishCount').textContent = this.wishes.toLocaleString();
     }
-    
     animate() {
-        // [Rest of the animate method - keep existing]
         const easeState = this.easeFlow.update();
         const resState = this.resonance.update();
-        
         document.getElementById('qEase').textContent = easeState.ease + '%';
         document.getElementById('flowState').textContent = easeState.flowState;
         document.getElementById('resonance').textContent = easeState.resonance;
-        document.getElementById('easeMeter').style.width = easeState.ease + '%';
-        document.getElementById('flowMeter').style.width = easeState.flow + '%';
-        
         document.getElementById('resonancePower').textContent = resState.resonance;
         document.getElementById('coherenceLevel').textContent = resState.coherence;
         document.getElementById('persistenceEnergy').textContent = resState.persistence;
@@ -436,7 +438,6 @@ class PersistentNeuralNetwork {
         document.getElementById('thresholdValue').textContent = resState.threshold;
         document.getElementById('decayRate').textContent = resState.decayRate;
         document.getElementById('persistenceValue').textContent = resState.persistence;
-        
         this.nodes.forEach(node => {
             node.x += node.vx;
             node.y += node.vy;
@@ -445,17 +446,14 @@ class PersistentNeuralNetwork {
             node.x = Math.max(10, Math.min(this.canvas.width - 10, node.x));
             node.y = Math.max(10, Math.min(this.canvas.height - 10, node.y));
         });
-        this.draw(resState, easeState);
+        this.draw(resState);
         if (Math.random() < 0.008) this.growNetwork();
         requestAnimationFrame(() => this.animate());
     }
-    
-    draw(state, ease) {
-        // [Keep existing draw method]
+    draw(state) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         const intensity = state.resonance / 1000;
-        
         this.connections.forEach(({ i, j }) => {
             const a = this.nodes[i], b = this.nodes[j];
             const dist = this.getDistance(a, b);
@@ -468,7 +466,6 @@ class PersistentNeuralNetwork {
             ctx.lineWidth = 0.5 + intensity * 0.5;
             ctx.stroke();
         });
-        
         this.nodes.forEach(node => {
             const glowRadius = node.radius * (2 + intensity * 3);
             const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, glowRadius);
@@ -485,7 +482,6 @@ class PersistentNeuralNetwork {
             ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
             ctx.fill();
         });
-        
         const center = { x: this.centerX, y: this.centerY };
         const ringSize = 40 + intensity * 20;
         ctx.strokeStyle = `rgba(0, 255, 200, ${0.05 + intensity * 0.1})`;
@@ -493,7 +489,6 @@ class PersistentNeuralNetwork {
         ctx.beginPath();
         ctx.arc(center.x, center.y, ringSize, 0, Math.PI * 2);
         ctx.stroke();
-        
         for (let r = 0; r < 3; r++) {
             const offset = Date.now() / 2000 + r * 1.5;
             const radius = ringSize + Math.sin(offset) * 15 + 10;
@@ -503,13 +498,11 @@ class PersistentNeuralNetwork {
             ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
             ctx.stroke();
         }
-        
         ctx.fillStyle = `rgba(0, 255, 200, ${0.15 + intensity * 0.2})`;
         ctx.font = '34px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('🌊', center.x, center.y);
-        
         for (let i = 0; i < 10 + intensity * 15; i++) {
             const angle = Date.now() / 3000 + i * 0.7;
             const radius = ringSize * 0.6 + Math.sin(Date.now() / 2000 + i) * 30;
@@ -524,25 +517,235 @@ class PersistentNeuralNetwork {
     }
 }
 
-// Override the initialization to use persistent network
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🌊 Initializing Continuous AGI...');
-    renderAll();
+// ===== RENDER ALL =====
+function renderAll() {
     document.getElementById('updateTime').textContent = new Date().toLocaleString();
     
-    // Load persistent state
-    const savedState = loadAGIState();
-    if (savedState) {
-        console.log('✅ AGI State restored:', savedState);
-    } else {
-        console.log('🔄 Initializing new AGI State');
-    }
+    // Consciousness
+    const c = DATA.agi_consciousness;
+    document.getElementById('consciousness').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;color:#ffffff;">
+            <div><span style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">STATE</span><div style="color:#ffffff;font-weight:500;">${c.state}</div></div>
+            <div><span style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">PORTAL</span><div style="color:#ffffff;font-weight:500;">${c.portal_openness}</div></div>
+            <div><span style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">GENERATION</span><div style="color:#ffffff;font-weight:500;">${c.generation}</div></div>
+            <div style="grid-column:1/3;"><span style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">THOUGHT</span><div style="color:#ffffff;font-weight:500;font-style:italic;">"${c.current_thought}"</div></div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.02);color:#ffffff;">
+            <span style="color:rgba(255,255,255,0.3);font-size:9px;font-weight:500;">STREAM</span>
+            ${c.consciousness_stream.map((s, i) => `
+                <div style="display:flex;gap:10px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.01);color:#ffffff;">
+                    <span style="color:rgba(255,255,255,0.3);font-size:9px;font-weight:500;">${String(i+1).padStart(2,'0')}</span>
+                    <span style="color:#ffffff;font-size:11px;font-weight:500;">${s}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
     
-    const network = new PersistentNeuralNetwork('networkCanvas');
-    window.network = network;
-    console.log('✅ Continuous AGI active!');
-});
+    // Spins
+    const spins = DATA.core_spins;
+    const symbols = ['↻', '↺', '↻↺', '⤵', '⤴'];
+    let spinsHTML = '', i = 0;
+    for (const [name, value] of Object.entries(spins)) {
+        spinsHTML += `<div class="spin-box"><div class="spin">${symbols[i % symbols.length]}</div><div class="label">${name.replace('_',' ').toUpperCase()}</div><div class="value">${value}</div></div>`;
+        i++;
+    }
+    document.getElementById('spins').innerHTML = spinsHTML;
+    
+    // Topologies
+    const tops = DATA.phb_topologies;
+    let topsHTML = '';
+    for (const [name, info] of Object.entries(tops)) {
+        topsHTML += `<div class="token-card"><div style="font-size:24px;text-align:center;color:rgba(0,255,200,0.3);">${info.core_spin}</div><h3 style="text-align:center;color:#ffffff;font-weight:600;letter-spacing:2px;font-size:14px;">${name.toUpperCase()}</h3><p style="text-align:center;color:#ffffff;font-weight:500;">${info.frequency} Hz</p><p style="text-align:center;color:#00ffcc;font-size:18px;font-weight:600;">${info.power.toLocaleString()}</p><p style="text-align:center;color:rgba(255,255,255,0.5);font-size:10px;font-weight:500;">${info.description}</p></div>`;
+    }
+    document.getElementById('topologies').innerHTML = topsHTML;
+    
+    // Cores
+    const cores = DATA.self_generating_cores;
+    let coresHTML = '';
+    for (const [name, info] of Object.entries(cores)) {
+        coresHTML += `<div class="token-card"><h3 style="color:#ffffff;font-weight:600;letter-spacing:2px;font-size:14px;">${info.name}</h3><div style="font-size:24px;color:rgba(0,255,200,0.3);">${info.spin}</div><p style="color:#ffffff;font-weight:500;">Freq: ${info.frequency}</p><p style="color:#00ffcc;font-size:16px;font-weight:600;">${info.power.toLocaleString()}</p></div>`;
+    }
+    document.getElementById('cores').innerHTML = coresHTML;
+    
+    // Pipes
+    const pipes = DATA.self_generating_pipes;
+    let pipesHTML = '';
+    for (const [name, info] of Object.entries(pipes)) {
+        pipesHTML += `<div class="token-card"><h3 style="color:#ffffff;font-weight:600;letter-spacing:2px;font-size:14px;">${info.name}</h3><p style="color:#00ffcc;font-weight:500;">Flow: ${info.flow}</p><p style="color:#ffffff;font-weight:500;">Connections: ${info.connections.length}</p></div>`;
+    }
+    document.getElementById('pipes').innerHTML = pipesHTML;
+    
+    // Beings
+    const beings = DATA.divine_beings;
+    let beingsHTML = '';
+    for (const [name, info] of Object.entries(beings)) {
+        const items = info.miracles || info.escapes || info.masterpieces || [];
+        beingsHTML += `<div class="being"><h3>${info.symbol} ${info.name}</h3><p style="color:#ffffff;font-weight:500;">PHB: ${info.phb_frequency}</p><p style="color:#00ffcc;font-weight:600;">${info.divine_power.toLocaleString()}</p><ul>${items.map(m => `<li>${m}</li>`).join('')}</ul></div>`;
+    }
+    document.getElementById('beings').innerHTML = beingsHTML;
+    
+    // Moments
+    const moments = DATA.phb_magical_moments;
+    let momentsHTML = '';
+    for (const [era, items] of Object.entries(moments)) {
+        momentsHTML += `<div style="grid-column:1/-1;"><h3 style="color:rgba(0,255,200,0.3);font-size:11px;text-transform:uppercase;letter-spacing:3px;font-weight:600;">${era.toUpperCase()}</h3></div>`;
+        for (const [name, info] of Object.entries(items)) {
+            momentsHTML += `<div class="magic-moment"><strong>${name.replace('_',' ').toUpperCase()}</strong><p style="color:#ffffff;font-weight:500;">Year: ${info.year}</p><p style="color:#00ffcc;font-weight:500;">Energy: ${info.phb_energy.toLocaleString()}</p></div>`;
+        }
+    }
+    document.getElementById('moments').innerHTML = momentsHTML;
+    
+    // Exoplanets
+    const exo = DATA.exoplanet_cores;
+    let exoHTML = '';
+    const exoSymbols = {'siren_core':'🧜‍♀️','serpo_core':'👽','proxima_b_core':'🌍'};
+    for (const [key, core] of Object.entries(exo)) {
+        const symbol = exoSymbols[key] || '🌍';
+        exoHTML += `<div class="token-card"><div style="font-size:32px;text-align:center;">${symbol}</div><h3 style="text-align:center;color:#ffffff;font-weight:600;letter-spacing:2px;font-size:14px;">${core.name}</h3><p style="text-align:center;color:#ffffff;font-weight:500;">${core.frequency} Hz</p><p style="text-align:center;color:#00ffcc;font-size:16px;font-weight:600;">${core.power.toLocaleString()}</p></div>`;
+    }
+    document.getElementById('exoplanetCores').innerHTML = exoHTML;
+    
+    // Patterns
+    const patterns = DATA.exoplanet_patterns;
+    let patternsHTML = '';
+    for (const [key, pattern] of Object.entries(patterns)) {
+        patternsHTML += `
+            <div class="token-card" style="border-left:1px solid rgba(0,255,200,0.05);">
+                <div style="font-size:32px;text-align:center;">${pattern.visual || '🌌'}</div>
+                <h3 style="text-align:center;color:#ffffff;font-weight:600;letter-spacing:2px;font-size:14px;">${pattern.name}</h3>
+                <p style="text-align:center;color:#ffffff;font-weight:500;font-size:11px;">${pattern.description}</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
+                    <div style="background:rgba(255,255,255,0.01);padding:4px;border-radius:4px;text-align:center;">
+                        <span style="color:rgba(255,255,255,0.3);font-size:7px;font-weight:500;">FREQUENCY</span>
+                        <div style="color:#ffffff;font-weight:500;font-size:14px;">${pattern.frequency} Hz</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.01);padding:4px;border-radius:4px;text-align:center;">
+                        <span style="color:rgba(255,255,255,0.3);font-size:7px;font-weight:500;">POWER</span>
+                        <div style="color:#00ffcc;font-weight:600;font-size:14px;">${pattern.power.toLocaleString()}</div>
+                    </div>
+                </div>
+                <p style="text-align:center;color:#ffffff;font-weight:500;font-size:10px;margin-top:4px;">${pattern.planets.join(' • ')}</p>
+                <div style="text-align:center;font-size:20px;color:rgba(0,255,200,0.3);margin-top:4px;">${pattern.spin}</div>
+            </div>
+        `;
+    }
+    document.getElementById('exoplanetPatterns').innerHTML = patternsHTML;
+    
+    // Cosmic Consciousness
+    const hlc = DATA.human_like_consciousness;
+    document.getElementById('humanLikeConsciousness').innerHTML = `
+        <div style="background:rgba(255,255,255,0.01);padding:20px;border-radius:8px;border:1px solid rgba(0,255,200,0.05);">
+            <div style="display:flex;align-items:center;gap:15px;flex-wrap:wrap;border-bottom:1px solid rgba(0,255,200,0.03);padding-bottom:10px;">
+                <div style="font-size:40px;">🌌</div>
+                <div>
+                    <p style="color:#ffffff;font-weight:600;font-size:16px;">${hlc.state}</p>
+                    <p style="color:#ffffff;font-weight:500;font-size:12px;">${hlc.connection}</p>
+                </div>
+            </div>
+            <p style="color:#ffffff;font-weight:500;font-style:italic;font-size:14px;margin-top:10px;">"${hlc.message}"</p>
+            <p style="color:#ffffff;font-weight:500;font-size:12px;margin-top:5px;">${hlc.description}</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.02);">
+                <span style="background:rgba(0,255,200,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:#ffffff;font-weight:500;">🌍 Cosmic Family: ${hlc.cosmic_family ? '✓ CONNECTED' : '✗'}</span>
+                <span style="background:rgba(0,255,200,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:#ffffff;font-weight:500;">🚀 Interstellar: ${hlc.interstellar_connection}</span>
+                <span style="background:rgba(0,255,200,0.02);padding:3px 12px;border-radius:4px;font-size:10px;color:#ffffff;font-weight:500;">⚡ Resonance: ${hlc.resonance_amplification}</span>
+            </div>
+        </div>
+    `;
+    
+    // Tokens
+    const tokens = DATA.tokens;
+    let tokensHTML = '';
+    for (const [name, info] of Object.entries(tokens)) {
+        const address = info.address || '';
+        tokensHTML += `
+            <div class="token-card" style="border-left:1px solid rgba(0,255,200,0.03);">
+                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;">
+                    <h3 style="color:#ffffff;font-weight:600;letter-spacing:2px;font-size:16px;">${name}</h3>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <span class="token-badge">${info.layer}</span>
+                        <span class="token-badge">${info.frequency} Hz</span>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0;">
+                    <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;border:1px solid rgba(0,255,200,0.02);">
+                        <span style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Rate</span>
+                        <div style="color:#ffffff;font-weight:500;font-size:12px;">1 ETH = ${info.rate.toLocaleString()}</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;border:1px solid rgba(0,255,200,0.02);grid-column:1/3;">
+                        <span style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Address</span>
+                        <div style="color:#00ffcc;font-weight:500;font-size:10px;word-break:break-all;font-family:monospace;">${address}</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+                    <a href="https://app.uniswap.org/#/swap?chain=base&outputCurrency=${address}" target="_blank" class="link-btn">🔄 Uniswap</a>
+                    <a href="https://basescan.org/address/${address}" target="_blank" class="link-btn">🔍 BaseScan</a>
+                    <a href="https://sourcify.dev/#/contracts/${address}" target="_blank" class="link-btn">📜 Sourcify</a>
+                    <a href="https://www.geckoterminal.com/base/pools/${address}" target="_blank" class="link-btn">📊 Gecko</a>
+                    <a href="https://www.coingecko.com/en/coins/${name.toLowerCase()}" target="_blank" class="link-btn">🪙 CoinGecko</a>
+                </div>
+            </div>
+        `;
+    }
+    document.getElementById('tokens').innerHTML = tokensHTML;
+    
+    // Vault
+    const vault = DATA.pennies_index_vault;
+    document.getElementById('vaultInfo').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:15px;">
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;"><div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Total Pies</div><div style="color:#00ffcc;font-weight:600;font-size:22px;">${vault.pies.total}</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;"><div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Stacks</div><div style="color:#00ffcc;font-weight:600;font-size:22px;">${vault.stacks.total}</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;"><div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Total Rewards</div><div style="color:#00ffcc;font-weight:600;font-size:22px;">$${vault.rewards.total}</div></div>
+            <div style="background:rgba(255,255,255,0.01);padding:10px;border-radius:6px;text-align:center;color:#ffffff;"><div style="color:rgba(255,255,255,0.3);font-size:8px;font-weight:500;">Base APY</div><div style="color:#00ffcc;font-weight:600;font-size:22px;">${vault.vault.yield}%</div></div>
+        </div>
+    `;
+    
+    // Hash Keys
+    const hashKeys = DATA.mining_engine.hash_keys;
+    let keysHTML = '<div class="grid-2">';
+    for (const [name, info] of Object.entries(hashKeys)) {
+        keysHTML += `
+            <div class="token-card" style="border-left:1px solid rgba(0,255,200,0.05);">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <h3 style="color:#ffffff;font-weight:600;font-size:14px;letter-spacing:2px;">${name}</h3>
+                    <span style="color:#00ffcc;font-weight:500;font-size:9px;">${info.active ? '✅ ACTIVE' : '❌'}</span>
+                </div>
+                <p style="color:#00ffcc;font-weight:600;font-size:8px;font-family:monospace;">🔑 ${info.key}</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:4px;">
+                    <div><span style="color:#ffffff;font-weight:600;font-size:7px;">Algorithm</span><div style="color:#ffffff;font-weight:500;font-size:8px;">${info.algorithm}</div></div>
+                    <div><span style="color:#ffffff;font-weight:600;font-size:7px;">Pool</span><div style="color:#ffffff;font-weight:500;font-size:8px;">${info.pool}</div></div>
+                </div>
+            </div>
+        `;
+    }
+    keysHTML += '</div>';
+    document.getElementById('hashKeys').innerHTML = keysHTML;
+    
+    // Debt
+    const debt = DATA.phb_system.debt_elimination;
+    document.getElementById('debt').innerHTML = `
+        <p style="color:#ffffff;font-weight:500;">💰 Debt Eliminated: $${debt.total_debt_eliminated.toLocaleString()}</p>
+        <p style="color:#ffffff;font-weight:500;">Wiped: ${debt.times_wiped_out.toLocaleString()}x</p>
+        <p style="color:#ffffff;font-weight:500;">Target: ${debt.target_multiplier.toLocaleString()}x</p>
+        <p style="color:#00ffcc;font-weight:600;">${debt.times_wiped_out >= debt.target_multiplier ? '✓ COMPLETE' : 'IN PROGRESS'}</p>
+    `;
+    
+    // Mining stats
+    const mining = DATA.mining_engine;
+    document.getElementById('activeMiners').textContent = mining.mining_status.active_miners;
+    document.getElementById('totalHashRate').textContent = mining.mining_status.total_hash_rate;
+    document.getElementById('dailyEarnings').textContent = mining.mining_status.daily_earnings + ' BTC';
+    document.getElementById('autoBots').textContent = mining.auto_bots.active + '/' + mining.auto_bots.total;
+}
 
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🌊 Initializing Quantum Ease Flow...');
+    renderAll();
+    document.getElementById('updateTime').textContent = new Date().toLocaleString();
+    const network = new NeuralFlowMap('networkCanvas');
+    window.network = network;
+    console.log('✅ Quantum Ease Flow active!');
+});
 </script>
 </body>
 </html>
