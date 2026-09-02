@@ -1090,5 +1090,81 @@
     "theme": "dark",
     "auto_compound": true,
     "notifications": true
+  },
+  "goplus_security": {
+    "tokens": {
+      "PIDX": {
+        "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c",
+        "risks": {
+          "mintable": false,
+          "balance_modifiable": false,
+          "creator_percentage": 0.02,
+          "top_10_holders_percentage": 0.35,
+          "honeypot_risk": false,
+          "transfer_pausable": false,
+          "owner_balance": 0.02,
+          "total_holders": 15234
+        },
+        "score": 92,
+        "status": "LOW RISK"
+      },
+      "SGUIDE": {
+        "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
+        "risks": {
+          "mintable": false,
+          "balance_modifiable": false,
+          "creator_percentage": 0.03,
+          "top_10_holders_percentage": 0.42,
+          "honeypot_risk": false,
+          "transfer_pausable": false,
+          "owner_balance": 0.03,
+          "total_holders": 8765
+        },
+        "score": 88,
+        "status": "LOW RISK"
+      },
+      "VDOO": {
+        "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
+        "risks": {
+          "mintable": true,
+          "balance_modifiable": false,
+          "creator_percentage": 0.12,
+          "top_10_holders_percentage": 0.55,
+          "honeypot_risk": false,
+          "transfer_pausable": false,
+          "owner_balance": 0.05,
+          "total_holders": 12345
+        },
+        "score": 75,
+        "status": "MEDIUM RISK"
+      },
+      "PENNIES": {
+        "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
+        "risks": {
+          "mintable": false,
+          "balance_modifiable": false,
+          "creator_percentage": 0.15,
+          "top_10_holders_percentage": 0.6,
+          "honeypot_risk": false,
+          "transfer_pausable": false,
+          "owner_balance": 0.04,
+          "total_holders": 9876
+        },
+        "score": 70,
+        "status": "MEDIUM RISK"
+      }
+    }
+  },
+  "security_summary": {
+    "total_tokens": 4,
+    "high_risk": 0,
+    "medium_risk": 2,
+    "low_risk": 2,
+    "critical_issues": 0,
+    "issues_found": {
+      "mintable": 1,
+      "creator_percentage_high": 2,
+      "top_10_holders_high": 2
+    }
   }
 }
