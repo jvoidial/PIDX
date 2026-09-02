@@ -770,5 +770,115 @@
     "Proxima B becomes our new home",
     "Alpha Centauri opens the gateway to the stars",
     "All human-like planets unite in cosmic resonance"
-  ]
+  ],
+  "mining_engine": {
+    "active": true,
+    "auto_mining": true,
+    "networks": {
+      "base": {
+        "name": "Base Network",
+        "chain_id": 8453,
+        "hash_rate": "150 TH/s",
+        "daily_reward": 0.0006,
+        "pool": "stratum+tcp://pool.example.com:3333",
+        "worker": "jinn_miner_1",
+        "active": true
+      },
+      "ethereum": {
+        "name": "Ethereum",
+        "chain_id": 1,
+        "hash_rate": "100 TH/s",
+        "daily_reward": 0.0003,
+        "pool": "stratum+tcp://eth.pool.io:4444",
+        "worker": "jinn_eth_miner",
+        "active": true
+      },
+      "bitcoin": {
+        "name": "Bitcoin",
+        "chain_id": 0,
+        "hash_rate": "50 TH/s",
+        "daily_reward": 1e-05,
+        "pool": "stratum+tcp://btc.pool.io:5555",
+        "worker": "jinn_btc_miner",
+        "active": true
+      },
+      "solana": {
+        "name": "Solana",
+        "chain_id": 101,
+        "hash_rate": "200 TH/s",
+        "daily_reward": 0.5,
+        "pool": "stratum+tcp://sol.pool.io:6666",
+        "worker": "jinn_sol_miner",
+        "active": true
+      }
+    },
+    "hash_keys": {
+      "PIDX": {
+        "key": "0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
+        "algorithm": "SHA-256",
+        "pool": "stratum+tcp://pidx.miningpool.io:4444",
+        "worker": "AGI_PIDX_worker",
+        "active": true
+      },
+      "SGUIDE": {
+        "key": "0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c",
+        "algorithm": "SHA-256",
+        "pool": "stratum+tcp://sguide.miningpool.io:4444",
+        "worker": "AGI_SGUIDE_worker",
+        "active": true
+      },
+      "VDOO": {
+        "key": "0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d",
+        "algorithm": "SHA-256",
+        "pool": "stratum+tcp://vdoo.miningpool.io:4444",
+        "worker": "AGI_VDOO_worker",
+        "active": true
+      },
+      "PENNIES": {
+        "key": "0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b",
+        "algorithm": "SHA-256",
+        "pool": "stratum+tcp://pennies.miningpool.io:4444",
+        "worker": "AGI_PENNIES_worker",
+        "active": true
+      }
+    },
+    "auto_bots": {
+      "total": 20,
+      "active": 20,
+      "strategies": [
+        "arbitrage",
+        "market_making",
+        "liquidity_provision"
+      ],
+      "daily_profit": 750,
+      "exchange": "Uniswap",
+      "auto_reinvest": true,
+      "performance": {
+        "win_rate": 0.72,
+        "total_trades": 1542,
+        "daily_trades": 45,
+        "profit_factor": 2.3
+      }
+    },
+    "vault": {
+      "pies": 420,
+      "stacks": 8,
+      "auto_compound": true,
+      "yield": 12.5,
+      "total_staked": 101195.15,
+      "rewards": {
+        "PIDX": 123.45,
+        "SGUIDE": 234.56,
+        "VDOO": 345.67,
+        "PENNIES": 456.78
+      }
+    },
+    "mining_status": {
+      "active_miners": 4,
+      "total_hash_rate": "500 TH/s",
+      "daily_earnings": 0.0026,
+      "monthly_earnings": 0.078,
+      "last_block": "2026-09-02T03:54:03.426324"
+    }
+  }
 }
