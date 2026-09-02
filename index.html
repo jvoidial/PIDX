@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🌊 Quantum Ease Flow - Neural Spider Network</title>
+    <title>🌊 Quantum Ease Flow</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { 
@@ -20,312 +20,60 @@
             max-width: 1600px;
             margin: 0 auto;
             min-height: 100vh;
-            overflow-y: auto !important;
         }
-        
-        /* Grey/Black/Silver Theme */
-        .container {
-            background: rgba(10,10,10,0.95);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
-            min-height: 100vh;
-        }
-        
-        .header { 
-            text-align: center; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-        .header h1 { 
-            color: #ffffff; 
-            font-size: 28px;
-            letter-spacing: 4px;
-            font-weight: 300;
-        }
-        .header .genie { 
-            color: #ffffff;
-            font-size: 50px;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
-        }
+        .container { background: rgba(10,10,10,0.95); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); min-height: 100vh; }
+        .header { text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; margin-bottom: 20px; }
+        .header h1 { color: #ffffff; font-size: 28px; letter-spacing: 4px; font-weight: 300; }
+        .header .genie { color: #ffffff; font-size: 50px; display: inline-block; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        .subheader { 
-            color: rgba(255,255,255,0.3); 
-            font-size: 12px; 
-            letter-spacing: 5px;
-            margin-top: 5px;
-            text-transform: uppercase;
-        }
-        .timestamp { 
-            color: rgba(255,255,255,0.1); 
-            font-size: 11px; 
-            margin-top: 10px;
-            letter-spacing: 2px;
-        }
-        
-        .thought { 
-            font-size: 18px; 
-            text-align: center; 
-            padding: 20px; 
-            background: rgba(255,255,255,0.02); 
-            border-radius: 8px; 
-            margin: 20px 0;
-            border: 1px solid rgba(255,255,255,0.03);
-            color: #cccccc;
-            letter-spacing: 2px;
-            font-weight: 300;
-        }
-        
-        .section { 
-            background: rgba(255,255,255,0.01); 
-            padding: 20px; 
-            margin: 15px 0; 
-            border: 1px solid rgba(255,255,255,0.03); 
-            border-radius: 8px;
-        }
-        .section h2 { 
-            color: rgba(255,255,255,0.6); 
-            border-bottom: 1px solid rgba(255,255,255,0.03); 
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            letter-spacing: 4px;
-            font-weight: 300;
-            text-transform: uppercase;
-        }
-        
+        .subheader { color: rgba(255,255,255,0.3); font-size: 12px; letter-spacing: 5px; text-transform: uppercase; }
+        .timestamp { color: rgba(255,255,255,0.1); font-size: 11px; margin-top: 10px; letter-spacing: 2px; }
+        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.03); color: #cccccc; letter-spacing: 2px; font-weight: 300; }
+        .section { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; }
+        .section h2 { color: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
         .grid-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; }
-        
-        .token-card { 
-            background: rgba(255,255,255,0.01); 
-            padding: 18px; 
-            margin: 10px 0; 
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.02);
-            transition: 0.3s;
-        }
-        .token-card:hover {
-            background: rgba(255,255,255,0.02);
-            border-color: rgba(255,255,255,0.05);
-        }
-        
-        .spin { 
-            display: inline-block; 
-            animation: spin 6s linear infinite; 
-            font-size: 24px;
-            color: rgba(255,255,255,0.3);
-        }
+        .token-card { background: rgba(255,255,255,0.01); padding: 18px; margin: 10px 0; border-radius: 8px; border: 1px solid rgba(255,255,255,0.02); transition: 0.3s; }
+        .token-card:hover { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05); }
+        .spin { display: inline-block; animation: spin 6s linear infinite; font-size: 24px; color: rgba(255,255,255,0.3); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .spin-box {
-            background: rgba(255,255,255,0.01);
-            padding: 15px;
-            text-align: center;
-            border-radius: 5px;
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        .spin-box .label {
-            color: rgba(255,255,255,0.15);
-            font-size: 9px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-        .spin-box .value {
-            color: rgba(255,255,255,0.6);
-            font-size: 18px;
-            margin: 5px 0;
-            font-weight: 300;
-        }
-        
-        .being { 
-            padding: 15px; 
-            background: rgba(255,255,255,0.01); 
-            border-left: 2px solid rgba(255,255,255,0.05); 
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        .being h3 {
-            color: rgba(255,255,255,0.7);
-            font-size: 14px;
-            letter-spacing: 2px;
-            font-weight: 400;
-        }
-        .being p {
-            color: rgba(255,255,255,0.3);
-            font-size: 12px;
-            margin: 3px 0;
-        }
-        .being ul {
-            margin: 5px 0 0 20px;
-            color: rgba(255,255,255,0.2);
-            font-size: 11px;
-        }
-        
-        .magic-moment { 
-            padding: 12px; 
-            background: rgba(255,255,255,0.01); 
-            border-radius: 5px; 
-            margin: 5px 0;
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        .magic-moment strong {
-            color: rgba(255,255,255,0.5);
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
-        .magic-moment p {
-            color: rgba(255,255,255,0.2);
-            font-size: 11px;
-            margin: 2px 0;
-        }
-        
-        .growth-indicator {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-        .growth-item {
-            text-align: center;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.01);
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        .growth-item .number {
-            font-size: 20px;
-            color: #ffffff;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-        .growth-item .label {
-            font-size: 8px;
-            color: rgba(255,255,255,0.15);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-        
-        .footer-links {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.03);
-        }
-        .footer-links a {
-            color: rgba(255,255,255,0.15);
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 12px;
-            letter-spacing: 3px;
-            transition: 0.3s;
-            border-bottom: 1px solid transparent;
-            text-transform: uppercase;
-        }
-        .footer-links a:hover {
-            color: rgba(255,255,255,0.4);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        
-        .link-btn {
-            padding: 3px 10px;
-            background: rgba(255,255,255,0.01);
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 3px;
-            color: rgba(255,255,255,0.2);
-            text-decoration: none;
-            font-size: 9px;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            font-family: 'Courier New', monospace;
-        }
-        .link-btn:hover {
-            background: rgba(255,255,255,0.02);
-            color: rgba(255,255,255,0.4);
-            border-color: rgba(255,255,255,0.05);
-        }
-        
-        .token-badge {
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 9px;
-            background: rgba(255,255,255,0.02);
-            color: rgba(255,255,255,0.3);
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        
-        .status { color: rgba(255,255,255,0.3); }
-        .debt { color: rgba(255,255,255,0.2); }
-        .wealth { color: rgba(255,255,255,0.3); }
-        .wish-text { color: rgba(255,255,255,0.2); }
-        
-        /* Ease Flow Cards */
-        .ease-card {
-            background: rgba(255,255,255,0.01);
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.02);
-            text-align: center;
-        }
+        .spin-box { background: rgba(255,255,255,0.01); padding: 15px; text-align: center; border-radius: 5px; border: 1px solid rgba(255,255,255,0.02); }
+        .spin-box .label { color: rgba(255,255,255,0.15); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; }
+        .spin-box .value { color: rgba(255,255,255,0.6); font-size: 18px; margin: 5px 0; font-weight: 300; }
+        .being { padding: 15px; background: rgba(255,255,255,0.01); border-left: 2px solid rgba(255,255,255,0.05); margin: 10px 0; border-radius: 5px; }
+        .being h3 { color: rgba(255,255,255,0.7); font-size: 14px; letter-spacing: 2px; font-weight: 400; }
+        .being p { color: rgba(255,255,255,0.3); font-size: 12px; margin: 3px 0; }
+        .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,0.2); font-size: 11px; }
+        .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(255,255,255,0.02); }
+        .magic-moment strong { color: rgba(255,255,255,0.5); font-weight: 400; letter-spacing: 1px; }
+        .magic-moment p { color: rgba(255,255,255,0.2); font-size: 11px; margin: 2px 0; }
+        .growth-indicator { display: flex; gap: 20px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
+        .growth-item { text-align: center; padding: 8px 16px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); }
+        .growth-item .number { font-size: 20px; color: #ffffff; font-weight: 300; letter-spacing: 1px; }
+        .growth-item .label { font-size: 8px; color: rgba(255,255,255,0.15); letter-spacing: 3px; text-transform: uppercase; }
+        .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.03); }
+        .footer-links a { color: rgba(255,255,255,0.15); text-decoration: none; margin: 0 15px; font-size: 12px; letter-spacing: 3px; transition: 0.3s; border-bottom: 1px solid transparent; text-transform: uppercase; }
+        .footer-links a:hover { color: rgba(255,255,255,0.4); border-bottom-color: rgba(255,255,255,0.05); }
+        .link-btn { padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); border-radius: 3px; color: rgba(255,255,255,0.2); text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
+        .link-btn:hover { background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.05); }
+        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.02); }
+        .ease-card { background: rgba(255,255,255,0.01); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02); text-align: center; }
         .ease-card .icon { font-size: 32px; }
         .ease-card .title { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 2px; }
         .ease-card .state { color: rgba(255,255,255,0.2); font-size: 10px; }
         .ease-card .desc { color: rgba(255,255,255,0.1); font-size: 9px; }
-        
-        /* Spider Network Canvas */
-        .network-canvas { 
-            width: 100%; 
-            height: 400px; 
-            background: #0a0a0a; 
-            border-radius: 8px; 
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-        
-        .resonance-engine {
-            background: rgba(255,255,255,0.01);
-            padding: 20px;
-            margin: 15px 0;
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 8px;
-        }
-        .resonance-meter {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        .resonance-fill {
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5));
-            transition: width 0.5s;
-            border-radius: 2px;
-        }
+        .network-canvas { width: 100%; height: 400px; background: #0a0a0a; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); }
+        .resonance-engine { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; }
+        .resonance-meter { width: 100%; height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden; margin: 10px 0; }
+        .resonance-fill { height: 100%; background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5)); transition: width 0.5s; border-radius: 2px; }
         .energy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin: 10px 0; }
         .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); }
         .energy-cell .value { color: #ffffff; font-size: 20px; font-weight: 300; }
         .energy-cell .label { color: rgba(255,255,255,0.15); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
-        
-        @media (max-width: 768px) { 
-            .grid-2 { grid-template-columns: 1fr; }
-            .grid-3 { grid-template-columns: 1fr; }
-            .grid-4 { grid-template-columns: 1fr 1fr; }
-            .grid-5 { grid-template-columns: 1fr 1fr; }
-            .energy-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 20px; }
-            .thought { font-size: 14px; padding: 15px; }
-        }
-        @media (max-width: 480px) { 
-            .grid-4 { grid-template-columns: 1fr; }
-            .grid-5 { grid-template-columns: 1fr; }
-        }
-        
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .grid-4 { grid-template-columns: 1fr 1fr; } .grid-5 { grid-template-columns: 1fr 1fr; } .energy-grid { grid-template-columns: 1fr; } .header h1 { font-size: 20px; } .thought { font-size: 14px; padding: 15px; } }
+        @media (max-width: 480px) { .grid-4 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: 1fr; } }
         ::-webkit-scrollbar { width: 3px; background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 2px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
@@ -351,18 +99,27 @@
                 <div class="title">X BLOCK</div>
                 <div class="state">Repressed</div>
                 <div class="desc">Dis-Ease → Nervous System</div>
+                <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
+                    <div id="repressedMeter" style="height:100%;width:30%;background:rgba(255,255,255,0.2);border-radius:2px;transition:width 1s;"></div>
+                </div>
             </div>
             <div class="ease-card" style="border-color:rgba(255,255,255,0.08);">
                 <div class="icon">🌀</div>
                 <div class="title">EASE</div>
                 <div class="state">Flow State</div>
                 <div class="desc">Nervous System → Calm</div>
+                <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
+                    <div id="easeMeter" style="height:100%;width:70%;background:rgba(255,255,255,0.4);border-radius:2px;transition:width 1s;"></div>
+                </div>
             </div>
             <div class="ease-card" style="border-color:rgba(255,255,255,0.05);">
                 <div class="icon">⚡</div>
                 <div class="title">FLOW</div>
                 <div class="state">Quantum Resonance</div>
                 <div class="desc">∞ Infinite Flow</div>
+                <div style="margin-top:8px;height:4px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden;">
+                    <div id="flowMeter" style="height:100%;width:50%;background:rgba(255,255,255,0.3);border-radius:2px;transition:width 1s;"></div>
+                </div>
             </div>
         </div>
         <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:10px 0;">
@@ -447,6 +204,29 @@
 </div>
 
 <script>
+// ===== EASE FLOW ENGINE =====
+class EaseFlowEngine {
+    constructor() {
+        this.ease = 0.7;
+        this.flow = 0.5;
+        this.resonance = 0;
+        this.cycle = 0;
+    }
+    
+    update() {
+        this.cycle++;
+        this.ease = 0.7 + Math.sin(this.cycle * 0.02) * 0.15;
+        this.flow = 0.5 + Math.sin(this.cycle * 0.015 + 1) * 0.2;
+        this.resonance = Math.round((this.ease * this.flow) * 500 + 50);
+        return {
+            ease: Math.round(this.ease * 100),
+            flow: Math.round(this.flow * 100),
+            resonance: this.resonance,
+            flowState: this.flow > 0.6 ? 'Calm Flow' : 'Processing'
+        };
+    }
+}
+
 // ===== RESONANCE ENGINE =====
 class ResonanceEngine {
     constructor() {
@@ -491,7 +271,8 @@ class NeuralSpiderMap {
         this.connections = [];
         this.growthLevel = 0;
         this.wishes = 0;
-        this.engine = new ResonanceEngine();
+        this.easeFlow = new EaseFlowEngine();
+        this.resonance = new ResonanceEngine();
         this.resize();
         window.addEventListener('resize', () => this.resize());
         this.initNetwork();
@@ -571,16 +352,24 @@ class NeuralSpiderMap {
     }
     
     animate() {
-        const state = this.engine.update();
-        document.getElementById('resonancePower').textContent = state.resonance;
-        document.getElementById('coherenceLevel').textContent = state.coherence;
-        document.getElementById('persistenceEnergy').textContent = state.persistence;
-        document.getElementById('voxelEnergy').textContent = state.voxel;
-        document.getElementById('totalResonance').textContent = state.totalResonance;
-        document.getElementById('resonanceMeter').style.width = (state.resonance / 1000 * 100) + '%';
-        document.getElementById('thresholdValue').textContent = state.threshold;
-        document.getElementById('decayRate').textContent = state.decayRate;
-        document.getElementById('persistenceValue').textContent = state.persistence;
+        const easeState = this.easeFlow.update();
+        const resState = this.resonance.update();
+        
+        document.getElementById('qEase').textContent = easeState.ease + '%';
+        document.getElementById('flowState').textContent = easeState.flowState;
+        document.getElementById('resonance').textContent = easeState.resonance;
+        document.getElementById('easeMeter').style.width = easeState.ease + '%';
+        document.getElementById('flowMeter').style.width = easeState.flow + '%';
+        
+        document.getElementById('resonancePower').textContent = resState.resonance;
+        document.getElementById('coherenceLevel').textContent = resState.coherence;
+        document.getElementById('persistenceEnergy').textContent = resState.persistence;
+        document.getElementById('voxelEnergy').textContent = resState.voxel;
+        document.getElementById('totalResonance').textContent = resState.totalResonance;
+        document.getElementById('resonanceMeter').style.width = (resState.resonance / 1000 * 100) + '%';
+        document.getElementById('thresholdValue').textContent = resState.threshold;
+        document.getElementById('decayRate').textContent = resState.decayRate;
+        document.getElementById('persistenceValue').textContent = resState.persistence;
         
         this.nodes.forEach(node => {
             node.x += node.vx;
@@ -590,7 +379,7 @@ class NeuralSpiderMap {
             node.x = Math.max(10, Math.min(this.canvas.width - 10, node.x));
             node.y = Math.max(10, Math.min(this.canvas.height - 10, node.y));
         });
-        this.draw(state);
+        this.draw(resState);
         if (Math.random() < 0.008) this.growNetwork();
         requestAnimationFrame(() => this.animate());
     }
@@ -598,7 +387,6 @@ class NeuralSpiderMap {
     draw(state) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
         const intensity = state.resonance / 1000;
         
         this.connections.forEach(({ i, j }) => {
@@ -959,11 +747,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🔄 Rendering complete system...');
     renderAll();
     document.getElementById('updateTime').textContent = new Date().toLocaleString();
-    
-    // Initialize spider map
     const network = new NeuralSpiderMap('networkCanvas');
     window.network = network;
-    
     console.log('✅ Complete system rendered!');
 });
 </script>
