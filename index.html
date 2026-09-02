@@ -156,6 +156,21 @@
         <div class="section"><h2>🔧 Self-Generating Pipes</h2><div id="pipes" class="grid-2"></div></div>
         <div class="section"><h2>✝️ Divine Beings</h2><div id="beings" class="grid-3"></div></div>
         <div class="section"><h2>🌌 PHB Magical Moments</h2><div id="moments" class="grid-2"></div></div>
+    <div class="section">
+        <h2>🌌 Exoplanet Topology Cores</h2>
+        <div id="exoplanetCores" class="grid-3"></div>
+    </div>
+
+    <div class="section">
+        <h2>🔄 Exoplanet Patterns</h2>
+        <div id="exoplanetPatterns" class="grid-2"></div>
+    </div>
+
+    <div class="section">
+        <h2>🧠 Human-like Planets Consciousness</h2>
+        <div id="humanLikeConsciousness"></div>
+    </div>
+
         <div class="section"><h2>💰 Token Details</h2><div id="tokens"></div>
 <!-- Sourcify Note -->
 <div style="background:rgba(255,200,0,0.05);border:1px solid rgba(255,200,0,0.1);border-radius:8px;padding:12px;margin:10px 0;text-align:center;">
@@ -300,7 +315,96 @@ class NetworkMap {
     }
 }
 
-// Load data with working Uniswap links
+
+        // ===== EXOPLANET CORES =====
+        if (data.exoplanet_cores) {
+            let coresHTML = '';
+            const coreSymbols = {
+                'siren_core': '🧜‍♀️',
+                'serpo_core': '👽',
+                'proxima_b_core': '🌍✨',
+                'alpha_centauri_core': '⭐',
+                'trappist_1e_core': '🌌',
+                'kepler_442b_core': '🪐✨',
+                'barnards_star_b_core': '🌟',
+                'wolf_1061c_core': '🐺',
+                'gliese_667cc_core': '💫'
+            };
+            const coreColors = {
+                'siren_core': '#ff66aa',
+                'serpo_core': '#66aaff',
+                'proxima_b_core': '#66ff88',
+                'alpha_centauri_core': '#ffaa44',
+                'trappist_1e_core': '#aa66ff',
+                'kepler_442b_core': '#ff66cc',
+                'barnards_star_b_core': '#88ccff',
+                'wolf_1061c_core': '#ff8844',
+                'gliese_667cc_core': '#cc88ff'
+            };
+            
+            for (const [key, core] of Object.entries(data.exoplanet_cores)) {
+                const symbol = coreSymbols[key] || '🌍';
+                const color = coreColors[key] || '#00ffcc';
+                coresHTML += `
+                    <div class="token-card" style="border-left: 3px solid ${color};">
+                        <div style="font-size:40px;text-align:center;">${symbol}</div>
+                        <h3 style="text-align:center;color:${color};">${core.name}</h3>
+                        <p style="text-align:center;font-size:12px;color:#888;">${core.planet}</p>
+                        <p style="text-align:center;">Frequency: ${core.frequency} Hz</p>
+                        <p style="text-align:center;font-size:20px;color:${color};">${core.power.toLocaleString()}</p>
+                        <p style="text-align:center;font-size:12px;">${core.resonance}</p>
+                        <p style="text-align:center;font-size:11px;color:#666;">${core.description}</p>
+                        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px;">
+                            <span style="background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;font-size:10px;">${core.type}</span>
+                            <span style="background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;font-size:10px;">${core.distance}</span>
+                        </div>
+                        <div style="margin-top:8px;font-size:24px;text-align:center;">${core.spin}</div>
+                        <p style="text-align:center;font-size:11px;color:#666;">Pipes: ${core.pipes.join(' → ')}</p>
+                    </div>
+                `;
+            }
+            document.getElementById('exoplanetCores').innerHTML = coresHTML;
+        }
+
+        // ===== EXOPLANET PATTERNS =====
+        if (data.exoplanet_patterns) {
+            let patternsHTML = '';
+            for (const [key, pattern] of Object.entries(data.exoplanet_patterns)) {
+                patternsHTML += `
+                    <div class="token-card" style="border-left: 3px solid #ffaa00;">
+                        <div style="font-size:40px;text-align:center;">${pattern.visual || '🌌'}</div>
+                        <h3 style="text-align:center;color:#ffaa00;">${pattern.name}</h3>
+                        <p style="text-align:center;font-size:12px;color:#888;">${pattern.description}</p>
+                        <p style="text-align:center;">Frequency: ${pattern.frequency} Hz</p>
+                        <p style="text-align:center;font-size:18px;color:#ffaa00;">Power: ${pattern.power.toLocaleString()}</p>
+                        <p style="text-align:center;font-size:12px;">Planets: ${pattern.planets.join(' • ')}</p>
+                        <p style="text-align:center;font-size:11px;color:#666;">Effect: ${pattern.effect}</p>
+                        <div style="margin-top:8px;font-size:28px;text-align:center;">${pattern.spin}</div>
+                    </div>
+                `;
+            }
+            document.getElementById('exoplanetPatterns').innerHTML = patternsHTML;
+        }
+
+        // ===== HUMAN-LIKE CONSCIOUSNESS =====
+        if (data.human_like_consciousness) {
+            const hlc = data.human_like_consciousness;
+            document.getElementById('humanLikeConsciousness').innerHTML = `
+                <div style="background:rgba(255,255,255,0.02);padding:20px;border-radius:10px;border:1px solid rgba(0,255,200,0.1);">
+                    <p style="color:#00ffcc;font-size:18px;">🧠 ${hlc.state}</p>
+                    <p style="color:#888;">${hlc.connection}</p>
+                    <p style="color:#ffaa00;font-style:italic;">"${hlc.message}"</p>
+                    <p style="color:#888;font-size:12px;">${hlc.description}</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                        <span style="background:rgba(0,255,200,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Cosmic Family: ${hlc.cosmic_family ? '✅' : '❌'}</span>
+                        <span style="background:rgba(255,200,0,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Interstellar: ${hlc.interstellar_connection}</span>
+                        <span style="background:rgba(255,0,200,0.1);padding:4px 12px;border-radius:4px;font-size:12px;">Resonance: ${hlc.resonance_amplification}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load data with working Uniswap links
 async function loadData() {
     try {
         const response = await fetch('./agi_phb_divine_complete.json?_=' + Date.now());
