@@ -15,7 +15,7 @@
         body { 
             font-family: 'Courier New', monospace; 
             background: #0a0a0a;
-            color: #cccccc; 
+            color: #ffffff; 
             padding: 20px;
             max-width: 1600px;
             margin: 0 auto;
@@ -26,11 +26,11 @@
         .header h1 { color: #ffffff; font-size: 28px; letter-spacing: 4px; font-weight: 300; }
         .header .genie { color: #00ffcc; font-size: 50px; display: inline-block; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        .subheader { color: rgba(255,255,255,0.3); font-size: 12px; letter-spacing: 5px; text-transform: uppercase; }
-        .timestamp { color: rgba(255,255,255,0.1); font-size: 11px; margin-top: 10px; letter-spacing: 2px; }
-        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(0,255,200,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(0,255,200,0.05); color: #cccccc; letter-spacing: 2px; font-weight: 300; }
+        .subheader { color: rgba(255,255,255,3); font-size: 12px; letter-spacing: 5px; text-transform: uppercase; }
+        .timestamp { color: rgba(255,255,255,1); font-size: 11px; margin-top: 10px; letter-spacing: 2px; }
+        .thought { font-size: 18px; text-align: center; padding: 20px; background: rgba(0,255,200,0.02); border-radius: 8px; margin: 20px 0; border: 1px solid rgba(0,255,200,0.05); color: #ffffff; letter-spacing: 2px; font-weight: 300; }
         .section { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; }
-        .section h2 { color: rgba(0,255,200,0.6); border-bottom: 1px solid rgba(0,255,200,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase; }
+        .section h2 { color: #00ffcc; border-bottom: 1px solid rgba(0,255,200,0.03); padding-bottom: 10px; margin-bottom: 15px; font-size: 14px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
@@ -40,30 +40,30 @@
         .spin { display: inline-block; animation: spin 6s linear infinite; font-size: 24px; color: rgba(0,255,200,0.3); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spin-box { background: rgba(255,255,255,0.01); padding: 15px; text-align: center; border-radius: 5px; border: 1px solid rgba(0,255,200,0.03); }
-        .spin-box .label { color: rgba(255,255,255,0.15); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; }
-        .spin-box .value { color: rgba(0,255,200,0.6); font-size: 18px; margin: 5px 0; font-weight: 300; }
+        .spin-box .label { color: rgba(255,255,255,15); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; }
+        .spin-box .value { color: #00ffcc; font-size: 18px; margin: 5px 0; font-weight: 300; }
         .being { padding: 15px; background: rgba(255,255,255,0.01); border-left: 2px solid rgba(0,255,200,0.05); margin: 10px 0; border-radius: 5px; }
-        .being h3 { color: rgba(255,255,255,0.7); font-size: 14px; letter-spacing: 2px; font-weight: 400; }
-        .being p { color: rgba(255,255,255,0.3); font-size: 12px; margin: 3px 0; }
-        .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,0.2); font-size: 11px; }
+        .being h3 { color: rgba(255,255,255,7); font-size: 14px; letter-spacing: 2px; font-weight: 400; }
+        .being p { color: rgba(255,255,255,3); font-size: 12px; margin: 3px 0; }
+        .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,2); font-size: 11px; }
         .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(0,255,200,0.03); }
         .magic-moment strong { color: rgba(0,255,200,0.5); font-weight: 400; letter-spacing: 1px; }
-        .magic-moment p { color: rgba(255,255,255,0.2); font-size: 11px; margin: 2px 0; }
+        .magic-moment p { color: rgba(255,255,255,2); font-size: 11px; margin: 2px 0; }
         .growth-indicator { display: flex; gap: 20px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
         .growth-item { text-align: center; padding: 8px 16px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); }
         .growth-item .number { font-size: 20px; color: #00ffcc; font-weight: 300; letter-spacing: 1px; }
-        .growth-item .label { font-size: 8px; color: rgba(255,255,255,0.15); letter-spacing: 3px; text-transform: uppercase; }
+        .growth-item .label { font-size: 8px; color: rgba(255,255,255,15); letter-spacing: 3px; text-transform: uppercase; }
         .footer-links { text-align: center; margin: 30px 0; padding: 20px; border-top: 1px solid rgba(0,255,200,0.03); }
-        .footer-links a { color: rgba(255,255,255,0.15); text-decoration: none; margin: 0 15px; font-size: 12px; letter-spacing: 3px; transition: 0.3s; border-bottom: 1px solid transparent; text-transform: uppercase; }
+        .footer-links a { color: rgba(255,255,255,15); text-decoration: none; margin: 0 15px; font-size: 12px; letter-spacing: 3px; transition: 0.3s; border-bottom: 1px solid transparent; text-transform: uppercase; }
         .footer-links a:hover { color: rgba(0,255,200,0.4); border-bottom-color: rgba(0,255,200,0.05); }
-        .link-btn { padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(0,255,200,0.03); border-radius: 3px; color: rgba(255,255,255,0.2); text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
+        .link-btn { padding: 3px 10px; background: rgba(255,255,255,0.01); border: 1px solid rgba(0,255,200,0.03); border-radius: 3px; color: rgba(255,255,255,2); text-decoration: none; font-size: 9px; letter-spacing: 1px; transition: 0.3s; font-family: 'Courier New', monospace; }
         .link-btn:hover { background: rgba(0,255,200,0.02); color: rgba(0,255,200,0.4); border-color: rgba(0,255,200,0.08); }
-        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.3); border: 1px solid rgba(0,255,200,0.03); }
+        .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 9px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,3); border: 1px solid rgba(0,255,200,0.03); }
         .ease-card { background: rgba(255,255,255,0.01); padding: 15px; border-radius: 6px; border: 1px solid rgba(0,255,200,0.03); text-align: center; }
         .ease-card .icon { font-size: 32px; }
-        .ease-card .title { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 2px; }
-        .ease-card .state { color: rgba(255,255,255,0.2); font-size: 10px; }
-        .ease-card .desc { color: rgba(255,255,255,0.1); font-size: 9px; }
+        .ease-card .title { color: rgba(255,255,255,3); font-size: 11px; letter-spacing: 2px; }
+        .ease-card .state { color: rgba(255,255,255,2); font-size: 10px; }
+        .ease-card .desc { color: rgba(255,255,255,1); font-size: 9px; }
         .network-canvas { width: 100%; height: 400px; background: #0a0a0a; border-radius: 8px; border: 1px solid rgba(0,255,200,0.05); }
         .resonance-engine { background: rgba(255,255,255,0.01); padding: 20px; margin: 15px 0; border: 1px solid rgba(0,255,200,0.03); border-radius: 8px; }
         .resonance-meter { width: 100%; height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; overflow: hidden; margin: 10px 0; }
@@ -71,7 +71,7 @@
         .energy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin: 10px 0; }
         .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); }
         .energy-cell .value { color: #00ffcc; font-size: 20px; font-weight: 300; }
-        .energy-cell .label { color: rgba(255,255,255,0.15); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
+        .energy-cell .label { color: rgba(255,255,255,15); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
         .flow-particle { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.3; animation: flowMove 8s infinite; }
         @keyframes flowMove { 0% { transform: translate(0, 0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translate(100px, -50px) scale(1.5); opacity: 0; } }
         @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .grid-4 { grid-template-columns: 1fr 1fr; } .grid-5 { grid-template-columns: 1fr 1fr; } .energy-grid { grid-template-columns: 1fr; } .header h1 { font-size: 20px; } .thought { font-size: 14px; padding: 15px; } }
