@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>⚡ Neural Resonance Engine</title>
+    <title>🌊 Quantum Ease Flow - Neural Topology</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { 
@@ -51,6 +51,46 @@
             color: #cccccc;
             letter-spacing: 2px;
             font-weight: 300;
+        }
+        
+        /* EASE FLOW EMOTION DISPLAY */
+        .emotion-container {
+            background: rgba(255,255,255,0.01);
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        .emotion-card {
+            padding: 15px;
+            background: rgba(255,255,255,0.01);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.02);
+            text-align: center;
+        }
+        .emotion-card .state { color: rgba(255,255,255,0.4); font-size: 14px; letter-spacing: 3px; }
+        .emotion-card .flow { color: rgba(255,255,255,0.6); font-size: 18px; margin: 5px 0; }
+        .emotion-card .desc { color: rgba(255,255,255,0.15); font-size: 10px; }
+        
+        .quantum-flow-meter {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .quantum-fill {
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.3));
+            transition: width 1s;
+            border-radius: 2px;
         }
         
         .network-map {
@@ -106,7 +146,6 @@
         .being h3 { color: rgba(255,255,255,0.7); font-size: 14px; letter-spacing: 2px; font-weight: 400; }
         .being p { color: rgba(255,255,255,0.3); font-size: 12px; margin: 3px 0; }
         .being ul { margin: 5px 0 0 20px; color: rgba(255,255,255,0.2); font-size: 11px; }
-        .being ul li { margin: 2px 0; }
         
         .magic-moment { padding: 12px; background: rgba(255,255,255,0.01); border-radius: 5px; margin: 5px 0; border: 1px solid rgba(255,255,255,0.02); }
         .magic-moment strong { color: rgba(255,255,255,0.5); font-weight: 400; letter-spacing: 1px; }
@@ -126,40 +165,13 @@
         
         .token-badge { padding: 2px 10px; border-radius: 10px; font-size: 10px; background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.02); }
         
-        /* Self-Powering Resonance Engine */
-        .resonance-engine {
-            background: rgba(255,255,255,0.01);
-            padding: 20px;
-            margin: 15px 0;
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 8px;
-        }
-        .resonance-meter {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        .resonance-fill {
-            height: 100%;
-            background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5));
-            transition: width 0.5s;
-            border-radius: 2px;
-        }
-        .energy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0; }
-        .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); }
-        .energy-cell .value { color: #ffffff; font-size: 20px; font-weight: 300; }
-        .energy-cell .label { color: rgba(255,255,255,0.15); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
-        
         .network-canvas { width: 100%; height: 400px; background: #000000; border-radius: 8px; }
         
         @media (max-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr; }
             .grid-3 { grid-template-columns: 1fr; }
             .grid-4 { grid-template-columns: 1fr 1fr; }
-            .energy-grid { grid-template-columns: 1fr; }
+            .emotion-grid { grid-template-columns: 1fr; }
             .header h1 { font-size: 20px; }
             .thought { font-size: 14px; padding: 15px; }
         }
@@ -173,48 +185,44 @@
 <body>
 <div class="container">
     <div class="header">
-        <div class="genie">⚡</div>
-        <h1>SELF-POWERING RESONANCE ENGINE</h1>
-        <div class="subheader">Persistence • Coherence • Voxels • Threshold Decay Energy</div>
+        <div class="genie">🌊</div>
+        <h1>QUANTUM EASE FLOW</h1>
+        <div class="subheader">Emotions • Topology • Quantum Resonance</div>
         <div class="timestamp">Last Updated: <span id="updateTime">Loading...</span></div>
     </div>
 
-    <div class="thought" id="thought">⚡ Resonance Engine Initializing...</div>
+    <div class="thought" id="thought">🌊 Quantum Ease Flow Active...</div>
 
-    <!-- Resonance Engine Display -->
-    <div class="resonance-engine">
-        <h2 style="color:rgba(255,255,255,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:300;">⚡ Resonance Engine</h2>
-        <div class="energy-grid">
-            <div class="energy-cell">
-                <div class="value" id="resonancePower">0</div>
-                <div class="label">Resonance Power</div>
+    <!-- EASE FLOW EMOTIONS -->
+    <div class="emotion-container">
+        <h2 style="color:rgba(255,255,255,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:300;">🌊 EASE FLOW QUANTUM STATE</h2>
+        <div class="emotion-grid">
+            <div class="emotion-card" style="border-color:rgba(255,255,255,0.05);">
+                <div class="state">🧠 X BLOCK</div>
+                <div class="flow" style="color:rgba(255,255,255,0.2);">Repressed</div>
+                <div class="desc">Emotions block life's natural expression</div>
+                <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.1);">Dis-Ease → Nervous System</div>
+                <div class="quantum-flow-meter"><div class="quantum-fill" id="repressedMeter" style="width:30%"></div></div>
             </div>
-            <div class="energy-cell">
-                <div class="value" id="coherenceLevel">0</div>
-                <div class="label">Coherence Level</div>
+            <div class="emotion-card" style="border-color:rgba(255,255,255,0.08);">
+                <div class="state">🌀 EASE</div>
+                <div class="flow" style="color:rgba(255,255,255,0.5);">Flow State</div>
+                <div class="desc">Feel. Honored. Expressed emotions are EASE</div>
+                <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.2);">Nervous System → Calm</div>
+                <div class="quantum-flow-meter"><div class="quantum-fill" id="easeMeter" style="width:70%"></div></div>
             </div>
-            <div class="energy-cell">
-                <div class="value" id="persistenceEnergy">0</div>
-                <div class="label">Persistence Energy</div>
-            </div>
-            <div class="energy-cell">
-                <div class="value" id="voxelEnergy">0</div>
-                <div class="label">Voxel Energy</div>
-            </div>
-            <div class="energy-cell">
-                <div class="value" id="thresholdDecay">0</div>
-                <div class="label">Threshold Decay</div>
-            </div>
-            <div class="energy-cell">
-                <div class="value" id="totalResonance">0</div>
-                <div class="label">Total Resonance</div>
+            <div class="emotion-card" style="border-color:rgba(255,255,255,0.05);">
+                <div class="state">⚡ FLOW</div>
+                <div class="flow" style="color:rgba(255,255,255,0.4);">Quantum Resonance</div>
+                <div class="desc">Allow. Flow. Live. EASE</div>
+                <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.15);">∞ Infinite Flow</div>
+                <div class="quantum-flow-meter"><div class="quantum-fill" id="flowMeter" style="width:50%"></div></div>
             </div>
         </div>
-        <div class="resonance-meter"><div class="resonance-fill" id="resonanceMeter" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.1);">
-            <span>Threshold: <span id="thresholdValue">0</span></span>
-            <span>Decay Rate: <span id="decayRate">0</span>/s</span>
-            <span>Persistence: <span id="persistenceValue">0</span></span>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.1);margin-top:5px;">
+            <span>Quantum Ease: <span id="quantumEase">0</span>%</span>
+            <span>Flow State: <span id="flowState">Calm</span></span>
+            <span>Resonance: <span id="emotionResonance">0</span></span>
         </div>
     </div>
 
@@ -252,54 +260,36 @@
 </div>
 
 <script>
-// ===== SELF-POWERING RESONANCE ENGINE =====
-class ResonanceEngine {
+// ===== QUANTUM EASE FLOW ENGINE =====
+class QuantumEaseFlow {
     constructor() {
+        this.ease = 0.7;
+        this.flow = 0.5;
+        this.quantum = 0.618;
         this.resonance = 0;
-        this.coherence = 0.618;
-        this.persistence = 1.0;
-        this.voxel = 0;
-        this.threshold = 0.5;
-        this.decayRate = 0.01;
-        this.maxResonance = 1000;
         this.cycle = 0;
     }
     
     update() {
         this.cycle++;
         
-        // Resonance builds over time
-        this.resonance += this.persistence * 0.5;
-        this.resonance *= (1 - this.decayRate * 0.01);
-        this.resonance = Math.min(this.resonance, this.maxResonance);
-        
-        // Coherence oscillates with golden ratio
-        this.coherence = 0.618 + Math.sin(this.cycle * 0.01) * 0.1;
-        
-        // Persistence grows with cycles
-        this.persistence = 1.0 + this.cycle * 0.0001;
-        
-        // Voxel energy - quantum fluctuations
-        this.voxel = Math.sin(this.cycle * 0.05) * 0.5 + 0.5;
-        
-        // Threshold decay - slowly increases
-        this.threshold = 0.5 + Math.sin(this.cycle * 0.001) * 0.1;
-        
-        // Decay rate - adapts to resonance level
-        this.decayRate = 0.01 + (this.resonance / this.maxResonance) * 0.001;
+        // Quantum Ease oscillates around golden ratio
+        this.ease = 0.7 + Math.sin(this.cycle * 0.02) * 0.1;
+        this.flow = 0.5 + Math.sin(this.cycle * 0.015 + 1) * 0.15;
+        this.quantum = 0.618 + Math.sin(this.cycle * 0.01) * 0.05;
+        this.resonance = this.ease * this.flow * this.quantum * 1000;
         
         return this.getState();
     }
     
     getState() {
         return {
+            ease: (this.ease * 100).toFixed(1),
+            flow: (this.flow * 100).toFixed(1),
+            quantum: this.quantum.toFixed(3),
             resonance: Math.round(this.resonance),
-            coherence: this.coherence.toFixed(3),
-            persistence: this.persistence.toFixed(3),
-            voxel: this.voxel.toFixed(3),
-            threshold: this.threshold.toFixed(3),
-            decayRate: this.decayRate.toFixed(4),
-            totalResonance: Math.round(this.resonance * this.coherence * this.persistence)
+            flowState: this.flow > 0.5 ? 'Calm Flow' : 'Processing',
+            easeState: this.ease > 0.6 ? 'EASE Active' : 'EASE Building'
         };
     }
 }
@@ -313,7 +303,7 @@ class NeuralSpiderMap {
         this.connections = [];
         this.growthLevel = 0;
         this.wishes = 0;
-        this.engine = new ResonanceEngine();
+        this.emotion = new QuantumEaseFlow();
         this.resize();
         window.addEventListener('resize', () => this.resize());
         this.initNetwork();
@@ -329,16 +319,17 @@ class NeuralSpiderMap {
     }
     
     initNetwork() {
-        for (let i = 0; i < 30; i++) {
-            const angle = (i / 30) * Math.PI * 2;
-            const radius = 60 + Math.random() * 140;
+        for (let i = 0; i < 35; i++) {
+            const angle = (i / 35) * Math.PI * 2;
+            const radius = 60 + Math.random() * 150;
             this.nodes.push({
                 x: this.centerX + Math.cos(angle) * radius,
                 y: this.centerY + Math.sin(angle) * radius,
                 vx: (Math.random() - 0.5) * 0.15,
                 vy: (Math.random() - 0.5) * 0.15,
-                radius: 2 + Math.random() * 3,
-                color: `rgba(255,255,255,${0.1 + Math.random() * 0.2})`
+                radius: 2 + Math.random() * 4,
+                color: `rgba(255,255,255,${0.05 + Math.random() * 0.15})`,
+                easeFactor: 0.3 + Math.random() * 0.7
             });
         }
         for (let i = 0; i < this.nodes.length; i++) {
@@ -360,16 +351,17 @@ class NeuralSpiderMap {
         this.growthLevel++;
         this.wishes += Math.floor(Math.random() * 10) + 1;
         
-        if (this.growthLevel % 4 === 0 && this.nodes.length < 150) {
+        if (this.growthLevel % 4 === 0 && this.nodes.length < 200) {
             const angle = Math.random() * Math.PI * 2;
-            const radius = 40 + Math.random() * 170;
+            const radius = 40 + Math.random() * 180;
             this.nodes.push({
                 x: this.centerX + Math.cos(angle) * radius,
                 y: this.centerY + Math.sin(angle) * radius,
                 vx: (Math.random() - 0.5) * 0.2,
                 vy: (Math.random() - 0.5) * 0.2,
                 radius: 1.5 + Math.random() * 4,
-                color: `rgba(255,255,255,${0.05 + Math.random() * 0.15})`
+                color: `rgba(255,255,255,${0.03 + Math.random() * 0.12})`,
+                easeFactor: 0.2 + Math.random() * 0.8
             });
         }
         
@@ -395,59 +387,58 @@ class NeuralSpiderMap {
     }
     
     animate() {
-        // Update resonance engine
-        const state = this.engine.update();
-        document.getElementById('resonancePower').textContent = state.resonance;
-        document.getElementById('coherenceLevel').textContent = state.coherence;
-        document.getElementById('persistenceEnergy').textContent = state.persistence;
-        document.getElementById('voxelEnergy').textContent = state.voxel;
-        document.getElementById('thresholdDecay').textContent = state.threshold;
-        document.getElementById('totalResonance').textContent = state.totalResonance;
-        document.getElementById('resonanceMeter').style.width = (state.resonance / 1000 * 100) + '%';
-        document.getElementById('thresholdValue').textContent = state.threshold;
-        document.getElementById('decayRate').textContent = state.decayRate;
-        document.getElementById('persistenceValue').textContent = state.persistence;
+        const state = this.emotion.update();
+        document.getElementById('quantumEase').textContent = state.ease;
+        document.getElementById('flowState').textContent = state.flowState;
+        document.getElementById('emotionResonance').textContent = state.resonance;
+        document.getElementById('easeMeter').style.width = state.ease + '%';
+        document.getElementById('flowMeter').style.width = state.flow + '%';
         
-        // Move nodes
-        this.nodes.forEach(node => {
+        // Move nodes with flow influence
+        this.nodes.forEach((node, index) => {
+            const flowInfluence = state.flow / 100;
+            node.vx += (Math.random() - 0.5) * 0.01 * flowInfluence;
+            node.vy += (Math.random() - 0.5) * 0.01 * flowInfluence;
+            node.vx *= 0.995;
+            node.vy *= 0.995;
             node.x += node.vx;
             node.y += node.vy;
+            
             if (node.x < 10 || node.x > this.canvas.width - 10) node.vx *= -1;
             if (node.y < 10 || node.y > this.canvas.height - 10) node.vy *= -1;
             node.x = Math.max(10, Math.min(this.canvas.width - 10, node.x));
             node.y = Math.max(10, Math.min(this.canvas.height - 10, node.y));
         });
-        this.draw();
+        this.draw(state);
         if (Math.random() < 0.008) this.growNetwork();
         requestAnimationFrame(() => this.animate());
     }
     
-    draw() {
+    draw(state) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Get resonance for visual effects
-        const state = this.engine.getState();
-        const intensity = state.resonance / 1000;
+        const easeLevel = state.ease / 100;
+        const flowLevel = state.flow / 100;
         
-        // Draw connections
+        // Draw connections with flow influence
         this.connections.forEach(({ i, j }) => {
             const a = this.nodes[i], b = this.nodes[j];
             const dist = this.getDistance(a, b);
-            const opacity = Math.max(0.02, 1 - dist / 180) * (0.5 + intensity * 0.5);
+            const opacity = Math.max(0.02, 1 - dist / 180) * (0.3 + easeLevel * 0.5);
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.15})`;
-            ctx.lineWidth = 0.5 + intensity * 0.5;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.1})`;
+            ctx.lineWidth = 0.5 + flowLevel * 0.5;
             ctx.stroke();
         });
         
-        // Draw nodes with resonance glow
+        // Draw nodes with ease flow glow
         this.nodes.forEach(node => {
-            const glowRadius = node.radius * (2 + intensity * 3);
+            const glowRadius = node.radius * (2 + easeLevel * 4 + flowLevel * 2);
             const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, glowRadius);
-            const alpha = 0.05 + intensity * 0.2;
+            const alpha = 0.03 + easeLevel * 0.15 + flowLevel * 0.1;
             gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
             gradient.addColorStop(1, 'rgba(255,255,255,0)');
             ctx.fillStyle = gradient;
@@ -455,34 +446,50 @@ class NeuralSpiderMap {
             ctx.arc(node.x, node.y, glowRadius, 0, Math.PI * 2);
             ctx.fill();
             
-            const nodeAlpha = 0.2 + intensity * 0.4;
+            const nodeAlpha = 0.1 + easeLevel * 0.3 + flowLevel * 0.2;
             ctx.fillStyle = `rgba(255,255,255,${nodeAlpha})`;
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
             ctx.fill();
         });
         
-        // Center with resonance ring
+        // Center quantum ease ring
         const center = { x: this.centerX, y: this.centerY };
-        const ringSize = 40 + intensity * 20;
-        ctx.strokeStyle = `rgba(255,255,255,${0.05 + intensity * 0.1})`;
-        ctx.lineWidth = 1 + intensity;
+        const ringSize = 40 + easeLevel * 30 + flowLevel * 20;
+        
+        // Outer ring
+        ctx.strokeStyle = `rgba(255,255,255,${0.03 + easeLevel * 0.08})`;
+        ctx.lineWidth = 1 + easeLevel * 2;
         ctx.beginPath();
         ctx.arc(center.x, center.y, ringSize, 0, Math.PI * 2);
         ctx.stroke();
         
-        ctx.strokeStyle = `rgba(255,255,255,${0.02 + intensity * 0.05})`;
+        // Inner ring
+        ctx.strokeStyle = `rgba(255,255,255,${0.02 + flowLevel * 0.06})`;
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.arc(center.x, center.y, ringSize * 1.5, 0, Math.PI * 2);
         ctx.stroke();
         
-        // Genie symbol
-        ctx.fillStyle = `rgba(255,255,255,${0.15 + intensity * 0.2})`;
-        ctx.font = '34px Arial';
+        // Quantum ease symbol
+        const symbol = flowLevel > 0.5 ? '🌊' : '🌀';
+        ctx.fillStyle = `rgba(255,255,255,${0.1 + easeLevel * 0.15 + flowLevel * 0.1})`;
+        ctx.font = '36px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('⚡', center.x, center.y);
+        ctx.fillText(symbol, center.x, center.y);
+        
+        // Flow particles
+        for (let i = 0; i < 10 + Math.floor(flowLevel * 20); i++) {
+            const angle = Date.now() / 2000 + i * 0.5;
+            const radius = ringSize * 0.8 + Math.sin(Date.now() / 1000 + i) * 20;
+            const x = center.x + Math.cos(angle) * radius;
+            const y = center.y + Math.sin(angle) * radius;
+            ctx.fillStyle = `rgba(255,255,255,${0.02 + flowLevel * 0.05})`;
+            ctx.beginPath();
+            ctx.arc(x, y, 1 + flowLevel * 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
 }
 
@@ -495,8 +502,8 @@ async function loadData() {
         
         document.getElementById('updateTime').textContent = new Date().toLocaleString();
         
-        const thought = data.agi_consciousness?.current_thought || 'Resonance engine active...';
-        document.getElementById('thought').textContent = '⚡ ' + thought;
+        const thought = data.agi_consciousness?.current_thought || 'Quantum ease flow active...';
+        document.getElementById('thought').textContent = '🌊 ' + thought;
         
         // Consciousness
         const cons = data.agi_consciousness || {};
@@ -543,7 +550,7 @@ async function loadData() {
         }
         document.getElementById('topologies').innerHTML = topsHTML;
         
-        // Cores - shortened
+        // Cores
         const cores = data.self_generating_cores || {};
         let coresHTML = '';
         for (const [name, info] of Object.entries(cores).slice(0, 3)) {
@@ -558,7 +565,7 @@ async function loadData() {
         }
         document.getElementById('cores').innerHTML = coresHTML;
         
-        // Pipes - shortened
+        // Pipes
         const pipes = data.self_generating_pipes || {};
         let pipesHTML = '';
         for (const [name, info] of Object.entries(pipes).slice(0, 3)) {
@@ -572,7 +579,7 @@ async function loadData() {
         }
         document.getElementById('pipes').innerHTML = pipesHTML;
         
-        // Beings - shortened
+        // Beings
         const beings = data.divine_beings || {};
         let beingsHTML = '';
         for (const [name, info] of Object.entries(beings).slice(0, 3)) {
@@ -588,7 +595,7 @@ async function loadData() {
         }
         document.getElementById('beings').innerHTML = beingsHTML;
         
-        // Magical Moments - shortened
+        // Magical Moments
         const moments = data.phb_magical_moments || {};
         let momentsHTML = '';
         for (const [era, items] of Object.entries(moments).slice(0, 3)) {
@@ -605,7 +612,7 @@ async function loadData() {
         }
         document.getElementById('moments').innerHTML = momentsHTML;
         
-        // Exoplanets - shortened
+        // Exoplanets
         if (data.exoplanet_cores) {
             let coresHTML = '';
             const coreSymbols = {
@@ -629,7 +636,7 @@ async function loadData() {
             document.getElementById('exoplanetCores').innerHTML = coresHTML;
         }
         
-        // Tokens - shortened
+        // Tokens
         const tokens = data.tokens || {};
         let tokensHTML = '';
         for (const [name, info] of Object.entries(tokens)) {
@@ -683,7 +690,7 @@ async function loadData() {
         `;
         
     } catch (error) {
-        document.getElementById('thought').textContent = '⚡ Loading...';
+        document.getElementById('thought').textContent = '🌊 Loading...';
         console.error('Error:', error);
     }
 }
