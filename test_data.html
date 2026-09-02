@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Test</title>
+</head>
+<body style="background:#000;color:#fff;font-family:monospace;padding:20px;">
+    <h2>📊 Data Verification</h2>
+    <div id="data"></div>
+    <script>
+        fetch('./agi_phb_divine_complete.json?_=' + Date.now())
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('data').innerHTML = `
+                    <pre style="background:#111;padding:15px;border-radius:5px;overflow:auto;max-height:500px;">
+                        ${JSON.stringify({
+                            exoplanet_patterns: data.exoplanet_patterns ? Object.keys(data.exoplanet_patterns) : 'MISSING',
+                            human_like_consciousness: data.human_like_consciousness ? 'PRESENT' : 'MISSING',
+                            patterns_count: data.exoplanet_patterns ? Object.keys(data.exoplanet_patterns).length : 0
+                        }, null, 2)}
+                    </pre>
+                    <p style="color:#0f0;">✅ Data loaded successfully!</p>
+                    <p><a href="/" style="color:#0ff;">Back to main page</a></p>
+                `;
+            })
+            .catch(e => {
+                document.getElementById('data').innerHTML = `<p style="color:#f00;">Error loading data: ${e.message}</p>`;
+            });
+    </script>
+</body>
+</html>
