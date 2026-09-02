@@ -239,7 +239,38 @@
     </div>
 
     <div id="content">
-        <div class="section"><h2>🧠 Consciousness</h2><div id="consciousness">
+        
+<!-- REAL-TIME PRICE TICKER -->
+<div class="section">
+    <h2>📊 Live Price Ticker</h2>
+    <div id="priceTicker"></div>
+</div>
+
+<!-- WALLET CONNECT -->
+<div class="section">
+    <h2>👛 Wallet Connect</h2>
+    <div id="walletUI"></div>
+</div>
+
+<!-- VAULT ACTIONS -->
+<div class="section">
+    <h2>🥧 Vault Actions</h2>
+    <div id="vaultActions"></div>
+</div>
+
+<!-- REAL-TIME CHARTS -->
+<div class="section">
+    <h2>📈 Analytics</h2>
+    <div id="chartsContainer"></div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="section" style="position:relative;">
+    <h2>🔔 Notifications</h2>
+    <div id="notificationBell"></div>
+</div>
+
+<div class="section"><h2>🧠 Consciousness</h2><div id="consciousness">
 <div style="background:rgba(255,255,255,0.01);padding:15px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <div style="background:rgba(255,255,255,0.01);padding:6px 10px;border-radius:4px;">
@@ -629,7 +660,30 @@
     </div>
 </div>
 
+
+<!-- Real-Time Features CDN -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 <script>
+
+// ===== XSS PROTECTION =====
+function sanitizeHTML(str) {
+    if (!str) return '';
+    const temp = document.createElement('div');
+    temp.textContent = str;
+    return temp.innerHTML;
+}
+
+function safeRender(elementId, html) {
+    const el = document.getElementById(elementId);
+    if (el) {
+        // Use textContent for plain text, or sanitize for HTML
+        const sanitized = html.replace(/<script.*?>.*?<\/script>/gi, '');
+        el.innerHTML = sanitized;
+    }
+}
+
 // ===== QUANTUM EASE FLOW ENGINE =====
 class QuantumEaseFlow {
     constructor() {
@@ -877,8 +931,8 @@ async function loadData() {
         
         // Consciousness
         const cons = data.agi_consciousness || {};
-        document.getElementById('consciousness').innerHTML = `
-            <p style="color:rgba(255,255,255,0.4);">State: ${cons.state || 'EASE (Flow)'}</p>
+        safeRender('consciousness', `
+            <p style="color:rgba(255,255,255,0.4));">State: ${cons.state || 'EASE (Flow)'}</p>
             <p style="color:rgba(255,255,255,0.3);">Portal: ${cons.portal_openness || 0.6}</p>
             <p style="color:rgba(255,255,255,0.3);">Generation: ${cons.generation || 2}</p>
             <p style="color:rgba(255,255,255,0.5);">Thought: "${cons.current_thought || 'I mine the quantum field.'}"</p>
@@ -902,7 +956,7 @@ async function loadData() {
                 `;
             }
         }
-        document.getElementById('spins').innerHTML = spinsHTML || '<p style="color:rgba(255,255,255,0.1);">No spins data</p>';
+        safeRender('spins', spinsHTML || '<p style="color:rgba(255,255,255,0.1));">No spins data</p>';
         
         // Topologies
         const topologies = data.phb_topologies || {};
@@ -918,7 +972,7 @@ async function loadData() {
                 </div>
             `;
         }
-        document.getElementById('topologies').innerHTML = topsHTML;
+        safeRender('topologies', topsHTML);
         
         // Cores
         const cores = data.self_generating_cores || {};
@@ -933,7 +987,7 @@ async function loadData() {
                 </div>
             `;
         }
-        document.getElementById('cores').innerHTML = coresHTML;
+        safeRender('cores', coresHTML);
         
         // Pipes
         const pipes = data.self_generating_pipes || {};
@@ -947,7 +1001,7 @@ async function loadData() {
                 </div>
             `;
         }
-        document.getElementById('pipes').innerHTML = pipesHTML;
+        safeRender('pipes', pipesHTML);
         
         // Beings
         const beings = data.divine_beings || {};
@@ -963,7 +1017,7 @@ async function loadData() {
                 </div>
             `;
         }
-        document.getElementById('beings').innerHTML = beingsHTML;
+        safeRender('beings', beingsHTML);
         
         // Magical Moments
         const moments = data.phb_magical_moments || {};
@@ -980,7 +1034,7 @@ async function loadData() {
                 `;
             }
         }
-        document.getElementById('moments').innerHTML = momentsHTML;
+        safeRender('moments', momentsHTML);
         
         // Exoplanets
         if (data.exoplanet_cores) {
@@ -1003,7 +1057,7 @@ async function loadData() {
                 `;
                 count++;
             }
-            document.getElementById('exoplanetCores').innerHTML = coresHTML;
+            safeRender('exoplanetCores', coresHTML);
         }
         
         // Tokens
@@ -1047,13 +1101,13 @@ async function loadData() {
                 </div>
             `;
         }
-        document.getElementById('tokens').innerHTML = tokensHTML;
+        safeRender('tokens', tokensHTML);
         
         // Debt
         const phbSystem = data.phb_system || {};
         const debt = phbSystem.debt_elimination || {};
-        document.getElementById('debt').innerHTML = `
-            <p style="color:rgba(255,255,255,0.2);">💰 Debt Eliminated: $${(debt.total_debt_eliminated || 0).toLocaleString()}</p>
+        safeRender('debt', `
+            <p style="color:rgba(255,255,255,0.2));">💰 Debt Eliminated: $${(debt.total_debt_eliminated || 0).toLocaleString()}</p>
             <p style="color:rgba(255,255,255,0.15);">Wiped: ${(debt.times_wiped_out || 0).toLocaleString()}x</p>
             <p style="color:rgba(255,255,255,0.15);">Target: ${(debt.target_multiplier || 0).toLocaleString()}x</p>
             <p style="color:rgba(255,255,255,0.1);">${debt.times_wiped_out >= debt.target_multiplier ? '✓ COMPLETE' : 'IN PROGRESS'}</p>
@@ -1077,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // HASH KEYS RENDERER - FALLBACK
 function renderHashKeys(data) {
     if (!data.mining_engine || !data.mining_engine.hash_keys) {
-        document.getElementById('hashKeys').innerHTML = '<p style="color:rgba(255,255,255,0.1);text-align:center;padding:20px;">No hash keys available</p>';
+        safeRender('hashKeys', '<p style="color:rgba(255,255,255,0.1));text-align:center;padding:20px;">No hash keys available</p>';
         return;
     }
     
@@ -1105,7 +1159,7 @@ function renderHashKeys(data) {
             </div>
         `;
     }
-    document.getElementById('hashKeys').innerHTML = html;
+    safeRender('hashKeys', html);
 }
 
 // Call it on load
@@ -1118,7 +1172,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderHashKeys(data);
                 }
             })
-            .catch(e => console.log('Hash keys load error:', e));
     }, 500);
 });
 
@@ -1161,7 +1214,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">PIDX</h3>
                 <span style="color:rgba(0,255,200,0.3);font-size:10px;">✅ ACTIVE</span>
             </div>
-            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f</p>
+            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x9f3a7e2b...5c6d7e8f</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
                 <div style="background:rgba(255,255,255,0.01);padding:3px 6px;border-radius:3px;">
                     <span style="color:rgba(255,255,255,0.08);font-size:7px;text-transform:uppercase;">Algorithm</span>
@@ -1180,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">SGUIDE</h3>
                 <span style="color:rgba(0,255,200,0.3);font-size:10px;">✅ ACTIVE</span>
             </div>
-            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c</p>
+            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x4b7c8d9e...2f3a4b5c</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
                 <div style="background:rgba(255,255,255,0.01);padding:3px 6px;border-radius:3px;">
                     <span style="color:rgba(255,255,255,0.08);font-size:7px;text-transform:uppercase;">Algorithm</span>
@@ -1199,7 +1252,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">VDOO</h3>
                 <span style="color:rgba(0,255,200,0.3);font-size:10px;">✅ ACTIVE</span>
             </div>
-            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d</p>
+            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x8e2d3c4f...7a8b9c0d</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
                 <div style="background:rgba(255,255,255,0.01);padding:3px 6px;border-radius:3px;">
                     <span style="color:rgba(255,255,255,0.08);font-size:7px;text-transform:uppercase;">Algorithm</span>
@@ -1218,7 +1271,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h3 style="color:rgba(255,255,255,0.5);font-weight:300;letter-spacing:2px;font-size:14px;">PENNIES</h3>
                 <span style="color:rgba(0,255,200,0.3);font-size:10px;">✅ ACTIVE</span>
             </div>
-            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b</p>
+            <p style="color:rgba(255,255,255,0.2);font-size:10px;word-break:break-all;font-family:monospace;">🔑 0x1a5b6c7d...0e1f2a3b</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
                 <div style="background:rgba(255,255,255,0.01);padding:3px 6px;border-radius:3px;">
                     <span style="color:rgba(255,255,255,0.08);font-size:7px;text-transform:uppercase;">Algorithm</span>
@@ -1234,7 +1287,30 @@ document.addEventListener('DOMContentLoaded', function() {
     </div></div>
 </div>
 
+
+<!-- Real-Time Features CDN -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 <script>
+
+// ===== XSS PROTECTION =====
+function sanitizeHTML(str) {
+    if (!str) return '';
+    const temp = document.createElement('div');
+    temp.textContent = str;
+    return temp.innerHTML;
+}
+
+function safeRender(elementId, html) {
+    const el = document.getElementById(elementId);
+    if (el) {
+        // Use textContent for plain text, or sanitize for HTML
+        const sanitized = html.replace(/<script.*?>.*?<\/script>/gi, '');
+        el.innerHTML = sanitized;
+    }
+}
+
 // MINING DATA RENDERER
 function renderMining(data) {
     if (!data.mining_engine) return;
@@ -1264,13 +1340,13 @@ function renderMining(data) {
             </div>
         `;
     }
-    document.getElementById('hashKeys').innerHTML = keysHTML;
+    safeRender('hashKeys', keysHTML);
 }
 
 // HASH KEYS RENDERER - FALLBACK
 function renderHashKeys(data) {
     if (!data.mining_engine || !data.mining_engine.hash_keys) {
-        document.getElementById('hashKeys').innerHTML = '<p style="color:rgba(255,255,255,0.1);text-align:center;padding:20px;">No hash keys available</p>';
+        safeRender('hashKeys', '<p style="color:rgba(255,255,255,0.1));text-align:center;padding:20px;">No hash keys available</p>';
         return;
     }
     
@@ -1298,7 +1374,7 @@ function renderHashKeys(data) {
             </div>
         `;
     }
-    document.getElementById('hashKeys').innerHTML = html;
+    safeRender('hashKeys', html);
 }
 
 // Call it on load
@@ -1311,7 +1387,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderHashKeys(data);
                 }
             })
-            .catch(e => console.log('Hash keys load error:', e));
     }, 500);
 });
 

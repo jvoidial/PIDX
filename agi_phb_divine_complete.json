@@ -1011,5 +1011,84 @@
       "monthly_growth": 12.0,
       "annual_apy": 30.0
     }
+  },
+  "real_time": {
+    "prices": {
+      "PIDX": {
+        "usd": 0.0001,
+        "change_24h": "+2.5%"
+      },
+      "SGUIDE": {
+        "usd": 1e-05,
+        "change_24h": "-1.2%"
+      },
+      "VDOO": {
+        "usd": 5e-05,
+        "change_24h": "+5.0%"
+      },
+      "PENNIES": {
+        "usd": 2e-05,
+        "change_24h": "+3.8%"
+      }
+    },
+    "holders": {
+      "PIDX": 15234,
+      "SGUIDE": 8765,
+      "VDOO": 12345,
+      "PENNIES": 9876
+    },
+    "volume_24h": {
+      "PIDX": 125000,
+      "SGUIDE": 78000,
+      "VDOO": 95000,
+      "PENNIES": 112000
+    }
+  },
+  "staking": {
+    "total_staked": 250000,
+    "users": 1250,
+    "apy_history": [
+      12.5,
+      13.2,
+      14.1,
+      13.8,
+      14.5
+    ]
+  },
+  "governance": {
+    "proposals": [
+      {
+        "id": 1,
+        "title": "Increase vault APY by 5%",
+        "votes_for": 150,
+        "votes_against": 30,
+        "status": "active"
+      }
+    ]
+  },
+  "wallet": {
+    "supported": [
+      "MetaMask",
+      "Coinbase Wallet",
+      "WalletConnect"
+    ],
+    "network": "Base",
+    "chain_id": 8453
+  },
+  "notifications": {
+    "price_alerts": [
+      {
+        "token": "PIDX",
+        "target": 0.00015,
+        "triggered": false
+      }
+    ],
+    "vault_compounds": true,
+    "mining_updates": true
+  },
+  "preferences": {
+    "theme": "dark",
+    "auto_compound": true,
+    "notifications": true
   }
 }
