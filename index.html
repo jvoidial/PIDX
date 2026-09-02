@@ -73,6 +73,7 @@
         .energy-cell { text-align: center; padding: 10px; background: rgba(255,255,255,0.01); border-radius: 4px; border: 1px solid rgba(0,255,200,0.03); color: #ffffff; font-weight: 500; }
         .energy-cell .value { color: #00ffcc; font-size: 20px; font-weight: 600; }
         .energy-cell .label { color: #ffffff; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
+        .no-data { color: rgba(255,255,255,0.3); font-size: 14px; text-align: center; padding: 20px; font-weight: 500; }
         @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .grid-4 { grid-template-columns: 1fr 1fr; } .grid-5 { grid-template-columns: 1fr 1fr; } .energy-grid { grid-template-columns: 1fr; } .header h1 { font-size: 20px; } .thought { font-size: 14px; padding: 15px; } }
         @media (max-width: 480px) { .grid-4 { grid-template-columns: 1fr; } .grid-5 { grid-template-columns: 1fr; } }
         ::-webkit-scrollbar { width: 3px; background: #0a0a0a; }
@@ -91,7 +92,6 @@
 
     <div class="thought" id="thought">🌊 Quantum Ease Flow Active...</div>
 
-    <!-- EASE FLOW -->
     <div class="section">
         <h2>🌊 EASE FLOW QUANTUM STATE</h2>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin:10px 0;">
@@ -106,7 +106,6 @@
         </div>
     </div>
 
-    <!-- RESONANCE -->
     <div class="resonance-engine">
         <h2 style="color:rgba(0,255,200,0.4);font-size:12px;letter-spacing:4px;text-transform:uppercase;font-weight:600;">⚡ Resonance Engine</h2>
         <div class="energy-grid">
@@ -124,7 +123,6 @@
         </div>
     </div>
 
-    <!-- NEURAL FLOW -->
     <div class="section">
         <h2>🌊 Neural Flow Map</h2>
         <canvas id="networkCanvas" class="network-canvas"></canvas>
@@ -521,7 +519,6 @@ class NeuralFlowMap {
 function renderAll() {
     document.getElementById('updateTime').textContent = new Date().toLocaleString();
     
-    // Consciousness
     const c = DATA.agi_consciousness;
     document.getElementById('consciousness').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;color:#ffffff;">
@@ -541,7 +538,6 @@ function renderAll() {
         </div>
     `;
     
-    // Spins
     const spins = DATA.core_spins;
     const symbols = ['↻', '↺', '↻↺', '⤵', '⤴'];
     let spinsHTML = '', i = 0;
@@ -551,7 +547,6 @@ function renderAll() {
     }
     document.getElementById('spins').innerHTML = spinsHTML;
     
-    // Topologies
     const tops = DATA.phb_topologies;
     let topsHTML = '';
     for (const [name, info] of Object.entries(tops)) {
@@ -559,7 +554,6 @@ function renderAll() {
     }
     document.getElementById('topologies').innerHTML = topsHTML;
     
-    // Cores
     const cores = DATA.self_generating_cores;
     let coresHTML = '';
     for (const [name, info] of Object.entries(cores)) {
@@ -567,7 +561,6 @@ function renderAll() {
     }
     document.getElementById('cores').innerHTML = coresHTML;
     
-    // Pipes
     const pipes = DATA.self_generating_pipes;
     let pipesHTML = '';
     for (const [name, info] of Object.entries(pipes)) {
@@ -575,7 +568,6 @@ function renderAll() {
     }
     document.getElementById('pipes').innerHTML = pipesHTML;
     
-    // Beings
     const beings = DATA.divine_beings;
     let beingsHTML = '';
     for (const [name, info] of Object.entries(beings)) {
@@ -584,7 +576,6 @@ function renderAll() {
     }
     document.getElementById('beings').innerHTML = beingsHTML;
     
-    // Moments
     const moments = DATA.phb_magical_moments;
     let momentsHTML = '';
     for (const [era, items] of Object.entries(moments)) {
@@ -595,7 +586,6 @@ function renderAll() {
     }
     document.getElementById('moments').innerHTML = momentsHTML;
     
-    // Exoplanets
     const exo = DATA.exoplanet_cores;
     let exoHTML = '';
     const exoSymbols = {'siren_core':'🧜‍♀️','serpo_core':'👽','proxima_b_core':'🌍'};
@@ -605,7 +595,6 @@ function renderAll() {
     }
     document.getElementById('exoplanetCores').innerHTML = exoHTML;
     
-    // Patterns
     const patterns = DATA.exoplanet_patterns;
     let patternsHTML = '';
     for (const [key, pattern] of Object.entries(patterns)) {
@@ -631,7 +620,6 @@ function renderAll() {
     }
     document.getElementById('exoplanetPatterns').innerHTML = patternsHTML;
     
-    // Cosmic Consciousness
     const hlc = DATA.human_like_consciousness;
     document.getElementById('humanLikeConsciousness').innerHTML = `
         <div style="background:rgba(255,255,255,0.01);padding:20px;border-radius:8px;border:1px solid rgba(0,255,200,0.05);">
@@ -652,7 +640,6 @@ function renderAll() {
         </div>
     `;
     
-    // Tokens
     const tokens = DATA.tokens;
     let tokensHTML = '';
     for (const [name, info] of Object.entries(tokens)) {
@@ -688,7 +675,6 @@ function renderAll() {
     }
     document.getElementById('tokens').innerHTML = tokensHTML;
     
-    // Vault
     const vault = DATA.pennies_index_vault;
     document.getElementById('vaultInfo').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:15px;">
@@ -699,7 +685,6 @@ function renderAll() {
         </div>
     `;
     
-    // Hash Keys
     const hashKeys = DATA.mining_engine.hash_keys;
     let keysHTML = '<div class="grid-2">';
     for (const [name, info] of Object.entries(hashKeys)) {
@@ -720,7 +705,6 @@ function renderAll() {
     keysHTML += '</div>';
     document.getElementById('hashKeys').innerHTML = keysHTML;
     
-    // Debt
     const debt = DATA.phb_system.debt_elimination;
     document.getElementById('debt').innerHTML = `
         <p style="color:#ffffff;font-weight:500;">💰 Debt Eliminated: $${debt.total_debt_eliminated.toLocaleString()}</p>
@@ -729,7 +713,6 @@ function renderAll() {
         <p style="color:#00ffcc;font-weight:600;">${debt.times_wiped_out >= debt.target_multiplier ? '✓ COMPLETE' : 'IN PROGRESS'}</p>
     `;
     
-    // Mining stats
     const mining = DATA.mining_engine;
     document.getElementById('activeMiners').textContent = mining.mining_status.active_miners;
     document.getElementById('totalHashRate').textContent = mining.mining_status.total_hash_rate;
