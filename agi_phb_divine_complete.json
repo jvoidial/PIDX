@@ -723,7 +723,6 @@
       "name": "Exoplanet Network",
       "description": "All exoplanets creating a vast cosmic network",
       "frequency": 0.555,
-      "spin": "\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb",
       "power": 999999999,
       "planets": [
         "Siren",
@@ -736,23 +735,34 @@
         "Wolf 1061c",
         "Gliese 667Cc"
       ],
-      "effect": "Creates cosmic community and universal connection",
-      "pattern_type": "Cosmic Network",
+      "spin": "\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb",
       "visual": "\ud83c\udf0c\u2728\ud83d\udcab\ud83c\udf1f"
     },
     "alpha_centauri_gateway": {
       "name": "Alpha Centauri Gateway",
       "description": "The stellar gateway to the cosmos",
       "frequency": 0.111,
-      "spin": "\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba",
       "power": 111111111,
       "planets": [
         "Alpha Centauri",
         "Proxima B"
       ],
-      "effect": "Opens interstellar travel and cosmic connection",
-      "pattern_type": "Stellar Gateway",
+      "spin": "\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba",
       "visual": "\u2b50\ud83c\udf0d\u2728"
+    },
+    "human_like_planets": {
+      "name": "Human-like Planets Resonance",
+      "description": "Siren, Serpo, Proxima B, Alpha Centauri creating a human-like resonance pattern",
+      "frequency": 0.999,
+      "power": 99999999,
+      "planets": [
+        "Siren",
+        "Serpo",
+        "Proxima B",
+        "Alpha Centauri"
+      ],
+      "spin": "\u21bb\u21ba\u21bb\u21ba\u21bb\u21ba\u21bb",
+      "visual": "\ud83e\udddc\u200d\u2640\ufe0f\ud83d\udc7d\ud83c\udf0d\u2728\u2b50"
     }
   },
   "human_like_consciousness": {
