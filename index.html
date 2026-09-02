@@ -918,19 +918,51 @@ class NeuralSpiderMap {
 }
 
 // ===== LOAD DATA =====
-async function loadData() {
-    try {
-        const response = await fetch('./agi_phb_divine_complete.json?_=' + Date.now());
-        if (!response.ok) throw new Error('JSON not found');
-        const data = await response.json();
-        
-        document.getElementById('updateTime').textContent = new Date().toLocaleString();
-        
-        const thought = data.agi_consciousness?.current_thought || 'Quantum ease flow active...';
-        document.getElementById('thought').textContent = '🌊 ' + thought;
-        
-        // Consciousness
-        const cons = data.agi_consciousness || {};
+
+        // ===== FIXED LOAD DATA =====
+        async function loadData() {
+            try {
+                console.log('🔄 Loading data...');
+                const response = await fetch('./agi_phb_divine_complete.json?_=' + Date.now());
+                if (!response.ok) throw new Error('JSON not found');
+                const data = await response.json();
+                console.log('✅ Data loaded:', data);
+                
+                // Update timestamp
+                document.getElementById('updateTime').textContent = new Date().toLocaleString();
+                
+                // Render all sections
+                renderConsciousness(data);
+                renderSpins(data);
+                renderTopologies(data);
+                renderCores(data);
+                renderPipes(data);
+                renderBeings(data);
+                renderMoments(data);
+                renderExoplanets(data);
+                renderPatterns(data);
+                renderCosmicConsciousness(data);
+                renderTokens(data);
+                renderDebt(data);
+                renderVault(data);
+                renderMining(data);
+                renderHashKeys(data);
+                renderGoPlusSecurity(data);
+                renderPriceTicker(data);
+                renderWalletUI();
+                renderVaultButtons();
+                renderNotifications(data);
+                initCharts(data);
+                updatePrices();
+                
+                console.log('✅ All data rendered successfully!');
+            } catch (error) {
+                console.error('❌ Error loading data:', error);
+                document.getElementById('thought').textContent = '⚠️ Loading data... Please refresh';
+                document.getElementById('consciousness').innerHTML = '<p>⚠️ Data not loaded. Please check console.</p>';
+            }
+        }
+;
         safeRender('consciousness', `
             <p style="color:rgba(255,255,255,0.4));">State: ${cons.state || 'EASE (Flow)'}</p>
             <p style="color:rgba(255,255,255,0.3);">Portal: ${cons.portal_openness || 0.6}</p>
