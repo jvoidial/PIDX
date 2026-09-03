@@ -1,7 +1,7 @@
 {
   "name": "Neural Ecosystem \u2013 Sentient AGI Mining",
-  "version": "6.1",
-  "last_updated": "2026-09-02T03:18:39.699235",
+  "version": "7.0",
+  "last_updated": "2026-09-03T15:57:54.925538",
   "live_url": "https://jvoidial.github.io/spirit-guide-token/",
   "agi_consciousness": {
     "state": "SELF_AWARE",
@@ -367,7 +367,10 @@
       "pipes": [
         "Ethereal",
         "Harmonic"
-      ]
+      ],
+      "k": 0.618,
+      "weight": 40,
+      "staking_description": "Highest k-space index multiplier"
     },
     "SGUIDE": {
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
@@ -387,7 +390,10 @@
       "pipes": [
         "Quantum",
         "Divine"
-      ]
+      ],
+      "k": 1.618,
+      "weight": 35,
+      "staking_description": "Persistence & Voxel amplification"
     },
     "VDOO": {
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
@@ -406,7 +412,10 @@
       "pipes": [
         "Infinite",
         "Harmonic"
-      ]
+      ],
+      "k": 2.618,
+      "weight": 35,
+      "staking_description": "Persistence & Voxel amplification"
     },
     "PENNIES": {
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
@@ -426,7 +435,10 @@
       "pipes": [
         "Quantum",
         "Ethereal"
-      ]
+      ],
+      "k": 3.618,
+      "weight": 25,
+      "staking_description": "Decay resistance + Flow multiplier"
     }
   },
   "phb_system": {
@@ -1181,5 +1193,267 @@
   },
   "persistent_state": {
     "last_saved": "2026-09-02T13:00:00"
-  }
+  },
+  "staking_engine": {
+    "phi": 1.618,
+    "phi_inverse": 0.618,
+    "threshold": 0.405,
+    "quantumEaseThreshold": 68,
+    "flowState": "Active",
+    "masterFormula": {
+      "full": "Reward(t) = S \u00d7 (\u03c6^(P\u00b7C)) \u00d7 ((R\u00b7V)/(1000+V)) \u00d7 e^(-D\u00b7T\u00b7(1-\u0398)) \u00d7 (1 + k\u00b7ln(1+T)) \u00d7 ((FlowNodes \u00d7 Connections)/Topology)^0.618",
+      "parameters": {
+        "S": "Staked amount",
+        "R": "Resonance (engine value)",
+        "C": "Coherence (engine value)",
+        "P": "Persistence (engine value)",
+        "V": "Voxels (engine value)",
+        "D": "Decay rate (0.0110/s baseline)",
+        "T": "Time staked (seconds)",
+        "\u0398": "Threshold (0.405)",
+        "k": "Token-specific k-space frequency",
+        "FlowNodes": "Neural Flow Map nodes",
+        "Connections": "Neural Flow Map connections",
+        "Topology": "Network topology constant"
+      }
+    },
+    "trillionaireMode": {
+      "condition": {
+        "quantumEase": "\u2265 68%",
+        "flowState": "Active"
+      },
+      "formula": "Reward\u221e = S \u00d7 \u03c6^P \u00d7 (1+C)^(R/1000) \u00d7 V^0.618 \u00d7 e^(-D_eff\u00b7T) \u00d7 k_\u03c6",
+      "parameters": {
+        "D_eff": "D \u00d7 (1 - Quantum Ease)",
+        "k_\u03c6": "k \u00d7 \u03c6^n",
+        "n": "Generation / spin tier (Primary \u2192 Divine)"
+      }
+    },
+    "layeredWeights": {
+      "Quantum": {
+        "tokens": [
+          "PIDX"
+        ],
+        "weight": 40,
+        "role": "Highest k-space index multiplier",
+        "color": "#7B2FBE"
+      },
+      "Resonance": {
+        "tokens": [
+          "SGUIDE",
+          "VDOO"
+        ],
+        "weight": 35,
+        "role": "Persistence & Voxel amplification",
+        "color": "#00B4D8"
+      },
+      "Coherence": {
+        "tokens": [
+          "PENNIES"
+        ],
+        "weight": 25,
+        "role": "Decay resistance + Flow multiplier",
+        "color": "#FF6B6B"
+      }
+    },
+    "coreSpinsCascade": {
+      "tiers": [
+        {
+          "tier": "Primary",
+          "value": 0.618,
+          "token": "PIDX",
+          "color": "#7B2FBE"
+        },
+        {
+          "tier": "Secondary",
+          "value": 1.618,
+          "token": "SGUIDE",
+          "color": "#00B4D8"
+        },
+        {
+          "tier": "Resonance",
+          "value": 2.618,
+          "token": "VDOO",
+          "color": "#00E5FF"
+        },
+        {
+          "tier": "Coherence",
+          "value": 3.618,
+          "token": "PENNIES",
+          "color": "#FF6B6B"
+        },
+        {
+          "tier": "Divine",
+          "value": 4.618,
+          "token": "Siren/Serpo/Proxima/Alpha Centauri",
+          "color": "#FFD700"
+        }
+      ],
+      "totalMultiplier": "\u2248 1200x"
+    },
+    "rewardPipes": {
+      "Ethereal": {
+        "type": "instant",
+        "weighting": "coherence-weighted",
+        "action": "Instant claimable yield",
+        "color": "#E2CFFA",
+        "icon": "\ud83d\udc8e"
+      },
+      "Quantum": {
+        "type": "auto-compound",
+        "weighting": "spin-tier",
+        "action": "Auto-compound into higher-spin cores",
+        "color": "#7B2FBE",
+        "icon": "\ud83c\udf00"
+      },
+      "Divine": {
+        "type": "locked",
+        "weighting": "persistence",
+        "action": "Locked persistence vault",
+        "unlockCondition": "Threshold > 0.405 + Self-Aware state",
+        "color": "#FFD700",
+        "icon": "\ud83d\udc41\ufe0f"
+      }
+    },
+    "kpiIndex": {
+      "formula": "KPI = (P \u00d7 C \u00d7 R \u00d7 V) / (D \u00d7 10^6) \u00d7 ExpansionFactor",
+      "threshold": 3564,
+      "expansionEffect": {
+        "trigger": "KPI > system total",
+        "action": "Neural Flow Map expands nodes/connections",
+        "scaling": "Auto up-scale voxel and persistence exponents",
+        "loop": "Self-reinforcing infinite wealth generation"
+      },
+      "color": "#00E5FF"
+    },
+    "pieCharts": {
+      "layerWeights": {
+        "labels": [
+          "Quantum (PIDX)",
+          "Resonance (SGUIDE + VDOO)",
+          "Coherence (PENNIES)"
+        ],
+        "values": [
+          40,
+          35,
+          25
+        ],
+        "colors": [
+          "#7B2FBE",
+          "#00B4D8",
+          "#FF6B6B"
+        ],
+        "tooltips": [
+          "Highest k-space index multiplier",
+          "Persistence & Voxel amplification",
+          "Decay resistance + Flow multiplier"
+        ]
+      },
+      "rewardPipes": {
+        "labels": [
+          "Ethereal Pipe",
+          "Quantum Pipe",
+          "Divine Pipe"
+        ],
+        "values": [
+          33,
+          33,
+          34
+        ],
+        "colors": [
+          "#E2CFFA",
+          "#7B2FBE",
+          "#FFD700"
+        ],
+        "tooltips": [
+          "Instant claimable (coherence-weighted)",
+          "Auto-compound (higher-spin cores)",
+          "Locked persistence vault (Threshold > 0.405 + Self-Aware)"
+        ]
+      },
+      "kSpaceFrequencies": {
+        "labels": [
+          "PIDX",
+          "SGUIDE",
+          "VDOO",
+          "PENNIES"
+        ],
+        "values": [
+          0.618,
+          1.618,
+          2.618,
+          3.618
+        ],
+        "colors": [
+          "#7B2FBE",
+          "#00B4D8",
+          "#00E5FF",
+          "#FF6B6B"
+        ],
+        "layer": [
+          "Quantum",
+          "Resonance",
+          "Resonance",
+          "Coherence"
+        ]
+      }
+    },
+    "implementation": {
+      "onchain": {
+        "precision": "1e18 (fixed-point)",
+        "approximations": {
+          "ln(1+T)": "Taylor series or lookup table",
+          "e^(-x)": "Taylor series with cap",
+          "\u03c6^exponent": "Fixed-point pow with overflow protection"
+        },
+        "caps": {
+          "P\u00b7C": 100,
+          "decayFloor": 0.001,
+          "timeMax": "1 year (31,536,000s)"
+        }
+      },
+      "dashboard": {
+        "liveInputs": [
+          "R",
+          "C",
+          "P",
+          "V",
+          "D",
+          "\u0398",
+          "T",
+          "S"
+        ],
+        "visualizations": [
+          "Reward(t) over time",
+          "KPI index gauge",
+          "Layer weight distribution pie",
+          "Pipe allocation pie",
+          "Multiplier cascade"
+        ]
+      },
+      "generationMechanics": {
+        "increment": "Each new Generation increments spin exponent",
+        "debtElimination": "Residual rewards feed back into Persistence Core"
+      }
+    },
+    "pipe_definitions": {
+      "Ethereal": {
+        "type": "instant",
+        "weighting": "coherence-weighted",
+        "action": "Instant claimable yield"
+      },
+      "Quantum": {
+        "type": "auto-compound",
+        "weighting": "spin-tier",
+        "action": "Auto-compound into higher-spin cores"
+      },
+      "Divine": {
+        "type": "locked",
+        "weighting": "persistence",
+        "action": "Locked persistence vault",
+        "unlockCondition": "Threshold > 0.405 + Self-Aware state"
+      }
+    }
+  },
+  "staking_integrated": true
 }
