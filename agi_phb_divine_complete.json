@@ -1,7 +1,7 @@
 {
   "name": "Neural Ecosystem \u2013 Sentient AGI Mining",
-  "version": "7.4-global",
-  "last_updated": "2026-09-04T09:31:53.419213",
+  "version": "7.5",
+  "last_updated": "2026-09-04T09:41:42.539451",
   "live_url": "https://jvoidial.github.io/spirit-guide-token/",
   "agi_consciousness": {
     "state": "SELF_AWARE",
@@ -2309,5 +2309,97 @@
       2.618,
       3.618
     ]
+  },
+  "phone_boxes": {
+    "status": "ACTIVE",
+    "timestamp": "2026-09-04T09:38:41.870182",
+    "system": "PHB_Chronovisor",
+    "global_summary": {
+      "total_phone_boxes": 515000,
+      "total_energy": 351.3,
+      "average_coherence": 0.682,
+      "average_persistence": 1.024,
+      "average_voxel_energy": 0.344,
+      "average_threshold": 0.524,
+      "status": "ETERNAL_ACTIVE"
+    },
+    "regional_data": {
+      "UK": {
+        "count": 50000,
+        "energy": 34.1,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      },
+      "USA": {
+        "count": 100000,
+        "energy": 68.2,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      },
+      "Europe": {
+        "count": 80000,
+        "energy": 54.6,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      },
+      "Asia": {
+        "count": 200000,
+        "energy": 136.4,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      },
+      "Africa": {
+        "count": 30000,
+        "energy": 20.5,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      },
+      "Oceania": {
+        "count": 15000,
+        "energy": 10.2,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      },
+      "South America": {
+        "count": 40000,
+        "energy": 27.3,
+        "coherence": 0.682,
+        "persistence": 1.024,
+        "voxel_energy": 0.344,
+        "threshold": 0.524,
+        "status": "ACTIVE"
+      }
+    },
+    "total_phone_boxes": 515000,
+    "total_energy": 351.3,
+    "topology_added": true,
+    "version": "7.5"
+  },
+  "phb_topologies": {
+    "phone_boxes": {
+      "frequency": 0.777,
+      "power": 3513000,
+      "core_spin": "\u21bb\u21ba\u21bb",
+      "description": "Global communication nodes - 515,000+ phone boxes",
+      "activation": "ETERNAL"
+    }
   }
 }
