@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quantum Ease Flow - KPI Portal & Stargate</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0a0a0a; color: #fff; padding: 20px; }
+        .portal-card { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px; 
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            display: inline-block;
+            min-width: 200px;
+        }
+        .portal-card.active { border-color: #00ffcc; background: rgba(0,255,204,0.1); }
+        .portal-card.processing { border-color: #ffaa00; background: rgba(255,170,0,0.1); }
+        .stargate-active { 
+            background: rgba(0,229,255,0.1); 
+            padding: 20px; 
+            border-radius: 8px;
+            border: 1px solid #00E5FF;
+            margin: 10px 0;
+        }
+        #kpi-display { 
+            background: rgba(123,47,190,0.1); 
+            padding: 20px; 
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        h2 { color: #00E5FF; }
+        .kpi-metrics p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>🌀 QUANTUM EASE FLOW</h1>
+    <p>KPI Portal & Stargate Integration</p>
+    
+    <div id="kpi-portals-container"></div>
+    <div id="stargate-container"></div>
+    <div id="kpi-display-container"></div>
+    
+    <script src="kpi_stargate_dashboard.js"></script>
+</body>
+</html>
