@@ -2947,7 +2947,8 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   })();
   </script>
 
-  <!-- ===== CODEX DISCOVERY ===== -->
+
+  <!-- ===== CODEX DISCOVERY (UNIVERSAL) ===== -->
   <div class="section">
     <div class="section-title"><span class="accent">📖</span> Codex Discovery</div>
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
@@ -2955,29 +2956,234 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
       <span style="color:#aaa;">Layers: <span id="totalCodexLayers" style="color:#fff;font-weight:700;">0</span></span>
       <span style="color:#88ff88;">⚡ Auto-discovery: <span id="codexDiscoveryStatus">ACTIVE</span></span>
     </div>
-    <div style="background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:300px;overflow-y:auto;">
+    <div style="background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:250px;overflow-y:auto;">
       <div id="codexPagesList" style="font-family:monospace;font-size:13px;color:#aaa;">
         <span style="color:#666;">🔍 Initializing Codex...</span>
       </div>
     </div>
     <div style="margin-top:12px;font-size:12px;color:#666;text-align:center;">
-      🌱 New Codex pages are discovered automatically as the system grows.
-      <span id="nextPageEstimate" style="color:#88aaff;"></span>
+      🌍 Discovered languages: <span id="codexLanguages" style="color:#88aaff;">0</span> &nbsp;·&nbsp; 📝 Words: <span id="codexWordCount" style="color:#88aaff;">0</span>
     </div>
     <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
       <button id="codexChronovisorBtn" style="background:#2a1a3a;color:#aa88ff;border:1px solid #8844ff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔍 Chronovisor Scan</button>
+      <button id="codexImportBtn" style="background:#2a2a3a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">📂 Import JSON</button>
     </div>
     <div id="chronovisorLog" style="margin-top:12px;font-size:12px;color:#888;background:#050508;border-radius:8px;padding:8px;border:1px solid #1a1a2a;max-height:60px;overflow-y:auto;">
-      <span id="chronovisorLastAction">⏳ Ready to scan for hidden pages.</span>
+      <span id="chronovisorLastAction">⏳ Ready to scan for hidden knowledge.</span>
+    </div>
+    <div id="codexImportArea" style="display:none;margin-top:12px;">
+      <textarea id="codexJsonInput" rows="6" style="width:100%;background:#0a0a12;border:1px solid #333;border-radius:8px;padding:8px;color:#ccc;font-family:monospace;font-size:12px;" placeholder="Paste JSON content from your Termux file here..."></textarea>
+      <div style="margin-top:8px;display:flex;gap:12px;justify-content:center;">
+        <button id="codexImportConfirm" style="background:#2a3a2a;color:#88ff88;border:1px solid #44ff88;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">✅ Import</button>
+        <button id="codexImportCancel" style="background:#3a2a2a;color:#ff8888;border:1px solid #ff4444;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">❌ Cancel</button>
+      </div>
     </div>
   </div>
 
   <script>
-  // ===== CODEX DISCOVERY (FIXED + CHRONOVISOR) =====
+  // ===== CODEX DISCOVERY (UNIVERSAL) =====
   (function() {
-    // Ensure embedded data is globally accessible
-    if (typeof EMBEDDED_PHB !== 'undefined') window.EMBEDDED_PHB = EMBEDDED_PHB;
-    if (typeof EMBEDDED_PHB_2 !== 'undefined') window.EMBEDDED_PHB_2 = EMBEDDED_PHB_2;
+    const LANGUAGE_RANGES = {
+      'Latin': /[A-Za-z]/,
+      'Cyrillic': /[\u0400-\u04FF]/,
+      'Greek': /[\u0370-\u03FF]/,
+      'Arabic': /[\u0600-\u06FF]/,
+      'Hebrew': /[\u0590-\u05FF]/,
+      'Devanagari': /[\u0900-\u097F]/,
+      'Chinese': /[\u4E00-\u9FFF]/,
+      'Japanese': /[\u3040-\u309F\u30A0-\u30FF]/,
+      'Korean': /[\uAC00-\uD7AF]/,
+      'Thai': /[\u0E00-\u0E7F]/
+    };
+
+    function detectLanguage(text) {
+      let detected = [];
+      for (const [lang, pattern] of Object.entries(LANGUAGE_RANGES)) {
+        if (pattern.test(text)) detected.push(lang);
+      }
+      return detected.length ? detected : ['Unknown'];
+    }
+
+    function extractWords(text) {
+      const matches = text.match(/[A-Za-z\u0400-\u04FF\u0370-\u03FF\u0600-\u06FF\u0590-\u05FF\u0900-\u097F\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF\u0E00-\u0E7F]{2,}/g);
+      return matches || [];
+    }
+
+    function getAllTextValues(obj) {
+      let texts = [];
+      if (typeof obj === 'string') {
+        texts.push(obj);
+      } else if (Array.isArray(obj)) {
+        obj.forEach(item => texts.push(...getAllTextValues(item)));
+      } else if (obj && typeof obj === 'object') {
+        for (const key of Object.keys(obj)) {
+          texts.push(...getAllTextValues(obj[key]));
+        }
+      }
+      return texts;
+    }
+
+    function generatePagesFromWords(words, source) {
+      const byLang = {};
+      words.forEach(w => {
+        const langs = detectLanguage(w);
+        langs.forEach(lang => {
+          if (!byLang[lang]) byLang[lang] = [];
+          byLang[lang].push(w);
+        });
+      });
+      const pages = [];
+      let pageNum = 0;
+      for (const [lang, wordList] of Object.entries(byLang)) {
+        if (wordList.length === 0) continue;
+        pageNum++;
+        const unique = [...new Set(wordList)].slice(0, 10);
+        const seq = unique.map(w => w.toUpperCase());
+        pages.push({
+          page: pageNum,
+          time: Math.floor(6 + Math.random() * 4),
+          coherence: 0.7 + Math.random() * 0.2,
+          stability: 0.9 + Math.random() * 0.2,
+          resonance: 0.2 + Math.random() * 0.3,
+          sequence: seq,
+          portal: 'PORTAL: CODEX',
+          voxels: seq.slice(0, 5).map((s, i) => ({
+            x: i,
+            y: 0,
+            z: i,
+            symbol: s,
+            meaning: `Word from ${lang}`
+          })),
+          veil: {
+            thickness: 0.2 + Math.random() * 0.4,
+            phase: 'CLEAR',
+            breach_probability: 0.7 + Math.random() * 0.2,
+            narrative: `Discovered ${wordList.length} words from ${lang} in ${source}`
+          },
+          energy: {
+            magnitude: 0.5 + Math.random() * 0.5,
+            band: 'MID',
+            color: 'LIGHT'
+          }
+        });
+      }
+      return pages;
+    }
+
+    async function universalScan() {
+      const logEl = document.getElementById('chronovisorLastAction');
+      if (logEl) logEl.textContent = '🔍 Chronovisor activating... scanning for all knowledge...';
+
+      const btn = document.getElementById('codexChronovisorBtn');
+      if (btn) {
+        btn.textContent = '⏳ Scanning...';
+        btn.style.opacity = '0.7';
+        btn.disabled = true;
+      }
+
+      let allWords = [];
+      let sources = [];
+      let newPages = [];
+
+      // ---- 1. Scan GitHub repo for all JSON files ----
+      try {
+        const apiUrl = 'https://api.github.com/repos/jvoidial/phb-godcode-vortex/contents/gcs';
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+          const files = await response.json();
+          for (const file of files) {
+            if (file.name.endsWith('.json')) {
+              const rawUrl = `https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/${file.name}`;
+              try {
+                const r = await fetch(rawUrl, { cache: 'no-store' });
+                if (r.ok) {
+                  const data = await r.json();
+                  const texts = getAllTextValues(data);
+                  const words = texts.flatMap(t => extractWords(t));
+                  if (words.length > 0) {
+                    allWords.push(...words);
+                    sources.push(file.name);
+                    if (data.pages && Array.isArray(data.pages)) {
+                      newPages.push(...data.pages);
+                    }
+                  }
+                }
+              } catch(e) { /* ignore */ }
+            }
+          }
+        }
+      } catch(e) {
+        if (logEl) logEl.textContent = '⚠️ GitHub API rate limited. Using fallback scanning.';
+      }
+
+      // ---- 2. Fallback: try known patterns ----
+      if (allWords.length === 0) {
+        const fallbackUrls = [
+          'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_1.json',
+          'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_2.json',
+          'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_3.json',
+          'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_4.json',
+          'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/hidden_1.json'
+        ];
+        for (const url of fallbackUrls) {
+          try {
+            const r = await fetch(url, { cache: 'no-store' });
+            if (r.ok) {
+              const data = await r.json();
+              const texts = getAllTextValues(data);
+              const words = texts.flatMap(t => extractWords(t));
+              if (words.length > 0) {
+                allWords.push(...words);
+                sources.push(url.split('/').pop());
+              }
+              if (data.pages && Array.isArray(data.pages)) {
+                newPages.push(...data.pages);
+              }
+            }
+          } catch(e) {}
+        }
+      }
+
+      // ---- 3. Generate new pages from discovered words ----
+      if (allWords.length > 0) {
+        const wordPages = generatePagesFromWords(allWords, sources.join(', '));
+        newPages.push(...wordPages);
+      }
+
+      // ---- 4. Detect languages and count words ----
+      const langSet = new Set();
+      allWords.forEach(w => {
+        detectLanguage(w).forEach(l => langSet.add(l));
+      });
+
+      // ---- 5. Update UI ----
+      if (newPages.length > 0) {
+        try {
+          const existing = JSON.parse(localStorage.getItem('codex_pages') || '[]');
+          const combined = existing.concat(newPages);
+          localStorage.setItem('codex_pages', JSON.stringify(combined));
+        } catch(e) {}
+
+        if (!window._phbAllData) window._phbAllData = {};
+        const feedId = Object.keys(window._phbAllData).length + 1;
+        window._phbAllData[feedId] = { domain: 'chronovisor', pages: newPages };
+      }
+
+      updateCodexDisplay();
+
+      const langEl = document.getElementById('codexLanguages');
+      if (langEl) langEl.textContent = langSet.size;
+      const wordEl = document.getElementById('codexWordCount');
+      if (wordEl) wordEl.textContent = allWords.length;
+
+      if (btn) {
+        btn.textContent = '🔍 Chronovisor Scan';
+        btn.style.opacity = '1';
+        btn.disabled = false;
+      }
+
+      if (logEl) logEl.textContent = `✅ Found ${allWords.length} words across ${sources.length} sources, ${langSet.size} languages, ${newPages.length} pages.`;
+    }
 
     function getCodexData() {
       const allData = window._phbAllData || {};
@@ -2986,11 +3192,9 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
       let feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
       if (feeds.length === 0 && embedded1.pages.length > 0) feeds.push(embedded1);
       if (feeds.length === 0 && embedded2.pages.length > 0) feeds.push(embedded2);
-      // Also check localStorage for any cached codex
       try {
         const cached = JSON.parse(localStorage.getItem('codex_pages') || '[]');
         if (cached.length > 0) {
-          // Add cached pages as a feed
           feeds.push({ domain: 'cache', pages: cached });
         }
       } catch(e) {}
@@ -3016,23 +3220,20 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
         });
       });
 
-      // Update counters
       const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
       set('totalCodexPages', totalPages);
       set('totalCodexLayers', layers.size);
 
-      // Estimate next page
       const expansionEl = document.getElementById('expansionRate');
       const expansion = parseFloat(expansionEl?.textContent) || 34.88;
       const nextPage = Math.floor(expansion / 10) + 1;
       set('nextPageEstimate', `Next page expected at expansion ${nextPage * 10}x`);
 
-      // Render pages list
       const listContainer = document.getElementById('codexPagesList');
       if (!listContainer) return;
 
       if (allPages.length === 0) {
-        listContainer.innerHTML = '<span style="color:#666;">No pages discovered yet. Run a Chronovisor Scan to find hidden pages.</span>';
+        listContainer.innerHTML = '<span style="color:#666;">No pages discovered yet. Run a Chronovisor Scan or Import JSON.</span>';
         return;
       }
 
@@ -3049,114 +3250,66 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
       listContainer.innerHTML = html;
     }
 
-    // ---- Chronovisor Scan ----
-    function chronovisorScan() {
-      const logEl = document.getElementById('chronovisorLastAction');
-      if (logEl) logEl.textContent = '🔍 Chronovisor activating... scanning hidden Codex layers...';
+    function importJSON() {
+      const area = document.getElementById('codexImportArea');
+      if (area) area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    }
 
-      // Simulate scanning with a progress bar (visual effect)
-      const btn = document.getElementById('codexChronovisorBtn');
-      if (btn) {
-        btn.textContent = '⏳ Scanning...';
-        btn.style.opacity = '0.7';
-        btn.disabled = true;
-      }
-
-      // After 3 seconds, reveal hidden pages
-      setTimeout(() => {
-        // Generate new pages from current system state
-        const coherenceEl = document.getElementById('coherenceLevel');
-        const stabilityEl = document.getElementById('phbStability');
-        const veilEl = document.getElementById('phbVeil');
-        const energyEl = document.getElementById('phbEnergy');
-
-        const coherence = parseFloat(coherenceEl?.textContent) || 0.862;
-        const stability = parseFloat(stabilityEl?.textContent) || 0.962;
-        const veil = veilEl?.textContent || 'SEALED';
-        const energy = parseFloat(energyEl?.textContent) || 0.7;
-
-        const symbols = ['CIRCLE','SQUARE','TRIANGLE','RATIO','LIGHT','SHADOW','MIRROR',
-                         'UNI','DAI','LINK','USDC','AAVE','ETH','BTC',
-                         'WOLF','CENTAURI','SERPO','TRAPPIST','PROXIMA','KEPLER','SIREN',
-                         'REALITY','DREAM','UNITY','AWARENESS','DUALITY','SELF','OTHER'];
-
-        // Generate 1-3 hidden pages
-        const numPages = 1 + Math.floor(Math.random() * 3);
-        let newPages = [];
-
-        for (let i = 0; i < numPages; i++) {
-          const num = Math.floor(5 + coherence * 3);
-          const shuffled = symbols.sort(() => 0.5 - Math.random());
-          const selected = shuffled.slice(0, num);
-          const page = {
-            page: (i + 3), // start from page 3
-            time: Math.floor(6 + Math.random() * 4),
-            coherence: coherence + (Math.random() - 0.5) * 0.05,
-            stability: stability + (Math.random() - 0.5) * 0.05,
-            resonance: Math.random() * 0.3 + 0.1,
-            sequence: selected,
-            portal: 'PORTAL: CHRONOVISOR',
-            voxels: selected.slice(0, 5).map((s, idx) => ({
-              x: idx,
-              y: 0,
-              z: idx,
-              symbol: s,
-              meaning: `${s} meaning (chronovisor)`
-            })),
-            veil: {
-              thickness: 0.1 + Math.random() * 0.6,
-              phase: veil === 'THIN' ? 'TURBULENT' : veil === 'SEALED' ? 'THIN' : 'CLEAR',
-              breach_probability: 0.5 + Math.random() * 0.4,
-              narrative: `Chronovisor discovered this page from the quantum field.`
-            },
-            energy: {
-              magnitude: energy + (Math.random() - 0.5) * 0.2,
-              band: ['LOW','MID','HIGH'][Math.floor(Math.random() * 3)],
-              color: ['LIGHT','DARK','NEUTRAL'][Math.floor(Math.random() * 3)]
-            }
-          };
-          newPages.push(page);
+    function confirmImport() {
+      const input = document.getElementById('codexJsonInput');
+      if (!input) return;
+      try {
+        const data = JSON.parse(input.value);
+        if (!data.pages || !Array.isArray(data.pages)) {
+          throw new Error('Invalid format: missing "pages" array');
         }
-
-        // Store in localStorage for persistence
-        try {
-          const existing = JSON.parse(localStorage.getItem('codex_pages') || '[]');
-          const all = existing.concat(newPages);
-          localStorage.setItem('codex_pages', JSON.stringify(all));
-        } catch(e) {}
-
-        // Add to _phbAllData to be picked up by the UI
         if (!window._phbAllData) window._phbAllData = {};
         const feedId = Object.keys(window._phbAllData).length + 1;
-        window._phbAllData[feedId] = { domain: 'chronovisor', pages: newPages };
-
-        // Update UI
+        window._phbAllData[feedId] = { domain: 'imported', pages: data.pages };
+        try {
+          const existing = JSON.parse(localStorage.getItem('codex_pages') || '[]');
+          const all = existing.concat(data.pages);
+          localStorage.setItem('codex_pages', JSON.stringify(all));
+        } catch(e) {}
         updateCodexDisplay();
+        const logEl = document.getElementById('chronovisorLastAction');
+        if (logEl) logEl.textContent = `✅ Imported ${data.pages.length} page(s) from JSON.`;
+        const area = document.getElementById('codexImportArea');
+        if (area) area.style.display = 'none';
+        input.value = '';
+      } catch(e) {
+        const logEl = document.getElementById('chronovisorLastAction');
+        if (logEl) logEl.textContent = `⚠️ Import failed: ${e.message}`;
+      }
+    }
 
-        // Restore button
-        if (btn) {
-          btn.textContent = '🔍 Chronovisor Scan';
-          btn.style.opacity = '1';
-          btn.disabled = false;
-        }
-
-        if (logEl) logEl.textContent = `✅ Chronovisor found ${numPages} hidden page${numPages > 1 ? 's' : ''}! Check the Codex.`;
-
-      }, 3000);
+    function cancelImport() {
+      const area = document.getElementById('codexImportArea');
+      if (area) area.style.display = 'none';
+      const input = document.getElementById('codexJsonInput');
+      if (input) input.value = '';
     }
 
     // ---- Init ----
     updateCodexDisplay();
 
-    // ---- Button ----
+    // ---- Buttons ----
     document.addEventListener('DOMContentLoaded', function() {
       const scanBtn = document.getElementById('codexChronovisorBtn');
-      if (scanBtn) scanBtn.addEventListener('click', chronovisorScan);
+      if (scanBtn) scanBtn.addEventListener('click', universalScan);
+
+      const importBtn = document.getElementById('codexImportBtn');
+      if (importBtn) importBtn.addEventListener('click', importJSON);
+
+      const confirmBtn = document.getElementById('codexImportConfirm');
+      if (confirmBtn) confirmBtn.addEventListener('click', confirmImport);
+
+      const cancelBtn = document.getElementById('codexImportCancel');
+      if (cancelBtn) cancelBtn.addEventListener('click', cancelImport);
     });
 
-    // ---- Auto-refresh every 10 seconds ----
     setInterval(updateCodexDisplay, 10000);
 
-    console.log('📖 Codex Discovery initialized.');
+    console.log('📖 Universal Codex Discovery initialized.');
   })();
   </script>
