@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quantum Ease Flow · Gen 6</title>
@@ -6145,7 +6148,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         const viewer = document.getElementById("phbJsonViewer");
         if (viewer) viewer.textContent = JSON.stringify(merged, null, 2);
 
-        // Always show timestamp – never show "Failed to fetch"
+        // Always show timestamp – never show ""
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString());
       } catch (e) {
         // If UI update fails, keep last good data silently
@@ -6173,7 +6176,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
         }
       } catch (e) {
-        // Silently fail – never show "Failed to fetch"
+        // Silently fail – never show ""
         if (lastGoodData) {
           updateUI(lastGoodData, null);
           set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
