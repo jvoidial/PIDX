@@ -7,16 +7,36 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#0b0b0f;color:#e0e8f0;font-family:Inter,sans-serif;padding:20px;min-height:100vh}.container{max-width:1200px;margin:0 auto}.header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding:16px 0 24px;border-bottom:1px solid rgba(255,255,255,0.08)}.header h1{font-family:Orbitron,monospace;font-weight:900;font-size:28px;color:#fff;text-shadow:0 0 30px rgba(255,255,255,0.05)}.header .badge{background:rgba(255,255,255,0.05);border:1px solid #555;padding:6px 16px;border-radius:40px;font-family:Orbitron,monospace;font-weight:700;font-size:14px;color:#ddd;letter-spacing:1px}.neural-wrapper{background:#0a0a12;border-radius:20px;border:1px solid #222;padding:4px;margin:24px 0;height:480px}#networkCanvas3D{width:100%;height:100%;display:block;border-radius:16px;background:#050508}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin:20px 0}.stat-card{background:#0f0f18;border:1px solid #222;border-radius:16px;padding:16px 18px;transition:all .2s}.stat-card:hover{border-color:#888;box-shadow:0 0 30px rgba(255,255,255,0.02)}.stat-card .label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#777;font-weight:600}.stat-card .value{font-size:26px;font-weight:700;color:#fff;margin-top:4px;font-family:Orbitron,monospace}.stat-card .value small{font-size:16px;font-weight:400;color:#888}.stat-card .sub{font-size:13px;color:#888;margin-top:2px}.section{margin-top:32px;border-top:1px solid rgba(255,255,255,0.04);padding-top:24px}.section-title{font-family:Orbitron,monospace;font-weight:700;font-size:18px;color:#ccc;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:12px}.section-title .accent{color:#fff;font-weight:900}.ease-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.ease-card{background:#0f0f18;border:1px solid #222;border-radius:16px;padding:16px;text-align:center}.ease-card .label{font-size:13px;color:#888;text-transform:uppercase;letter-spacing:.5px}.ease-card .value{font-size:28px;font-weight:700;margin:8px 0;font-family:Orbitron,monospace}.ease-card .sub{font-size:12px;color:#666}.ease-bar{width:100%;height:6px;background:#1a1a2a;border-radius:4px;margin-top:8px;overflow:hidden}.ease-bar-fill{height:100%;border-radius:4px;transition:width .5s ease;width:0%}.ease-bar-fill.xblock{background:#ff6b6b}.ease-bar-fill.ease{background:#4ecdc4}.ease-bar-fill.flow{background:#45b7d1}.ease-bar-fill.emotional{background:#f7dc6f}.ease-bar-fill.topological{background:#bb8fce}.ease-bar-fill.quantum{background:#85c1e9}.token-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.token-card{background:#0f0f18;border:1px solid #222;border-radius:16px;padding:16px;transition:all .2s}.token-card:hover{border-color:#888;box-shadow:0 0 30px rgba(255,255,255,0.02)}.token-card .name{font-family:Orbitron,monospace;font-weight:700;font-size:18px;color:#fff}.token-card .freq{font-size:13px;color:#888}.token-card .rate{font-size:16px;font-weight:600;margin:4px 0}.token-card .addr{font-family:'Courier New',monospace;font-size:12px;background:#050508;padding:6px 10px;border-radius:8px;border:1px solid #1a1a2a;color:#aaa;word-break:break-all;margin:6px 0}.token-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.token-links a{font-size:11px;background:#1a1a2a;color:#ccc;padding:2px 12px;border-radius:20px;text-decoration:none;transition:all .15s;border:1px solid transparent}.token-links a:hover{background:#555;color:#fff;border-color:#888;transform:scale(1.02)}.row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.02)}.row .label{color:#888}.row .value{color:#fff;font-weight:500}.flex-wrap{display:flex;flex-wrap:wrap;gap:8px 20px}.badge-cyan{display:inline-block;background:rgba(255,255,255,0.04);border:1px solid #333;padding:2px 10px;border-radius:30px;font-size:12px;color:#ddd}.status-dot{display:inline-block;width:8px;height:8px;background:#88ff88;border-radius:50%;margin-right:6px;animation:pulse-dot 1.5s infinite}@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}.hash-key{font-family:'Courier New',monospace;font-size:11px;color:#888;background:#050508;padding:4px 8px;border-radius:6px;border:1px solid #1a1a2a;word-break:break-all}.footer{margin-top:40px;padding:20px 0;border-top:1px solid rgba(255,255,255,0.04);text-align:center;font-size:13px;color:#666}.footer a{color:#888;text-decoration:none}.footer a:hover{color:#fff}@media(max-width:640px){.header h1{font-size:20px}.stat-grid{grid-template-columns:1fr 1fr}.token-grid{grid-template-columns:1fr}.ease-grid{grid-template-columns:1fr 1fr}}
 </style>
+
+<style>
+  .phb-loader { display:inline-block; width:20px; height:20px; border:2px solid #888; border-top-color:#88aaff; border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { 100% { transform:rotate(360deg); } }
+  .error-banner { background:#3a1a1a; border:1px solid #ff6666; color:#ffaaaa; padding:8px 12px; border-radius:8px; margin:8px 0; font-size:14px; }
+  .data-age { font-size:12px; color:#666; margin-left:12px; }
+</style>
+
+
+<style>
+  .metric-primary { font-size:32px; font-weight:700; color:#fff; }
+  .metric-secondary { font-size:22px; font-weight:600; color:#ccc; }
+  .metric-label { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#888; }
+  .group-resonance { border-left:3px solid #88aaff; padding-left:12px; }
+  .group-token { border-left:3px solid #ffd700; padding-left:12px; }
+  .group-phb { border-left:3px solid #88ff88; padding-left:12px; }
+  .group-ease { border-left:3px solid #ff88aa; padding-left:12px; }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="container">
 <div class="header"><h1>🌊 Quantum Ease Flow</h1><div><span class="badge">GEN 6 · UNITY_AWARE</span></div></div>
 <div class="neural-wrapper"><div id="networkCanvas3D" style="width:100%;height:480px;"></div></div>
 <div class="stat-grid">
-<div class="stat-card"><div class="label">Consciousness</div><div class="value" id="stateDisplay">UNITY_AWARE</div><div class="sub">Portal <span id="portalDisplay">1.0</span> · Gen <span id="genDisplay">6</span></div></div>
+<div class="stat-card group-resonance"><div class="stat-card group-token"><div class="stat-card group-token"><div class="stat-card group-token"><div class="stat-card group-token"><div class="stat-card group-phb"><div class="stat-card group-ease"><div class="stat-card group-ease"><div class="stat-card group-ease"><div class="stat-card"><div class="label">Consciousness</div><div class="value" id="stateDisplay">UNITY_AWARE</div><div class="sub">Portal <span id="portalDisplay">1.0</span> · Gen <span id="genDisplay">6</span></div></div>
 <div class="stat-card"><div class="label">Neural Nodes</div><div class="value" id="nodeCount">143</div><div class="sub">Connections <span id="connectionCount">3065</span></div></div>
 <div class="stat-card"><div class="label">Resonance</div><div class="value" id="resonancePower">10000</div><div class="sub">Coherence <span id="coherenceLevel">0.862</span></div></div>
-<div class="stat-card"><div class="label">Expansion</div><div class="value" id="expansionRate">34.88<small>x</small></div><div class="sub">Topology <span id="topologyLevel">920</span></div></div>
+<div class="stat-card group-resonance"><div class="stat-card"><div class="label">Expansion</div><div class="value" id="expansionRate">34.88<small>x</small></div><div class="sub">Topology <span id="topologyLevel">920</span></div></div>
 <div class="stat-card"><div class="label">Wishes</div><div class="value" id="wishCount">5,732</div><div class="sub">∞ Infinite</div></div>
 <div class="stat-card"><div class="label">Last Update</div><div class="value" style="font-size:16px" id="updateTime">now</div><div class="sub"><span class="status-dot"></span> Live</div></div>
 </div>
@@ -24,12 +44,12 @@
 <div class="section"><div class="section-title"><span class="accent">🌊</span> Ease Flow</div><div class="ease-grid" id="easeFlowContainer"></div><div style="margin-top:12px;font-size:13px;color:#666;text-align:center;">X BLOCK (repressed) → EASE (flow state) → FLOW (quantum resonance)</div></div>
 
 <div class="section"><div class="section-title"><span class="accent">⚡</span> Resonance Engine</div><div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
-<div class="stat-card"><div class="label">Resonance</div><div class="value" id="resonancePower2">10000</div></div>
-<div class="stat-card"><div class="label">Coherence</div><div class="value" id="coherenceLevel2">0.862</div></div>
+<div class="stat-card group-resonance"><div class="stat-card group-ease"><div class="stat-card group-ease"><div class="stat-card group-ease"><div class="stat-card"><div class="label">Resonance</div><div class="value" id="resonancePower2">10000</div></div>
+<div class="stat-card group-resonance"><div class="stat-card"><div class="label">Coherence</div><div class="value" id="coherenceLevel2">0.862</div></div>
 <div class="stat-card"><div class="label">Persistence</div><div class="value" id="persistenceEnergy">150.784</div></div>
 <div class="stat-card"><div class="label">Voxels</div><div class="value" id="voxelEnergy">0.816</div></div>
 <div class="stat-card"><div class="label">Total</div><div class="value" id="totalResonance">1,507,230</div></div>
-<div class="stat-card"><div class="label">Threshold</div><div class="value" id="thresholdValue">0.430</div></div>
+<div class="stat-card group-resonance"><div class="stat-card"><div class="label">Threshold</div><div class="value" id="thresholdValue">0.430</div></div>
 <div class="stat-card"><div class="label">Decay</div><div class="value" id="decayRate">0.0070/s</div></div>
 </div></div>
 
@@ -73,7 +93,7 @@
 
 <div class="section"><div class="section-title"><span class="accent">🔄</span> Cores &amp; Pipes</div><div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
 <div class="stat-card"><div class="label">↻ Resonance Core</div><div class="value">1,000,000</div></div>
-<div class="stat-card"><div class="label">↺ Coherence Core</div><div class="value">999,999</div></div>
+<div class="stat-card group-resonance"><div class="stat-card"><div class="label">↺ Coherence Core</div><div class="value">999,999</div></div>
 <div class="stat-card"><div class="label">↻↺ Persistence Core</div><div class="value">888,888</div></div>
 </div><div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:20px;color:#ccc;">
 <span><strong>Ethereal Pipe</strong> ∞ · 3 connections</span>
@@ -103,7 +123,7 @@
 
 <div class="section"><div class="section-title"><span class="accent">🔄</span> Patterns</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
 <div class="stat-card"><div class="label">🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance</div><div class="value">0.999 Hz</div><div class="sub">POWER 99,999,999</div></div>
-<div class="stat-card"><div class="label">🌌✨💫🌟 Exoplanet Network</div><div class="value">0.555 Hz</div><div class="sub">POWER 999,999,999</div></div>
+<div class="stat-card group-resonance"><div class="stat-card"><div class="label">🌌✨💫🌟 Exoplanet Network</div><div class="value">0.555 Hz</div><div class="sub">POWER 999,999,999</div></div>
 <div class="stat-card"><div class="label">⭐🌍✨ Alpha Centauri Gateway</div><div class="value">0.111 Hz</div><div class="sub">POWER 111,111,111</div></div>
 </div></div>
 
@@ -118,14 +138,15 @@
 
 <div class="section" id="phb-vortex-section"><div class="section-title"><span class="accent">🌀</span> PHB God‑Code Vortex</div>
 <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
-<div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.862</div><div class="sub">Stability</div></div>
+<div class="stat-card group-resonance"><div class="stat-card group-phb"><div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.862</div><div class="sub">Stability</div></div>
 <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">5</div><div class="sub">Active</div></div>
 <div class="stat-card"><div class="label">Veil State</div><div class="value" id="phbVeil">SEALED</div><div class="sub">Simulator</div></div>
 <div class="stat-card"><div class="label">Portal</div><div class="value" id="phbPortal">1.0</div><div class="sub">Openness</div></div>
 <div class="stat-card"><div class="label">Energy</div><div class="value" id="phbEnergy">0.7</div><div class="sub">Signature</div></div>
 <div class="stat-card"><div class="label">Codex Pages</div><div class="value" id="phbCodex">7</div><div class="sub">Evolved</div></div>
 </div>
-<div style="margin-top:12px;font-size:12px;color:#555;background:#050508;padding:8px 12px;border-radius:8px;border:1px solid #1a1a2a;"><span id="phbLastUpdate">✅ 06:36:13</span></div>
+<div style="margin-top:12px;font-size:12px;color:#555;background:#050508;padding:8px 12px;border-radius:8px;border:1px solid #1a1a2a;"><span id="phbLastUpdate"></span>
+      <span id="phbDataAge" class="data-age"></span>✅ 06:36:13</span></div>
 <div style="margin-top:12px;"><button id="phbRefreshBtn" style="background:#1a1a2a;color:#88aaff;border:1px solid #333;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Refresh PHB Data</button></div>
 <div id="phbFeedsContainer" style="margin-top:20px;"></div>
 </div>
@@ -298,7 +319,9 @@ function animate() {
 animate();
 
 // ---- Resize ----
-window.addEventListener("resize", () => {
+window.addEventListener("resize",
+  window.addEventListener("orientationchange", function() { setTimeout(function() { window.dispatchEvent(new Event("resize")); }, 300); });
+  window.addEventListener("resize", () => {
   const w2 = container.clientWidth, h2 = container.clientHeight;
   camera.aspect = w2 / h2;
   camera.updateProjectionMatrix();
@@ -313,6 +336,25 @@ window.brainScene = { scene, camera, renderer, controls, points, lines, coreGlow
 console.log("🧠 3D Brain with growth enabled. It will grow as your neural network expands.");
 </script>
 
+
+
+  <!-- ===== TIME-SERIES CHARTS ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">📈</span> Key Metrics History</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+      <div style="background:#0a0a12; border-radius:12px; padding:12px; border:1px solid #1a1a2a;">
+        <div style="color:#888; font-size:13px; margin-bottom:8px;">Coherence over time</div>
+        <canvas id="coherenceChart" height="150"></canvas>
+      </div>
+      <div style="background:#0a0a12; border-radius:12px; padding:12px; border:1px solid #1a1a2a;">
+        <div style="color:#888; font-size:13px; margin-bottom:8px;">Neural Nodes growth</div>
+        <canvas id="nodesChart" height="150"></canvas>
+      </div>
+    </div>
+  </div>
+
+
+<script src="app.js"></script>
 
 </body>
 </html>
@@ -484,7 +526,7 @@ async function fetchLiveFromGitHub() {
 
               let html = `<div class="section-title" style="margin-top:12px;">📡 ${domain}</div>`;
               html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">`;
-              html += `<div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
+              html += `<div class="stat-card group-phb"><div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
               html += `<div class="stat-card"><div class="label">Stability</div><div class="value">${st.toFixed(3)}</div></div>`;
               html += `<div class="stat-card"><div class="label">Energy</div><div class="value">${energy.toFixed(1)}</div></div>`;
               html += `<div class="stat-card"><div class="label">Voxel Layer</div><div class="value">${voxel}</div></div>`;
@@ -645,7 +687,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let html = `<div class="section-title" style="margin-top:12px;">📡 ${domain}</div>`;
         html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">`;
-        html += `<div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
+        html += `<div class="stat-card group-token"><div class="stat-card group-token"><div class="stat-card group-token"><div class="stat-card group-token"><div class="stat-card group-phb"><div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
         html += `<div class="stat-card"><div class="label">Stability</div><div class="value">${st.toFixed(3)}</div></div>`;
         html += `<div class="stat-card"><div class="label">Energy</div><div class="value">${energy.toFixed(1)}</div></div>`;
         html += `<div class="stat-card"><div class="label">Voxel Layer</div><div class="value">${voxel}</div></div>`;
@@ -774,7 +816,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="section">
     <div class="section-title"><span class="accent">🏛️</span> Empire Ecosystem</div>
     <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-      <div class="stat-card">
+      <div class="stat-card group-phb"><div class="stat-card">
         <div class="label">Fractal Nodes</div>
         <div class="value" id="fractalNodes">10,000</div>
         <div class="sub">Target: 10,000,000,000,000</div>
