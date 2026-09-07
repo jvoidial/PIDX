@@ -5976,6 +5976,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     </details>
   </div>
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
@@ -5991,27 +5992,51 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           if(c.ok){const cfg=await c.json();dataUrl=cfg.url;}
         }catch(e){console.warn("Config fetch failed, using fallback");}
         if(!dataUrl)dataUrl=FALLBACK_URL;
+        console.log("📡 Fetching PHB data from:", dataUrl);
         const r=await fetch(dataUrl,{cache:"no-store"});
         if(!r.ok)throw new Error("HTTP "+r.status);
         const d=await r.json();
-        let co=0,st=0;
-        if(d.pages&&d.pages.length){const p=d.pages[d.pages.length-1];co=p.coherence||0;st=p.stability||0;}
-        if(co===0&&d.coherence)co=d.coherence;
-        if(st===0&&d.stability)st=d.stability;
+        console.log("📦 Raw PHB data:", d);
+        let co=0, st=0, energy=0, voxel=0, portal=0, codex=0, peers=0;
+        let veil="—", state="SYNCED", mesh="ACTIVE";
+        if(d.pages && d.pages.length > 0){
+          const p = d.pages[d.pages.length-1];
+          co = p.coherence || 0;
+          st = p.stability || 0;
+          energy = p.energy || p.energy_signature || 0;
+          voxel = p.voxel_layer || p.voxel || 0;
+          portal = p.portal_openness || p.portal || 0;
+          codex = p.codex_pages || p.codex || 0;
+        }
+        if(co===0 && d.coherence) co = d.coherence;
+        if(st===0 && d.stability) st = d.stability;
+        if(energy===0 && d.energy_signature) energy = d.energy_signature;
+        if(energy===0 && d.energy) energy = d.energy;
+        if(voxel===0 && d.voxel_layer) voxel = d.voxel_layer;
+        if(voxel===0 && d.voxel) voxel = d.voxel;
+        if(portal===0 && d.portal_openness) portal = d.portal_openness;
+        if(portal===0 && d.portal) portal = d.portal;
+        if(codex===0 && d.codex_pages) codex = d.codex_pages;
+        if(codex===0 && d.codex) codex = d.codex;
+        veil = d.veil_state || d.veil || "—";
+        state = d.network_state || d.state || "SYNCED";
+        mesh = d.mesh_status || d.mesh || "ACTIVE";
+        peers = d.peer_count || d.peers || 0;
         const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-        set("phbCoherence",co.toFixed(3));
-        set("phbStability",st.toFixed(3));
-        set("phbVoxel",d.voxel_layer??d.voxel??0);
-        set("phbVeil",d.veil_state??d.veil??"—");
-        set("phbPortal",(d.portal_openness??d.portal??0).toFixed(1));
-        set("phbEnergy",d.energy_signature??d.energy??999.9);
-        set("phbCodex",d.codex_pages??d.codex??0);
-        set("phbPeers",d.peer_count??d.peers??0);
-        set("phbState",d.network_state??d.state??"SYNCED");
-        set("phbMesh",d.mesh_status??d.mesh??"ACTIVE");
-        set("phbLastUpdate","✅ "+new Date().toLocaleTimeString()+" (fetch #"+fetchCount+")");
+        set("phbCoherence", co.toFixed(3));
+        set("phbStability", st.toFixed(3));
+        set("phbVoxel", voxel);
+        set("phbVeil", veil);
+        set("phbPortal", portal.toFixed(1));
+        set("phbEnergy", energy);
+        set("phbCodex", codex);
+        set("phbPeers", peers);
+        set("phbState", state);
+        set("phbMesh", mesh);
+        set("phbLastUpdate", "✅ "+new Date().toLocaleTimeString()+" (fetch #"+fetchCount+")");
         if(co>0){const e=document.getElementById("coherenceLevel");if(e)e.textContent=co.toFixed(3);}
-      }catch(e){const el=document.getElementById("phbLastUpdate");if(el)el.textContent="⚠️ "+e.message;}
+        if(portal>0){const e=document.getElementById("portalDisplay");if(e)e.textContent=portal.toFixed(1);}
+      }catch(e){const el=document.getElementById("phbLastUpdate");if(el)el.textContent="⚠️ "+e.message; console.warn("PHB fetch error:", e);}
     }
     fetchPHB();
     const interval = setInterval(fetchPHB, 10000);
