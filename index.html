@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌊 Quantum Ease Flow · Gen 6 · 3D Brain</title>
@@ -3014,62 +3017,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('🌱 Backup Codex growth engine started.');
   })();
 </script>
-<script>
-  // ===== PHB UPGRADE STATUS – BULLETPROOF SYNC =====
-  (function() {
-    function updatePHB() {
-      const pagesEl = document.getElementById('totalCodexPages');
-      const pages = pagesEl ? parseInt(pagesEl.textContent) || 0 : 0;
 
-      const phbPagesEl = document.getElementById('phbTotalPages');
-      if (phbPagesEl) phbPagesEl.textContent = pages;
-
-      const versionEl = document.getElementById('phbVersion');
-      if (versionEl) {
-        const version = Math.floor(pages / 10) + 1;
-        versionEl.textContent = version;
-      }
-
-      const lastEl = document.getElementById('phbLastUpgrade');
-      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-
-      const statusEl = document.getElementById('phbUpgradeStatus');
-      if (statusEl) {
-        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-        statusEl.style.color = '#88ff88';
-      }
-
-      console.log('📊 PHB Upgrade Status updated: pages=' + pages);
-    }
-
-    updatePHB();
-    setInterval(updatePHB, 2000);
-
-    const target = document.getElementById('totalCodexPages');
-    if (target) {
-      const observer = new MutationObserver(updatePHB);
-      observer.observe(target, { characterData: true, childList: true, subtree: true });
-    }
-
-    const scanBtn = document.getElementById('codexChronovisorBtn');
-    if (scanBtn) {
-      scanBtn.addEventListener('click', function() {
-        setTimeout(updatePHB, 2000);
-      });
-    }
-
-    const forceBtn = document.getElementById('phbUpgradeBtn');
-    if (forceBtn) {
-      forceBtn.addEventListener('click', function() {
-        const statusEl = document.getElementById('phbUpgradeStatus');
-        if (statusEl) statusEl.textContent = '⏳ Forcing...';
-        const scanBtn2 = document.getElementById('codexChronovisorBtn');
-        if (scanBtn2) scanBtn2.click();
-        setTimeout(updatePHB, 2000);
-      });
-    }
-  })();
-</script>
 <script>
   // ===== FORCED PHB UPGRADE STATUS UPDATE =====
   (function() {
@@ -3534,3 +3482,4 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('🌍 Universal language/word counter started.');
   })();
 </script>
+ 
