@@ -3923,3 +3923,21 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   console.log('⚡ PHB Codex force sync installed.');
 })();
 </script>
+<script>
+(function() {
+  setInterval(function() {
+    var src = document.getElementById("totalCodexPages");
+    if (src) {
+      var p = parseInt(src.textContent, 10);
+      if (!isNaN(p) && p > 0) {
+        var dst = document.getElementById("phbCodex");
+        if (dst && parseInt(dst.textContent, 10) !== p) {
+          dst.textContent = p;
+          console.log("✅ PHB Codex forced to " + p);
+        }
+      }
+    }
+  }, 1000);
+  console.log("⚡ PHB Codex force‑sync installed.");
+})();
+</script>
