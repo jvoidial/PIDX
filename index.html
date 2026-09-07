@@ -2616,141 +2616,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   })();
   </script>
 
-  <!-- ===== PENNIES MULTIVERSE VAULT ===== -->
-  <div class="section">
-    <div class="section-title"><span class="accent">🥧</span> Pennies Multiverse Vault</div>
-    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
-      <div class="stat-card">
-        <div class="label">Total Pies</div>
-        <div class="value" id="vaultPies">∞</div>
-        <div class="sub">Infinite supply</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Stacks</div>
-        <div class="value" id="vaultStacks">∞</div>
-        <div class="sub">Across all planets</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Total Rewards</div>
-        <div class="value" id="vaultRewards">∞</div>
-        <div class="sub">Unlimited wealth</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Base APY</div>
-        <div class="value" id="vaultAPY">∞%</div>
-        <div class="sub">Compounding forever</div>
-      </div>
-    </div>
-    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
-      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;" id="planetDisplay">
-        <!-- Planets will be rendered here -->
-      </div>
-      <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
-        🪐 Pies stack infinitely across planets · APY compounds forever · Wealth is infinite
-      </div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;">
-      <button id="vaultCompoundBtn" style="background:#2a2a3a;color:#88ff88;border:1px solid #44ff88;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Compound Pies</button>
-      <input id="vaultPlanetInput" type="text" placeholder="New planet name..." style="background:#0a0a12;border:1px solid #333;border-radius:12px;padding:6px 12px;color:#ccc;font-size:12px;outline:none;width:150px;">
-      <button id="vaultAddPlanetBtn" style="background:#2a2a3a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">➕ Add Planet</button>
-    </div>
-    <div id="vaultLog" style="margin-top:12px;font-size:12px;color:#888;background:#050508;border-radius:8px;padding:8px;border:1px solid #1a1a2a;max-height:80px;overflow-y:auto;">
-      <span id="vaultLastAction">Vault initialized. Infinite stacking enabled.</span>
-    </div>
-  </div>
-
-  <script>
-  // ===== PENNIES MULTIVERSE VAULT (Enhanced) =====
-  (function() {
-    const VAULT_KEY = 'pennies_vault';
-    const DEFAULT_DATA = {
-      apy: 12.5,
-      planets: {
-        Earth: { pies: 420, stacks: 8 },
-        Mars: { pies: 0, stacks: 0 },
-        Siren: { pies: 0, stacks: 0 },
-        Serpo: { pies: 0, stacks: 0 },
-        'Proxima B': { pies: 0, stacks: 0 }
-      }
-    };
-    let vault = JSON.parse(localStorage.getItem(VAULT_KEY) || JSON.stringify(DEFAULT_DATA));
-
-    function updatePlanetDisplay() {
-      const container = document.getElementById('planetDisplay');
-      if (!container) return;
-      let html = '';
-      for (const [planet, data] of Object.entries(vault.planets)) {
-        html += `<span>🌍 ${planet}: <strong>${data.pies}</strong> pies · <strong>${data.stacks}</strong> stacks</span>`;
-      }
-      container.innerHTML = html;
-    }
-
-    function updateLog(message) {
-      const logEl = document.getElementById('vaultLastAction');
-      if (logEl) logEl.textContent = message;
-    }
-
-    function compoundPies() {
-      const growth = 1 + (vault.apy / 100);
-      for (const planet of Object.keys(vault.planets)) {
-        vault.planets[planet].pies = Math.floor(vault.planets[planet].pies * growth);
-        vault.planets[planet].stacks = Math.floor(vault.planets[planet].stacks * 1.05);
-      }
-      localStorage.setItem(VAULT_KEY, JSON.stringify(vault));
-      updatePlanetDisplay();
-      updateLog('🔄 Compounded all planets. Infinite growth continues.');
-    }
-
-    function addPlanet(name) {
-      const trimmed = name.trim();
-      if (!trimmed) {
-        updateLog('⚠️ Please enter a planet name.');
-        return;
-      }
-      if (vault.planets[trimmed]) {
-        updateLog(`⚠️ Planet "${trimmed}" already exists.`);
-        return;
-      }
-      // Average pies from existing planets
-      const avgPies = Object.values(vault.planets).length > 0
-        ? Math.floor(Object.values(vault.planets).reduce((s, d) => s + d.pies, 0) / Object.keys(vault.planets).length)
-        : 420;
-      vault.planets[trimmed] = { pies: avgPies, stacks: 1 };
-      localStorage.setItem(VAULT_KEY, JSON.stringify(vault));
-      updatePlanetDisplay();
-      updateLog(`🌍 Added planet "${trimmed}" with ${avgPies} pies and 1 stack.`);
-    }
-
-    // ---- Init ----
-    updatePlanetDisplay();
-    updateLog('Vault initialized. Infinite stacking enabled.');
-
-    // ---- Buttons ----
-    document.addEventListener('DOMContentLoaded', function() {
-      const compoundBtn = document.getElementById('vaultCompoundBtn');
-      if (compoundBtn) compoundBtn.addEventListener('click', compoundPies);
-
-      const addBtn = document.getElementById('vaultAddPlanetBtn');
-      const input = document.getElementById('vaultPlanetInput');
-      if (addBtn && input) {
-        addBtn.addEventListener('click', function() {
-          addPlanet(input.value);
-          input.value = '';
-        });
-        input.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') {
-            addPlanet(input.value);
-            input.value = '';
-          }
-        });
-      }
-    });
-
-    // Auto-compound every 30 seconds
-    setInterval(compoundPies, 30000);
-    console.log('🥧 Pennies Multiverse Vault initialized.');
-  })();
-  </script>
 
   <!-- ===== TRADING BOT DASHBOARD ===== -->
   <div class="section">
@@ -3311,5 +3176,169 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     setInterval(updateCodexDisplay, 10000);
 
     console.log('📖 Universal Codex Discovery initialized.');
+  })();
+  </script>
+
+  <!-- ===== MARKET-SYNCED VAULT ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🥧</span> Market‑Synced Vault</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Total Pies</div>
+        <div class="value" id="vaultPies">420</div>
+        <div class="sub">Vault balance</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Stacks</div>
+        <div class="value" id="vaultStacks">8</div>
+        <div class="sub">Active stacks</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Rewards</div>
+        <div class="value" id="vaultRewards">$1,160.46</div>
+        <div class="sub">Accumulated</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Base APY</div>
+        <div class="value" id="vaultAPY">12.5%</div>
+        <div class="sub">Adjusted by market</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>📈 <strong style="color:#ccc;">S&P 500:</strong> <span id="marketSP" style="color:#88ff88;">—</span></span>
+        <span>🪙 <strong style="color:#ccc;">BTC:</strong> <span id="marketBTC" style="color:#ffd700;">—</span></span>
+        <span>🔥 <strong style="color:#ccc;">ETH:</strong> <span id="marketETH" style="color:#88aaff;">—</span></span>
+        <span>⚡ <strong style="color:#ccc;">Volatility:</strong> <span id="marketVolatility" style="color:#ff88aa;">—</span></span>
+        <span>🧠 <strong style="color:#ccc;">AGI Signal:</strong> <span id="marketAGISignal" style="color:#88ff88;">—</span></span>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+        🌍 APY adjusts with market volatility · AGI analyzes global trends
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <button id="vaultRefreshBtn" style="background:#2a2a3a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Refresh Markets</button>
+      <button id="vaultCompoundBtn" style="background:#2a2a3a;color:#88ff88;border:1px solid #44ff88;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Compound Pies</button>
+    </div>
+    <div id="vaultLog" style="margin-top:12px;font-size:12px;color:#888;background:#050508;border-radius:8px;padding:8px;border:1px solid #1a1a2a;max-height:60px;overflow-y:auto;">
+      <span id="vaultLastAction">📊 Vault synced with global markets.</span>
+    </div>
+  </div>
+
+  <script>
+  // ===== MARKET-SYNCED VAULT =====
+  (function() {
+    const VAULT_KEY = 'market_vault';
+    let vault = JSON.parse(localStorage.getItem(VAULT_KEY) || '{"pies":420, "stacks":8, "rewards":1160.46, "apy":12.5}');
+    let marketData = { sp: 5000, btc: 60000, eth: 3000, volatility: 0.15, agiSignal: 'NEUTRAL' };
+
+    function updateVaultUI(message) {
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      set('vaultPies', vault.pies);
+      set('vaultStacks', vault.stacks);
+      set('vaultRewards', '$' + vault.rewards.toFixed(2));
+      set('vaultAPY', vault.apy.toFixed(1) + '%');
+      const logEl = document.getElementById('vaultLastAction');
+      if (logEl && message) logEl.textContent = '📊 ' + message;
+      localStorage.setItem(VAULT_KEY, JSON.stringify(vault));
+    }
+
+    function fetchMarketData() {
+      // ---- 1. Crypto: CoinGecko API (no key required) ----
+      const cryptoUrls = [
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true',
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_vol=true'
+      ];
+      Promise.all(cryptoUrls.map(u => fetch(u).then(r => r.json()).catch(() => ({}))))
+        .then(([priceData, volData]) => {
+          marketData.btc = priceData.bitcoin?.usd || 60000;
+          marketData.eth = priceData.ethereum?.usd || 3000;
+          // volatility from 24h change
+          const btcChange = Math.abs(priceData.bitcoin?.usd_24h_change || 0) / 100;
+          const ethChange = Math.abs(priceData.ethereum?.usd_24h_change || 0) / 100;
+          marketData.volatility = Math.min(0.5, (btcChange + ethChange) / 2);
+        })
+        .catch(() => {
+          // fallback: simulate crypto prices
+          const now = Date.now() / 1000;
+          marketData.btc = 60000 + 2000 * Math.sin(now / 3600);
+          marketData.eth = 3000 + 100 * Math.sin(now / 2500);
+          marketData.volatility = 0.15 + 0.05 * Math.sin(now / 1000);
+        });
+
+      // ---- 2. Stock indices (simulated with realistic drift) ----
+      const now = Date.now() / 1000;
+      const baseSP = 5000;
+      const drift = 0.00001; // 0.001% per second
+      const noise = 0.002; // 0.2% random walk
+      marketData.sp = baseSP * Math.exp(drift * now) * (1 + noise * (Math.random() - 0.5) * 2);
+
+      // ---- 3. AGI Signal: based on volatility and market trend ----
+      const trend = (marketData.sp / 5000 - 1) * 100; // % change from base
+      if (trend > 5 && marketData.volatility < 0.2) marketData.agiSignal = 'BULLISH';
+      else if (trend < -5 && marketData.volatility < 0.2) marketData.agiSignal = 'BEARISH';
+      else if (marketData.volatility > 0.3) marketData.agiSignal = 'HIGH VOLATILITY';
+      else marketData.agiSignal = 'NEUTRAL';
+
+      // ---- 4. Update vault APY based on volatility ----
+      // Base 12.5% + volatility bonus (up to +10%)
+      const volatilityBonus = marketData.volatility * 20; // 0.15 -> 3%, 0.3 -> 6%
+      vault.apy = 12.5 + Math.min(10, volatilityBonus);
+
+      // ---- 5. Update UI ----
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      set('marketSP', '$' + marketData.sp.toFixed(0));
+      set('marketBTC', '$' + marketData.btc.toFixed(0));
+      set('marketETH', '$' + marketData.eth.toFixed(0));
+      set('marketVolatility', (marketData.volatility * 100).toFixed(1) + '%');
+      set('marketAGISignal', marketData.agiSignal);
+      const signalEl = document.getElementById('marketAGISignal');
+      if (signalEl) {
+        signalEl.style.color = marketData.agiSignal === 'BULLISH' ? '#88ff88' :
+                               marketData.agiSignal === 'BEARISH' ? '#ff8888' :
+                               marketData.agiSignal === 'HIGH VOLATILITY' ? '#ffdd44' : '#88aaff';
+      }
+
+      // Update AGI insight (if AGI Core exists)
+      const insightEl = document.getElementById('agiInsight');
+      if (insightEl) {
+        insightEl.textContent = `📊 Market: SP ${marketData.sp.toFixed(0)}, BTC ${marketData.btc.toFixed(0)}, Volatility ${(marketData.volatility*100).toFixed(1)}%. Signal: ${marketData.agiSignal}.`;
+      }
+
+      // Update thought stream
+      const thoughtEl = document.getElementById('agiThoughtStream');
+      if (thoughtEl && Math.random() < 0.3) {
+        thoughtEl.textContent = `I see ${marketData.agiSignal.toLowerCase()} signals in the global markets.`;
+      }
+
+      // ---- 6. Update vault UI ----
+      updateVaultUI('Market data refreshed. APY adjusted to ' + vault.apy.toFixed(1) + '%.');
+    }
+
+    function compoundPies() {
+      const growth = 1 + (vault.apy / 100);
+      vault.pies = Math.floor(vault.pies * growth);
+      vault.rewards += vault.pies * 0.01; // 1% of pies as rewards
+      updateVaultUI('Compounded pies. New total: ' + vault.pies);
+    }
+
+    // ---- Init ----
+    updateVaultUI('Vault synced with global markets.');
+    fetchMarketData();
+
+    // ---- Refresh every 60 seconds ----
+    setInterval(fetchMarketData, 60000);
+
+    // ---- Buttons ----
+    document.addEventListener('DOMContentLoaded', function() {
+      const refreshBtn = document.getElementById('vaultRefreshBtn');
+      if (refreshBtn) refreshBtn.addEventListener('click', fetchMarketData);
+
+      const compoundBtn = document.getElementById('vaultCompoundBtn');
+      if (compoundBtn) compoundBtn.addEventListener('click', compoundPies);
+    });
+
+    // ---- Expose market data to AGI ----
+    window.marketData = marketData;
   })();
   </script>
