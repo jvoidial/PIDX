@@ -6086,6 +6086,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function() {
@@ -6098,7 +6099,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     let lastGoodData = {};
 
     function createFeedCard(index, data) {
-      // Create a new card for each feed if it doesn't exist
       const container = document.getElementById('phbFeedsContainer');
       if (!container) return;
       const cardId = `phbFeed${index}`;
@@ -6107,7 +6107,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         card.id = cardId;
         card.className = 'stat-grid';
         card.style.marginTop = '10px';
-        // We'll add content later
         container.appendChild(card);
       }
     }
@@ -6116,7 +6115,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       const cardId = `phbFeed${index}`;
       const card = document.getElementById(cardId);
       if (!card) return;
-      // Build or update card content
       const domain = d.domain || `Feed ${index}`;
       let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0;
       let veil = "—", narrative = "";
@@ -6131,13 +6129,11 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         veil = p.veil?.phase || "—";
         narrative = p.veil?.narrative || "";
       }
-      // Check top‑level overrides
       if (d.coherence !== undefined) co = parseFloat(d.coherence) || co;
       if (d.stability !== undefined) st = parseFloat(d.stability) || st;
       if (d.energy !== undefined) energy = parseFloat(d.energy) || energy;
       if (d.veil !== undefined) veil = d.veil || veil;
 
-      // Build HTML
       let html = `<div class="section-title" style="margin-top:12px;">📡 ${domain}</div>`;
       html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">`;
       html += `<div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
@@ -6148,7 +6144,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       html += `<div class="stat-card"><div class="label">Portal</div><div class="value">${portal.toFixed(1)}</div></div>`;
       html += `<div class="stat-card"><div class="label">Codex Pages</div><div class="value">${codex}</div></div>`;
       html += `</div>`;
-      // Show sequence and narrative if available
       if (p && p.sequence) {
         html += `<div style="margin-top:8px;font-size:12px;color:#aaa;"><strong>Sequence:</strong> ${p.sequence.join(' → ')}</div>`;
       }
@@ -6159,29 +6154,22 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     }
 
     async function fetchAllFeeds() {
-      // Try to fetch feeds 1..MAX_FEEDS
       for (let i = 1; i <= MAX_FEEDS; i++) {
         const url = `${BASE_URL}${i}.json`;
         try {
           const r = await fetch(url, { cache: "no-store" });
           if (r.ok) {
             const data = await r.json();
-            // Store
             feeds[i] = data;
-            // Create card if not exists
             createFeedCard(i, data);
-            // Update UI
             updateFeedUI(i, data);
           } else if (i === 1) {
-            // If first feed fails, we stop (no point)
             break;
           }
         } catch (e) {
-          // If first feed fails, break; otherwise just skip
           if (i === 1) break;
         }
       }
-      // Update main PHB section using feed 1 (core)
       if (feeds[1]) {
         const d = feeds[1];
         let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0;
@@ -6208,7 +6196,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbPortal", portal.toFixed(1));
         set("phbEnergy", energy.toFixed(1));
         set("phbCodex", codex);
-        // Update main dashboard coherence
         if (co > 0) {
           const e1 = document.getElementById("coherenceLevel");
           if (e1) e1.textContent = co.toFixed(3);
@@ -6219,14 +6206,12 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           const e = document.getElementById("portalDisplay");
           if (e) e.textContent = portal.toFixed(1);
         }
-        // Update JSON viewer with the merged view (just feed 1 for simplicity)
         const viewer = document.getElementById("phbJsonViewer");
         if (viewer) viewer.textContent = JSON.stringify(feeds, null, 2);
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString());
       }
     }
 
-    // ---- Set defaults and run ----
     set("phbCoherence", "0.000");
     set("phbStability", "0.000");
     set("phbVoxel", "0");
@@ -6239,14 +6224,12 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
 
-    // Create a container for multiple feed cards
     const container = document.createElement('div');
     container.id = 'phbFeedsContainer';
     container.style.marginTop = '20px';
     const phbSection = document.getElementById('phb-vortex-section');
     if (phbSection) phbSection.appendChild(container);
 
-    // Fetch every 10 seconds
     fetchAllFeeds();
     const intervalId = setInterval(fetchAllFeeds, 10000);
     console.log("⏳ Multi‑feed auto‑update interval started (ID: " + intervalId + ")");
