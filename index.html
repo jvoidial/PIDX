@@ -847,3 +847,86 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🏛️ Empire updated:', { fractalNodes, wealthMultiplier, chronovisorSignal, portalCapacity, wishPower, empireStatus });
   })();
   </script>
+
+  <!-- ===== BEINGS EVOLUTION ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">✝️</span> Beings Evolution</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <!-- Jesus Christ -->
+      <div class="stat-card" style="border-color:#ffd700;">
+        <div class="label">✝️ Jesus Christ</div>
+        <div class="value" id="jesusCoherence">0.900</div>
+        <div class="sub">Coherence · Divine</div>
+        <div style="margin-top:4px;font-size:13px;color:#aaa;">Veil: <span id="jesusVeil">THIN</span></div>
+        <div style="font-size:12px;color:#666;">Codex: <span id="jesusCodex">7</span> pages</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">Water to Wine · Walking on Water</div>
+      </div>
+
+      <!-- Harry Houdini -->
+      <div class="stat-card" style="border-color:#aaccff;">
+        <div class="label">🔓 Harry Houdini</div>
+        <div class="value" id="houdiniCoherence">0.750</div>
+        <div class="sub">Coherence · Escape</div>
+        <div style="margin-top:4px;font-size:13px;color:#aaa;">Veil: <span id="houdiniVeil">TURBULENT</span></div>
+        <div style="font-size:12px;color:#666;">Codex: <span id="houdiniCodex">5</span> pages</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">Water Torture · Straightjacket</div>
+      </div>
+
+      <!-- Leonardo da Vinci -->
+      <div class="stat-card" style="border-color:#88ddff;">
+        <div class="label">🎨 Leonardo da Vinci</div>
+        <div class="value" id="daVinciCoherence">0.650</div>
+        <div class="sub">Coherence · Vision</div>
+        <div style="margin-top:4px;font-size:13px;color:#aaa;">Veil: <span id="daVinciVeil">CLEAR</span></div>
+        <div style="font-size:12px;color:#666;">Codex: <span id="daVinciCodex">4</span> pages</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">Mona Lisa · Last Supper</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:#888;text-align:center;border-top:1px solid #1a1a2a;padding-top:12px;">
+      <span style="color:#ffd700;">✦</span> Beings evolve with system coherence &amp; expansion
+      <br />
+      <span style="font-size:12px;color:#666;">Coherence → Veil phase → Codex depth</span>
+    </div>
+  </div>
+
+  <script>
+  // ===== BEINGS EVOLUTION UPDATE =====
+  (function updateBeings() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const stabilityEl = document.getElementById('phbStability');
+    const expansionEl = document.getElementById('expansionRate');
+
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+
+    // Jesus: highest coherence, thin veil, codex = 7
+    const jesusCoherence = Math.min(0.999, 0.9 + (coherence - 0.8) * 0.5);
+    const jesusVeil = coherence > 0.85 ? 'THIN' : coherence > 0.75 ? 'SEALED' : 'TURBULENT';
+    const jesusCodex = Math.round(7 + (coherence - 0.8) * 10);
+
+    // Houdini: escape artist, turbulent veil, codex = 5
+    const houdiniCoherence = Math.min(0.85, 0.75 + (coherence - 0.7) * 0.4);
+    const houdiniVeil = stability > 1.0 ? 'TURBULENT' : stability > 0.9 ? 'CLEAR' : 'SEALED';
+    const houdiniCodex = Math.round(5 + (stability - 0.9) * 10);
+
+    // da Vinci: visionary, clear veil, codex = 4
+    const daVinciCoherence = Math.min(0.75, 0.65 + (coherence - 0.6) * 0.3);
+    const daVinciVeil = expansion > 40 ? 'CLEAR' : expansion > 30 ? 'THIN' : 'SEALED';
+    const daVinciCodex = Math.round(4 + (expansion - 30) * 0.1);
+
+    // Update DOM
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('jesusCoherence', jesusCoherence.toFixed(3));
+    set('jesusVeil', jesusVeil);
+    set('jesusCodex', jesusCodex);
+    set('houdiniCoherence', houdiniCoherence.toFixed(3));
+    set('houdiniVeil', houdiniVeil);
+    set('houdiniCodex', houdiniCodex);
+    set('daVinciCoherence', daVinciCoherence.toFixed(3));
+    set('daVinciVeil', daVinciVeil);
+    set('daVinciCodex', daVinciCodex);
+
+    console.log('✝️ Beings updated:', { jesus: {coherence:jesusCoherence, veil:jesusVeil, codex:jesusCodex}, houdini: {coherence:houdiniCoherence, veil:houdiniVeil, codex:houdiniCodex}, daVinci: {coherence:daVinciCoherence, veil:daVinciVeil, codex:daVinciCodex} });
+  })();
+  </script>
