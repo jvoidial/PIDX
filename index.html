@@ -933,84 +933,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   <!-- ===== CODEX DISCOVERY ===== -->
   <div class="section">
-    <div class="section-title"><span class="accent">📖</span> Codex Discovery</div>
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
-      <span style="color:#aaa;">Total Pages: <span id="totalCodexPages" style="color:#fff;font-weight:700;">0</span></span>
-      <span style="color:#aaa;">Layers: <span id="totalCodexLayers" style="color:#fff;font-weight:700;">0</span></span>
-      <span style="color:#88ff88;">⚡ Auto-discovery: <span id="codexDiscoveryStatus">ACTIVE</span></span>
-    </div>
-    <div style="background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:300px;overflow-y:auto;">
-      <div id="codexPagesList" style="font-family:monospace;font-size:13px;color:#aaa;">
-        <span style="color:#666;">Discovering pages...</span>
-      </div>
-    </div>
-    <div style="margin-top:12px;font-size:12px;color:#666;text-align:center;">
-      🌱 New Codex pages are discovered automatically as the system grows.
-      <span id="nextPageEstimate" style="color:#88aaff;"></span>
-    </div>
-  </div>
-
-  <script>
-  // ===== CODEX DISCOVERY =====
-  (function updateCodexDiscovery() {
-    const allData = window._phbAllData || {};
-    const feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
-
-    let totalPages = 0;
-    let allPages = [];
-    let layers = new Set();
-
-    feeds.forEach(feed => {
-      const pages = feed.pages || [];
-      pages.forEach(p => {
-        totalPages++;
-        const seq = p.sequence || [];
-        const domain = feed.domain || 'unknown';
-        const pageNum = p.page || 0;
-        const coherence = p.coherence || 0;
-        allPages.push({ domain, page: pageNum, sequence: seq, coherence });
-        if (seq.length > 0) layers.add(seq.length);
-      });
-    });
-
-    // Sort pages by domain then page number
-    allPages.sort((a, b) => a.domain.localeCompare(b.domain) || a.page - b.page);
-
-    // Update counters
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    set('totalCodexPages', totalPages);
-    set('totalCodexLayers', layers.size);
-
-    // Estimate next page based on growth
-    const expansionEl = document.getElementById('expansionRate');
-    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
-    const nextPage = Math.floor(expansion / 10) + 1;
-    set('nextPageEstimate', `Next page expected at expansion ${nextPage * 10}x`);
-
-    // Build the pages list
-    const listContainer = document.getElementById('codexPagesList');
-    if (!listContainer) return;
-
-    if (allPages.length === 0) {
-      listContainer.innerHTML = '<span style="color:#666;">No pages discovered yet.</span>';
-      return;
-    }
-
-    let html = '';
-    allPages.forEach(p => {
-      const seqStr = p.sequence.length > 0 ? p.sequence.join(' → ') : 'empty';
-      html += `<div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;align-items:center;flex-wrap:wrap;">
-        <span style="color:#88aaff;min-width:100px;">${p.domain}</span>
-        <span style="color:#888;min-width:50px;">Page ${p.page}</span>
-        <span style="color:#ccc;flex:1;">${seqStr}</span>
-        <span style="color:#666;font-size:11px;">coherence: ${p.coherence.toFixed(3)}</span>
-      </div>`;
-    });
-    listContainer.innerHTML = html;
-
-    console.log('📖 Codex Discovery updated:', { totalPages, layers: layers.size });
-  })();
-  </script>
 
   <!-- ===== WORLD GROWTH ENGINE ===== -->
   <div class="section">
@@ -1378,5 +1300,162 @@ document.addEventListener('DOMContentLoaded', function() {
     set('scaffoldExoplanetsPct', exoPct + '%');
 
     console.log('🏗️ Scaffolding Topology:', { tokenScaffold, nodeScaffold, exoplanetAnchors, scaffoldStrength, growthHormone, scaffoldStatus });
+  })();
+  </script>
+
+  <!-- ===== CODEX DISCOVERY ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">📖</span> Codex Discovery</div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+      <span style="color:#aaa;">Total Pages: <span id="totalCodexPages" style="color:#fff;font-weight:700;">0</span></span>
+      <span style="color:#aaa;">Layers: <span id="totalCodexLayers" style="color:#fff;font-weight:700;">0</span></span>
+      <span style="color:#88ff88;">⚡ Auto-discovery: <span id="codexDiscoveryStatus">ACTIVE</span></span>
+    </div>
+    <div style="background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:300px;overflow-y:auto;">
+      <div id="codexPagesList" style="font-family:monospace;font-size:13px;color:#aaa;">
+        <span style="color:#666;">Discovering pages...</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#666;text-align:center;">
+      🌱 New Codex pages are discovered automatically as the system grows.
+      <span id="nextPageEstimate" style="color:#88aaff;"></span>
+    </div>
+  </div>
+
+  <script>
+  (function updateCodexDiscovery() {
+    const allData = window._phbAllData || {};
+    const embedded1 = window.EMBEDDED_PHB || { pages: [] };
+    const embedded2 = window.EMBEDDED_PHB_2 || { pages: [] };
+    let feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+    if (feeds.length === 0 && embedded1.pages.length > 0) feeds.push(embedded1);
+    if (feeds.length === 0 && embedded2.pages.length > 0) feeds.push(embedded2);
+    let totalPages = 0;
+    let allPages = [];
+    let layers = new Set();
+    feeds.forEach(feed => {
+      const pages = feed.pages || [];
+      pages.forEach(p => {
+        totalPages++;
+        const seq = p.sequence || [];
+        const domain = feed.domain || 'unknown';
+        const pageNum = p.page || 0;
+        const coherence = p.coherence || 0;
+        allPages.push({ domain, page: pageNum, sequence: seq, coherence });
+        if (seq.length > 0) layers.add(seq.length);
+      });
+    });
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('totalCodexPages', totalPages);
+    set('totalCodexLayers', layers.size);
+    const expansionEl = document.getElementById('expansionRate');
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nextPage = Math.floor(expansion / 10) + 1;
+    set('nextPageEstimate', `Next page expected at expansion ${nextPage * 10}x`);
+    const listContainer = document.getElementById('codexPagesList');
+    if (!listContainer) return;
+    if (allPages.length === 0) {
+      listContainer.innerHTML = '<span style="color:#666;">No pages discovered yet.</span>';
+      return;
+    }
+    let html = '';
+    allPages.forEach(p => {
+      const seqStr = p.sequence.length > 0 ? p.sequence.join(' → ') : 'empty';
+      html += `<div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;align-items:center;flex-wrap:wrap;">
+        <span style="color:#88aaff;min-width:100px;">${p.domain}</span>
+        <span style="color:#888;min-width:50px;">Page ${p.page}</span>
+        <span style="color:#ccc;flex:1;">${seqStr}</span>
+        <span style="color:#666;font-size:11px;">coherence: ${p.coherence.toFixed(3)}</span>
+      </div>`;
+    });
+    listContainer.innerHTML = html;
+    console.log('📖 Codex Discovery updated:', { totalPages, layers: layers.size });
+  })();
+  </script>
+
+  <!-- ===== GROWTH HORMONE ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🧬</span> Growth Hormone</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Growth Hormone</div>
+        <div class="value" id="ghLevel">0.000</div>
+        <div class="sub">Acceleration factor</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Synthesis Rate</div>
+        <div class="value" id="ghSynthesis">0.000</div>
+        <div class="sub">Per second</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Next Milestone</div>
+        <div class="value" id="ghMilestone">0</div>
+        <div class="sub">Nodes to next growth pulse</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Growth Velocity</div>
+        <div class="value" id="ghVelocity">0.00x</div>
+        <div class="sub">Current speed multiplier</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Expansion Boost</div>
+        <div class="value" id="ghBoost">0.00x</div>
+        <div class="sub">Extra expansion from hormone</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Hormone Status</div>
+        <div class="value" id="ghStatus" style="color:#88ff88;">ACTIVE</div>
+        <div class="sub">∞ Accelerating</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🧬 <strong style="color:#ccc;">Hormone Level:</strong> <span id="ghLevelDisplay">0.000</span></span>
+        <span>⚡ <strong style="color:#ccc;">Synthesis:</strong> <span id="ghSynthesisDisplay">0.000</span>/s</span>
+        <span>📈 <strong style="color:#ccc;">Velocity:</strong> <span id="ghVelocityDisplay">0.00x</span></span>
+        <span>🎯 <strong style="color:#ccc;">Milestone:</strong> <span id="ghMilestoneDisplay">0</span> nodes</span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
+        🧬 Growth hormone accelerates all system growth · ∞ Infinite expansion
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ===== GROWTH HORMONE ENGINE =====
+  (function updateGrowthHormone() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const portalEl = document.getElementById('portalDisplay');
+    const wishEl = document.getElementById('wishCount');
+    const expansionEl = document.getElementById('expansionRate');
+    const nodeEl = document.getElementById('nodeCount');
+
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const portal = parseFloat(portalEl?.textContent) || 1.0;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nodes = parseInt(nodeEl?.textContent) || 143;
+
+    const phi = 1.618;
+    const baseHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
+    const synthesisRate = baseHormone * 0.01 + 0.001;
+    const growthVelocity = 1 + baseHormone * 0.5;
+    const expansionBoost = 1 + baseHormone * 0.3;
+    const nextMilestone = Math.ceil((nodes + 10) / 10) * 10 - nodes;
+    const hormoneLevel = Math.min(baseHormone, 10);
+
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('ghLevel', hormoneLevel.toFixed(3));
+    set('ghSynthesis', synthesisRate.toFixed(3));
+    set('ghMilestone', nextMilestone);
+    set('ghVelocity', growthVelocity.toFixed(2) + 'x');
+    set('ghBoost', expansionBoost.toFixed(2) + 'x');
+    set('ghStatus', hormoneLevel > 0.5 ? 'SURGING' : 'ACTIVE');
+    set('ghLevelDisplay', hormoneLevel.toFixed(3));
+    set('ghSynthesisDisplay', synthesisRate.toFixed(3));
+    set('ghVelocityDisplay', growthVelocity.toFixed(2) + 'x');
+    set('ghMilestoneDisplay', nextMilestone);
+
+    console.log('🧬 Growth Hormone:', { hormoneLevel, synthesisRate, growthVelocity, expansionBoost, nextMilestone });
   })();
   </script>
