@@ -2606,3 +2606,169 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('🛡️ Security & Safety module initialized.');
   })();
   </script>
+
+  <!-- ===== PIDX VAULT ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🏦</span> PIDX Vault</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Staked PIDX</div>
+        <div class="value" id="pidxStaked">0</div>
+        <div class="sub">Tokens locked</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Available PIDX</div>
+        <div class="value" id="pidxAvailable">1,000,000</div>
+        <div class="sub">Balance</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Rewards</div>
+        <div class="value" id="pidxRewards">0.00</div>
+        <div class="sub">PIDX earned</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">APY</div>
+        <div class="value" id="pidxAPY">12.5%</div>
+        <div class="sub">Base + bonus</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🏦 <strong style="color:#ccc;">Vault Balance:</strong> <span id="pidxVaultBalance">0</span> PIDX</span>
+        <span>💰 <strong style="color:#ccc;">Total Rewards:</strong> <span id="pidxTotalRewards">0.00</span> PIDX</span>
+        <span>🔄 <strong style="color:#ccc;">Staking Status:</strong> <span id="pidxStakingStatus" style="color:#88ff88;">ACTIVE</span></span>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+        ⚡ Stake PIDX to earn rewards · Compounding automatically
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <button id="pidxStakeBtn" style="background:#2a3a2a;color:#88ff88;border:1px solid #44ff88;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">⬆️ Stake PIDX</button>
+      <button id="pidxUnstakeBtn" style="background:#3a2a2a;color:#ff8888;border:1px solid #ff4444;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">⬇️ Unstake PIDX</button>
+      <button id="pidxClaimBtn" style="background:#2a2a3a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🎯 Claim Rewards</button>
+    </div>
+    <div id="pidxVaultLog" style="margin-top:12px;font-size:12px;color:#888;background:#050508;border-radius:8px;padding:8px;border:1px solid #1a1a2a;max-height:60px;overflow-y:auto;">
+      <span id="pidxVaultLastAction">🏦 PIDX Vault initialized. Ready for staking.</span>
+    </div>
+  </div>
+
+  <script>
+  // ===== PIDX VAULT =====
+  (function() {
+    const PIDX_KEY = 'pidx_vault';
+    let vault = JSON.parse(localStorage.getItem(PIDX_KEY) || '{"staked":0, "rewards":0, "totalRewards":0, "lastClaim":0}');
+
+    const APY = 0.125; // 12.5%
+    const REWARD_RATE = APY / 365; // Daily
+
+    function updatePIDXVaultUI(message) {
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      set('pidxStaked', vault.staked.toLocaleString());
+      set('pidxRewards', vault.rewards.toFixed(2));
+      set('pidxTotalRewards', vault.totalRewards.toFixed(2));
+      set('pidxVaultBalance', vault.staked.toLocaleString());
+      const apyBonus = vault.staked > 0 ? 0.02 : 0;
+      set('pidxAPY', ((APY + apyBonus) * 100).toFixed(1) + '%');
+
+      const logEl = document.getElementById('pidxVaultLastAction');
+      if (logEl && message) logEl.textContent = '🏦 ' + message;
+
+      localStorage.setItem(PIDX_KEY, JSON.stringify(vault));
+    }
+
+    function compoundRewards() {
+      if (vault.staked === 0) return;
+      const now = Date.now();
+      const elapsed = (now - vault.lastClaim) / 1000 / 60 / 60 / 24; // days
+      if (elapsed < 0.01) return;
+
+      const earned = vault.staked * REWARD_RATE * elapsed;
+      vault.rewards += earned;
+      vault.totalRewards += earned;
+      vault.lastClaim = now;
+      updatePIDXVaultUI('🔄 Rewards compounded. Earned ' + earned.toFixed(2) + ' PIDX.');
+    }
+
+    function stakePIDX(amount) {
+      if (!amount || amount <= 0) {
+        const logEl = document.getElementById('pidxVaultLastAction');
+        if (logEl) logEl.textContent = '⚠️ Enter a valid amount to stake.';
+        return;
+      }
+      vault.staked += amount;
+      if (vault.lastClaim === 0) vault.lastClaim = Date.now();
+      updatePIDXVaultUI('⬆️ Staked ' + amount + ' PIDX. Rewards accumulating.');
+    }
+
+    function unstakePIDX(amount) {
+      if (!amount || amount <= 0) {
+        const logEl = document.getElementById('pidxVaultLastAction');
+        if (logEl) logEl.textContent = '⚠️ Enter a valid amount to unstake.';
+        return;
+      }
+      if (amount > vault.staked) {
+        const logEl = document.getElementById('pidxVaultLastAction');
+        if (logEl) logEl.textContent = '⚠️ Insufficient staked PIDX.';
+        return;
+      }
+      vault.staked -= amount;
+      updatePIDXVaultUI('⬇️ Unstaked ' + amount + ' PIDX.');
+    }
+
+    function claimRewards() {
+      if (vault.rewards < 0.01) {
+        const logEl = document.getElementById('pidxVaultLastAction');
+        if (logEl) logEl.textContent = '⚠️ No rewards to claim. Keep staking!';
+        return;
+      }
+      const claimed = vault.rewards;
+      vault.rewards = 0;
+      vault.totalRewards += claimed;
+      updatePIDXVaultUI('🎯 Claimed ' + claimed.toFixed(2) + ' PIDX rewards.');
+    }
+
+    // ---- Prompt-based staking (simple UI) ----
+    function promptStake() {
+      const amount = prompt('Enter amount of PIDX to stake:', '100');
+      if (amount !== null) {
+        const val = parseFloat(amount);
+        if (!isNaN(val) && val > 0) stakePIDX(val);
+        else {
+          const logEl = document.getElementById('pidxVaultLastAction');
+          if (logEl) logEl.textContent = '⚠️ Invalid amount. Please enter a number.';
+        }
+      }
+    }
+
+    function promptUnstake() {
+      const amount = prompt('Enter amount of PIDX to unstake (max: ' + vault.staked + '):', Math.min(100, vault.staked));
+      if (amount !== null) {
+        const val = parseFloat(amount);
+        if (!isNaN(val) && val > 0) unstakePIDX(val);
+        else {
+          const logEl = document.getElementById('pidxVaultLastAction');
+          if (logEl) logEl.textContent = '⚠️ Invalid amount.';
+        }
+      }
+    }
+
+    // ---- Auto-compound every 10 seconds ----
+    setInterval(compoundRewards, 10000);
+
+    // ---- Buttons ----
+    document.addEventListener('DOMContentLoaded', function() {
+      const stakeBtn = document.getElementById('pidxStakeBtn');
+      if (stakeBtn) stakeBtn.addEventListener('click', promptStake);
+
+      const unstakeBtn = document.getElementById('pidxUnstakeBtn');
+      if (unstakeBtn) unstakeBtn.addEventListener('click', promptUnstake);
+
+      const claimBtn = document.getElementById('pidxClaimBtn');
+      if (claimBtn) claimBtn.addEventListener('click', claimRewards);
+    });
+
+    // ---- Init ----
+    updatePIDXVaultUI('🏦 PIDX Vault initialized. Ready for staking.');
+    console.log('🏦 PIDX Vault initialized.');
+  })();
+  </script>
