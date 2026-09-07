@@ -5987,6 +5987,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
@@ -6022,6 +6023,9 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbMesh", mesh);
         if (co > 0) { const e = document.getElementById("coherenceLevel"); if (e) e.textContent = co.toFixed(3); }
         lastGoodData = d;
+        // Update JSON viewer
+        const viewer = document.getElementById("phbJsonViewer");
+        if (viewer) viewer.textContent = JSON.stringify(d, null, 2);
       } catch (e) { console.warn("UI update error:", e); }
     }
     async function fetchPHB() {
@@ -6034,11 +6038,9 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         console.warn("PHB fetch error:", e);
         if (lastGoodData) updateUI(lastGoodData);
       }
-      // Always update the timestamp (no errors)
-      const ts = new Date().toLocaleTimeString();
-      set("phbLastUpdate", "🔄 " + ts);
+      set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
     }
-    // ---- Initial data: show zeros immediately ----
+    // Initial defaults
     set("phbCoherence", "0.000");
     set("phbStability", "0.000");
     set("phbVoxel", "0");
@@ -6050,7 +6052,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbState", "SYNCED");
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
-    // ---- Fetch now and every 10 seconds ----
     fetchPHB();
     setInterval(fetchPHB, 10000);
     document.addEventListener("DOMContentLoaded", function() {
@@ -6059,6 +6060,17 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     });
   })();
   </script>
+
+  <!-- PHB JSON Viewer -->
+  <div class="section">
+    <div class="section-title"><span class="accent">📄</span> PHB Raw JSON</div>
+    <div style="background:#0a0a12;border:1px solid #222;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#888;max-height:400px;overflow:auto;white-space:pre-wrap;word-break:break-all;">
+      <pre id="phbJsonViewer" style="margin:0;color:#aaa;">Loading...</pre>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#666;">
+      Source: <a href="https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json" target="_blank" style="color:#88aaff;">raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json</a>
+    </div>
+  </div>
 </body>
 </html>
         <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
