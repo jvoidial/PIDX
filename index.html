@@ -5979,6 +5979,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
@@ -6004,30 +6005,30 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         let veil="—", state="SYNCED", mesh="ACTIVE";
         if(d.pages && d.pages.length > 0){
           const p = d.pages[d.pages.length-1];
-          co = p.coherence || p.stability || 0;
-          st = p.stability || p.coherence || 0;
-          energy = p.energy || p.energy_signature || p.energy_level || 0;
-          voxel = p.voxel_layer || p.voxel || 0;
-          portal = p.portal_openness || p.portal || 0;
-          codex = p.codex_pages || p.codex || 0;
+          co = parseFloat(p.coherence) || parseFloat(p.stability) || 0;
+          st = parseFloat(p.stability) || parseFloat(p.coherence) || 0;
+          energy = parseFloat(p.energy) || parseFloat(p.energy_signature) || parseFloat(p.energy_level) || 0;
+          voxel = parseInt(p.voxel_layer) || parseInt(p.voxel) || 0;
+          portal = parseFloat(p.portal_openness) || parseFloat(p.portal) || 0;
+          codex = parseInt(p.codex_pages) || parseInt(p.codex) || 0;
         }
-        if(co===0 && d.coherence) co = d.coherence;
-        if(co===0 && d.stability) co = d.stability;
-        if(st===0 && d.stability) st = d.stability;
-        if(st===0 && d.coherence) st = d.coherence;
-        if(energy===0 && d.energy_signature) energy = d.energy_signature;
-        if(energy===0 && d.energy) energy = d.energy;
-        if(energy===0 && d.energy_level) energy = d.energy_level;
-        if(voxel===0 && d.voxel_layer) voxel = d.voxel_layer;
-        if(voxel===0 && d.voxel) voxel = d.voxel;
-        if(portal===0 && d.portal_openness) portal = d.portal_openness;
-        if(portal===0 && d.portal) portal = d.portal;
-        if(codex===0 && d.codex_pages) codex = d.codex_pages;
-        if(codex===0 && d.codex) codex = d.codex;
+        if(co===0 && d.coherence) co = parseFloat(d.coherence) || 0;
+        if(co===0 && d.stability) co = parseFloat(d.stability) || 0;
+        if(st===0 && d.stability) st = parseFloat(d.stability) || 0;
+        if(st===0 && d.coherence) st = parseFloat(d.coherence) || 0;
+        if(energy===0 && d.energy_signature) energy = parseFloat(d.energy_signature) || 0;
+        if(energy===0 && d.energy) energy = parseFloat(d.energy) || 0;
+        if(energy===0 && d.energy_level) energy = parseFloat(d.energy_level) || 0;
+        if(voxel===0 && d.voxel_layer) voxel = parseInt(d.voxel_layer) || 0;
+        if(voxel===0 && d.voxel) voxel = parseInt(d.voxel) || 0;
+        if(portal===0 && d.portal_openness) portal = parseFloat(d.portal_openness) || 0;
+        if(portal===0 && d.portal) portal = parseFloat(d.portal) || 0;
+        if(codex===0 && d.codex_pages) codex = parseInt(d.codex_pages) || 0;
+        if(codex===0 && d.codex) codex = parseInt(d.codex) || 0;
         veil = d.veil_state || d.veil || "—";
         state = d.network_state || d.state || "SYNCED";
         mesh = d.mesh_status || d.mesh || "ACTIVE";
-        peers = d.peer_count || d.peers || 0;
+        peers = parseInt(d.peer_count) || parseInt(d.peers) || 0;
         const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
         set("phbCoherence", co.toFixed(3));
         set("phbStability", st.toFixed(3));
