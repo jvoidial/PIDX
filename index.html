@@ -5962,17 +5962,23 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     </div>
   </div>
 
-  <!-- PHB Vortex Live Sync Script -->
+
+  <!-- PHB Vortex Live Sync Script (Dual‑Sync) -->
   <script>
-  (function() {
-    const DATA_URL = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json";
+  (function(){
+    // ---- TWO DATA SOURCES ----
+    const URL1 = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json";
+    const URL2 = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_2.json";
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
-    function updateUI(d) {
+    let combinedState = {};
+    function updateUI(d1, d2) {
       try {
+        const merged = { ...d1, ...d2 };
+        combinedState = merged;
         let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0, peers = 0;
         let veil = "—", state = "SYNCED", mesh = "ACTIVE";
-        if (d.pages && d.pages.length > 0) {
-          const p = d.pages[0];
+        if (d1 && d1.pages && d1.pages.length > 0) {
+          const p = d1.pages[0];
           co = parseFloat(p.coherence) || 0;
           st = parseFloat(p.stability) || 0;
           energy = parseFloat(p.energy?.magnitude) || 0;
@@ -5981,6 +5987,13 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           codex = p.sequence ? p.sequence.length : 0;
           veil = p.veil?.phase || "—";
         }
+        if (d2 && d2.coherence) co = parseFloat(d2.coherence) || co;
+        if (d2 && d2.stability) st = parseFloat(d2.stability) || st;
+        if (d2 && d2.energy) energy = parseFloat(d2.energy) || energy;
+        if (d2 && d2.voxel_layer) voxel = parseInt(d2.voxel_layer) || voxel;
+        if (d2 && d2.portal) portal = parseFloat(d2.portal) || portal;
+        if (d2 && d2.codex) codex = parseInt(d2.codex) || codex;
+        if (d2 && d2.veil) veil = d2.veil || veil;
         set("phbCoherence", co.toFixed(3));
         set("phbStability", st.toFixed(3));
         set("phbVoxel", voxel);
@@ -5992,29 +6005,38 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbState", state);
         set("phbMesh", mesh);
         if (co > 0) {
-          const e = document.getElementById("coherenceLevel");
-          if (e) e.textContent = co.toFixed(3);
+          const e1 = document.getElementById("coherenceLevel");
+          if (e1) e1.textContent = co.toFixed(3);
+          const e2 = document.getElementById("coherenceLevel2");
+          if (e2) e2.textContent = co.toFixed(3);
+        }
+        if (portal > 0) {
+          const e = document.getElementById("portalDisplay");
+          if (e) e.textContent = portal.toFixed(1);
         }
         const viewer = document.getElementById("phbJsonViewer");
-        if (viewer) viewer.textContent = JSON.stringify(d, null, 2);
+        if (viewer) viewer.textContent = JSON.stringify(merged, null, 2);
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString());
-        console.log("PHB updated:", {co, st, energy, voxel, veil, portal, codex});
+        console.log("Dual‑sync updated:", {co, st, energy, voxel, veil, portal, codex});
       } catch (e) {
         console.warn("UI update error:", e);
       }
     }
-    async function fetchPHB() {
+    async function fetchBoth() {
       try {
-        const r = await fetch(DATA_URL, { cache: "no-store" });
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        const d = await r.json();
-        updateUI(d);
+        const [r1, r2] = await Promise.all([
+          fetch(URL1, { cache: "no-store" }),
+          fetch(URL2, { cache: "no-store" }).catch(() => null)
+        ]);
+        const d1 = r1.ok ? await r1.json() : null;
+        const d2 = r2 && r2.ok ? await r2.json() : null;
+        if (d1) updateUI(d1, d2);
+        else set("phbLastUpdate", "⚠️ PHB fetch failed");
       } catch (e) {
-        console.warn("PHB fetch error:", e);
+        console.warn("Dual‑fetch error:", e);
         set("phbLastUpdate", "⚠️ " + e.message);
       }
     }
-    // Defaults
     set("phbCoherence", "0.000");
     set("phbStability", "0.000");
     set("phbVoxel", "0");
@@ -6026,12 +6048,11 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbState", "SYNCED");
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "⏳ loading…");
-    // Fetch on load and every 10 seconds
-    fetchPHB();
-    setInterval(fetchPHB, 10000);
+    fetchBoth();
+    setInterval(fetchBoth, 10000);
     document.addEventListener("DOMContentLoaded", function() {
       const btn = document.getElementById("phbRefreshBtn");
-      if (btn) btn.addEventListener("click", function() { fetchPHB(); });
+      if (btn) btn.addEventListener("click", function() { fetchBoth(); });
     });
   })();
   </script>
