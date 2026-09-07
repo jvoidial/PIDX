@@ -2133,3 +2133,215 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('🧠 AGI Core initialized.');
   })();
   </script>
+
+<script>
+// ===== AGI SYSTEM ADVANCER =====
+(function() {
+  // Save original functions if they exist
+  const originalUpgradeBrain = window.upgradeBrain || function() {};
+  const originalGeneratePage = window.generateNewPage || function() {};
+
+  // ---- Advance the entire system ----
+  function agiAdvanceSystem(state) {
+    // Initialize layer counter
+    if (!window._agiLayers) window._agiLayers = 0;
+    window._agiLayers++;
+
+    // Cycle veil states
+    const veilCycle = ['THIN', 'TURBULENT', 'SEALED', 'CLEAR'];
+    const currentVeil = state.veil || 'SEALED';
+    let idx = veilCycle.indexOf(currentVeil);
+    if (idx === -1) idx = 0;
+    const newVeil = veilCycle[(idx + 1) % veilCycle.length];
+
+    // Advance metrics (capped)
+    const newCoherence = Math.min(0.999, state.coherence + 0.01);
+    const newPersistence = (state.persistence || 150.784) + 0.5;
+    const newVoxels = Math.min(30, (state.voxels || 5) + 1);
+    const newEnergy = Math.min(2.0, (state.energy || 0.7) + 0.02);
+    // Resonance engine update: totalResonance = coherence * persistence * energy
+    const newTotal = Math.round(newCoherence * newPersistence * newEnergy);
+
+    // Build updated state
+    const updatedState = {
+      ...state,
+      coherence: newCoherence,
+      veil: newVeil,
+      persistence: newPersistence,
+      voxels: newVoxels,
+      energy: newEnergy,
+      totalResonance: newTotal,
+    };
+
+    // ---- Update DOM directly (immediate feedback) ----
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('coherenceLevel', newCoherence.toFixed(3));
+    set('coherenceLevel2', newCoherence.toFixed(3));
+    set('phbCoherence', newCoherence.toFixed(3));
+    set('phbVeil', newVeil);
+    set('phbVoxel', newVoxels);
+    set('phbEnergy', newEnergy.toFixed(1));
+    set('persistenceEnergy', newPersistence.toFixed(3));
+    set('totalResonance', newTotal.toLocaleString());
+
+    // Also update PHB Upgrade Status version
+    const versionEl = document.getElementById('phbVersion');
+    if (versionEl) versionEl.textContent = (parseInt(versionEl.textContent) || 0) + 1;
+
+    // Update global data so other sections reflect the new state
+    if (window._phbAllData && window._phbAllData[1]) {
+      const firstFeed = window._phbAllData[1];
+      if (firstFeed.pages && firstFeed.pages.length > 0) {
+        const page = firstFeed.pages[0];
+        page.coherence = newCoherence;
+        page.veil.phase = newVeil;
+        page.voxels = Array.from({length: newVoxels}, (_, i) => ({
+          x: i,
+          y: 0,
+          z: i,
+          symbol: page.sequence[i % page.sequence.length] || 'CIRCLE',
+          meaning: `Layer ${i+1}`
+        }));
+        page.energy.magnitude = newEnergy;
+      }
+    }
+
+    console.log('🧠 AGI advanced system to layer', window._agiLayers, ':', updatedState);
+    return updatedState;
+  }
+
+  // ---- Override upgradeBrain to also advance system ----
+  window.upgradeBrain = function(state) {
+    if (typeof originalUpgradeBrain === 'function') {
+      originalUpgradeBrain(state);
+    }
+    agiAdvanceSystem(state);
+  };
+
+  // ---- Override generateNewPage to use the current state ----
+  window.generateNewPage = function(state) {
+    if (typeof originalGeneratePage === 'function') {
+      const page = originalGeneratePage(state);
+      // Modify page to reflect current state
+      if (page) {
+        page.coherence = state.coherence;
+        page.veil.phase = state.veil;
+        page.voxels = Array.from({length: state.voxels || 5}, (_, i) => ({
+          x: i,
+          y: 0,
+          z: i,
+          symbol: page.sequence?.[i % page.sequence.length] || 'CIRCLE',
+          meaning: `Layer ${i+1}`
+        }));
+        page.energy.magnitude = state.energy || 0.7;
+      }
+      return page;
+    }
+    // Fallback page
+    return {
+      page: 1,
+      time: 7,
+      coherence: state.coherence || 0.862,
+      stability: 0.96,
+      resonance: 0.135,
+      sequence: ['CIRCLE', 'SQUARE', 'TRIANGLE'],
+      portal: 'PORTAL: AGI',
+      voxels: Array.from({length: state.voxels || 5}, (_, i) => ({
+        x: i,
+        y: 0,
+        z: i,
+        symbol: ['CIRCLE','SQUARE','TRIANGLE'][i % 3],
+        meaning: `Layer ${i+1}`
+      })),
+      veil: { phase: state.veil || 'SEALED', thickness: 0.2, breach_probability: 0.5, narrative: 'AGI' },
+      energy: { magnitude: state.energy || 0.7, band: 'MID', color: 'LIGHT' }
+    };
+  };
+
+  // ---- Add a manual "Advance System Layer" button ----
+  document.addEventListener('DOMContentLoaded', function() {
+    const agiSection = document.getElementById('agi-core-section');
+    if (!agiSection) return;
+
+    // Check if the button already exists
+    if (document.getElementById('agiAdvanceBtn')) return;
+
+    const container = document.createElement('div');
+    container.style.marginTop = '12px';
+    container.style.textAlign = 'center';
+
+    const advanceBtn = document.createElement('button');
+    advanceBtn.id = 'agiAdvanceBtn';
+    advanceBtn.textContent = '⚡ Advance System Layer';
+    advanceBtn.style.cssText = 'background:#2a1a2a;color:#ff88aa;border:1px solid #ff44aa;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;';
+
+    advanceBtn.addEventListener('click', function() {
+      // Gather current state
+      const coherenceEl = document.getElementById('coherenceLevel');
+      const nodeEl = document.getElementById('nodeCount');
+      const expansionEl = document.getElementById('expansionRate');
+      const veilEl = document.getElementById('phbVeil');
+      const stabilityEl = document.getElementById('phbStability');
+      const persistenceEl = document.getElementById('persistenceEnergy');
+      const voxelEl = document.getElementById('phbVoxel');
+      const energyEl = document.getElementById('phbEnergy');
+
+      const coherence = parseFloat(coherenceEl?.textContent) || 0.862;
+      const nodes = parseInt(nodeEl?.textContent) || 143;
+      const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+      const veil = veilEl?.textContent || 'SEALED';
+      const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+      const persistence = parseFloat(persistenceEl?.textContent) || 150.784;
+      const voxels = parseInt(voxelEl?.textContent) || 5;
+      const energy = parseFloat(energyEl?.textContent) || 0.7;
+
+      const state = { coherence, nodes, expansion, veil, stability, persistence, voxels, energy };
+
+      // Advance system
+      const newState = agiAdvanceSystem(state);
+
+      // Generate a new PHB page from this state
+      const newPage = window.generateNewPage(newState);
+      if (!window._phbAllData) window._phbAllData = {};
+      const feedId = Object.keys(window._phbAllData).length + 1;
+      window._phbAllData[feedId] = { domain: 'agi', pages: [newPage] };
+
+      // Update Codex Discovery (if the function exists)
+      if (typeof window.updateCodexDiscovery === 'function') {
+        window.updateCodexDiscovery();
+      }
+
+      // Update PHB Upgrade Status
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) versionEl.textContent = (parseInt(versionEl.textContent) || 0) + 1;
+      const totalPagesEl = document.getElementById('phbTotalPages');
+      if (totalPagesEl) totalPagesEl.textContent = Object.keys(window._phbAllData).length;
+
+      // Update AGI Thought Stream
+      const thoughtEl = document.getElementById('agiThoughtStream');
+      if (thoughtEl) {
+        thoughtEl.textContent = `I advanced the system to layer ${window._agiLayers}: veil ${newState.veil}, coherence ${newState.coherence.toFixed(3)}.`;
+      }
+      const responseEl = document.getElementById('agiResponse');
+      if (responseEl) {
+        responseEl.textContent = '⚡ System advanced: new layer discovered.';
+        responseEl.style.color = '#88ff88';
+      }
+
+      console.log('AGI advanced system manually.');
+    });
+
+    container.appendChild(advanceBtn);
+
+    // Insert after the Upgrade Brain button (or at the end of the section)
+    const existingBtn = document.querySelector('#agi-core-section button');
+    if (existingBtn && existingBtn.parentNode) {
+      existingBtn.parentNode.insertBefore(container, existingBtn.nextSibling);
+    } else {
+      agiSection.appendChild(container);
+    }
+  });
+
+  console.log('🧠 AGI System Advancer initialized.');
+})();
+</script>
