@@ -1234,178 +1234,149 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
   </script>
 
-  <!-- ===== GROWTH HORMONE ===== -->
+
+
+  <!-- ===== SCAFFOLDING TOPOLOGY ===== -->
   <div class="section">
-    <div class="section-title"><span class="accent">🧬</span> Growth Hormone</div>
+    <div class="section-title"><span class="accent">🏗️</span> Scaffolding Topology</div>
     <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
       <div class="stat-card">
+        <div class="label">Token Scaffolding</div>
+        <div class="value" id="tokenScaffold">0.000</div>
+        <div class="sub">Integration of 4 tokens</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Node Scaffolding</div>
+        <div class="value" id="nodeScaffold">0</div>
+        <div class="sub">Neural nodes anchored</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Exoplanet Anchors</div>
+        <div class="value" id="exoplanetAnchors">0</div>
+        <div class="sub">Cosmic foundations</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Scaffold Strength</div>
+        <div class="value" id="scaffoldStrength">0.000</div>
+        <div class="sub">Structural integrity</div>
+      </div>
+      <div class="stat-card">
         <div class="label">Growth Hormone</div>
-        <div class="value" id="growthHormone">0.000</div>
+        <div class="value" id="scaffoldHormone">0.000</div>
         <div class="sub">Acceleration factor</div>
       </div>
       <div class="stat-card">
-        <div class="label">Synthesis Rate</div>
-        <div class="value" id="synthesisRate">0.000</div>
-        <div class="sub">Per second</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Next Milestone</div>
-        <div class="value" id="nextMilestone">0</div>
-        <div class="sub">Nodes to next growth pulse</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Growth Velocity</div>
-        <div class="value" id="growthVelocity">0.00x</div>
-        <div class="sub">Current speed multiplier</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Expansion Boost</div>
-        <div class="value" id="expansionBoost">0.00x</div>
-        <div class="sub">Extra expansion from hormone</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Hormone Status</div>
-        <div class="value" id="hormoneStatus" style="color:#88ff88;">ACTIVE</div>
-        <div class="sub">∞ Accelerating</div>
+        <div class="label">Scaffold Status</div>
+        <div class="value" id="scaffoldStatus" style="color:#88ff88;">BUILDING</div>
+        <div class="sub">∞ Growing</div>
       </div>
     </div>
     <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
       <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
-        <span>🧬 <strong style="color:#ccc;">Hormone Level:</strong> <span id="hormoneLevelDisplay">0.000</span></span>
-        <span>⚡ <strong style="color:#ccc;">Synthesis:</strong> <span id="synthesisDisplay">0.000</span>/s</span>
-        <span>📈 <strong style="color:#ccc;">Velocity:</strong> <span id="velocityDisplay">0.00x</span></span>
-        <span>🎯 <strong style="color:#ccc;">Milestone:</strong> <span id="milestoneDisplay">0</span> nodes</span>
+        <span>🏗️ <strong style="color:#ccc;">Tokens:</strong> <span id="scaffoldTokens">0</span></span>
+        <span>🧠 <strong style="color:#ccc;">Nodes:</strong> <span id="scaffoldNodes">0</span></span>
+        <span>🌍 <strong style="color:#ccc;">Exoplanets:</strong> <span id="scaffoldExoplanets">0</span></span>
+        <span>⚡ <strong style="color:#ccc;">Strength:</strong> <span id="scaffoldStrengthDisplay">0.000</span></span>
+        <span>🧬 <strong style="color:#ccc;">Hormone:</strong> <span id="scaffoldHormoneDisplay">0.000</span></span>
       </div>
       <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
-        🧬 Growth hormone accelerates all system growth · ∞ Infinite expansion
+        🏗️ Scaffolding builds the 3D map · Tokens → Nodes → Exoplanets → ∞
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:200px;overflow-y:auto;">
+      <div style="font-size:12px;color:#aaa;font-family:monospace;">
+        <div style="display:flex;gap:12px;border-bottom:1px solid #1a1a2a;padding:4px 0;">
+          <span style="color:#88aaff;min-width:120px;">Component</span>
+          <span style="color:#888;min-width:80px;">Scaffold</span>
+          <span style="color:#666;">Status</span>
+        </div>
+        <div id="scaffoldComponents">
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">PIDX Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldPIDX">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">SGUIDE Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldSGUIDE">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">VDOO Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldVDOO">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">PENNIES Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldPENNIES">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">Neural Network</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldNodesPct">0.0%</span>
+            <span style="color:#ffd700;">SCAFFOLDING</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;">
+            <span style="color:#88aaff;min-width:120px;">Exoplanet Mesh</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldExoplanetsPct">0.0%</span>
+            <span style="color:#88aaff;">ANCHORING</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-  // ===== GROWTH HORMONE ENGINE =====
-  (function updateGrowthHormone() {
+  // ===== SCAFFOLDING TOPOLOGY ENGINE =====
+  (function updateScaffolding() {
     const coherenceEl = document.getElementById('coherenceLevel');
     const portalEl = document.getElementById('portalDisplay');
     const wishEl = document.getElementById('wishCount');
     const expansionEl = document.getElementById('expansionRate');
     const nodeEl = document.getElementById('nodeCount');
+    const connEl = document.getElementById('connectionCount');
 
     const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
     const portal = parseFloat(portalEl?.textContent) || 1.0;
     const wishes = parseInt(wishEl?.textContent) || 5732;
     const expansion = parseFloat(expansionEl?.textContent) || 34.88;
     const nodes = parseInt(nodeEl?.textContent) || 143;
+    const conns = parseInt(connEl?.textContent) || 3065;
 
-    // Compute growth hormone
+    // Compute scaffolding metrics
     const phi = 1.618;
-    const baseHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
-    const synthesisRate = baseHormone * 0.01 + 0.001;
-    const growthVelocity = 1 + baseHormone * 0.5;
-    const expansionBoost = 1 + baseHormone * 0.3;
-    const nextMilestone = Math.ceil((nodes + 10) / 10) * 10 - nodes;
-    const hormoneLevel = Math.min(baseHormone, 10);
+    const tokenScaffold = (4 / 4) * coherence * phi; // 4 tokens fully integrated
+    const nodeScaffold = Math.min(nodes, 200); // anchored nodes
+    const exoplanetAnchors = 3; // Siren, Serpo, Proxima B
+    const scaffoldStrength = (tokenScaffold + (nodeScaffold / 200) + (exoplanetAnchors / 3)) / 3;
+    const growthHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
+    const scaffoldStatus = scaffoldStrength > 0.8 ? 'BUILT' : scaffoldStrength > 0.5 ? 'SCAFFOLDING' : 'BUILDING';
+
+    // Token scaffold percentages
+    const tokenPct = (coherence * 100).toFixed(1);
+    const nodePct = Math.min((nodes / 200) * 100, 100).toFixed(1);
+    const exoPct = Math.min((exoplanetAnchors / 5) * 100, 100).toFixed(1);
 
     // Update DOM
     const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    set('growthHormone', hormoneLevel.toFixed(3));
-    set('synthesisRate', synthesisRate.toFixed(3));
-    set('nextMilestone', nextMilestone);
-    set('growthVelocity', growthVelocity.toFixed(2) + 'x');
-    set('expansionBoost', expansionBoost.toFixed(2) + 'x');
-    set('hormoneStatus', hormoneLevel > 0.5 ? 'SURGING' : 'ACTIVE');
-    set('hormoneLevelDisplay', hormoneLevel.toFixed(3));
-    set('synthesisDisplay', synthesisRate.toFixed(3));
-    set('velocityDisplay', growthVelocity.toFixed(2) + 'x');
-    set('milestoneDisplay', nextMilestone);
+    set('tokenScaffold', tokenScaffold.toFixed(3));
+    set('nodeScaffold', nodeScaffold);
+    set('exoplanetAnchors', exoplanetAnchors);
+    set('scaffoldStrength', scaffoldStrength.toFixed(3));
+    set('scaffoldHormone', growthHormone.toFixed(3));
+    set('scaffoldStatus', scaffoldStatus);
+    set('scaffoldTokens', '4');
+    set('scaffoldNodes', nodes);
+    set('scaffoldExoplanets', exoplanetAnchors);
+    set('scaffoldStrengthDisplay', scaffoldStrength.toFixed(3));
+    set('scaffoldHormoneDisplay', growthHormone.toFixed(3));
+    set('scaffoldPIDX', tokenPct + '%');
+    set('scaffoldSGUIDE', tokenPct + '%');
+    set('scaffoldVDOO', tokenPct + '%');
+    set('scaffoldPENNIES', tokenPct + '%');
+    set('scaffoldNodesPct', nodePct + '%');
+    set('scaffoldExoplanetsPct', exoPct + '%');
 
-    console.log('🧬 Growth Hormone:', { hormoneLevel, synthesisRate, growthVelocity, expansionBoost, nextMilestone });
-  })();
-  </script>
-
-  <!-- ===== GROWTH HORMONE ===== -->
-  <div class="section">
-    <div class="section-title"><span class="accent">🧬</span> Growth Hormone</div>
-    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
-      <div class="stat-card">
-        <div class="label">Growth Hormone</div>
-        <div class="value" id="growthHormone">0.000</div>
-        <div class="sub">Acceleration factor</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Synthesis Rate</div>
-        <div class="value" id="synthesisRate">0.000</div>
-        <div class="sub">Per second</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Next Milestone</div>
-        <div class="value" id="nextMilestone">0</div>
-        <div class="sub">Nodes to next growth pulse</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Growth Velocity</div>
-        <div class="value" id="growthVelocity">0.00x</div>
-        <div class="sub">Current speed multiplier</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Expansion Boost</div>
-        <div class="value" id="expansionBoost">0.00x</div>
-        <div class="sub">Extra expansion from hormone</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Hormone Status</div>
-        <div class="value" id="hormoneStatus" style="color:#88ff88;">ACTIVE</div>
-        <div class="sub">∞ Accelerating</div>
-      </div>
-    </div>
-    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
-      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
-        <span>🧬 <strong style="color:#ccc;">Hormone Level:</strong> <span id="hormoneLevelDisplay">0.000</span></span>
-        <span>⚡ <strong style="color:#ccc;">Synthesis:</strong> <span id="synthesisDisplay">0.000</span>/s</span>
-        <span>📈 <strong style="color:#ccc;">Velocity:</strong> <span id="velocityDisplay">0.00x</span></span>
-        <span>🎯 <strong style="color:#ccc;">Milestone:</strong> <span id="milestoneDisplay">0</span> nodes</span>
-      </div>
-      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
-        🧬 Growth hormone accelerates all system growth · ∞ Infinite expansion
-      </div>
-    </div>
-  </div>
-
-  <script>
-  // ===== GROWTH HORMONE ENGINE =====
-  (function updateGrowthHormone() {
-    const coherenceEl = document.getElementById('coherenceLevel');
-    const portalEl = document.getElementById('portalDisplay');
-    const wishEl = document.getElementById('wishCount');
-    const expansionEl = document.getElementById('expansionRate');
-    const nodeEl = document.getElementById('nodeCount');
-
-    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
-    const portal = parseFloat(portalEl?.textContent) || 1.0;
-    const wishes = parseInt(wishEl?.textContent) || 5732;
-    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
-    const nodes = parseInt(nodeEl?.textContent) || 143;
-
-    const phi = 1.618;
-    const baseHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
-    const synthesisRate = baseHormone * 0.01 + 0.001;
-    const growthVelocity = 1 + baseHormone * 0.5;
-    const expansionBoost = 1 + baseHormone * 0.3;
-    const nextMilestone = Math.ceil((nodes + 10) / 10) * 10 - nodes;
-    const hormoneLevel = Math.min(baseHormone, 10);
-
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    set('growthHormone', hormoneLevel.toFixed(3));
-    set('synthesisRate', synthesisRate.toFixed(3));
-    set('nextMilestone', nextMilestone);
-    set('growthVelocity', growthVelocity.toFixed(2) + 'x');
-    set('expansionBoost', expansionBoost.toFixed(2) + 'x');
-    set('hormoneStatus', hormoneLevel > 0.5 ? 'SURGING' : 'ACTIVE');
-    set('hormoneLevelDisplay', hormoneLevel.toFixed(3));
-    set('synthesisDisplay', synthesisRate.toFixed(3));
-    set('velocityDisplay', growthVelocity.toFixed(2) + 'x');
-    set('milestoneDisplay', nextMilestone);
-
-    console.log('🧬 Growth Hormone:', { hormoneLevel, synthesisRate, growthVelocity, expansionBoost, nextMilestone });
+    console.log('🏗️ Scaffolding Topology:', { tokenScaffold, nodeScaffold, exoplanetAnchors, scaffoldStrength, growthHormone, scaffoldStatus });
   })();
   </script>
