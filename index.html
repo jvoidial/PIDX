@@ -6089,6 +6089,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function() {
@@ -6224,7 +6225,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
 
-    // ---- Create container after DOM is ready ----
     function init() {
       const container = document.createElement('div');
       container.id = 'phbFeedsContainer';
@@ -6247,7 +6247,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       window.phbInterval = intervalId;
     }
 
-    // ---- Wait for DOM to be fully ready ----
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       setTimeout(init, 200);
     } else {
