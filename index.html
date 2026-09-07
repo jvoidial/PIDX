@@ -5985,11 +5985,13 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
     const DATA_URL = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json";
     let fetchCount = 0;
+    let lastGoodData = null;
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
     function updateUI(d) {
       try {
@@ -6006,7 +6008,8 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         }
         if (co === 0 && d.coherence) co = parseFloat(d.coherence) || 0;
         if (st === 0 && d.stability) st = parseFloat(d.stability) || 0;
-        veil = d.veil_state || d.veil?.phase || "—";
+        // Veil: try veil_state, then veil.phase, then veil, then fallback
+        veil = d.veil_state || d.veil?.phase || d.veil || "—";
         peers = d.peer_count || d.peers || 0;
         set("phbCoherence", co.toFixed(3));
         set("phbStability", st.toFixed(3));
@@ -6020,6 +6023,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbMesh", mesh);
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (fetch #" + fetchCount + ")");
         if (co > 0) { const e = document.getElementById("coherenceLevel"); if (e) e.textContent = co.toFixed(3); }
+        lastGoodData = d;
       } catch (e) {
         console.warn("UI update error:", e);
         set("phbLastUpdate", "⚠️ UI error: " + e.message);
@@ -6037,8 +6041,10 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       } catch (e) {
         console.warn("PHB fetch error:", e);
         set("phbLastUpdate", "⚠️ " + e.message);
+        if (lastGoodData) updateUI(lastGoodData);
       }
     }
+    // ---- Set initial defaults (no "Waiting" text) ----
     set("phbCoherence", "0.000");
     set("phbStability", "0.000");
     set("phbVoxel", "0");
@@ -6050,12 +6056,18 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbState", "SYNCED");
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "⏳ Loading...");
-    fetchPHB();
-    setInterval(fetchPHB, 10000);
-    document.addEventListener("DOMContentLoaded", function() {
+    // ---- Wait for DOM to be ready, then fetch ----
+    function init() {
+      fetchPHB();
+      setInterval(fetchPHB, 10000);
       const btn = document.getElementById("phbRefreshBtn");
       if (btn) btn.addEventListener("click", function() { fetchPHB(); });
-    });
+    }
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      init();
+    } else {
+      document.addEventListener("DOMContentLoaded", init);
+    }
   })();
   </script>
 </body>
