@@ -5978,11 +5978,12 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
     const CONFIG_URL = "https://jvoidial.github.io/spirit-guide-token/phb_url.json";
-    const FALLBACK_URL = "https://troubleshooting-hist-bob-despite.trycloudflare.com/gcs/network_state.json";
+    let lastGoodUrl = localStorage.getItem("phb_last_good_url") || "";
     let fetchCount = 0;
     async function fetchPHB(){
       fetchCount++;
@@ -5990,9 +5991,10 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         let dataUrl;
         try{
           const c=await fetch(CONFIG_URL,{cache:"no-store"});
-          if(c.ok){const cfg=await c.json();dataUrl=cfg.url;}
-        }catch(e){console.warn("Config fetch failed, using fallback");}
-        if(!dataUrl)dataUrl=FALLBACK_URL;
+          if(c.ok){const cfg=await c.json();dataUrl=cfg.url; localStorage.setItem("phb_last_good_url", dataUrl);}
+        }catch(e){console.warn("Config fetch failed");}
+        if(!dataUrl && lastGoodUrl) dataUrl = lastGoodUrl;
+        if(!dataUrl) throw new Error("No URL available");
         console.log("📡 Fetching PHB from:", dataUrl);
         const r=await fetch(dataUrl,{cache:"no-store"});
         if(!r.ok)throw new Error("HTTP "+r.status);
