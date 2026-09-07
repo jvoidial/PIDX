@@ -184,7 +184,8 @@ window.brainScene={scene,camera,renderer,controls,points,coreGlow,lines};
 </body>
 </html>
 <script>
-// ===== EMBEDDED PHB DATA (from chat) =====
+// ===== AUTO‑SYNC PHB DATA =====
+// Embedded data from chat (instant display + fallback)
 const EMBEDDED_PHB = {
   "timestamp": "Sat Apr 11 07:43:11 2026",
   "vitruvian_state": [51, 0.9323850703432185, 0.8937493222007789],
@@ -217,10 +218,9 @@ const EMBEDDED_PHB = {
       "color": "LIGHT"
     }
   }],
-  "_source": "embedded from chat"
+  "_source": "embedded"
 };
 
-// ---- Also embed the second JSON data (network_state_2.json) ----
 const EMBEDDED_PHB_2 = {
   "timestamp": "Mon Sep 07 05:47:56 2026",
   "domain": "tokenomics",
@@ -254,103 +254,148 @@ const EMBEDDED_PHB_2 = {
   "coherence": 0.839253,
   "stability": 0.961964,
   "energy": 0.763581,
-  "veil": "TURBULENT"
+  "veil": "TURBULENT",
+  "_source": "embedded"
 };
 
-// ---- Dashboard update functions ----
+// ---- UI update function ----
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-function updateUIFromEmbedded() {
-  const d = EMBEDDED_PHB;
-  const p = d.pages[0];
-  const co = p.coherence;
-  const st = p.stability;
-  const energy = p.energy.magnitude;
-  const voxel = p.voxels.length;
-  const portal = p.portal ? 1.0 : 0;
-  const codex = p.sequence.length;
-  const veil = p.veil.phase;
+function updatePHBUI(data, source = 'embedded') {
+  try {
+    const p = data.pages ? data.pages[0] : data;
+    const co = parseFloat(p.coherence) || 0;
+    const st = parseFloat(p.stability) || 0;
+    const energy = parseFloat(p.energy?.magnitude || p.energy) || 0;
+    const voxel = p.voxels ? p.voxels.length : 0;
+    const portal = p.portal ? 1.0 : 0;
+    const codex = p.sequence ? p.sequence.length : 0;
+    const veil = p.veil?.phase || '—';
 
-  set('phbCoherence', co.toFixed(3));
-  set('phbStability', st.toFixed(3));
-  set('phbVoxel', voxel);
-  set('phbVeil', veil);
-  set('phbPortal', portal.toFixed(1));
-  set('phbEnergy', energy.toFixed(1));
-  set('phbCodex', codex);
+    set('phbCoherence', co.toFixed(3));
+    set('phbStability', st.toFixed(3));
+    set('phbVoxel', voxel);
+    set('phbVeil', veil);
+    set('phbPortal', portal.toFixed(1));
+    set('phbEnergy', energy.toFixed(1));
+    set('phbCodex', codex);
 
-  // Update main dashboard coherence
-  const e1 = document.getElementById('coherenceLevel');
-  if (e1) e1.textContent = co.toFixed(3);
-  const e2 = document.getElementById('coherenceLevel2');
-  if (e2) e2.textContent = co.toFixed(3);
+    // Update main dashboard
+    const e1 = document.getElementById('coherenceLevel');
+    if (e1) e1.textContent = co.toFixed(3);
+    const e2 = document.getElementById('coherenceLevel2');
+    if (e2) e2.textContent = co.toFixed(3);
+    const ePortal = document.getElementById('portalDisplay');
+    if (ePortal) ePortal.textContent = portal.toFixed(1);
 
-  // Update portal display
-  const ePortal = document.getElementById('portalDisplay');
-  if (ePortal) ePortal.textContent = portal.toFixed(1);
+    // Update JSON viewer (show all feeds if available)
+    // We'll show the full data object if we have multiple feeds
+    const viewer = document.getElementById('phbJsonViewer');
+    if (viewer) {
+      if (window._phbAllData) {
+        viewer.textContent = JSON.stringify(window._phbAllData, null, 2);
+      } else {
+        viewer.textContent = JSON.stringify(data, null, 2);
+      }
+    }
 
-  // Show full JSON in viewer
-  const viewer = document.getElementById('phbJsonViewer');
-  if (viewer) {
-    // Show both embedded feeds merged
-    const merged = {
-      "1": EMBEDDED_PHB,
-      "2": EMBEDDED_PHB_2
-    };
-    viewer.textContent = JSON.stringify(merged, null, 2);
+    set('phbLastUpdate', `✅ ${source} data · ${new Date().toLocaleTimeString()}`);
+  } catch (e) {
+    console.warn('PHB UI update error:', e);
   }
-
-  set('phbLastUpdate', '✅ Embedded data loaded');
 }
 
-// ---- Run when DOM is ready ----
-function initPHB() {
-  updateUIFromEmbedded();
+// ---- Fetch live data from GitHub ----
+async function fetchLiveFromGitHub() {
+  const BASE_URL = 'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_';
+  const MAX_FEEDS = 10;
+  const allData = {};
 
-  // Also try to fetch live data from GitHub, but use embedded as fallback
-  async function fetchLive() {
-    const BASE_URL = 'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_';
-    for (let i = 1; i <= 4; i++) {
-      try {
-        const r = await fetch(BASE_URL + i + '.json', { cache: 'no-store' });
-        if (r.ok) {
-          const data = await r.json();
-          // Update viewer with live data if needed
-          const viewer = document.getElementById('phbJsonViewer');
-          if (viewer) {
-            // Merge live data with embedded
-            const allData = {
-              "1": EMBEDDED_PHB,
-              "2": EMBEDDED_PHB_2,
-              "live": data
-            };
-            viewer.textContent = JSON.stringify(allData, null, 2);
-            set('phbLastUpdate', '✅ Updated with live data');
+  for (let i = 1; i <= MAX_FEEDS; i++) {
+    try {
+      const r = await fetch(BASE_URL + i + '.json', { cache: 'no-store' });
+      if (r.ok) {
+        const data = await r.json();
+        allData[i] = data;
+        // Update PHB UI with the first feed (or any)
+        if (i === 1) {
+          // Also create feed cards if needed
+          const container = document.getElementById('phbFeedsContainer');
+          if (container) {
+            // remove existing cards if any
+            container.innerHTML = '';
+            // create cards for all feeds
+            for (const [idx, d] of Object.entries(allData)) {
+              // create card
+              const card = document.createElement('div');
+              card.className = 'stat-grid';
+              card.style.marginTop = '10px';
+              const domain = d.domain || `Feed ${idx}`;
+              let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0;
+              let veil = '—', narrative = '';
+              if (d.pages && d.pages.length > 0) {
+                const p = d.pages[0];
+                co = parseFloat(p.coherence) || 0;
+                st = parseFloat(p.stability) || 0;
+                energy = parseFloat(p.energy?.magnitude) || 0;
+                voxel = p.voxels ? p.voxels.length : 0;
+                portal = p.portal ? 1.0 : 0;
+                codex = p.sequence ? p.sequence.length : 0;
+                veil = p.veil?.phase || '—';
+                narrative = p.veil?.narrative || '';
+              }
+              if (d.coherence !== undefined) co = parseFloat(d.coherence) || co;
+              if (d.stability !== undefined) st = parseFloat(d.stability) || st;
+              if (d.energy !== undefined) energy = parseFloat(d.energy) || energy;
+              if (d.veil !== undefined) veil = d.veil || veil;
+
+              let html = `<div class="section-title" style="margin-top:12px;">📡 ${domain}</div>`;
+              html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">`;
+              html += `<div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
+              html += `<div class="stat-card"><div class="label">Stability</div><div class="value">${st.toFixed(3)}</div></div>`;
+              html += `<div class="stat-card"><div class="label">Energy</div><div class="value">${energy.toFixed(1)}</div></div>`;
+              html += `<div class="stat-card"><div class="label">Voxel Layer</div><div class="value">${voxel}</div></div>`;
+              html += `<div class="stat-card"><div class="label">Veil</div><div class="value">${veil}</div></div>`;
+              html += `<div class="stat-card"><div class="label">Portal</div><div class="value">${portal.toFixed(1)}</div></div>`;
+              html += `<div class="stat-card"><div class="label">Codex Pages</div><div class="value">${codex}</div></div>`;
+              html += `</div>`;
+              if (p && p.sequence) html += `<div style="margin-top:8px;font-size:12px;color:#aaa;"><strong>Sequence:</strong> ${p.sequence.join(' → ')}</div>`;
+              if (narrative) html += `<div style="margin-top:4px;font-size:12px;color:#888;font-style:italic;">“${narrative}”</div>`;
+              card.innerHTML = html;
+              container.appendChild(card);
+            }
           }
         }
-      } catch(e) { /* ignore */ }
+      }
+    } catch (e) {
+      // ignore
     }
   }
 
-  // Fetch once after 5 seconds
-  setTimeout(fetchLive, 5000);
-  // Then every 30 seconds
-  setInterval(fetchLive, 30000);
+  // If we have any data, update UI with the first feed
+  if (allData[1]) {
+    window._phbAllData = allData;
+    updatePHBUI(allData[1], 'GitHub');
+  } else {
+    // Fallback to embedded
+    window._phbAllData = { '1': EMBEDDED_PHB, '2': EMBEDDED_PHB_2 };
+    updatePHBUI(EMBEDDED_PHB, 'embedded (fallback)');
+  }
+}
 
-  // Refresh button
+// ---- Initial display with embedded data ----
+updatePHBUI(EMBEDDED_PHB, 'embedded (instant)');
+// Then fetch live after 2 seconds
+setTimeout(fetchLiveFromGitHub, 2000);
+// Auto-sync every 10 seconds
+setInterval(fetchLiveFromGitHub, 10000);
+
+// ---- Refresh button ----
+document.addEventListener('DOMContentLoaded', function() {
   const btn = document.getElementById('phbRefreshBtn');
   if (btn) btn.addEventListener('click', function() {
     set('phbLastUpdate', '⏳ Refreshing…');
-    updateUIFromEmbedded();
-    fetchLive();
+    fetchLiveFromGitHub();
   });
-}
-
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  setTimeout(initPHB, 200);
-} else {
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initPHB, 200);
-  });
-}
+});
 </script>
