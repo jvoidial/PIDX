@@ -3798,3 +3798,53 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   console.log('⚡ PHB Codex patch installed.');
 })();
 </script>
+<script>
+(function() {
+  function updateCodex() {
+    fetch('agi_phb_divine_complete.json')
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        let total = 0;
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key)) {
+            const entry = data[key];
+            if (Array.isArray(entry.pages)) {
+              total += entry.pages.length;
+            }
+          }
+        }
+        if (total > 0) {
+          const el = document.getElementById('phbCodex');
+          if (el) {
+            el.textContent = total;
+            console.log('✅ PHB Codex updated to ' + total);
+          }
+        }
+      })
+      .catch(() => {
+        const domEl = document.getElementById('totalCodexPages');
+        if (domEl) {
+          const val = parseInt(domEl.textContent, 10);
+          if (!isNaN(val)) {
+            const el = document.getElementById('phbCodex');
+            if (el) el.textContent = val;
+            console.log('✅ PHB Codex updated from DOM to ' + val);
+          }
+        }
+      });
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(updateCodex, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(updateCodex, 500);
+    });
+  }
+  setInterval(updateCodex, 30000);
+  console.log('⚡ PHB Codex patch installed.');
+})();
+</script>
