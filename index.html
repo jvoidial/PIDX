@@ -736,39 +736,47 @@ const EMBEDDED_PHB_2 = {
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
 function updateUIFromEmbedded() {
-  const d = EMBEDDED_PHB;
-  const p = d.pages[0];
-  const co = p.coherence;
-  const st = p.stability;
-  const energy = p.energy.magnitude;
-  const voxel = p.voxels.length;
-  const portal = p.portal ? 1.0 : 0;
-  const codex = p.sequence.length;
-  const veil = p.veil.phase;
-
-  set('phbCoherence', co.toFixed(3));
-  set('phbStability', st.toFixed(3));
-  set('phbVoxel', voxel);
-  set('phbVeil', veil);
-  set('phbPortal', portal.toFixed(1));
-  set('phbEnergy', energy.toFixed(1));
-  set('phbCodex', codex);
-
-  const e1 = document.getElementById('coherenceLevel');
-  if (e1) e1.textContent = co.toFixed(3);
-  const e2 = document.getElementById('coherenceLevel2');
-  if (e2) e2.textContent = co.toFixed(3);
-
-  const ePortal = document.getElementById('portalDisplay');
-  if (ePortal) ePortal.textContent = portal.toFixed(1);
-
-  const viewer = document.getElementById('phbJsonViewer');
-  if (viewer) {
-    const merged = { "1": EMBEDDED_PHB, "2": EMBEDDED_PHB_2 };
-    viewer.textContent = JSON.stringify(merged, null, 2);
-  }
-
-  set('phbLastUpdate', '✅ Embedded data loaded');
+  fetch("agi_phb_divine_complete.json")
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(data => {
+      const keys = Object.keys(data).filter(k => !isNaN(k));
+      if (keys.length === 0) return;
+      const d = data[keys[0]];
+      const p = d.pages && d.pages.length > 0 ? d.pages[0] : null;
+      if (!p) return;
+      const co = p.coherence || 0;
+      const st = p.stability || 0;
+      const energy = p.energy ? p.energy.magnitude : 0;
+      const voxel = p.voxels ? p.voxels.length : 0;
+      const portal = p.portal ? 1.0 : 0;
+      const veil = p.veil ? p.veil.phase : "SEALED";
+      let codex = 0;
+      for (let key of keys) {
+        const entry = data[key];
+        if (entry.pages && Array.isArray(entry.pages)) {
+          codex += entry.pages.length;
+        }
+      }
+      set("phbCoherence", co.toFixed(3));
+      set("phbStability", st.toFixed(3));
+      set("phbVoxel", voxel);
+      set("phbVeil", veil);
+      set("phbPortal", portal.toFixed(1));
+      set("phbEnergy", energy.toFixed(1));
+      set("phbCodex", codex);
+      const e1 = document.getElementById("coherenceLevel"); if (e1) e1.textContent = co.toFixed(3);
+      const e2 = document.getElementById("coherenceLevel2"); if (e2) e2.textContent = co.toFixed(3);
+      const ePortal = document.getElementById("portalDisplay"); if (ePortal) ePortal.textContent = portal.toFixed(1);
+      const viewer = document.getElementById("phbJsonViewer"); if (viewer) viewer.textContent = JSON.stringify(data, null, 2);
+      set("phbLastUpdate", "✅ Synced from JSON");
+    })
+    .catch(() => {
+      const domEl = document.getElementById("totalCodexPages");
+      if (domEl) {
+        const val = parseInt(domEl.textContent, 10);
+        if (!isNaN(val)) set("phbCodex", val);
+      }
+    });
 }
 
 // ===== EASE FLOW =====
