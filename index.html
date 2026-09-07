@@ -1233,3 +1233,92 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   })();
   </script>
+
+  <!-- ===== GROWTH HORMONE ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🧬</span> Growth Hormone</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Growth Hormone</div>
+        <div class="value" id="growthHormone">0.000</div>
+        <div class="sub">Acceleration factor</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Synthesis Rate</div>
+        <div class="value" id="synthesisRate">0.000</div>
+        <div class="sub">Per second</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Next Milestone</div>
+        <div class="value" id="nextMilestone">0</div>
+        <div class="sub">Nodes to next growth pulse</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Growth Velocity</div>
+        <div class="value" id="growthVelocity">0.00x</div>
+        <div class="sub">Current speed multiplier</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Expansion Boost</div>
+        <div class="value" id="expansionBoost">0.00x</div>
+        <div class="sub">Extra expansion from hormone</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Hormone Status</div>
+        <div class="value" id="hormoneStatus" style="color:#88ff88;">ACTIVE</div>
+        <div class="sub">∞ Accelerating</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🧬 <strong style="color:#ccc;">Hormone Level:</strong> <span id="hormoneLevelDisplay">0.000</span></span>
+        <span>⚡ <strong style="color:#ccc;">Synthesis:</strong> <span id="synthesisDisplay">0.000</span>/s</span>
+        <span>📈 <strong style="color:#ccc;">Velocity:</strong> <span id="velocityDisplay">0.00x</span></span>
+        <span>🎯 <strong style="color:#ccc;">Milestone:</strong> <span id="milestoneDisplay">0</span> nodes</span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
+        🧬 Growth hormone accelerates all system growth · ∞ Infinite expansion
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ===== GROWTH HORMONE ENGINE =====
+  (function updateGrowthHormone() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const portalEl = document.getElementById('portalDisplay');
+    const wishEl = document.getElementById('wishCount');
+    const expansionEl = document.getElementById('expansionRate');
+    const nodeEl = document.getElementById('nodeCount');
+
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const portal = parseFloat(portalEl?.textContent) || 1.0;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nodes = parseInt(nodeEl?.textContent) || 143;
+
+    // Compute growth hormone
+    const phi = 1.618;
+    const baseHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
+    const synthesisRate = baseHormone * 0.01 + 0.001;
+    const growthVelocity = 1 + baseHormone * 0.5;
+    const expansionBoost = 1 + baseHormone * 0.3;
+    const nextMilestone = Math.ceil((nodes + 10) / 10) * 10 - nodes;
+    const hormoneLevel = Math.min(baseHormone, 10);
+
+    // Update DOM
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('growthHormone', hormoneLevel.toFixed(3));
+    set('synthesisRate', synthesisRate.toFixed(3));
+    set('nextMilestone', nextMilestone);
+    set('growthVelocity', growthVelocity.toFixed(2) + 'x');
+    set('expansionBoost', expansionBoost.toFixed(2) + 'x');
+    set('hormoneStatus', hormoneLevel > 0.5 ? 'SURGING' : 'ACTIVE');
+    set('hormoneLevelDisplay', hormoneLevel.toFixed(3));
+    set('synthesisDisplay', synthesisRate.toFixed(3));
+    set('velocityDisplay', growthVelocity.toFixed(2) + 'x');
+    set('milestoneDisplay', nextMilestone);
+
+    console.log('🧬 Growth Hormone:', { hormoneLevel, synthesisRate, growthVelocity, expansionBoost, nextMilestone });
+  })();
+  </script>
