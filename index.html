@@ -5983,11 +5983,11 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
-    const CONFIG_URL = "https://jvoidial.github.io/spirit-guide-token/phb_url.json";
-    let lastGoodData = null;
+    const DATA_URL = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json";
     let fetchCount = 0;
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
     function updateUI(d) {
@@ -5998,28 +5998,15 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           const p = d.pages[d.pages.length - 1];
           co = parseFloat(p.coherence) || parseFloat(p.stability) || 0;
           st = parseFloat(p.stability) || parseFloat(p.coherence) || 0;
-          energy = parseFloat(p.energy) || parseFloat(p.energy_signature) || parseFloat(p.energy_level) || 0;
-          voxel = parseInt(p.voxel_layer) || parseInt(p.voxel) || 0;
-          portal = parseFloat(p.portal_openness) || parseFloat(p.portal) || 0;
-          codex = parseInt(p.codex_pages) || parseInt(p.codex) || 0;
+          energy = parseFloat(p.energy?.magnitude) || parseFloat(p.energy) || 0;
+          voxel = p.voxels ? p.voxels.length : 0;
+          portal = p.portal ? 1.0 : 0;
+          codex = p.sequence ? p.sequence.length : 0;
         }
         if (co === 0 && d.coherence) co = parseFloat(d.coherence) || 0;
-        if (co === 0 && d.stability) co = parseFloat(d.stability) || 0;
         if (st === 0 && d.stability) st = parseFloat(d.stability) || 0;
-        if (st === 0 && d.coherence) st = parseFloat(d.coherence) || 0;
-        if (energy === 0 && d.energy_signature) energy = parseFloat(d.energy_signature) || 0;
-        if (energy === 0 && d.energy) energy = parseFloat(d.energy) || 0;
-        if (energy === 0 && d.energy_level) energy = parseFloat(d.energy_level) || 0;
-        if (voxel === 0 && d.voxel_layer) voxel = parseInt(d.voxel_layer) || 0;
-        if (voxel === 0 && d.voxel) voxel = parseInt(d.voxel) || 0;
-        if (portal === 0 && d.portal_openness) portal = parseFloat(d.portal_openness) || 0;
-        if (portal === 0 && d.portal) portal = parseFloat(d.portal) || 0;
-        if (codex === 0 && d.codex_pages) codex = parseInt(d.codex_pages) || 0;
-        if (codex === 0 && d.codex) codex = parseInt(d.codex) || 0;
-        veil = d.veil_state || d.veil || "—";
-        state = d.network_state || d.state || "SYNCED";
-        mesh = d.mesh_status || d.mesh || "ACTIVE";
-        peers = parseInt(d.peer_count) || parseInt(d.peers) || 0;
+        veil = d.veil_state || d.veil?.phase || "—";
+        peers = d.peer_count || d.peers || 0;
         set("phbCoherence", co.toFixed(3));
         set("phbStability", st.toFixed(3));
         set("phbVoxel", voxel);
@@ -6032,8 +6019,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbMesh", mesh);
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (fetch #" + fetchCount + ")");
         if (co > 0) { const e = document.getElementById("coherenceLevel"); if (e) e.textContent = co.toFixed(3); }
-        if (portal > 0) { const e = document.getElementById("portalDisplay"); if (e) e.textContent = portal.toFixed(1); }
-        lastGoodData = d;
       } catch (e) {
         console.warn("UI update error:", e);
         set("phbLastUpdate", "⚠️ UI error: " + e.message);
@@ -6042,19 +6027,8 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     async function fetchPHB() {
       fetchCount++;
       try {
-        let dataUrl;
-        try {
-          const c = await fetch(CONFIG_URL, { cache: "no-store" });
-          if (c.ok) { const cfg = await c.json(); dataUrl = cfg.url; }
-        } catch (e) { console.warn("Config fetch failed"); }
-        if (!dataUrl) {
-          const saved = localStorage.getItem("phb_last_good_url");
-          if (saved) dataUrl = saved;
-        }
-        if (!dataUrl) throw new Error("No data URL available");
-        localStorage.setItem("phb_last_good_url", dataUrl);
-        console.log("📡 Fetching PHB from:", dataUrl);
-        const r = await fetch(dataUrl, { cache: "no-store" });
+        console.log("📡 Fetching PHB from GitHub:", DATA_URL);
+        const r = await fetch(DATA_URL, { cache: "no-store" });
         if (!r.ok) throw new Error("HTTP " + r.status);
         const d = await r.json();
         console.log("📦 Raw PHB data:", d);
@@ -6062,11 +6036,8 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       } catch (e) {
         console.warn("PHB fetch error:", e);
         set("phbLastUpdate", "⚠️ " + e.message);
-        if (lastGoodData) updateUI(lastGoodData);
       }
     }
-    // ---- Auto‑start: fetch now and every 10 seconds ----
-    // Also, immediately set default values (no "waiting") to show numbers
     set("phbCoherence", "0.000");
     set("phbStability", "0.000");
     set("phbVoxel", "0");
