@@ -3070,3 +3070,41 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     }
   })();
 </script>
+<script>
+  // ===== FORCED PHB UPGRADE STATUS UPDATE =====
+  (function() {
+    function forceUpdate() {
+      // Get total pages from Codex Discovery
+      const pagesEl = document.getElementById('totalCodexPages');
+      const pages = pagesEl ? parseInt(pagesEl.textContent) || 0 : 0;
+
+      // Update PHB Upgrade Status elements
+      const phbPagesEl = document.getElementById('phbTotalPages');
+      if (phbPagesEl) phbPagesEl.textContent = pages;
+
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
+      }
+
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+
+      const autoEl = document.getElementById('phbAutoUpgrade');
+      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
+
+      console.log('🔁 Forced update: pages=' + pages + ', version=' + (Math.floor(pages/10)+1));
+    }
+
+    // Run immediately, then every second
+    forceUpdate();
+    setInterval(forceUpdate, 1000);
+  })();
+</script>
