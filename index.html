@@ -4026,3 +4026,149 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 
 })();
 </script>
+<script>
+(function() {
+  'use strict';
+
+  function countPagesFromJSON(data) {
+    let total = 0;
+    if (Array.isArray(data)) {
+      total = data.length;
+    } else if (typeof data === 'object' && data !== null) {
+      for (let key in data) {
+        if (data.hasOwnProperty(key) && !isNaN(key)) {
+          const entry = data[key];
+          if (Array.isArray(entry.pages)) {
+            total += entry.pages.length;
+          } else if (Array.isArray(entry)) {
+            total += entry.length;
+          } else {
+            total++;
+          }
+        }
+      }
+    }
+    return total;
+  }
+
+  function updatePHB(pages) {
+    if (pages === undefined || pages === null) return;
+    console.log('✅ PHB sync: total pages = ' + pages);
+
+    const phbPages = document.getElementById('phbTotalPages');
+    if (phbPages) phbPages.textContent = pages;
+
+    const versionEl = document.getElementById('phbVersion');
+    if (versionEl) {
+      const version = Math.floor(pages / 10) + 1;
+      versionEl.textContent = version;
+    }
+
+    const statusEl = document.getElementById('phbUpgradeStatus');
+    if (statusEl) {
+      statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+      statusEl.style.color = '#88ff88';
+    }
+
+    const autoEl = document.getElementById('phbAutoUpgrade');
+    if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
+
+    const lastEl = document.getElementById('phbLastUpgrade');
+    if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+
+    const codexEl = document.querySelector('#phbCodexPages, .phb-codex-pages, [id*="codexPages"]');
+    if (codexEl) codexEl.textContent = pages;
+  }
+
+  function fetchAndSync() {
+    const jsonFiles = ['agi_phb_divine_complete.json', 'agi_phb_divine.json', 'phb_data.json'];
+    let tried = 0;
+
+    function tryFetch(index) {
+      if (index >= jsonFiles.length) {
+        console.warn('⚠️ All JSON files failed. Falling back to DOM totalCodexPages.');
+        const domEl = document.getElementById('totalCodexPages');
+        if (domEl) {
+          const val = parseInt(domEl.textContent, 10);
+          if (!isNaN(val)) updatePHB(val);
+        }
+        return;
+      }
+      const url = jsonFiles[index];
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(data => {
+          const pages = countPagesFromJSON(data);
+          if (pages > 0) {
+            updatePHB(pages);
+            console.log('✅ Synced from ' + url);
+            return;
+          } else {
+            console.warn('⚠️ No pages found in ' + url + ', trying next.');
+            tryFetch(index + 1);
+          }
+        })
+        .catch(err => {
+          console.warn('⚠️ Failed to fetch ' + url + ': ' + err.message);
+          tryFetch(index + 1);
+        });
+    }
+    tryFetch(0);
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(fetchAndSync, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(fetchAndSync, 500);
+    });
+  }
+  setInterval(fetchAndSync, 30000);
+
+  console.log('⚡ PHB sync started (fetching JSON).');
+
+  // ===== AUTO-LOCKDOWN =====
+  function checkSecurity() {
+    let shouldLockdown = false;
+
+    const scoreEl = document.querySelector('#securityScore, .security-score, [id*="securityScore"]');
+    if (scoreEl) {
+      const score = parseInt(scoreEl.textContent.replace(/[^0-9]/g, ''), 10);
+      if (!isNaN(score) && score < 100) {
+        console.warn('🔒 Security score is ' + score + ' – triggering lockdown.');
+        shouldLockdown = true;
+      }
+    }
+
+    const veilEls = document.querySelectorAll('[id*="veil"], .veil-status, .veil-phase');
+    for (let el of veilEls) {
+      if (el.textContent.includes('TURBULENT')) {
+        console.warn('🔒 Turbulent veil detected – triggering lockdown.');
+        shouldLockdown = true;
+        break;
+      }
+    }
+
+    if (shouldLockdown) {
+      const btn = document.querySelector('#activateLockdown, [onclick*="lockdown"], .lockdown-btn');
+      if (btn) {
+        btn.click();
+        console.log('🔒 Lockdown activated automatically.');
+      } else if (typeof window.activateLockdown === 'function') {
+        window.activateLockdown();
+        console.log('🔒 Lockdown activated via global function.');
+      } else {
+        console.warn('⚠️ Could not find lockdown button or function.');
+      }
+    }
+  }
+
+  setInterval(checkSecurity, 15000);
+  setTimeout(checkSecurity, 3000);
+  console.log('⚡ Auto‑lockdown monitoring started.');
+
+})();
+</script>
