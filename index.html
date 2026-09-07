@@ -5977,6 +5977,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
   </div>
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function(){
@@ -5992,7 +5993,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           if(c.ok){const cfg=await c.json();dataUrl=cfg.url;}
         }catch(e){console.warn("Config fetch failed, using fallback");}
         if(!dataUrl)dataUrl=FALLBACK_URL;
-        console.log("📡 Fetching PHB data from:", dataUrl);
+        console.log("📡 Fetching PHB from:", dataUrl);
         const r=await fetch(dataUrl,{cache:"no-store"});
         if(!r.ok)throw new Error("HTTP "+r.status);
         const d=await r.json();
@@ -6001,17 +6002,20 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         let veil="—", state="SYNCED", mesh="ACTIVE";
         if(d.pages && d.pages.length > 0){
           const p = d.pages[d.pages.length-1];
-          co = p.coherence || 0;
-          st = p.stability || 0;
-          energy = p.energy || p.energy_signature || 0;
+          co = p.coherence || p.stability || 0;
+          st = p.stability || p.coherence || 0;
+          energy = p.energy || p.energy_signature || p.energy_level || 0;
           voxel = p.voxel_layer || p.voxel || 0;
           portal = p.portal_openness || p.portal || 0;
           codex = p.codex_pages || p.codex || 0;
         }
         if(co===0 && d.coherence) co = d.coherence;
+        if(co===0 && d.stability) co = d.stability;
         if(st===0 && d.stability) st = d.stability;
+        if(st===0 && d.coherence) st = d.coherence;
         if(energy===0 && d.energy_signature) energy = d.energy_signature;
         if(energy===0 && d.energy) energy = d.energy;
+        if(energy===0 && d.energy_level) energy = d.energy_level;
         if(voxel===0 && d.voxel_layer) voxel = d.voxel_layer;
         if(voxel===0 && d.voxel) voxel = d.voxel;
         if(portal===0 && d.portal_openness) portal = d.portal_openness;
@@ -6028,7 +6032,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbVoxel", voxel);
         set("phbVeil", veil);
         set("phbPortal", portal.toFixed(1));
-        set("phbEnergy", energy);
+        set("phbEnergy", energy.toFixed(1));
         set("phbCodex", codex);
         set("phbPeers", peers);
         set("phbState", state);
