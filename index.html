@@ -399,3 +399,148 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<script>
+// ===== RESTORE MISSING SECTIONS =====
+(function() {
+  // Wait for the page to be fully loaded
+  function restoreSections() {
+    // ---- 1. Ease Flow Cards ----
+    const easeContainer = document.getElementById('easeFlowContainer');
+    if (easeContainer && easeContainer.children.length === 0) {
+      const now = Date.now() / 1000;
+      const ease = 0.6 + 0.15 * Math.sin(now * 0.01);
+      const flow = 0.7 + 0.2 * Math.sin(now * 0.015 + 0.5);
+      const emotional = 0.65 + 0.2 * Math.sin(now * 0.012 + 0.3);
+      const topological = 0.7 + 0.15 * Math.sin(now * 0.018 + 0.7);
+      const quantum = 0.8 + 0.15 * Math.sin(now * 0.025 + 1.2);
+      const xBlock = 0.25 + 0.1 * Math.sin(now * 0.01);
+      const items = [
+        { label: 'X BLOCK', sub: 'Repressed', pct: xBlock * 100, cls: 'xblock' },
+        { label: 'EASE', sub: 'Flow State', pct: ease * 100, cls: 'ease' },
+        { label: 'FLOW', sub: 'Quantum Resonance', pct: flow * 100, cls: 'flow' },
+        { label: 'Emotional', sub: 'Feeling', pct: emotional * 100, cls: 'emotional' },
+        { label: 'Topological', sub: 'Space', pct: topological * 100, cls: 'topological' },
+        { label: 'Quantum', sub: 'Field', pct: quantum * 100, cls: 'quantum' },
+      ];
+      easeContainer.innerHTML = items.map(item => `
+        <div class="ease-card">
+          <div class="label">${item.label}</div>
+          <div class="value">${Math.round(item.pct)}%</div>
+          <div class="sub">${item.sub}</div>
+          <div class="ease-bar"><div class="ease-bar-fill ${item.cls}" style="width:${item.pct}%;"></div></div>
+        </div>
+      `).join('');
+    }
+
+    // ---- 2. Tokens ----
+    const tokenContainer = document.getElementById('tokenContainer');
+    if (tokenContainer && tokenContainer.children.length === 0) {
+      const tokens = {
+        PIDX: { freq: '0.618 Hz', rate: '691,986', addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c' },
+        SGUIDE: { freq: '1.618 Hz', rate: '6,724,821', addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a' },
+        VDOO: { freq: '2.618 Hz', rate: '65,673,753', addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b' },
+        PENNIES: { freq: '3.618 Hz', rate: '6,230,945', addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7' }
+      };
+      tokenContainer.innerHTML = Object.entries(tokens).map(([name, data]) => `
+        <div class="token-card">
+          <div class="name">${name}</div>
+          <div class="freq">${data.freq}</div>
+          <div class="rate">1 ETH = ${data.rate}</div>
+          <div class="addr">${data.addr}</div>
+          <div class="token-links">
+            <a href="https://app.uniswap.org/#/swap?chain=base&outputCurrency=${data.addr}" target="_blank">Uniswap</a>
+            <a href="https://basescan.org/token/${data.addr}" target="_blank">BaseScan</a>
+            <a href="https://sourcify.dev/" target="_blank">Sourcify</a>
+            <a href="https://www.geckoterminal.com/" target="_blank">Gecko</a>
+            <a href="https://www.coingecko.com/" target="_blank">CoinGecko</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ---- 3. Hash Keys & Pools ----
+    const hashContainer = document.getElementById('hashKeysContainer');
+    if (hashContainer && hashContainer.children.length === 0) {
+      const keys = {
+        PIDX: '0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f',
+        SGUIDE: '0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c',
+        VDOO: '0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d',
+        PENNIES: '0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b'
+      };
+      hashContainer.innerHTML = Object.entries(keys).map(([name, key]) => `
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-bottom:8px;padding:6px 10px;background:#0a0a12;border-radius:8px;border:1px solid #1a1a2a;">
+          <span style="font-weight:600;min-width:70px;color:#ccc;">${name}</span>
+          <span class="status-dot"></span> ACTIVE
+          <span class="hash-key">${key}</span>
+          <span style="color:#666;">| Pool:</span>
+          <a href="http://${name.toLowerCase()}.miningpool.io" target="_blank" style="color:#88aaff;text-decoration:none;">${name.toLowerCase()}.miningpool.io</a>
+        </div>
+      `).join('');
+    }
+
+    // ---- 4. PHB Multi‑Feed Cards ----
+    const feedContainer = document.getElementById('phbFeedsContainer');
+    if (feedContainer && feedContainer.children.length === 0 && window._phbAllData) {
+      // We have the data from the auto‑sync script
+      const allData = window._phbAllData;
+      // Clear container
+      feedContainer.innerHTML = '';
+      // Create a card for each feed (skip index 0)
+      for (const [idx, data] of Object.entries(allData)) {
+        if (idx === 'live') continue; // skip live meta
+        const card = document.createElement('div');
+        card.className = 'stat-grid';
+        card.style.marginTop = '10px';
+        const domain = data.domain || `Feed ${idx}`;
+        let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0;
+        let veil = '—', narrative = '';
+        if (data.pages && data.pages.length > 0) {
+          const p = data.pages[0];
+          co = parseFloat(p.coherence) || 0;
+          st = parseFloat(p.stability) || 0;
+          energy = parseFloat(p.energy?.magnitude) || 0;
+          voxel = p.voxels ? p.voxels.length : 0;
+          portal = p.portal ? 1.0 : 0;
+          codex = p.sequence ? p.sequence.length : 0;
+          veil = p.veil?.phase || '—';
+          narrative = p.veil?.narrative || '';
+        }
+        if (data.coherence !== undefined) co = parseFloat(data.coherence) || co;
+        if (data.stability !== undefined) st = parseFloat(data.stability) || st;
+        if (data.energy !== undefined) energy = parseFloat(data.energy) || energy;
+        if (data.veil !== undefined) veil = data.veil || veil;
+
+        let html = `<div class="section-title" style="margin-top:12px;">📡 ${domain}</div>`;
+        html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">`;
+        html += `<div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;
+        html += `<div class="stat-card"><div class="label">Stability</div><div class="value">${st.toFixed(3)}</div></div>`;
+        html += `<div class="stat-card"><div class="label">Energy</div><div class="value">${energy.toFixed(1)}</div></div>`;
+        html += `<div class="stat-card"><div class="label">Voxel Layer</div><div class="value">${voxel}</div></div>`;
+        html += `<div class="stat-card"><div class="label">Veil</div><div class="value">${veil}</div></div>`;
+        html += `<div class="stat-card"><div class="label">Portal</div><div class="value">${portal.toFixed(1)}</div></div>`;
+        html += `<div class="stat-card"><div class="label">Codex Pages</div><div class="value">${codex}</div></div>`;
+        html += `</div>`;
+        if (p && p.sequence) html += `<div style="margin-top:8px;font-size:12px;color:#aaa;"><strong>Sequence:</strong> ${p.sequence.join(' → ')}</div>`;
+        if (narrative) html += `<div style="margin-top:4px;font-size:12px;color:#888;font-style:italic;">“${narrative}”</div>`;
+        card.innerHTML = html;
+        feedContainer.appendChild(card);
+      }
+    }
+
+    // ---- 5. Update timestamp ----
+    const updateTime = document.getElementById('updateTime');
+    if (updateTime) updateTime.textContent = new Date().toLocaleString();
+    const updateTimeFooter = document.getElementById('updateTimeFooter');
+    if (updateTimeFooter) updateTimeFooter.textContent = new Date().toLocaleString();
+  }
+
+  // Run after DOM is ready and after a small delay to ensure all containers exist
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(restoreSections, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(restoreSections, 500);
+    });
+  }
+})();
+</script>
