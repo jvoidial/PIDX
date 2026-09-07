@@ -5815,6 +5815,40 @@ document.getElementById('jsonDumpLink').addEventListener('click', (e) => {
 
 console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 </script>
+<script>
+(function(){
+  const CONFIG_URL = "https://jvoidial.github.io/spirit-guide-token/phb_url.json";
+  const FALLBACK_URL = "https://festivals-equal-jersey-bikini.trycloudflare.com/gcs/network_state.json";
+  async function fetchPHB(){
+    try{
+      let dataUrl;
+      try{
+        const c=await fetch(CONFIG_URL,{cache:"no-store"});
+        if(c.ok){const cfg=await c.json();dataUrl=cfg.url;}
+      }catch(e){console.warn("Config fetch failed, using fallback");}
+      if(!dataUrl)dataUrl=FALLBACK_URL;
+      const r=await fetch(dataUrl,{cache:"no-store"});
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      const d=await r.json();
+      let co=0,st=0;
+      if(d.pages&&d.pages.length){const p=d.pages[d.pages.length-1];co=p.coherence||0;st=p.stability||0;}
+      if(co===0&&d.coherence)co=d.coherence;
+      if(st===0&&d.stability)st=d.stability;
+      const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+      set("phbCoherence",co.toFixed(3));set("phbStability",st.toFixed(3));
+      set("phbVoxel",d.voxel_layer??d.voxel??0);set("phbVeil",d.veil_state??d.veil??"—");
+      set("phbPortal",(d.portal_openness??d.portal??0).toFixed(1));
+      set("phbEnergy",d.energy_signature??d.energy??0);
+      set("phbCodex",d.codex_pages??d.codex??0);
+      set("phbPeers",d.peer_count??d.peers??0);
+      set("phbState",d.network_state??d.state??"SYNCED");
+      set("phbMesh",d.mesh_status??d.mesh??"ACTIVE");
+      set("phbLastUpdate","✅ "+new Date().toLocaleTimeString());
+      if(co>0){const e=document.getElementById("coherenceLevel");if(e)e.textContent=co.toFixed(3);}
+    }catch(e){const el=document.getElementById("phbLastUpdate");if(el)el.textContent="⚠️ "+e.message;}
+  }
+  fetchPHB();setInterval(fetchPHB,10000);
+})();</script>
 </body>
 </html>
   <!-- ===== PHB GOD-CODE VORTEX ===== -->
