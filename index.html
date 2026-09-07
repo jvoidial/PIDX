@@ -2346,11 +2346,12 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 })();
 </script>
 
+
   <!-- ===== CRYPTO LIVE DATA ===== -->
   <div class="section">
     <div class="section-title"><span class="accent">🪙</span> Crypto Live Data</div>
     <div style="font-size:12px;color:#666;margin-bottom:12px;">
-      Real-time prices from Base chain · Auto-refreshes every 60s
+      Live prices derived from ETH/USD + token/ETH rates · Auto-refreshes every 60s
       <span id="cryptoUpdateTime" style="color:#88aaff;margin-left:12px;">⏳ loading...</span>
     </div>
     <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
@@ -2358,151 +2359,118 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
       <div class="stat-card" id="crypto-pidx">
         <div class="label">PIDX</div>
         <div class="value" id="cryptoPricePidx" style="font-size:22px;">—</div>
-        <div class="sub" id="cryptoVolumePidx">24h vol: —</div>
-        <div class="sub" id="cryptoLiqPidx">Liquidity: —</div>
+        <div class="sub" id="cryptoRatePidx">Rate: 1 ETH = 691,986</div>
         <div style="font-size:10px;color:#555;margin-top:4px;word-break:break-all;">0x95c7e2...17f0c</div>
       </div>
       <!-- SGUIDE -->
       <div class="stat-card" id="crypto-sguide">
         <div class="label">SGUIDE</div>
         <div class="value" id="cryptoPriceSguide" style="font-size:22px;">—</div>
-        <div class="sub" id="cryptoVolumeSguide">24h vol: —</div>
-        <div class="sub" id="cryptoLiqSguide">Liquidity: —</div>
+        <div class="sub" id="cryptoRateSguide">Rate: 1 ETH = 6,724,821</div>
         <div style="font-size:10px;color:#555;margin-top:4px;word-break:break-all;">0xb50DCE...3dc5a</div>
       </div>
       <!-- VDOO -->
       <div class="stat-card" id="crypto-vdoo">
         <div class="label">VDOO</div>
         <div class="value" id="cryptoPriceVdoo" style="font-size:22px;">—</div>
-        <div class="sub" id="cryptoVolumeVdoo">24h vol: —</div>
-        <div class="sub" id="cryptoLiqVdoo">Liquidity: —</div>
+        <div class="sub" id="cryptoRateVdoo">Rate: 1 ETH = 65,673,753</div>
         <div style="font-size:10px;color:#555;margin-top:4px;word-break:break-all;">0x38e4f0...2d30b</div>
       </div>
       <!-- PENNIES -->
       <div class="stat-card" id="crypto-pennies">
         <div class="label">PENNIES</div>
         <div class="value" id="cryptoPricePennies" style="font-size:22px;">—</div>
-        <div class="sub" id="cryptoVolumePennies">24h vol: —</div>
-        <div class="sub" id="cryptoLiqPennies">Liquidity: —</div>
+        <div class="sub" id="cryptoRatePennies">Rate: 1 ETH = 6,230,945</div>
         <div style="font-size:10px;color:#555;margin-top:4px;word-break:break-all;">0x2a92CA...c19A7</div>
       </div>
     </div>
     <div style="margin-top:12px;font-size:11px;color:#555;text-align:center;border-top:1px solid #1a1a2a;padding-top:8px;">
-      ⚡ Data sourced from DexPaprika DEX API · Base network
+      ⚡ ETH price from CoinGecko · Token price = (ETH/USD) / (token per ETH)
     </div>
   </div>
 
   <script>
-  // ===== CRYPTO LIVE DATA =====
+  // ===== CRYPTO LIVE DATA (ETH-derived) =====
   (function() {
-    const TOKENS = {
-      pidx: {
-        address: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-        name: 'PIDX',
-        el: 'cryptoPricePidx',
-        volEl: 'cryptoVolumePidx',
-        liqEl: 'cryptoLiqPidx',
-        card: 'crypto-pidx'
-      },
-      sguide: {
-        address: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-        name: 'SGUIDE',
-        el: 'cryptoPriceSguide',
-        volEl: 'cryptoVolumeSguide',
-        liqEl: 'cryptoLiqSguide',
-        card: 'crypto-sguide'
-      },
-      vdoo: {
-        address: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-        name: 'VDOO',
-        el: 'cryptoPriceVdoo',
-        volEl: 'cryptoVolumeVdoo',
-        liqEl: 'cryptoLiqVdoo',
-        card: 'crypto-vdoo'
-      },
-      pennies: {
-        address: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-        name: 'PENNIES',
-        el: 'cryptoPricePennies',
-        volEl: 'cryptoVolumePennies',
-        liqEl: 'cryptoLiqPennies',
-        card: 'crypto-pennies'
+    const TOKENS = [
+      { id: 'pidx', rate: 691986, el: 'cryptoPricePidx', rateEl: 'cryptoRatePidx', card: 'crypto-pidx' },
+      { id: 'sguide', rate: 6724821, el: 'cryptoPriceSguide', rateEl: 'cryptoRateSguide', card: 'crypto-sguide' },
+      { id: 'vdoo', rate: 65673753, el: 'cryptoPriceVdoo', rateEl: 'cryptoRateVdoo', card: 'crypto-vdoo' },
+      { id: 'pennies', rate: 6230945, el: 'cryptoPricePennies', rateEl: 'cryptoRatePennies', card: 'crypto-pennies' }
+    ];
+
+    let ethPrice = null;
+
+    async function fetchEthPrice() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        ethPrice = data.ethereum?.usd;
+        if (!ethPrice) throw new Error('No ETH price');
+        return ethPrice;
+      } catch (err) {
+        console.warn('Failed to fetch ETH price:', err);
+        return null;
       }
-    };
-
-    function fetchCryptoData() {
-      const updateTimeEl = document.getElementById('cryptoUpdateTime');
-      if (updateTimeEl) updateTimeEl.textContent = '⏳ fetching...';
-
-      Object.values(TOKENS).forEach(token => {
-        const url = `https://api.dexpaprika.com/networks/base/tokens/${token.address}`;
-        fetch(url)
-          .then(r => r.json())
-          .then(data => {
-            const price = data.summary?.price_usd;
-            const volume24h = data.summary?.['24h']?.volume_usd;
-            const liquidity = data.summary?.liquidity_usd;
-            const priceEl = document.getElementById(token.el);
-            const volEl = document.getElementById(token.volEl);
-            const liqEl = document.getElementById(token.liqEl);
-            const card = document.getElementById(token.card);
-
-            if (priceEl) {
-              if (price !== null && price !== undefined) {
-                priceEl.textContent = '$' + Number(price).toFixed(8);
-                priceEl.style.color = '#88ff88';
-              } else {
-                priceEl.textContent = '—';
-                priceEl.style.color = '#666';
-              }
-            }
-            if (volEl) {
-              if (volume24h && volume24h > 0) {
-                volEl.textContent = '24h vol: $' + Number(volume24h).toLocaleString(undefined, { maximumFractionDigits: 0 });
-              } else {
-                volEl.textContent = '24h vol: —';
-              }
-            }
-            if (liqEl) {
-              if (liquidity && liquidity > 0) {
-                liqEl.textContent = 'Liquidity: $' + Number(liquidity).toLocaleString(undefined, { maximumFractionDigits: 0 });
-              } else {
-                liqEl.textContent = 'Liquidity: —';
-              }
-            }
-            if (card) {
-              // Highlight if price is available
-              if (price !== null && price !== undefined) {
-                card.style.borderColor = '#44ff88';
-              } else {
-                card.style.borderColor = '#333';
-              }
-            }
-
-            if (updateTimeEl) {
-              const now = new Date();
-              updateTimeEl.textContent = '✅ Updated: ' + now.toLocaleTimeString();
-            }
-          })
-          .catch(err => {
-            console.warn('Crypto fetch error for', token.name, err);
-            const priceEl = document.getElementById(token.el);
-            if (priceEl) { priceEl.textContent = '⚠️'; priceEl.style.color = '#ff6666'; }
-            if (updateTimeEl) updateTimeEl.textContent = '⚠️ Error fetching data';
-          });
-      });
     }
 
-    // Initial fetch after DOM ready
+    function updateTokenPrices() {
+      if (!ethPrice) {
+        // Show waiting state
+        const updateTimeEl = document.getElementById('cryptoUpdateTime');
+        if (updateTimeEl) updateTimeEl.textContent = '⏳ waiting for ETH price...';
+        return;
+      }
+
+      const updateTimeEl = document.getElementById('cryptoUpdateTime');
+      if (updateTimeEl) updateTimeEl.textContent = '💰 ETH = $' + ethPrice.toFixed(2);
+
+      TOKENS.forEach(token => {
+        const priceEl = document.getElementById(token.el);
+        const rateEl = document.getElementById(token.rateEl);
+        const card = document.getElementById(token.card);
+
+        if (priceEl) {
+          const tokenPrice = ethPrice / token.rate;
+          if (tokenPrice > 0.0001) {
+            priceEl.textContent = '$' + tokenPrice.toFixed(6);
+            priceEl.style.color = '#88ff88';
+            if (card) card.style.borderColor = '#44ff88';
+          } else {
+            priceEl.textContent = '$' + tokenPrice.toFixed(10);
+            priceEl.style.color = '#aaa';
+            if (card) card.style.borderColor = '#333';
+          }
+        }
+        if (rateEl) {
+          rateEl.textContent = 'Rate: 1 ETH = ' + token.rate.toLocaleString();
+        }
+      });
+
+      if (updateTimeEl) {
+        const now = new Date();
+        updateTimeEl.textContent += ' · Updated: ' + now.toLocaleTimeString();
+      }
+    }
+
+    async function refreshCrypto() {
+      const updateTimeEl = document.getElementById('cryptoUpdateTime');
+      if (updateTimeEl) updateTimeEl.textContent = '⏳ fetching ETH price...';
+      await fetchEthPrice();
+      updateTokenPrices();
+    }
+
+    // Init
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      setTimeout(fetchCryptoData, 500);
+      setTimeout(refreshCrypto, 500);
     } else {
       document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(fetchCryptoData, 500);
+        setTimeout(refreshCrypto, 500);
       });
     }
 
     // Refresh every 60 seconds
-    setInterval(fetchCryptoData, 60000);
+    setInterval(refreshCrypto, 60000);
   })();
   </script>
