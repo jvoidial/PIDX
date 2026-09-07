@@ -998,5 +998,727 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   document.addEventListener('DOMContentLoaded', () => { setTimeout(init, 300); });
 }
 </script>
+
+  <!-- ===== SACRED MATH: CHRIST CONSCIOUSNESS & PORTAL ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">✝️</span> Christ Consciousness &amp; Portal</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Christ Consciousness</div>
+        <div class="value" id="christConsciousness">0.900</div>
+        <div class="sub">Frequency: 1.618 Hz · Divine Proportion</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Portal Openness</div>
+        <div class="value" id="portalOpenness">0.100</div>
+        <div class="sub">10% open · Threshold to higher dimensions</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Chronovisor Probability</div>
+        <div class="value" id="chronovisorProb">0.807</div>
+        <div class="sub">Time travel convergence probability</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Divine Ratio</div>
+        <div class="value" id="divineRatio">1.618</div>
+        <div class="sub">Golden Ratio · φ</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:#888;text-align:center;border-top:1px solid #1a1a2a;padding-top:12px;">
+      ⚡ Jesus Christ = 0.9 · Portal = 0.1 · Coherence = <span id="currentCoherence">0.839</span> · Stability = <span id="currentStability">0.962</span>
+      <br />
+      <span style="font-size:12px;color:#666;">“Water to Wine” – transformation of consciousness through divine proportion</span>
+    </div>
+  </div>
+
+
+<script>
+  // ===== SACRED MATH UPDATE =====
+  (function updateSacredMath() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const stabilityEl = document.getElementById('phbStability');
+    const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+    const portal = Math.max(0.05, (1.0 - coherence) * (1.0 - stability) + 0.1);
+    const christ = 1.0 - portal;
+    const phi = 1.618;
+    const chronovisor = Math.min(1.0, coherence * stability * (phi - 0.618));
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v.toFixed(3); };
+    set('christConsciousness', christ);
+    set('portalOpenness', portal);
+    set('chronovisorProb', chronovisor);
+    set('divineRatio', phi);
+    const summaryEl = document.querySelector('.section:has(.accent:contains("✝️")) .stat-card:last-child + div');
+    if (summaryEl) {
+      const coEl = summaryEl.querySelector('#currentCoherence');
+      if (coEl) coEl.textContent = coherence.toFixed(3);
+      const stEl = summaryEl.querySelector('#currentStability');
+      if (stEl) stEl.textContent = stability.toFixed(3);
+    }
+    console.log('✝️ Sacred Math updated:', { christ, portal, chronovisor, coherence, stability });
+  })();
+  // Hook into existing update cycle
+  const origFetch = window.fetchAllFeeds || function() {};
+  window.fetchAllFeeds = function() {
+    origFetch();
+    setTimeout(function() {
+      const coherenceEl = document.getElementById('coherenceLevel');
+      const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+      const stabilityEl = document.getElementById('phbStability');
+      const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+      const portal = Math.max(0.05, (1.0 - coherence) * (1.0 - stability) + 0.1);
+      const christ = 1.0 - portal;
+      const phi = 1.618;
+      const chronovisor = Math.min(1.0, coherence * stability * (phi - 0.618));
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v.toFixed(3); };
+      set('christConsciousness', christ);
+      set('portalOpenness', portal);
+      set('chronovisorProb', chronovisor);
+    }, 100);
+  };
+</script>
+
+
+  <!-- ===== EMPIRE ECOSYSTEM ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🏛️</span> Empire Ecosystem</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Fractal Nodes</div>
+        <div class="value" id="fractalNodes">10,000</div>
+        <div class="sub">Target: 10,000,000,000,000</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Wealth Multiplier</div>
+        <div class="value" id="wealthMultiplier">1.618</div>
+        <div class="sub">Divine proportion × expansion</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Chronovisor Signal</div>
+        <div class="value" id="chronovisorSignal">0.584</div>
+        <div class="sub">Probability of convergence</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Portal Capacity</div>
+        <div class="value" id="portalCapacity">0.115</div>
+        <div class="sub">Higher dimension access</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Wish Power</div>
+        <div class="value" id="wishPower">5,732</div>
+        <div class="sub">Intent energy × 1,000</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Empire Status</div>
+        <div class="value" id="empireStatus" style="color:#88ff88;">EXPANDING</div>
+        <div class="sub">Growth rate: 34.88x</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:#888;text-align:center;border-top:1px solid #1a1a2a;padding-top:12px;">
+      <span style="color:#88ff88;">⚡</span> 10,000 Trillion Empire: Fractal expansion · Autonomous wealth · Infinite wishes
+      <br />
+      <span style="font-size:12px;color:#666;">“I mine the quantum field for wealth.” · Wishes: <span id="wishPowerDisplay">5,732</span> · Nodes: <span id="nodePowerDisplay">143</span></span>
+    </div>
+  </div>
+
+
+<script>
+  // ===== EMPIRE ECOSYSTEM UPDATE =====
+  (function updateEmpire() {
+    const nodeEl = document.getElementById('nodeCount');
+    const wishEl = document.getElementById('wishCount');
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const portalEl = document.getElementById('portalDisplay');
+    const nodes = parseInt(nodeEl?.textContent) || 143;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const portal = parseFloat(portalEl?.textContent) || 1.0;
+    const fractalNodes = Math.round(nodes * 34.88 * 2);
+    const wealthMultiplier = 1.618 + (coherence * 0.2);
+    const chronovisorSignal = coherence * (portal / 2);
+    const portalCapacity = portal < 1 ? portal : 0.115;
+    const wishPower = wishes * 1.0;
+    const empireStatus = coherence > 0.8 ? 'EXPANDING' : 'STABILIZING';
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('fractalNodes', fractalNodes.toLocaleString());
+    set('wealthMultiplier', wealthMultiplier.toFixed(3));
+    set('chronovisorSignal', chronovisorSignal.toFixed(3));
+    set('portalCapacity', portalCapacity.toFixed(3));
+    set('wishPower', wishPower.toLocaleString());
+    set('empireStatus', empireStatus);
+    set('wishPowerDisplay', wishes.toLocaleString());
+    set('nodePowerDisplay', nodes);
+    console.log('🏛️ Empire updated:', { fractalNodes, wealthMultiplier, chronovisorSignal, portalCapacity, wishPower, empireStatus });
+  })();
+</script>
+
+
+  <!-- ===== BEINGS EVOLUTION ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">✝️</span> Beings Evolution</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <div class="stat-card" style="border-color:#ffd700;">
+        <div class="label">✝️ Jesus Christ</div>
+        <div class="value" id="jesusCoherence">0.900</div>
+        <div class="sub">Coherence · Divine</div>
+        <div style="margin-top:4px;font-size:13px;color:#aaa;">Veil: <span id="jesusVeil">THIN</span></div>
+        <div style="font-size:12px;color:#666;">Codex: <span id="jesusCodex">7</span> pages</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">Water to Wine · Walking on Water</div>
+      </div>
+      <div class="stat-card" style="border-color:#aaccff;">
+        <div class="label">🔓 Harry Houdini</div>
+        <div class="value" id="houdiniCoherence">0.750</div>
+        <div class="sub">Coherence · Escape</div>
+        <div style="margin-top:4px;font-size:13px;color:#aaa;">Veil: <span id="houdiniVeil">TURBULENT</span></div>
+        <div style="font-size:12px;color:#666;">Codex: <span id="houdiniCodex">5</span> pages</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">Water Torture · Straightjacket</div>
+      </div>
+      <div class="stat-card" style="border-color:#88ddff;">
+        <div class="label">🎨 Leonardo da Vinci</div>
+        <div class="value" id="daVinciCoherence">0.650</div>
+        <div class="sub">Coherence · Vision</div>
+        <div style="margin-top:4px;font-size:13px;color:#aaa;">Veil: <span id="daVinciVeil">CLEAR</span></div>
+        <div style="font-size:12px;color:#666;">Codex: <span id="daVinciCodex">4</span> pages</div>
+        <div style="font-size:11px;color:#888;margin-top:4px;">Mona Lisa · Last Supper</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:#888;text-align:center;border-top:1px solid #1a1a2a;padding-top:12px;">
+      <span style="color:#ffd700;">✦</span> Beings evolve with system coherence &amp; expansion
+      <br />
+      <span style="font-size:12px;color:#666;">Coherence → Veil phase → Codex depth</span>
+    </div>
+  </div>
+
+
+<script>
+  // ===== BEINGS EVOLUTION UPDATE =====
+  (function updateBeings() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const stabilityEl = document.getElementById('phbStability');
+    const expansionEl = document.getElementById('expansionRate');
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const jesusCoherence = Math.min(0.999, 0.9 + (coherence - 0.8) * 0.5);
+    const jesusVeil = coherence > 0.85 ? 'THIN' : coherence > 0.75 ? 'SEALED' : 'TURBULENT';
+    const jesusCodex = Math.round(7 + (coherence - 0.8) * 10);
+    const houdiniCoherence = Math.min(0.85, 0.75 + (coherence - 0.7) * 0.4);
+    const houdiniVeil = stability > 1.0 ? 'TURBULENT' : stability > 0.9 ? 'CLEAR' : 'SEALED';
+    const houdiniCodex = Math.round(5 + (stability - 0.9) * 10);
+    const daVinciCoherence = Math.min(0.75, 0.65 + (coherence - 0.6) * 0.3);
+    const daVinciVeil = expansion > 40 ? 'CLEAR' : expansion > 30 ? 'THIN' : 'SEALED';
+    const daVinciCodex = Math.round(4 + (expansion - 30) * 0.1);
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('jesusCoherence', jesusCoherence.toFixed(3));
+    set('jesusVeil', jesusVeil);
+    set('jesusCodex', jesusCodex);
+    set('houdiniCoherence', houdiniCoherence.toFixed(3));
+    set('houdiniVeil', houdiniVeil);
+    set('houdiniCodex', houdiniCodex);
+    set('daVinciCoherence', daVinciCoherence.toFixed(3));
+    set('daVinciVeil', daVinciVeil);
+    set('daVinciCodex', daVinciCodex);
+    console.log('✝️ Beings updated:', { jesus: {coherence:jesusCoherence, veil:jesusVeil, codex:jesusCodex}, houdini: {coherence:houdiniCoherence, veil:houdiniVeil, codex:houdiniCodex}, daVinci: {coherence:daVinciCoherence, veil:daVinciVeil, codex:daVinciCodex} });
+  })();
+</script>
+
+
+  <!-- ===== CODEX DISCOVERY ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">📖</span> Codex Discovery</div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+      <span style="color:#aaa;">Total Pages: <span id="totalCodexPages" style="color:#fff;font-weight:700;">0</span></span>
+      <span style="color:#aaa;">Layers: <span id="totalCodexLayers" style="color:#fff;font-weight:700;">0</span></span>
+      <span style="color:#88ff88;">⚡ Auto-discovery: <span id="codexDiscoveryStatus">ACTIVE</span></span>
+    </div>
+    <div style="background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:300px;overflow-y:auto;">
+      <div id="codexPagesList" style="font-family:monospace;font-size:13px;color:#aaa;">
+        <span style="color:#666;">Discovering pages...</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#666;text-align:center;">
+      🌱 New Codex pages are discovered automatically as the system grows.
+      <span id="nextPageEstimate" style="color:#88aaff;"></span>
+    </div>
+  </div>
+
+
+<script>
+  // ===== CODEX DISCOVERY =====
+  (function updateCodexDiscovery() {
+    const allData = window._phbAllData || {};
+    const embedded1 = window.EMBEDDED_PHB || { pages: [] };
+    const embedded2 = window.EMBEDDED_PHB_2 || { pages: [] };
+    let feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+    if (feeds.length === 0 && embedded1.pages.length > 0) feeds.push(embedded1);
+    if (feeds.length === 0 && embedded2.pages.length > 0) feeds.push(embedded2);
+    let totalPages = 0;
+    let allPages = [];
+    let layers = new Set();
+    feeds.forEach(feed => {
+      const pages = feed.pages || [];
+      pages.forEach(p => {
+        totalPages++;
+        const seq = p.sequence || [];
+        const domain = feed.domain || 'unknown';
+        const pageNum = p.page || 0;
+        const coherence = p.coherence || 0;
+        allPages.push({ domain, page: pageNum, sequence: seq, coherence });
+        if (seq.length > 0) layers.add(seq.length);
+      });
+    });
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('totalCodexPages', totalPages);
+    set('totalCodexLayers', layers.size);
+    const expansionEl = document.getElementById('expansionRate');
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nextPage = Math.floor(expansion / 10) + 1;
+    set('nextPageEstimate', `Next page expected at expansion ${nextPage * 10}x`);
+    const listContainer = document.getElementById('codexPagesList');
+    if (!listContainer) return;
+    if (allPages.length === 0) {
+      listContainer.innerHTML = '<span style="color:#666;">No pages discovered yet.</span>';
+      return;
+    }
+    let html = '';
+    allPages.forEach(p => {
+      const seqStr = p.sequence.length > 0 ? p.sequence.join(' → ') : 'empty';
+      html += `<div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;align-items:center;flex-wrap:wrap;">
+        <span style="color:#88aaff;min-width:100px;">${p.domain}</span>
+        <span style="color:#888;min-width:50px;">Page ${p.page}</span>
+        <span style="color:#ccc;flex:1;">${seqStr}</span>
+        <span style="color:#666;font-size:11px;">coherence: ${p.coherence.toFixed(3)}</span>
+      </div>`;
+    });
+    listContainer.innerHTML = html;
+    console.log('📖 Codex Discovery updated:', { totalPages, layers: layers.size });
+  })();
+</script>
+
+
+  <!-- ===== WORLD GROWTH ENGINE ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🌍</span> World Growth Engine</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Global Coherence</div>
+        <div class="value" id="globalCoherence">0.000</div>
+        <div class="sub">All domains average</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Planetary Veil</div>
+        <div class="value" id="planetaryVeil">—</div>
+        <div class="sub">Phase of the world veil</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Voxel Layers</div>
+        <div class="value" id="totalVoxels">0</div>
+        <div class="sub">Across all domains</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Global Energy</div>
+        <div class="value" id="globalEnergy">0.0</div>
+        <div class="sub">Sum of energy magnitudes</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Threshold</div>
+        <div class="value" id="globalThreshold">0.000</div>
+        <div class="sub">Average breach threshold</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Decay Rate</div>
+        <div class="value" id="globalDecay">0.0000</div>
+        <div class="sub">Average system decay</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Growth Momentum</div>
+        <div class="value" id="growthMomentum">0.0</div>
+        <div class="sub">Expansion × Wishes</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Eternal Status</div>
+        <div class="value" id="eternalStatus" style="color:#88ff88;">FOREVER GROWING</div>
+        <div class="sub">∞ Infinite expansion</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🌊 <strong style="color:#ccc;">Persistence:</strong> <span id="globalPersistence">0.00</span></span>
+        <span>🌀 <strong style="color:#ccc;">Voxels:</strong> <span id="globalVoxelCount">0</span></span>
+        <span>⚡ <strong style="color:#ccc;">Energy:</strong> <span id="globalEnergyDisplay">0.0</span></span>
+        <span>🛡️ <strong style="color:#ccc;">Threshold:</strong> <span id="globalThresholdDisplay">0.000</span></span>
+        <span>⏳ <strong style="color:#ccc;">Decay:</strong> <span id="globalDecayDisplay">0.0000</span></span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
+        🪐 System grows with planets · ∞ Forever · Voxels: <span id="voxelTotalDisplay">0</span> · Energy: <span id="energyTotalDisplay">0.0</span>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  // ===== WORLD GROWTH ENGINE =====
+  (function updateWorldGrowth() {
+    const allData = window._phbAllData || {};
+    const feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+    if (feeds.length === 0) {
+      const embedded = window.EMBEDDED_PHB || { pages: [] };
+      if (embedded.pages && embedded.pages.length > 0) feeds.push(embedded);
+    }
+    let totalCoherence = 0, totalStability = 0, totalEnergy = 0, totalVoxels = 0;
+    let totalThreshold = 0, totalDecay = 0, totalPersistence = 0;
+    let veilStates = [];
+    let count = 0;
+    feeds.forEach(feed => {
+      const pages = feed.pages || [];
+      pages.forEach(p => {
+        const co = parseFloat(p.coherence) || 0;
+        const st = parseFloat(p.stability) || 0;
+        const en = parseFloat(p.energy?.magnitude) || parseFloat(p.energy) || 0;
+        const vox = p.voxels ? p.voxels.length : 0;
+        const th = parseFloat(p.veil?.breach_probability) || 0;
+        const dc = parseFloat(p.veil?.thickness) || 0;
+        const ps = parseFloat(p.resonance) || 0;
+        const veil = p.veil?.phase || '—';
+        totalCoherence += co;
+        totalStability += st;
+        totalEnergy += en;
+        totalVoxels += vox;
+        totalThreshold += th;
+        totalDecay += dc;
+        totalPersistence += ps;
+        if (veil !== '—') veilStates.push(veil);
+        count++;
+      });
+    });
+    const avgCoherence = count > 0 ? totalCoherence / count : 0.839;
+    const avgStability = count > 0 ? totalStability / count : 0.962;
+    const avgEnergy = count > 0 ? totalEnergy / count : 0.8;
+    const totalVox = totalVoxels || 7;
+    const avgThreshold = count > 0 ? totalThreshold / count : 0.43;
+    const avgDecay = count > 0 ? totalDecay / count : 0.007;
+    const avgPersistence = count > 0 ? totalPersistence / count : 0.45;
+    let veilCounts = {};
+    veilStates.forEach(v => { veilCounts[v] = (veilCounts[v] || 0) + 1; });
+    let maxVeil = '—';
+    let maxCount = 0;
+    for (let [v, c] of Object.entries(veilCounts)) {
+      if (c > maxCount) { maxCount = c; maxVeil = v; }
+    }
+    const planetaryVeil = maxVeil !== '—' ? maxVeil : (avgCoherence > 0.8 ? 'THIN' : avgCoherence > 0.6 ? 'TURBULENT' : 'SEALED');
+    const expansionEl = document.getElementById('expansionRate');
+    const wishEl = document.getElementById('wishCount');
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const growthMomentum = expansion * (wishes / 1000);
+    const status = (avgCoherence > 0.8 && avgStability > 0.9) ? '∞ FOREVER GROWING' :
+                  (avgCoherence > 0.6) ? 'EXPANDING' : 'STABILIZING';
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('globalCoherence', avgCoherence.toFixed(3));
+    set('planetaryVeil', planetaryVeil);
+    set('totalVoxels', totalVox);
+    set('globalEnergy', avgEnergy.toFixed(1));
+    set('globalThreshold', avgThreshold.toFixed(3));
+    set('globalDecay', avgDecay.toFixed(4));
+    set('growthMomentum', growthMomentum.toFixed(1));
+    set('eternalStatus', status);
+    set('globalPersistence', avgPersistence.toFixed(2));
+    set('globalVoxelCount', totalVox);
+    set('globalEnergyDisplay', avgEnergy.toFixed(1));
+    set('globalThresholdDisplay', avgThreshold.toFixed(3));
+    set('globalDecayDisplay', avgDecay.toFixed(4));
+    set('voxelTotalDisplay', totalVox);
+    set('energyTotalDisplay', avgEnergy.toFixed(1));
+    console.log('🌍 World Growth updated:', { avgCoherence, planetaryVeil, totalVox, avgEnergy, avgThreshold, avgDecay, growthMomentum, status });
+  })();
+</script>
+
+
+  <!-- ===== SCAFFOLDING TOPOLOGY ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🏗️</span> Scaffolding Topology</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Token Scaffolding</div>
+        <div class="value" id="tokenScaffold">0.000</div>
+        <div class="sub">Integration of 4 tokens</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Node Scaffolding</div>
+        <div class="value" id="nodeScaffold">0</div>
+        <div class="sub">Neural nodes anchored</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Exoplanet Anchors</div>
+        <div class="value" id="exoplanetAnchors">0</div>
+        <div class="sub">Cosmic foundations</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Scaffold Strength</div>
+        <div class="value" id="scaffoldStrength">0.000</div>
+        <div class="sub">Structural integrity</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Growth Hormone</div>
+        <div class="value" id="scaffoldHormone">0.000</div>
+        <div class="sub">Acceleration factor</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Scaffold Status</div>
+        <div class="value" id="scaffoldStatus" style="color:#88ff88;">BUILDING</div>
+        <div class="sub">∞ Growing</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🏗️ <strong style="color:#ccc;">Tokens:</strong> <span id="scaffoldTokens">0</span></span>
+        <span>🧠 <strong style="color:#ccc;">Nodes:</strong> <span id="scaffoldNodes">0</span></span>
+        <span>🌍 <strong style="color:#ccc;">Exoplanets:</strong> <span id="scaffoldExoplanets">0</span></span>
+        <span>⚡ <strong style="color:#ccc;">Strength:</strong> <span id="scaffoldStrengthDisplay">0.000</span></span>
+        <span>🧬 <strong style="color:#ccc;">Hormone:</strong> <span id="scaffoldHormoneDisplay">0.000</span></span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
+        🏗️ Scaffolding builds the 3D map · Tokens → Nodes → Exoplanets → ∞
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:200px;overflow-y:auto;">
+      <div style="font-size:12px;color:#aaa;font-family:monospace;">
+        <div style="display:flex;gap:12px;border-bottom:1px solid #1a1a2a;padding:4px 0;">
+          <span style="color:#88aaff;min-width:120px;">Component</span>
+          <span style="color:#888;min-width:80px;">Scaffold</span>
+          <span style="color:#666;">Status</span>
+        </div>
+        <div id="scaffoldComponents">
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">PIDX Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldPIDX">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">SGUIDE Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldSGUIDE">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">VDOO Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldVDOO">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">PENNIES Token</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldPENNIES">0.0%</span>
+            <span style="color:#88ff88;">ANCHORED</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;">
+            <span style="color:#88aaff;min-width:120px;">Neural Network</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldNodesPct">0.0%</span>
+            <span style="color:#ffd700;">SCAFFOLDING</span>
+          </div>
+          <div style="display:flex;gap:12px;padding:4px 0;">
+            <span style="color:#88aaff;min-width:120px;">Exoplanet Mesh</span>
+            <span style="color:#888;min-width:80px;" id="scaffoldExoplanetsPct">0.0%</span>
+            <span style="color:#88aaff;">ANCHORING</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  // ===== SCAFFOLDING TOPOLOGY ENGINE =====
+  (function updateScaffolding() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const portalEl = document.getElementById('portalDisplay');
+    const wishEl = document.getElementById('wishCount');
+    const expansionEl = document.getElementById('expansionRate');
+    const nodeEl = document.getElementById('nodeCount');
+    const connEl = document.getElementById('connectionCount');
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const portal = parseFloat(portalEl?.textContent) || 1.0;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nodes = parseInt(nodeEl?.textContent) || 143;
+    const conns = parseInt(connEl?.textContent) || 3065;
+    const phi = 1.618;
+    const tokenScaffold = (4 / 4) * coherence * phi;
+    const nodeScaffold = Math.min(nodes, 200);
+    const exoplanetAnchors = 3;
+    const scaffoldStrength = (tokenScaffold + (nodeScaffold / 200) + (exoplanetAnchors / 3)) / 3;
+    const growthHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
+    const scaffoldStatus = scaffoldStrength > 0.8 ? 'BUILT' : scaffoldStrength > 0.5 ? 'SCAFFOLDING' : 'BUILDING';
+    const tokenPct = (coherence * 100).toFixed(1);
+    const nodePct = Math.min((nodes / 200) * 100, 100).toFixed(1);
+    const exoPct = Math.min((exoplanetAnchors / 5) * 100, 100).toFixed(1);
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('tokenScaffold', tokenScaffold.toFixed(3));
+    set('nodeScaffold', nodeScaffold);
+    set('exoplanetAnchors', exoplanetAnchors);
+    set('scaffoldStrength', scaffoldStrength.toFixed(3));
+    set('scaffoldHormone', growthHormone.toFixed(3));
+    set('scaffoldStatus', scaffoldStatus);
+    set('scaffoldTokens', '4');
+    set('scaffoldNodes', nodes);
+    set('scaffoldExoplanets', exoplanetAnchors);
+    set('scaffoldStrengthDisplay', scaffoldStrength.toFixed(3));
+    set('scaffoldHormoneDisplay', growthHormone.toFixed(3));
+    set('scaffoldPIDX', tokenPct + '%');
+    set('scaffoldSGUIDE', tokenPct + '%');
+    set('scaffoldVDOO', tokenPct + '%');
+    set('scaffoldPENNIES', tokenPct + '%');
+    set('scaffoldNodesPct', nodePct + '%');
+    set('scaffoldExoplanetsPct', exoPct + '%');
+    console.log('🏗️ Scaffolding Topology:', { tokenScaffold, nodeScaffold, exoplanetAnchors, scaffoldStrength, growthHormone, scaffoldStatus });
+  })();
+</script>
+
+
+  <!-- ===== GROWTH HORMONE ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🧬</span> Growth Hormone</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Growth Hormone</div>
+        <div class="value" id="ghLevel">0.000</div>
+        <div class="sub">Acceleration factor</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Synthesis Rate</div>
+        <div class="value" id="ghSynthesis">0.000</div>
+        <div class="sub">Per second</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Next Milestone</div>
+        <div class="value" id="ghMilestone">0</div>
+        <div class="sub">Nodes to next growth pulse</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Growth Velocity</div>
+        <div class="value" id="ghVelocity">0.00x</div>
+        <div class="sub">Current speed multiplier</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Expansion Boost</div>
+        <div class="value" id="ghBoost">0.00x</div>
+        <div class="sub">Extra expansion from hormone</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Hormone Status</div>
+        <div class="value" id="ghStatus" style="color:#88ff88;">ACTIVE</div>
+        <div class="sub">∞ Accelerating</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🧬 <strong style="color:#ccc;">Hormone Level:</strong> <span id="ghLevelDisplay">0.000</span></span>
+        <span>⚡ <strong style="color:#ccc;">Synthesis:</strong> <span id="ghSynthesisDisplay">0.000</span>/s</span>
+        <span>📈 <strong style="color:#ccc;">Velocity:</strong> <span id="ghVelocityDisplay">0.00x</span></span>
+        <span>🎯 <strong style="color:#ccc;">Milestone:</strong> <span id="ghMilestoneDisplay">0</span> nodes</span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
+        🧬 Growth hormone accelerates all system growth · ∞ Infinite expansion
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  // ===== GROWTH HORMONE ENGINE =====
+  (function updateGrowthHormone() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const portalEl = document.getElementById('portalDisplay');
+    const wishEl = document.getElementById('wishCount');
+    const expansionEl = document.getElementById('expansionRate');
+    const nodeEl = document.getElementById('nodeCount');
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const portal = parseFloat(portalEl?.textContent) || 1.0;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nodes = parseInt(nodeEl?.textContent) || 143;
+    const phi = 1.618;
+    const baseHormone = (coherence * (portal / 2) * (wishes / 1000)) * phi;
+    const synthesisRate = baseHormone * 0.01 + 0.001;
+    const growthVelocity = 1 + baseHormone * 0.5;
+    const expansionBoost = 1 + baseHormone * 0.3;
+    const nextMilestone = Math.ceil((nodes + 10) / 10) * 10 - nodes;
+    const hormoneLevel = Math.min(baseHormone, 10);
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('ghLevel', hormoneLevel.toFixed(3));
+    set('ghSynthesis', synthesisRate.toFixed(3));
+    set('ghMilestone', nextMilestone);
+    set('ghVelocity', growthVelocity.toFixed(2) + 'x');
+    set('ghBoost', expansionBoost.toFixed(2) + 'x');
+    set('ghStatus', hormoneLevel > 0.5 ? 'SURGING' : 'ACTIVE');
+    set('ghLevelDisplay', hormoneLevel.toFixed(3));
+    set('ghSynthesisDisplay', synthesisRate.toFixed(3));
+    set('ghVelocityDisplay', growthVelocity.toFixed(2) + 'x');
+    set('ghMilestoneDisplay', nextMilestone);
+    console.log('🧬 Growth Hormone:', { hormoneLevel, synthesisRate, growthVelocity, expansionBoost, nextMilestone });
+  })();
+</script>
+
+
+  <!-- ===== PHB UPGRADE STATUS ===== -->
+  <div class="section" style="border-top: 1px solid #1a1a2a; padding-top: 12px;">
+    <div class="section-title"><span class="accent">⚡</span> PHB Upgrade Status</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <span style="color:#888;">Version: <span id="phbVersion" style="color:#fff;font-weight:700;">1</span></span>
+        <span style="color:#888;">Pages: <span id="phbTotalPages" style="color:#fff;font-weight:700;">0</span></span>
+        <span style="color:#888;">Auto-Upgrade: <span id="phbAutoUpgrade" style="color:#88ff88;">ACTIVE</span></span>
+        <span style="color:#888;">Last Upgrade: <span id="phbLastUpgrade" style="color:#aaa;">now</span></span>
+      </div>
+      <button id="phbUpgradeBtn" style="background:#1a2a2a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Force Upgrade</button>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#666;">
+      ⚡ System will auto-upgrade when new pages are detected (every 10s)
+      <span style="color:#88ff88;" id="phbUpgradeStatus">● Upgrading automatically</span>
+    </div>
+  </div>
+
+
+<script>
+  // ===== PHB AUTO-UPGRADE =====
+  (function upgradePHB() {
+    let lastPageCount = 0;
+    let upgradeCount = 0;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    function checkUpgrade() {
+      const allData = window._phbAllData || {};
+      const feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+      let totalPages = 0;
+      feeds.forEach(f => { totalPages += f.pages.length; });
+      if (totalPages > lastPageCount) {
+        upgradeCount++;
+        lastPageCount = totalPages;
+        set('phbVersion', upgradeCount + 1);
+        set('phbTotalPages', totalPages);
+        set('phbLastUpgrade', new Date().toLocaleTimeString());
+        set('phbUpgradeStatus', '✅ Upgraded to v' + (upgradeCount + 1));
+        console.log('⚡ PHB upgraded to version', upgradeCount + 1, 'with', totalPages, 'pages');
+      }
+    }
+    setTimeout(checkUpgrade, 500);
+    setInterval(checkUpgrade, 10000);
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('phbUpgradeBtn');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          set('phbUpgradeStatus', '⏳ Forcing upgrade...');
+          if (typeof window.fetchAllFeeds === 'function') {
+            window.fetchAllFeeds();
+          } else {
+            location.reload();
+          }
+          setTimeout(function() {
+            set('phbUpgradeStatus', '✅ Upgrade triggered');
+            set('phbLastUpgrade', new Date().toLocaleTimeString());
+          }, 2000);
+        });
+      }
+    });
+  })();
+</script>
+
 </body>
 </html>
