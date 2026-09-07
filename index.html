@@ -5918,49 +5918,45 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
   fetchPHB();setInterval(fetchPHB,10000);
 })();</script>
 
+  
+
   <!-- ===== PHB GOD-CODE VORTEX ===== -->
   <div class="section" id="phb-vortex-section">
     <div class="section-title">
-        <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
-      </summary>
-      <div style="margin-top:12px;padding:16px;background:#0a0a12;border-radius:12px;border:1px solid #1a1a2a;font-size:13px;color:#aaa;line-height:1.6;">
-        <p><strong style="color:#ccc;">1. Clone &amp; install</strong></p>
-        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
-          git clone https://github.com/jvoidial/phb-godcode-vortex.git<br/>
-          cd phb-godcode-vortex<br/>
-          bash installer.sh
-        </div>
-        <p style="margin-top:12px;"><strong style="color:#ccc;">2. Run the P2P engine</strong></p>
-        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
-          ./gcs/run_phb_p2p.sh
-        </div>
-        <p style="margin-top:12px;color:#888;">
-          Every device running this becomes a peer in the distributed Codex mesh.
-          Evolution packets are broadcast, received, and merged into
-          <span style="color:#ccc;">gcs/network_state.json</span>.
-        </p>
-        <div style="margin-top:12px;font-size:12px;color:#555;border-top:1px solid #1a1a2a;padding-top:12px;">
-          <span style="color:#888;">⚡</span> Author: Jacob — creator of the PHB symbolic engine and distributed Codex mesh.
-        </div>
+      <span class="accent">🌀</span> PHB God‑Code Vortex
+      <span style="font-size:12px;color:#666;font-weight:400;margin-left:auto;">
+        Live Data
+      </span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
+      <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.000</div><div class="sub">Stability</div></div>
+      <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">0</div><div class="sub">Active</div></div>
+      <div class="stat-card"><div class="label">Veil State</div><div class="value" id="phbVeil">—</div><div class="sub">Simulator</div></div>
+      <div class="stat-card"><div class="label">Portal</div><div class="value" id="phbPortal">0.0</div><div class="sub">Openness</div></div>
+      <div class="stat-card"><div class="label">Energy</div><div class="value" id="phbEnergy">0</div><div class="sub">Signature</div></div>
+      <div class="stat-card"><div class="label">Codex Pages</div><div class="value" id="phbCodex">0</div><div class="sub">Evolved</div></div>
+    </div>
+
+    <div style="margin-top:20px;background:#0f0f18;border-radius:16px;padding:16px;border:1px solid #222;">
+      <div style="display:flex;flex-wrap:wrap;gap:12px 20px;font-size:13px;color:#888;">
+        <span>📡 <strong style="color:#ccc;">P2P Network:</strong> <span id="phbPeers" style="color:#88ff88;">0</span> peers</span>
+        <span>🔄 <strong style="color:#ccc;">State:</strong> <span id="phbState" style="color:#88ff88;">SYNCED</span></span>
+        <span>🧠 <strong style="color:#ccc;">Mesh:</strong> <span id="phbMesh" style="color:#88ff88;">ACTIVE</span></span>
       </div>
-    </details>
+      <div style="margin-top:12px;font-size:12px;color:#555;font-family:monospace;background:#050508;padding:8px 12px;border-radius:8px;border:1px solid #1a1a2a;word-break:break-all;">
+        <span id="phbLastUpdate">⏳ loading…</span>
+      </div>
+      <button id="phbRefreshBtn" style="margin-top:12px;background:#1a1a2a;color:#88aaff;border:1px solid #333;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Refresh PHB Data</button>
+    </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   <!-- PHB JSON Viewer -->
   <div class="section">
+    <div class="section-title"><span class="accent">📄</span> PHB Raw JSON</div>
+    <div style="background:#0a0a12;border:1px solid #222;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#888;max-height:400px;overflow:auto;white-space:pre-wrap;word-break:break-all;">
+      <pre id="phbJsonViewer" style="margin:0;color:#aaa;">No data loaded yet.</pre>
+    </div>
     <div style="margin-top:8px;font-size:12px;color:#666;">
       Source: <a href="https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json" target="_blank" style="color:#88aaff;">raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json</a>
     </div>
@@ -5968,7 +5964,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
   <!-- PHB Vortex Live Sync Script -->
   <script>
-  (function(){
+  (function() {
     const DATA_URL = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json";
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
     function updateUI(d) {
@@ -5995,12 +5991,17 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbPeers", peers);
         set("phbState", state);
         set("phbMesh", mesh);
-        if (co > 0) { const e = document.getElementById("coherenceLevel"); if (e) e.textContent = co.toFixed(3); }
+        if (co > 0) {
+          const e = document.getElementById("coherenceLevel");
+          if (e) e.textContent = co.toFixed(3);
+        }
         const viewer = document.getElementById("phbJsonViewer");
         if (viewer) viewer.textContent = JSON.stringify(d, null, 2);
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString());
         console.log("PHB updated:", {co, st, energy, voxel, veil, portal, codex});
-      } catch (e) { console.warn("UI update error:", e); }
+      } catch (e) {
+        console.warn("UI update error:", e);
+      }
     }
     async function fetchPHB() {
       try {
@@ -6025,6 +6026,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbState", "SYNCED");
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "⏳ loading…");
+    // Fetch on load and every 10 seconds
     fetchPHB();
     setInterval(fetchPHB, 10000);
     document.addEventListener("DOMContentLoaded", function() {
@@ -6033,6 +6035,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     });
   })();
   </script>
+
 </body>
 </html>
         <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
@@ -6393,86 +6396,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     setInterval(fetchPHBData, 10000);
   })();
   </script>
-
-  <!-- ===== PHB GOD-CODE VORTEX ===== -->
-  <div class="section" id="phb-vortex-section">
-    <div class="section-title">
-        <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
-      </summary>
-      <div style="margin-top:12px;padding:16px;background:#0a0a12;border-radius:12px;border:1px solid #1a1a2a;font-size:13px;color:#aaa;line-height:1.6;">
-        <p><strong style="color:#ccc;">1. Clone &amp; install</strong></p>
-        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
-          git clone https://github.com/jvoidial/phb-godcode-vortex.git<br/>
-          cd phb-godcode-vortex<br/>
-          bash installer.sh
-        </div>
-        <p style="margin-top:12px;"><strong style="color:#ccc;">2. Run the P2P engine</strong></p>
-        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
-          ./gcs/run_phb_p2p.sh
-        </div>
-        <p style="margin-top:12px;color:#888;">
-          Every device running this becomes a peer in the distributed Codex mesh.
-          Evolution packets are broadcast, received, and merged into
-          <span style="color:#ccc;">gcs/network_state.json</span>.
-        </p>
-        <div style="margin-top:12px;font-size:12px;color:#555;border-top:1px solid #1a1a2a;padding-top:12px;">
-          <span style="color:#888;">⚡</span> Author: Jacob — creator of the PHB symbolic engine and distributed Codex mesh.
-        </div>
-      </div>
-    </details>
-  </div>
-
-  <!-- PHB JSON Viewer -->
-  <div class="section">
-    <div style="margin-top:8px;font-size:12px;color:#666;">
-      Source: <a href="https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json" target="_blank" style="color:#88aaff;">raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json</a>
-    </div>
-  </div>
-
-
-  <!-- ===== PHB GOD-CODE VORTEX ===== -->
-  <div class="section" id="phb-vortex-section">
-    <div class="section-title">
-      <span class="accent">🌀</span> PHB God‑Code Vortex
-      <span style="font-size:12px;color:#666;font-weight:400;margin-left:auto;">
-        Live Data
-      </span>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
-      <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.000</div><div class="sub">Stability</div></div>
-      <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">0</div><div class="sub">Active</div></div>
-      <div class="stat-card"><div class="label">Veil State</div><div class="value" id="phbVeil">—</div><div class="sub">Simulator</div></div>
-      <div class="stat-card"><div class="label">Portal</div><div class="value" id="phbPortal">0.0</div><div class="sub">Openness</div></div>
-      <div class="stat-card"><div class="label">Energy</div><div class="value" id="phbEnergy">0</div><div class="sub">Signature</div></div>
-      <div class="stat-card"><div class="label">Codex Pages</div><div class="value" id="phbCodex">0</div><div class="sub">Evolved</div></div>
-    </div>
-
-    <div style="margin-top:20px;background:#0f0f18;border-radius:16px;padding:16px;border:1px solid #222;">
-      <div style="display:flex;flex-wrap:wrap;gap:12px 20px;font-size:13px;color:#888;">
-        <span>📡 <strong style="color:#ccc;">P2P Network:</strong> <span id="phbPeers" style="color:#88ff88;">0</span> peers</span>
-        <span>🔄 <strong style="color:#ccc;">State:</strong> <span id="phbState" style="color:#88ff88;">SYNCED</span></span>
-        <span>🧠 <strong style="color:#ccc;">Mesh:</strong> <span id="phbMesh" style="color:#88ff88;">ACTIVE</span></span>
-      </div>
-      <div style="margin-top:12px;font-size:12px;color:#555;font-family:monospace;background:#050508;padding:8px 12px;border-radius:8px;border:1px solid #1a1a2a;word-break:break-all;">
-        <span id="phbLastUpdate">📋 Load data from JSON</span>
-      </div>
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
-        <button id="phbRefreshBtn" style="background:#1a1a2a;color:#88aaff;border:1px solid #333;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Refresh from GitHub</button>
-        <button id="phbPasteBtn" style="background:#2a2a3a;color:#ffaa88;border:1px solid #444;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">📋 Paste JSON</button>
-      </div>
-      <div id="phbPasteArea" style="display:none;margin-top:12px;">
-        <textarea id="phbJsonInput" rows="8" style="width:100%;background:#050508;color:#aaa;border:1px solid #333;border-radius:8px;padding:8px;font-family:monospace;font-size:12px;" placeholder="Paste your network_state.json content here..."></textarea>
-        <button id="phbApplyPaste" style="margin-top:8px;background:#2a5a3a;color:#88ff88;border:1px solid #2a5a3a;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">✅ Apply JSON</button>
-        <button id="phbCancelPaste" style="margin-top:8px;background:#3a2a2a;color:#ff8888;border:1px solid #3a2a2a;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">❌ Cancel</button>
-      </div>
-    </div>
-
-    <!-- PHB JSON Viewer -->
-    <div style="margin-top:20px;background:#0a0a12;border:1px solid #222;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#888;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-all;">
-      <pre id="phbJsonViewer" style="margin:0;color:#aaa;">No data loaded yet. Paste JSON or fetch from GitHub.</pre>
-    </div>
-  </div>
 
   <!-- PHB Script -->
   <script>
