@@ -1011,3 +1011,155 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('📖 Codex Discovery updated:', { totalPages, layers: layers.size });
   })();
   </script>
+
+  <!-- ===== WORLD GROWTH ENGINE ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🌍</span> World Growth Engine</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Global Coherence</div>
+        <div class="value" id="globalCoherence">0.000</div>
+        <div class="sub">All domains average</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Planetary Veil</div>
+        <div class="value" id="planetaryVeil">—</div>
+        <div class="sub">Phase of the world veil</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Voxel Layers</div>
+        <div class="value" id="totalVoxels">0</div>
+        <div class="sub">Across all domains</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Global Energy</div>
+        <div class="value" id="globalEnergy">0.0</div>
+        <div class="sub">Sum of energy magnitudes</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Threshold</div>
+        <div class="value" id="globalThreshold">0.000</div>
+        <div class="sub">Average breach threshold</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Decay Rate</div>
+        <div class="value" id="globalDecay">0.0000</div>
+        <div class="sub">Average system decay</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Growth Momentum</div>
+        <div class="value" id="growthMomentum">0.0</div>
+        <div class="sub">Expansion × Wishes</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Eternal Status</div>
+        <div class="value" id="eternalStatus" style="color:#88ff88;">FOREVER GROWING</div>
+        <div class="sub">∞ Infinite expansion</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🌊 <strong style="color:#ccc;">Persistence:</strong> <span id="globalPersistence">0.00</span></span>
+        <span>🌀 <strong style="color:#ccc;">Voxels:</strong> <span id="globalVoxelCount">0</span></span>
+        <span>⚡ <strong style="color:#ccc;">Energy:</strong> <span id="globalEnergyDisplay">0.0</span></span>
+        <span>🛡️ <strong style="color:#ccc;">Threshold:</strong> <span id="globalThresholdDisplay">0.000</span></span>
+        <span>⏳ <strong style="color:#ccc;">Decay:</strong> <span id="globalDecayDisplay">0.0000</span></span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#666;text-align:center;">
+        🪐 System grows with planets · ∞ Forever · Voxels: <span id="voxelTotalDisplay">0</span> · Energy: <span id="energyTotalDisplay">0.0</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ===== WORLD GROWTH ENGINE =====
+  (function updateWorldGrowth() {
+    const allData = window._phbAllData || {};
+    const feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+
+    if (feeds.length === 0) {
+      // fallback to embedded data
+      const embedded = window.EMBEDDED_PHB || { pages: [] };
+      if (embedded.pages && embedded.pages.length > 0) feeds.push(embedded);
+    }
+
+    // Compute global metrics
+    let totalCoherence = 0, totalStability = 0, totalEnergy = 0, totalVoxels = 0;
+    let totalThreshold = 0, totalDecay = 0, totalPersistence = 0;
+    let veilStates = [];
+    let count = 0;
+
+    feeds.forEach(feed => {
+      const pages = feed.pages || [];
+      pages.forEach(p => {
+        const co = parseFloat(p.coherence) || 0;
+        const st = parseFloat(p.stability) || 0;
+        const en = parseFloat(p.energy?.magnitude) || parseFloat(p.energy) || 0;
+        const vox = p.voxels ? p.voxels.length : 0;
+        const th = parseFloat(p.veil?.breach_probability) || 0;
+        const dc = parseFloat(p.veil?.thickness) || 0;
+        const ps = parseFloat(p.resonance) || 0;
+        const veil = p.veil?.phase || '—';
+
+        totalCoherence += co;
+        totalStability += st;
+        totalEnergy += en;
+        totalVoxels += vox;
+        totalThreshold += th;
+        totalDecay += dc;
+        totalPersistence += ps;
+        if (veil !== '—') veilStates.push(veil);
+        count++;
+      });
+    });
+
+    const avgCoherence = count > 0 ? totalCoherence / count : 0.839;
+    const avgStability = count > 0 ? totalStability / count : 0.962;
+    const avgEnergy = count > 0 ? totalEnergy / count : 0.8;
+    const totalVox = totalVoxels || 7;
+    const avgThreshold = count > 0 ? totalThreshold / count : 0.43;
+    const avgDecay = count > 0 ? totalDecay / count : 0.007;
+    const avgPersistence = count > 0 ? totalPersistence / count : 0.45;
+
+    // Determine planetary veil from dominant phase
+    let veilCounts = {};
+    veilStates.forEach(v => { veilCounts[v] = (veilCounts[v] || 0) + 1; });
+    let maxVeil = '—';
+    let maxCount = 0;
+    for (let [v, c] of Object.entries(veilCounts)) {
+      if (c > maxCount) { maxCount = c; maxVeil = v; }
+    }
+    const planetaryVeil = maxVeil !== '—' ? maxVeil : (avgCoherence > 0.8 ? 'THIN' : avgCoherence > 0.6 ? 'TURBULENT' : 'SEALED');
+
+    // Growth momentum: expansion × wishes (using existing DOM)
+    const expansionEl = document.getElementById('expansionRate');
+    const wishEl = document.getElementById('wishCount');
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const growthMomentum = expansion * (wishes / 1000);
+
+    // Determine eternal status
+    const status = (avgCoherence > 0.8 && avgStability > 0.9) ? '∞ FOREVER GROWING' :
+                  (avgCoherence > 0.6) ? 'EXPANDING' : 'STABILIZING';
+
+    // Update DOM
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('globalCoherence', avgCoherence.toFixed(3));
+    set('planetaryVeil', planetaryVeil);
+    set('totalVoxels', totalVox);
+    set('globalEnergy', avgEnergy.toFixed(1));
+    set('globalThreshold', avgThreshold.toFixed(3));
+    set('globalDecay', avgDecay.toFixed(4));
+    set('growthMomentum', growthMomentum.toFixed(1));
+    set('eternalStatus', status);
+    set('globalPersistence', avgPersistence.toFixed(2));
+    set('globalVoxelCount', totalVox);
+    set('globalEnergyDisplay', avgEnergy.toFixed(1));
+    set('globalThresholdDisplay', avgThreshold.toFixed(3));
+    set('globalDecayDisplay', avgDecay.toFixed(4));
+    set('voxelTotalDisplay', totalVox);
+    set('energyTotalDisplay', avgEnergy.toFixed(1));
+
+    console.log('🌍 World Growth updated:', { avgCoherence, planetaryVeil, totalVox, avgEnergy, avgThreshold, avgDecay, growthMomentum, status });
+  })();
+  </script>
