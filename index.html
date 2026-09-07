@@ -3461,58 +3461,86 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
  
 <script>
 <script>
-  // ===== FORCE PHB UPGRADE STATUS SYNC (FINAL) =====
+ 
+<script>
   (function() {
-    function updatePHB() {
-      try {
-        let pages = 0;
-        const pagesEl = document.getElementById('totalCodexPages');
-        if (pagesEl) {
-          pages = parseInt(pagesEl.textContent) || 0;
-          console.log('✅ Found totalCodexPages: ' + pages);
-        } else {
-          console.warn('⚠️ totalCodexPages element not found.');
-        }
+    "use strict";
 
-        const phbPagesEl = document.getElementById('phbTotalPages');
-        if (phbPagesEl) phbPagesEl.textContent = pages;
+    // Helper to update PHB fields from the total pages element
+    function updatePHBFromElement(pagesEl) {
+      if (!pagesEl) return;
+      const pages = parseInt(pagesEl.textContent, 10) || 0;
+      console.log('✅ PHB sync: totalCodexPages = ' + pages);
 
-        const versionEl = document.getElementById('phbVersion');
-        if (versionEl) {
-          const version = Math.floor(pages / 10) + 1;
-          versionEl.textContent = version;
-        }
+      const phbPages = document.getElementById('phbTotalPages');
+      if (phbPages) phbPages.textContent = pages;
 
-        const statusEl = document.getElementById('phbUpgradeStatus');
-        if (statusEl) {
-          statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-          statusEl.style.color = '#88ff88';
-        }
-
-        const autoEl = document.getElementById('phbAutoUpgrade');
-        if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
-
-        const lastEl = document.getElementById('phbLastUpgrade');
-        if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-
-      } catch(e) {
-        console.error('PHB update error:', e);
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
       }
+
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+
+      const autoEl = document.getElementById('phbAutoUpgrade');
+      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
+
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
     }
 
-    // Run immediately, every second, and on DOM ready
-    updatePHB();
-    setInterval(updatePHB, 1000);
+    // Try to find the element and update once, then set up observers
+    function initPHBSync() {
+      const pagesEl = document.getElementById('totalCodexPages');
+      if (pagesEl) {
+        // Update immediately
+        updatePHBFromElement(pagesEl);
 
-    if (document.readyState === 'complete') {
-      setTimeout(updatePHB, 500);
-    } else {
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(updatePHB, 500);
+        // Watch for changes to the element's content
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'characterData' || mutation.type === 'childList') {
+              updatePHBFromElement(pagesEl);
+            }
+          });
+        });
+        observer.observe(pagesEl, { characterData: true, childList: true, subtree: true });
+        console.log('👀 PHB sync: watching for changes to totalCodexPages');
+        return true;
+      }
+      return false;
+    }
+
+    // If element exists now, set up; else wait for it using a MutationObserver on the whole document
+    if (!initPHBSync()) {
+      console.log('⏳ PHB sync: waiting for #totalCodexPages to appear...');
+      const docObserver = new MutationObserver(function() {
+        if (initPHBSync()) {
+          docObserver.disconnect();
+          console.log('✅ PHB sync: #totalCodexPages found and observer attached');
+        }
+      });
+      docObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true
       });
     }
 
-    console.log('⚡ PHB Upgrade Status sync started.');
+    // Fallback: re‑run every 5 seconds in case the observer misses something
+    setInterval(function() {
+      const pagesEl = document.getElementById('totalCodexPages');
+      if (pagesEl) {
+        updatePHBFromElement(pagesEl);
+      } else {
+        console.warn('⚠️ PHB sync fallback: #totalCodexPages not found');
+      }
+    }, 5000);
+
+    console.log('⚡ PHB Upgrade Status sync started (MutationObserver version).');
   })();
 </script>
- 
