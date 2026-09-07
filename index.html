@@ -6084,6 +6084,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
   })();
   </script>
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function() {
@@ -6096,10 +6097,8 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       try {
         const merged = { ...d1, ...d2 };
         lastGoodData = merged;
-
         let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0, peers = 0;
         let veil = "—", state = "SYNCED", mesh = "ACTIVE";
-
         if (d1 && d1.pages && d1.pages.length > 0) {
           const p = d1.pages[0];
           co = parseFloat(p.coherence) || 0;
@@ -6120,8 +6119,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           if (d2.veil !== undefined) veil = d2.veil || veil;
           if (d2.peers !== undefined) peers = parseInt(d2.peers) || peers;
         }
-
-        // Update PHB section
         set("phbCoherence", co.toFixed(3));
         set("phbStability", st.toFixed(3));
         set("phbVoxel", voxel);
@@ -6132,8 +6129,6 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
         set("phbPeers", peers);
         set("phbState", state);
         set("phbMesh", mesh);
-
-        // Update main dashboard
         if (co > 0) {
           const e1 = document.getElementById("coherenceLevel");
           if (e1) e1.textContent = co.toFixed(3);
@@ -6144,14 +6139,12 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
           const e = document.getElementById("portalDisplay");
           if (e) e.textContent = portal.toFixed(1);
         }
-
         const viewer = document.getElementById("phbJsonViewer");
         if (viewer) viewer.textContent = JSON.stringify(merged, null, 2);
-
-        // Always show timestamp – never show ""
         set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString());
+        console.log("PHB auto‑updated:", {co, st, energy, voxel, veil, portal, codex});
       } catch (e) {
-        // If UI update fails, keep last good data silently
+        console.warn("UI update error:", e);
         if (lastGoodData) {
           const viewer = document.getElementById("phbJsonViewer");
           if (viewer) viewer.textContent = JSON.stringify(lastGoodData, null, 2);
@@ -6162,29 +6155,22 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
     async function fetchBoth() {
       try {
+        console.log("🔄 Auto‑fetching PHB data...");
         const [r1, r2] = await Promise.all([
           fetch(URL1, { cache: "no-store" }),
           fetch(URL2, { cache: "no-store" }).catch(() => null)
         ]);
         const d1 = r1.ok ? await r1.json() : null;
         const d2 = r2 && r2.ok ? await r2.json() : null;
-        if (d1) {
-          updateUI(d1, d2);
-        } else if (lastGoodData) {
-          // Silently use cached data – no error message
-          updateUI(lastGoodData, null);
-          set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
-        }
+        if (d1) updateUI(d1, d2);
+        else if (lastGoodData) updateUI(lastGoodData, null);
       } catch (e) {
-        // Silently fail – never show ""
-        if (lastGoodData) {
-          updateUI(lastGoodData, null);
-          set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
-        }
+        console.warn("Fetch error:", e);
+        if (lastGoodData) updateUI(lastGoodData, null);
       }
     }
 
-    // Set defaults
+    // ---- Set defaults ----
     set("phbCoherence", "0.000");
     set("phbStability", "0.000");
     set("phbVoxel", "0");
@@ -6197,12 +6183,28 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
 
+    // ---- Immediate first fetch ----
     fetchBoth();
-    setInterval(fetchBoth, 10000);
 
+    // ---- Auto‑update every 10 seconds (even if tab is inactive) ----
+    const intervalId = setInterval(fetchBoth, 10000);
+    console.log("⏳ Auto‑update interval started (ID: " + intervalId + ")");
+
+    // ---- Also refresh when the tab becomes visible again ----
+    document.addEventListener("visibilitychange", function() {
+      if (!document.hidden) {
+        console.log("👁️ Tab visible – refreshing PHB data");
+        fetchBoth();
+      }
+    });
+
+    // ---- Refresh button ----
     document.addEventListener("DOMContentLoaded", function() {
       const btn = document.getElementById("phbRefreshBtn");
       if (btn) btn.addEventListener("click", function() { fetchBoth(); });
     });
+
+    // ---- Keep interval alive (prevent garbage collection) ----
+    window.phbInterval = intervalId;
   })();
   </script>
