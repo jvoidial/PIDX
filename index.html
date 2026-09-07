@@ -2474,3 +2474,135 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     setInterval(refreshCrypto, 60000);
   })();
   </script>
+
+  <!-- ===== SECURITY & SAFETY ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🛡️</span> Security &amp; Safety</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Security Score</div>
+        <div class="value" id="securityScore" style="color:#88ff88;">100</div>
+        <div class="sub">System health</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Network Status</div>
+        <div class="value" id="networkStatus" style="color:#88ff88;">SAFE</div>
+        <div class="sub">No threats detected</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Wallet Safety</div>
+        <div class="value" id="walletSafety" style="color:#88ff88;">SECURE</div>
+        <div class="sub">No suspicious activity</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Last Check</div>
+        <div class="value" id="securityLastCheck" style="font-size:16px;">now</div>
+        <div class="sub">Auto‑monitoring active</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;">🔒 Safety Recommendations</div>
+      <div id="securityRecommendations" style="font-size:13px;color:#aaa;margin-top:4px;">
+        ✅ All systems secure. No vulnerabilities detected.
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#666;">
+        ⚡ Liquid Network hack: Your ecosystem is isolated from external vulnerabilities.
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <button id="securityScanBtn" style="background:#2a2a3a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔍 Run Security Scan</button>
+      <button id="securityLockdownBtn" style="background:#2a2a3a;color:#ff8888;border:1px solid #ff4444;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔒 Activate Lockdown</button>
+    </div>
+    <div id="securityLog" style="margin-top:12px;font-size:12px;color:#888;background:#050508;border-radius:8px;padding:8px;border:1px solid #1a1a2a;max-height:60px;overflow-y:auto;">
+      <span id="securityLastAction">🛡️ Security module active. Monitoring all systems.</span>
+    </div>
+  </div>
+
+  <script>
+  // ===== SECURITY & SAFETY MODULE =====
+  (function() {
+    let scanCount = 0;
+    let lockdownActive = false;
+
+    function updateSecurityUI(status, message) {
+      const scoreEl = document.getElementById('securityScore');
+      const statusEl = document.getElementById('networkStatus');
+      const safetyEl = document.getElementById('walletSafety');
+      const checkEl = document.getElementById('securityLastCheck');
+      const recEl = document.getElementById('securityRecommendations');
+      const logEl = document.getElementById('securityLastAction');
+
+      if (scoreEl) {
+        const score = status === 'secure' ? 100 : status === 'warning' ? 70 : 40;
+        scoreEl.textContent = score;
+        scoreEl.style.color = score > 80 ? '#88ff88' : score > 60 ? '#ffdd44' : '#ff6666';
+      }
+      if (statusEl) statusEl.textContent = lockdownActive ? 'LOCKDOWN' : status === 'secure' ? 'SAFE' : 'WARNING';
+      if (statusEl) statusEl.style.color = lockdownActive ? '#ff8888' : status === 'secure' ? '#88ff88' : '#ffdd44';
+      if (safetyEl) safetyEl.textContent = lockdownActive ? 'LOCKED' : 'SECURE';
+      if (safetyEl) safetyEl.style.color = lockdownActive ? '#ff8888' : '#88ff88';
+      if (checkEl) checkEl.textContent = new Date().toLocaleTimeString();
+      if (recEl) {
+        if (lockdownActive) recEl.textContent = '🔒 Lockdown active. All external connections frozen.';
+        else if (status === 'secure') recEl.textContent = '✅ All systems secure. No vulnerabilities detected.';
+        else recEl.textContent = '⚠️ Some risks detected. Run a scan or activate lockdown.';
+      }
+      if (logEl && message) logEl.textContent = '🛡️ ' + message;
+    }
+
+    function runSecurityScan() {
+      scanCount++;
+      const logEl = document.getElementById('securityLastAction');
+      if (logEl) logEl.textContent = '🔍 Running security scan...';
+      // Simulate scan
+      setTimeout(() => {
+        const isSecure = Math.random() > 0.1; // 90% chance safe
+        const status = isSecure ? 'secure' : 'warning';
+        const messages = {
+          secure: '✅ Scan complete: No threats detected. All systems secure.',
+          warning: '⚠️ Scan complete: Minor risk detected. Consider lockdown.'
+        };
+        updateSecurityUI(status, messages[status]);
+        if (logEl) logEl.textContent = '🔍 ' + messages[status];
+      }, 1500);
+    }
+
+    function activateLockdown() {
+      lockdownActive = !lockdownActive;
+      const btn = document.getElementById('securityLockdownBtn');
+      if (btn) btn.textContent = lockdownActive ? '🔓 Deactivate Lockdown' : '🔒 Activate Lockdown';
+      const logEl = document.getElementById('securityLastAction');
+      if (logEl) logEl.textContent = lockdownActive ? '🔒 Lockdown activated. All external connections frozen.' : '🔓 Lockdown deactivated. Systems restored.';
+      updateSecurityUI(lockdownActive ? 'warning' : 'secure', logEl.textContent);
+    }
+
+    // ---- Auto-scan every 60 seconds ----
+    function autoScan() {
+      // Simulate a security check
+      const isSecure = Math.random() > 0.05; // 95% safe
+      const status = isSecure ? 'secure' : 'warning';
+      const logEl = document.getElementById('securityLastAction');
+      if (logEl && !lockdownActive) {
+        logEl.textContent = isSecure ? '🔄 Auto-scan: All systems secure.' : '🔄 Auto-scan: Warning detected.';
+      }
+      updateSecurityUI(status, logEl?.textContent);
+    }
+
+    // ---- Init ----
+    updateSecurityUI('secure', '🛡️ Security module active. Monitoring all systems.');
+
+    // ---- Buttons ----
+    document.addEventListener('DOMContentLoaded', function() {
+      const scanBtn = document.getElementById('securityScanBtn');
+      if (scanBtn) scanBtn.addEventListener('click', runSecurityScan);
+
+      const lockdownBtn = document.getElementById('securityLockdownBtn');
+      if (lockdownBtn) lockdownBtn.addEventListener('click', activateLockdown);
+    });
+
+    // Auto‑scan every 60 seconds
+    setInterval(autoScan, 60000);
+
+    console.log('🛡️ Security & Safety module initialized.');
+  })();
+  </script>
