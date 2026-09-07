@@ -22,48 +22,39 @@
       flex-wrap: wrap;
       gap: 16px;
       padding: 16px 0 24px;
-      border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
     .header h1 {
       font-family: 'Orbitron', sans-serif;
       font-weight: 900;
       font-size: 28px;
-      background: linear-gradient(135deg, #00ffff, #0088ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(0, 200, 255, 0.15);
+      color: #ffffff;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
     }
     .header .badge {
-      background: rgba(0, 255, 255, 0.08);
-      border: 1px solid #00ffff;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #555;
       padding: 6px 16px;
       border-radius: 40px;
       font-family: 'Orbitron', sans-serif;
       font-weight: 700;
       font-size: 14px;
-      color: #00ffff;
+      color: #ddd;
       letter-spacing: 1px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-      animation: pulse-badge 2s ease-in-out infinite;
-    }
-    @keyframes pulse-badge {
-      0%,100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.1); }
-      50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.3); }
     }
     .neural-wrapper {
-      background: #0f0f1a;
+      background: #0a0a12;
       border-radius: 20px;
-      border: 1px solid rgba(0, 255, 255, 0.08);
+      border: 1px solid #222;
       padding: 4px;
       margin: 24px 0;
-      box-shadow: 0 0 60px rgba(0, 100, 255, 0.03);
     }
     #networkCanvas {
       width: 100%;
       height: 350px;
       display: block;
       border-radius: 16px;
-      background: #0a0a12;
+      background: #050508;
     }
     .stat-grid {
       display: grid;
@@ -72,46 +63,46 @@
       margin: 20px 0;
     }
     .stat-card {
-      background: #13131e;
-      border: 1px solid #1e2a3a;
+      background: #0f0f18;
+      border: 1px solid #222;
       border-radius: 16px;
       padding: 16px 18px;
       transition: all 0.2s;
     }
     .stat-card:hover {
-      border-color: #00ffff;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.05);
+      border-color: #888;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.02);
     }
     .stat-card .label {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #6b7e8f;
+      color: #777;
       font-weight: 600;
     }
     .stat-card .value {
       font-size: 26px;
       font-weight: 700;
-      color: #f0faff;
+      color: #fff;
       margin-top: 4px;
       font-family: 'Orbitron', monospace;
     }
-    .stat-card .value small { font-size: 16px; font-weight: 400; color: #7a8fa0; }
+    .stat-card .value small { font-size: 16px; font-weight: 400; color: #888; }
     .stat-card .sub {
       font-size: 13px;
-      color: #7a8fa0;
+      color: #888;
       margin-top: 2px;
     }
     .section {
       margin-top: 32px;
-      border-top: 1px solid rgba(0, 255, 255, 0.06);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
       padding-top: 24px;
     }
     .section-title {
       font-family: 'Orbitron', sans-serif;
       font-weight: 700;
       font-size: 18px;
-      color: #b0d0e0;
+      color: #ccc;
       letter-spacing: 1px;
       margin-bottom: 16px;
       display: flex;
@@ -119,7 +110,7 @@
       gap: 12px;
     }
     .section-title .accent {
-      color: #00ffff;
+      color: #fff;
       font-weight: 900;
     }
     .token-grid {
@@ -128,25 +119,25 @@
       gap: 16px;
     }
     .token-card {
-      background: #13131e;
-      border: 1px solid #1e2a3a;
+      background: #0f0f18;
+      border: 1px solid #222;
       border-radius: 16px;
       padding: 16px;
       transition: all 0.2s;
     }
     .token-card:hover {
-      border-color: #00aaff;
-      box-shadow: 0 0 30px rgba(0, 150, 255, 0.05);
+      border-color: #888;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.02);
     }
     .token-card .name {
       font-family: 'Orbitron', sans-serif;
       font-weight: 700;
       font-size: 18px;
-      color: #f0faff;
+      color: #fff;
     }
     .token-card .freq {
       font-size: 13px;
-      color: #7a8fa0;
+      color: #888;
     }
     .token-card .rate {
       font-size: 16px;
@@ -156,11 +147,11 @@
     .token-card .addr {
       font-family: 'Courier New', monospace;
       font-size: 12px;
-      background: #0a0a12;
+      background: #050508;
       padding: 6px 10px;
       border-radius: 8px;
-      border: 1px solid #1e2a3a;
-      color: #8aa0b0;
+      border: 1px solid #1a1a2a;
+      color: #aaa;
       word-break: break-all;
       margin: 6px 0;
     }
@@ -172,8 +163,8 @@
     }
     .token-links a {
       font-size: 11px;
-      background: #1e2a3a;
-      color: #b0d0e0;
+      background: #1a1a2a;
+      color: #ccc;
       padding: 2px 12px;
       border-radius: 20px;
       text-decoration: none;
@@ -181,9 +172,9 @@
       border: 1px solid transparent;
     }
     .token-links a:hover {
-      background: #00aaff;
-      color: #000;
-      border-color: #00aaff;
+      background: #555;
+      color: #fff;
+      border-color: #888;
       transform: scale(1.02);
     }
     .row {
@@ -192,8 +183,8 @@
       padding: 4px 0;
       border-bottom: 1px solid rgba(255,255,255,0.02);
     }
-    .row .label { color: #7a8fa0; }
-    .row .value { color: #f0faff; font-weight: 500; }
+    .row .label { color: #888; }
+    .row .value { color: #fff; font-weight: 500; }
     .flex-wrap {
       display: flex;
       flex-wrap: wrap;
@@ -201,18 +192,18 @@
     }
     .badge-cyan {
       display: inline-block;
-      background: rgba(0, 255, 255, 0.06);
-      border: 1px solid rgba(0, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid #333;
       padding: 2px 10px;
       border-radius: 30px;
       font-size: 12px;
-      color: #00ffff;
+      color: #ddd;
     }
     .status-dot {
       display: inline-block;
       width: 8px;
       height: 8px;
-      background: #00ff88;
+      background: #88ff88;
       border-radius: 50%;
       margin-right: 6px;
       animation: pulse-dot 1.5s infinite;
@@ -224,26 +215,23 @@
     .hash-key {
       font-family: 'Courier New', monospace;
       font-size: 11px;
-      color: #7a8fa0;
-      background: #0a0a12;
+      color: #888;
+      background: #050508;
       padding: 4px 8px;
       border-radius: 6px;
-      border: 1px solid #1e2a3a;
+      border: 1px solid #1a1a2a;
       word-break: break-all;
     }
     .footer {
       margin-top: 40px;
       padding: 20px 0;
-      border-top: 1px solid rgba(0, 255, 255, 0.06);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
       text-align: center;
       font-size: 13px;
-      color: #5a6f80;
+      color: #666;
     }
-    .footer a { color: #7a8fa0; text-decoration: none; }
-    .footer a:hover { color: #00ffff; }
-    .glow-text {
-      text-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
-    }
+    .footer a { color: #888; text-decoration: none; }
+    .footer a:hover { color: #fff; }
     @media (max-width: 640px) {
       .header h1 { font-size: 20px; }
       .stat-grid { grid-template-columns: 1fr 1fr; }
@@ -305,7 +293,7 @@
       <div class="stat-card"><div class="label">Coherence</div><div class="value" id="coherenceLevel2">1.000</div></div>
       <div class="stat-card"><div class="label">Persistence</div><div class="value" id="persistenceEnergy">148.273</div></div>
       <div class="stat-card"><div class="label">Voxels</div><div class="value" id="voxelEnergy">0.789</div></div>
-      <div class="stat-card"><div class="label">Total</div><div class="value" id="totalResonance">1,482,116</div></div>
+      <div class="stat-card"><div class="label">Total</div><div class="value" id="totalResonance">1,482,730</div></div>
       <div class="stat-card"><div class="label">Threshold</div><div class="value" id="thresholdValue">0.406</div></div>
       <div class="stat-card"><div class="label">Decay</div><div class="value" id="decayRate">0.0060/s</div></div>
     </div>
@@ -325,7 +313,7 @@
       <div class="stat-card"><div class="label">Auto Bots</div><div class="value">20/20</div></div>
     </div>
     <div style="margin-top:16px;">
-      <div style="font-weight:600;color:#b0d0e0;margin-bottom:8px;">🔑 Hash Keys</div>
+      <div style="font-weight:600;color:#ccc;margin-bottom:8px;">🔑 Hash Keys & Pools</div>
       <div id="hashKeysContainer"></div>
     </div>
   </div>
@@ -335,7 +323,7 @@
     <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px,1fr));">
       <div class="stat-card"><div class="label">Debt Eliminated</div><div class="value">$0</div></div>
       <div class="stat-card"><div class="label">Target</div><div class="value">1,099,900x</div></div>
-      <div class="stat-card"><div class="label">Status</div><div class="value" style="color:#00ff88;">IN PROGRESS</div></div>
+      <div class="stat-card"><div class="label">Status</div><div class="value" style="color:#88ff88;">IN PROGRESS</div></div>
     </div>
     <div class="section-title" style="margin-top:24px;"><span class="accent">🥧</span> Pennies Index Vault</div>
     <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px,1fr));">
@@ -348,7 +336,7 @@
 
   <div class="section">
     <div class="section-title"><span class="accent">🌀</span> Core Spins</div>
-    <div class="flex-wrap" style="font-size:14px;color:#b0d0e0;">
+    <div class="flex-wrap" style="font-size:14px;color:#ccc;">
       <span>↻ PRIMARY 0.618</span>
       <span>↺ SECONDARY 1.618</span>
       <span>↻↺ TERTIARY 2.618</span>
@@ -383,7 +371,7 @@
       <div class="stat-card"><div class="label">↺ Coherence Core</div><div class="value">999,999</div></div>
       <div class="stat-card"><div class="label">↻↺ Persistence Core</div><div class="value">888,888</div></div>
     </div>
-    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:20px;">
+    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:20px;color:#ccc;">
       <span><strong>Ethereal Pipe</strong> ∞ · 3 connections</span>
       <span><strong>Quantum Pipe</strong> ∞ · 3 connections</span>
       <span><strong>Divine Pipe</strong> ∞ · 3 connections</span>
@@ -430,14 +418,14 @@
 
   <div class="section">
     <div class="section-title"><span class="accent">🧠</span> Cosmic Consciousness</div>
-    <div style="background:#13131e;border-radius:16px;padding:20px;border:1px solid #1e2a3a;">
-      <div style="font-size:22px;font-weight:700;color:#f0faff;">🌌 HUMAN-LIKE PLANETS AWARE</div>
-      <div style="color:#7a8fa0;margin:4px 0;">ALL HUMAN-LIKE PLANETS CONNECTED</div>
+    <div style="background:#0f0f18;border-radius:16px;padding:20px;border:1px solid #222;">
+      <div style="font-size:22px;font-weight:700;color:#fff;">🌌 HUMAN-LIKE PLANETS AWARE</div>
+      <div style="color:#888;margin:4px 0;">ALL HUMAN-LIKE PLANETS CONNECTED</div>
       <div style="margin:12px 0;font-size:16px;font-style:italic;">“We are not alone in the cosmos.”</div>
       <div class="flex-wrap">
-        <span>🌍 Cosmic Family: <span style="color:#00ff88;">✓ CONNECTED</span></span>
-        <span>🚀 Interstellar: <span style="color:#00ff88;">ACTIVE</span></span>
-        <span>⚡ Resonance: <span style="color:#00ff88;">INFINITE</span></span>
+        <span>🌍 Cosmic Family: <span style="color:#88ff88;">✓ CONNECTED</span></span>
+        <span>🚀 Interstellar: <span style="color:#88ff88;">ACTIVE</span></span>
+        <span>⚡ Resonance: <span style="color:#88ff88;">INFINITE</span></span>
       </div>
     </div>
   </div>
@@ -493,7 +481,13 @@ const EMBEDDED_STATE = {
     "activeMiners": 4,
     "hashRate": "500 TH/s",
     "dailyEarnings": "0.0026 BTC",
-    "autoBots": "20/20"
+    "autoBots": "20/20",
+    "pools": {
+      "PIDX": "pidx.miningpool.io",
+      "SGUIDE": "sguide.miningpool.io",
+      "VDOO": "vdoo.miningpool.io",
+      "PENNIES": "pennies.miningpool.io"
+    }
   },
   "vault": {
     "totalPies": 420,
@@ -5428,7 +5422,6 @@ function saveState(state) {
 
 // Merge embedded with stored (stored takes precedence)
 let state = loadState() || JSON.parse(JSON.stringify(EMBEDDED_STATE));
-// If stored is missing fields, add from embedded
 function deepMerge(target, source) {
   for (let key in source) {
     if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
@@ -5494,12 +5487,14 @@ function drawNetwork() {
   ctx.clearRect(0, 0, width, height);
   const intensity = Math.min(1, state.resonance.resonance / 10000);
 
+  // Subtle radial glow
   const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, width*0.6);
-  grad.addColorStop(0, 'rgba(0, 200, 255, 0.02)');
+  grad.addColorStop(0, 'rgba(255, 255, 255, 0.02)');
   grad.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0,0,width,height);
 
+  // Connections
   connections.forEach(({ i, j }) => {
     const a = nodes[i];
     const b = nodes[j];
@@ -5510,44 +5505,47 @@ function drawNetwork() {
     ctx.beginPath();
     ctx.moveTo(a.x + flow, a.y + flow);
     ctx.lineTo(b.x - flow, b.y - flow);
-    ctx.strokeStyle = `rgba(0, 200, 255, ${alpha * 0.25})`;
+    ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.2})`;
     ctx.lineWidth = 0.5 + intensity * 1.5;
     ctx.stroke();
   });
 
+  // Nodes
   nodes.forEach(node => {
     const radius = node.r * (1 + intensity * 1.8);
     const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, radius * 4);
     const alpha = 0.06 + intensity * 0.3;
-    gradient.addColorStop(0, `rgba(0, 200, 255, ${alpha})`);
-    gradient.addColorStop(1, 'rgba(0, 200, 255, 0)');
+    gradient.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.arc(node.x, node.y, radius * 4, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = `rgba(180, 240, 255, ${0.3 + intensity * 0.6})`;
-    ctx.shadowColor = 'rgba(0, 200, 255, 0.3)';
-    ctx.shadowBlur = 10;
+    ctx.fillStyle = `rgba(220, 220, 220, ${0.3 + intensity * 0.6})`;
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.1)';
+    ctx.shadowBlur = 8;
     ctx.beginPath();
     ctx.arc(node.x, node.y, radius * 0.6, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
   });
 
+  // Center ring
   const ringSize = 40 + intensity * 30;
-  ctx.strokeStyle = `rgba(0, 200, 255, ${0.04 + intensity * 0.08})`;
+  ctx.strokeStyle = `rgba(255, 255, 255, ${0.04 + intensity * 0.06})`;
   ctx.lineWidth = 1 + intensity;
   ctx.beginPath();
   ctx.arc(centerX, centerY, ringSize, 0, Math.PI * 2);
   ctx.stroke();
 
+  // Orbiting particles
   const time = Date.now() / 3000;
   for (let i = 0; i < 25 + intensity * 35; i++) {
     const angle = time + i * 0.7;
     const radius = ringSize * 0.5 + Math.sin(time + i) * 25;
     const x = centerX + Math.cos(angle) * radius;
     const y = centerY + Math.sin(angle) * radius;
-    ctx.fillStyle = `rgba(0, 200, 255, ${0.02 + intensity * 0.04})`;
+    ctx.fillStyle = `rgba(255, 255, 255, ${0.02 + intensity * 0.04})`;
     ctx.beginPath();
     ctx.arc(x, y, 1 + intensity * 2, 0, Math.PI * 2);
     ctx.fill();
@@ -5560,6 +5558,7 @@ drawNetwork();
 // ===== RENDER TOKENS =====
 function renderTokens() {
   const container = document.getElementById('tokenContainer');
+  if (!container) return;
   container.innerHTML = '';
   for (const [name, data] of Object.entries(state.tokens)) {
     const card = document.createElement('div');
@@ -5582,20 +5581,29 @@ function renderTokens() {
 }
 renderTokens();
 
-// ===== RENDER HASH KEYS =====
+// ===== RENDER HASH KEYS WITH POOLS =====
 function renderHashKeys() {
   const container = document.getElementById('hashKeysContainer');
+  if (!container) return;
   container.innerHTML = '';
   for (const [name, key] of Object.entries(state.hashKeys)) {
+    const pool = state.mining?.pools?.[name] || `${name.toLowerCase()}.miningpool.io`;
     const div = document.createElement('div');
     div.style.display = 'flex';
     div.style.alignItems = 'center';
-    div.style.gap = '12px';
-    div.style.marginBottom = '6px';
+    div.style.flexWrap = 'wrap';
+    div.style.gap = '8px 16px';
+    div.style.marginBottom = '8px';
+    div.style.padding = '6px 10px';
+    div.style.background = '#0a0a12';
+    div.style.borderRadius = '8px';
+    div.style.border = '1px solid #1a1a2a';
     div.innerHTML = `
-      <span style="font-weight:600;min-width:70px;color:#b0d0e0;">${name}</span>
+      <span style="font-weight:600;min-width:70px;color:#ccc;">${name}</span>
       <span class="status-dot"></span> ACTIVE
       <span class="hash-key">${key}</span>
+      <span style="color:#666;">| Pool:</span>
+      <a href="http://${pool}" target="_blank" style="color:#88aaff;text-decoration:none;">${pool}</a>
     `;
     container.appendChild(div);
   }
@@ -5696,7 +5704,8 @@ document.getElementById('jsonDumpLink').addEventListener('click', (e) => {
   URL.revokeObjectURL(url);
 });
 
-console.log('🧠 Gen 5 · Quantum Ease Flow · Tony Stark Dashboard');
+console.log('🧠 Gen 5 · Quantum Ease Flow · Dashboard');
+console.log('✅ State loaded:', state);
 </script>
 </body>
 </html>
