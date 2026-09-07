@@ -5817,3 +5817,134 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 </script>
 </body>
 </html>
+  <!-- ===== PHB GOD-CODE VORTEX ===== -->
+  <div class="section" id="phb-vortex-section">
+    <div class="section-title">
+      <span class="accent">🌀</span> PHB God‑Code Vortex
+      <span style="font-size:12px;color:#666;font-weight:400;margin-left:auto;">
+        Distributed · Evolving · P2P
+      </span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+      <div class="stat-card">
+        <div class="label">Coherence</div>
+        <div class="value" id="phbCoherence">0.000</div>
+        <div class="sub">Stability</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Voxel Layer</div>
+        <div class="value" id="phbVoxel">0</div>
+        <div class="sub">Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Veil State</div>
+        <div class="value" id="phbVeil">—</div>
+        <div class="sub">Simulator</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Portal</div>
+        <div class="value" id="phbPortal">0.0</div>
+        <div class="sub">Openness</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Energy</div>
+        <div class="value" id="phbEnergy">0</div>
+        <div class="sub">Signature</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Codex Pages</div>
+        <div class="value" id="phbCodex">0</div>
+        <div class="sub">Evolved</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;background:#0f0f18;border-radius:16px;padding:16px;border:1px solid #222;">
+      <div style="display:flex;flex-wrap:wrap;gap:12px 20px;font-size:13px;color:#888;">
+        <span>📡 <strong style="color:#ccc;">P2P Network:</strong> <span id="phbPeers" style="color:#88ff88;">0</span> peers</span>
+        <span>🔄 <strong style="color:#ccc;">State:</strong> <span id="phbState" style="color:#88ff88;">SYNCED</span></span>
+        <span>🧠 <strong style="color:#ccc;">Mesh:</strong> <span id="phbMesh" style="color:#88ff88;">ACTIVE</span></span>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:#555;font-family:monospace;background:#050508;padding:8px 12px;border-radius:8px;border:1px solid #1a1a2a;word-break:break-all;">
+        <span id="phbLastUpdate">⏳ waiting for PHB data…</span>
+      </div>
+    </div>
+
+    <!-- Collapsible details (Termux instructions & structure) -->
+    <details style="margin-top:16px;cursor:pointer;color:#888;font-size:13px;">
+      <summary style="list-style:none;display:flex;align-items:center;gap:8px;border:1px solid #222;border-radius:12px;padding:10px 14px;background:#0a0a12;">
+        <span style="font-size:16px;">📘</span> How to run PHB Vortex on Termux
+        <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
+      </summary>
+      <div style="margin-top:12px;padding:16px;background:#0a0a12;border-radius:12px;border:1px solid #1a1a2a;font-size:13px;color:#aaa;line-height:1.6;">
+        <p><strong style="color:#ccc;">1. Clone &amp; install</strong></p>
+        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
+          git clone https://github.com/jvoidial/phb-godcode-vortex.git<br/>
+          cd phb-godcode-vortex<br/>
+          bash installer.sh
+        </div>
+        <p style="margin-top:12px;"><strong style="color:#ccc;">2. Run the P2P engine</strong></p>
+        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
+          ./gcs/run_phb_p2p.sh
+        </div>
+        <p style="margin-top:12px;color:#888;">
+          Every device running this becomes a peer in the distributed Codex mesh.
+          Evolution packets are broadcast, received, and merged into
+          <span style="color:#ccc;">gcs/network_state.json</span>.
+        </p>
+        <div style="margin-top:12px;background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:11px;color:#666;border:1px solid #1a1a2a;">
+          <span style="color:#888;">📁 Project structure:</span><br/>
+          phb-godcode-vortex/<br/>
+          ├── installer.sh<br/>
+          ├── gcs/<br/>
+          │   ├── run_phb_p2p.sh<br/>
+          │   ├── network_state.json<br/>
+          │   ├── phb_auto_broadcast.py<br/>
+          │   └── scripts/<br/>
+          │       ├── p2p_listener.py<br/>
+          │       ├── p2p_send_auto.py<br/>
+          │       └── p2p_send.py<br/>
+          └── engine/<br/>
+              ├── phb_godcode_vortex.py<br/>
+              └── …
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:#555;border-top:1px solid #1a1a2a;padding-top:12px;">
+          <span style="color:#888;">⚡</span> Author: Jacob — creator of the PHB symbolic engine and distributed Codex mesh.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <script>
+  // ===== PHB Vortex Data Sync =====
+  // Assumes you serve the PHB state via HTTP, e.g., Python http.server
+  // or you have a WebSocket endpoint.
+
+  const PHB_DATA_URL = 'http://localhost:8000/gcs/network_state.json'; // adjust
+
+  async function updatePHB() {
+    try {
+      const response = await fetch(PHB_DATA_URL);
+      if (!response.ok) throw new Error('Network response not ok');
+      const data = await response.json();
+
+      // Map your PHB JSON fields to the DOM elements
+      document.getElementById('phbCoherence').textContent = data.coherence?.toFixed(3) || '0.000';
+      document.getElementById('phbVoxel').textContent = data.voxel_layer || 0;
+      document.getElementById('phbVeil').textContent = data.veil_state || '—';
+      document.getElementById('phbPortal').textContent = data.portal_openness?.toFixed(1) || '0.0';
+      document.getElementById('phbEnergy').textContent = data.energy_signature || 0;
+      document.getElementById('phbCodex').textContent = data.codex_pages || 0;
+      document.getElementById('phbPeers').textContent = data.peer_count || 0;
+      document.getElementById('phbState').textContent = data.network_state || 'SYNCED';
+      document.getElementById('phbMesh').textContent = data.mesh_status || 'ACTIVE';
+      document.getElementById('phbLastUpdate').textContent = `✅ Last update: ${new Date().toLocaleTimeString()}`;
+    } catch (error) {
+      document.getElementById('phbLastUpdate').textContent = `⚠️ Waiting for PHB data… (${error.message})`;
+    }
+  }
+
+  // Update every 5 seconds
+  updatePHB();
+  setInterval(updatePHB, 5000);
+  </script>
