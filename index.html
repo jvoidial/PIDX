@@ -6172,3 +6172,63 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     setInterval(fetchPHBData, 10000);
   })();
   </script>
+
+  <!-- PHB Vortex: hardcoded tunnel URL (permanent) -->
+  <script>
+  (function() {
+    // Direct tunnel URL – no config file needed
+    const PHB_DATA_URL = 'https://racing-revenues-extra-signs.trycloudflare.com/gcs/network_state.json';
+
+    async function fetchPHBData() {
+      try {
+        const response = await fetch(PHB_DATA_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        // Update PHB section
+        const setEl = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val;
+        };
+
+        // Extract values (using the same mapping)
+        let coherence = 0, stability = 0;
+        if (data.pages && data.pages.length > 0) {
+          const latest = data.pages[data.pages.length - 1];
+          coherence = latest.coherence || 0;
+          stability = latest.stability || 0;
+        }
+        if (coherence === 0 && data.coherence) coherence = data.coherence;
+        if (stability === 0 && data.stability) stability = data.stability;
+
+        setEl('phbCoherence', coherence.toFixed(3));
+        setEl('phbStability', stability.toFixed(3));
+        setEl('phbVoxel', data.voxel_layer ?? data.voxel ?? 0);
+        setEl('phbVeil', data.veil_state ?? data.veil ?? '—');
+        setEl('phbPortal', (data.portal_openness ?? data.portal ?? 0).toFixed(1));
+        setEl('phbEnergy', data.energy_signature ?? data.energy ?? 0);
+        setEl('phbCodex', data.codex_pages ?? data.codex ?? 0);
+        setEl('phbPeers', data.peer_count ?? data.peers ?? 0);
+        setEl('phbState', data.network_state ?? data.state ?? 'SYNCED');
+        setEl('phbMesh', data.mesh_status ?? data.mesh ?? 'ACTIVE');
+        setEl('phbLastUpdate', `✅ Last update: ${new Date().toLocaleTimeString()}`);
+
+        // Update main Resonance Coherence
+        if (coherence > 0) {
+          const coherenceEl = document.getElementById('coherenceLevel');
+          if (coherenceEl) coherenceEl.textContent = coherence.toFixed(3);
+          const coherenceEl2 = document.getElementById('coherenceLevel2');
+          if (coherenceEl2) coherenceEl2.textContent = coherence.toFixed(3);
+        }
+      } catch (error) {
+        const el = document.getElementById('phbLastUpdate');
+        if (el) el.textContent = `⚠️ ${error.message}`;
+        console.warn('PHB fetch error:', error);
+      }
+    }
+
+    // Run every 10 seconds
+    fetchPHBData();
+    setInterval(fetchPHBData, 10000);
+  })();
+  </script>
