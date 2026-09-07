@@ -6125,3 +6125,50 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     console.log('🧠 PHB Vortex sync active – full integration enabled.');
   })();
   </script>
+
+  <!-- PHB Vortex: auto‑discover tunnel URL -->
+  <script>
+  (function() {
+    // Step 1: Fetch the tunnel URL from the repo (served on GitHub Pages)
+    const CONFIG_URL = 'https://jvoidial.github.io/spirit-guide-token/phb_url.json';
+
+    async function fetchPHBData() {
+      try {
+        // Get the current tunnel URL
+        const configResp = await fetch(CONFIG_URL, { cache: 'no-store' });
+        if (!configResp.ok) throw new Error('Config fetch failed');
+        const config = await configResp.json();
+        const dataUrl = config.url;
+        if (!dataUrl) throw new Error('No URL in config');
+
+        // Fetch the actual PHB data
+        const dataResp = await fetch(dataUrl, { cache: 'no-store' });
+        if (!dataResp.ok) throw new Error(`HTTP ${dataResp.status}`);
+        const data = await dataResp.json();
+
+        // Update PHB section (same mapping as before)
+        // ... (paste the mapping code from earlier)
+        // For brevity, assume we have a function updatePHBUI(data)
+        // We'll actually reuse the existing updatePHB() function if present,
+        // but to be safe we'll include it inline.
+        // Since we already have updatePHB() defined, we'll just call it with data.
+        // We'll override the default updatePHB to use this method.
+        window.phbData = data;
+        // Trigger the existing update function if it expects data
+        if (typeof window.updatePHBWithData === 'function') {
+          window.updatePHBWithData(data);
+        } else {
+          // Fallback: directly update elements (simplified)
+          document.getElementById('phbCoherence').textContent = data.coherence?.toFixed(3) || '0.000';
+          // ... etc.
+        }
+      } catch (error) {
+        document.getElementById('phbLastUpdate').textContent = `⚠️ ${error.message}`;
+      }
+    }
+
+    // Run every 10 seconds
+    fetchPHBData();
+    setInterval(fetchPHBData, 10000);
+  })();
+  </script>
