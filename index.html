@@ -1720,6 +1720,119 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   })();
 </script>
 
+
+  <!-- ===== PENNIES MULTIVERSE VAULT ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🥧</span> Pennies Multiverse Vault</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Total Pies</div>
+        <div class="value" id="vaultPies">∞</div>
+        <div class="sub">Infinite supply</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Stacks</div>
+        <div class="value" id="vaultStacks">∞</div>
+        <div class="sub">Across all planets</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Rewards</div>
+        <div class="value" id="vaultRewards">∞</div>
+        <div class="sub">Unlimited wealth</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Base APY</div>
+        <div class="value" id="vaultAPY">∞%</div>
+        <div class="sub">Compounding forever</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;">
+      <div style="font-size:13px;color:#888;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:20px;">
+        <span>🌍 Earth: <span id="earthPies">420</span> pies · <span id="earthStacks">8</span> stacks</span>
+        <span>🚀 Mars: <span id="marsPies">0</span> pies · <span id="marsStacks">0</span> stacks</span>
+        <span>🧜‍♀️ Siren: <span id="sirenPies">0</span> pies · <span id="sirenStacks">0</span> stacks</span>
+        <span>👽 Serpo: <span id="serpoPies">0</span> pies · <span id="serpoStacks">0</span> stacks</span>
+        <span>🌍 Proxima B: <span id="proximaPies">0</span> pies · <span id="proximaStacks">0</span> stacks</span>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+        🪐 Pies stack infinitely across planets · APY compounds forever · Wealth is infinite
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <button id="vaultCompoundBtn" style="background:#2a2a3a;color:#88ff88;border:1px solid #44ff88;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Compound Pies</button>
+      <button id="vaultAddPlanetBtn" style="background:#2a2a3a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">➕ Add Planet</button>
+    </div>
+    <div id="vaultLog" style="margin-top:12px;font-size:12px;color:#888;background:#050508;border-radius:8px;padding:8px;border:1px solid #1a1a2a;max-height:80px;overflow-y:auto;">
+      <span id="vaultLastAction">Vault initialized. Infinite stacking enabled.</span>
+    </div>
+  </div>
+
+
+<script>
+  // ===== PENNIES MULTIVERSE VAULT =====
+  (function() {
+    const VAULT_KEY = "pennies_vault";
+    let vault = JSON.parse(localStorage.getItem(VAULT_KEY) || '{"pies":420, "stacks":8, "rewards":1160.46, "apy":12.5, "planets":{"Earth":{ "pies":420, "stacks":8 }}}');
+
+    function updateVaultUI() {
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      set("vaultPies", "∞");
+      set("vaultStacks", "∞");
+      set("vaultRewards", "∞");
+      set("vaultAPY", "∞%");
+      for (const [planet, data] of Object.entries(vault.planets)) {
+        const pieEl = document.getElementById(planet.toLowerCase() + "Pies");
+        const stackEl = document.getElementById(planet.toLowerCase() + "Stacks");
+        if (pieEl) pieEl.textContent = data.pies;
+        if (stackEl) stackEl.textContent = data.stacks;
+      }
+      localStorage.setItem(VAULT_KEY, JSON.stringify(vault));
+    }
+
+    function compoundPies() {
+      const growth = 1 + (vault.apy / 100);
+      for (const planet of Object.keys(vault.planets)) {
+        vault.planets[planet].pies = Math.floor(vault.planets[planet].pies * growth);
+        vault.planets[planet].stacks = Math.floor(vault.planets[planet].stacks * 1.05);
+      }
+      const log = document.getElementById("vaultLastAction");
+      if (log) log.textContent = "🔄 Compounded all planets. Infinite growth continues.";
+      updateVaultUI();
+    }
+
+    function addPlanet() {
+      const planetNames = ["Mars", "Siren", "Serpo", "Proxima B", "Alpha Centauri", "Kepler-442b", "TRAPPIST-1e"];
+      let newPlanet = null;
+      for (const name of planetNames) {
+        if (!vault.planets[name]) {
+          newPlanet = name;
+          break;
+        }
+      }
+      if (!newPlanet) {
+        const log = document.getElementById("vaultLastAction");
+        if (log) log.textContent = "⚠️ All known planets already have vaults.";
+        return;
+      }
+      const avgPies = Math.floor(Object.values(vault.planets).reduce((s, d) => s + d.pies, 0) / Object.keys(vault.planets).length);
+      vault.planets[newPlanet] = { pies: avgPies, stacks: 1 };
+      const log = document.getElementById("vaultLastAction");
+      if (log) log.textContent = "🌍 Added vault for " + newPlanet + " with " + avgPies + " pies.";
+      updateVaultUI();
+    }
+
+    updateVaultUI();
+    document.addEventListener("DOMContentLoaded", function() {
+      const compoundBtn = document.getElementById("vaultCompoundBtn");
+      if (compoundBtn) compoundBtn.addEventListener("click", compoundPies);
+      const addBtn = document.getElementById("vaultAddPlanetBtn");
+      if (addBtn) addBtn.addEventListener("click", addPlanet);
+    });
+    setInterval(compoundPies, 30000);
+    console.log("🥧 Pennies Multiverse Vault initialized.");
+  })();
+</script>
+
 </body>
 </html>
 
