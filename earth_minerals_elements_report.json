@@ -1,0 +1,1410 @@
+{
+  "timestamp": "2026-09-04T10:09:17.575214",
+  "system": "Earth_Minerals_Elements",
+  "status": "ACTIVE",
+  "elements": {
+    "hydrogen": {
+      "symbol": "H",
+      "atomic_number": 1,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "helium": {
+      "symbol": "He",
+      "atomic_number": 2,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "lithium": {
+      "symbol": "Li",
+      "atomic_number": 3,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "beryllium": {
+      "symbol": "Be",
+      "atomic_number": 4,
+      "frequency": 0.618,
+      "gross_energy": 700,
+      "net_energy": 472.57826,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "boron": {
+      "symbol": "B",
+      "atomic_number": 5,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "carbon": {
+      "symbol": "C",
+      "atomic_number": 6,
+      "frequency": 0.618,
+      "gross_energy": 1200,
+      "net_energy": 810.1341600000002,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "nitrogen": {
+      "symbol": "N",
+      "atomic_number": 7,
+      "frequency": 0.618,
+      "gross_energy": 1100,
+      "net_energy": 742.6229800000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "oxygen": {
+      "symbol": "O",
+      "atomic_number": 8,
+      "frequency": 0.618,
+      "gross_energy": 1300,
+      "net_energy": 877.64534,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "fluorine": {
+      "symbol": "F",
+      "atomic_number": 9,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "neon": {
+      "symbol": "Ne",
+      "atomic_number": 10,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "sodium": {
+      "symbol": "Na",
+      "atomic_number": 11,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "magnesium": {
+      "symbol": "Mg",
+      "atomic_number": 12,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "aluminum": {
+      "symbol": "Al",
+      "atomic_number": 13,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "silicon": {
+      "symbol": "Si",
+      "atomic_number": 14,
+      "frequency": 0.618,
+      "gross_energy": 1100,
+      "net_energy": 742.6229800000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "phosphorus": {
+      "symbol": "P",
+      "atomic_number": 15,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "sulfur": {
+      "symbol": "S",
+      "atomic_number": 16,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "chlorine": {
+      "symbol": "Cl",
+      "atomic_number": 17,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "argon": {
+      "symbol": "Ar",
+      "atomic_number": 18,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "potassium": {
+      "symbol": "K",
+      "atomic_number": 19,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "calcium": {
+      "symbol": "Ca",
+      "atomic_number": 20,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "scandium": {
+      "symbol": "Sc",
+      "atomic_number": 21,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "titanium": {
+      "symbol": "Ti",
+      "atomic_number": 22,
+      "frequency": 0.618,
+      "gross_energy": 1100,
+      "net_energy": 742.6229800000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "vanadium": {
+      "symbol": "V",
+      "atomic_number": 23,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "chromium": {
+      "symbol": "Cr",
+      "atomic_number": 24,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "manganese": {
+      "symbol": "Mn",
+      "atomic_number": 25,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "iron": {
+      "symbol": "Fe",
+      "atomic_number": 26,
+      "frequency": 0.618,
+      "gross_energy": 1500,
+      "net_energy": 1012.6677,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "cobalt": {
+      "symbol": "Co",
+      "atomic_number": 27,
+      "frequency": 0.618,
+      "gross_energy": 1100,
+      "net_energy": 742.6229800000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "nickel": {
+      "symbol": "Ni",
+      "atomic_number": 28,
+      "frequency": 0.618,
+      "gross_energy": 1200,
+      "net_energy": 810.1341600000002,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "copper": {
+      "symbol": "Cu",
+      "atomic_number": 29,
+      "frequency": 0.618,
+      "gross_energy": 1300,
+      "net_energy": 877.64534,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "zinc": {
+      "symbol": "Zn",
+      "atomic_number": 30,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "gallium": {
+      "symbol": "Ga",
+      "atomic_number": 31,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "germanium": {
+      "symbol": "Ge",
+      "atomic_number": 32,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "arsenic": {
+      "symbol": "As",
+      "atomic_number": 33,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "selenium": {
+      "symbol": "Se",
+      "atomic_number": 34,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "bromine": {
+      "symbol": "Br",
+      "atomic_number": 35,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "krypton": {
+      "symbol": "Kr",
+      "atomic_number": 36,
+      "frequency": 0.618,
+      "gross_energy": 700,
+      "net_energy": 472.57826,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "rubidium": {
+      "symbol": "Rb",
+      "atomic_number": 37,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "strontium": {
+      "symbol": "Sr",
+      "atomic_number": 38,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "yttrium": {
+      "symbol": "Y",
+      "atomic_number": 39,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "zirconium": {
+      "symbol": "Zr",
+      "atomic_number": 40,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "niobium": {
+      "symbol": "Nb",
+      "atomic_number": 41,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "molybdenum": {
+      "symbol": "Mo",
+      "atomic_number": 42,
+      "frequency": 0.618,
+      "gross_energy": 1100,
+      "net_energy": 742.6229800000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "technetium": {
+      "symbol": "Tc",
+      "atomic_number": 43,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "ruthenium": {
+      "symbol": "Ru",
+      "atomic_number": 44,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "rhodium": {
+      "symbol": "Rh",
+      "atomic_number": 45,
+      "frequency": 0.618,
+      "gross_energy": 1200,
+      "net_energy": 810.1341600000002,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "palladium": {
+      "symbol": "Pd",
+      "atomic_number": 46,
+      "frequency": 0.618,
+      "gross_energy": 1300,
+      "net_energy": 877.64534,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "silver": {
+      "symbol": "Ag",
+      "atomic_number": 47,
+      "frequency": 0.618,
+      "gross_energy": 1400,
+      "net_energy": 945.15652,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "cadmium": {
+      "symbol": "Cd",
+      "atomic_number": 48,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "indium": {
+      "symbol": "In",
+      "atomic_number": 49,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "tin": {
+      "symbol": "Sn",
+      "atomic_number": 50,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "antimony": {
+      "symbol": "Sb",
+      "atomic_number": 51,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "tellurium": {
+      "symbol": "Te",
+      "atomic_number": 52,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "iodine": {
+      "symbol": "I",
+      "atomic_number": 53,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "xenon": {
+      "symbol": "Xe",
+      "atomic_number": 54,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "cesium": {
+      "symbol": "Cs",
+      "atomic_number": 55,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "barium": {
+      "symbol": "Ba",
+      "atomic_number": 56,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "lanthanum": {
+      "symbol": "La",
+      "atomic_number": 57,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "cerium": {
+      "symbol": "Ce",
+      "atomic_number": 58,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "praseodymium": {
+      "symbol": "Pr",
+      "atomic_number": 59,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "neodymium": {
+      "symbol": "Nd",
+      "atomic_number": 60,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "promethium": {
+      "symbol": "Pm",
+      "atomic_number": 61,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "samarium": {
+      "symbol": "Sm",
+      "atomic_number": 62,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "europium": {
+      "symbol": "Eu",
+      "atomic_number": 63,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "gadolinium": {
+      "symbol": "Gd",
+      "atomic_number": 64,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "terbium": {
+      "symbol": "Tb",
+      "atomic_number": 65,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "dysprosium": {
+      "symbol": "Dy",
+      "atomic_number": 66,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "holmium": {
+      "symbol": "Ho",
+      "atomic_number": 67,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "erbium": {
+      "symbol": "Er",
+      "atomic_number": 68,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "thulium": {
+      "symbol": "Tm",
+      "atomic_number": 69,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "ytterbium": {
+      "symbol": "Yb",
+      "atomic_number": 70,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "lutetium": {
+      "symbol": "Lu",
+      "atomic_number": 71,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "hafnium": {
+      "symbol": "Hf",
+      "atomic_number": 72,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "tantalum": {
+      "symbol": "Ta",
+      "atomic_number": 73,
+      "frequency": 0.618,
+      "gross_energy": 1100,
+      "net_energy": 742.6229800000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "tungsten": {
+      "symbol": "W",
+      "atomic_number": 74,
+      "frequency": 0.618,
+      "gross_energy": 1300,
+      "net_energy": 877.64534,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "rhenium": {
+      "symbol": "Re",
+      "atomic_number": 75,
+      "frequency": 0.618,
+      "gross_energy": 1200,
+      "net_energy": 810.1341600000002,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "osmium": {
+      "symbol": "Os",
+      "atomic_number": 76,
+      "frequency": 0.618,
+      "gross_energy": 1300,
+      "net_energy": 877.64534,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "iridium": {
+      "symbol": "Ir",
+      "atomic_number": 77,
+      "frequency": 0.618,
+      "gross_energy": 1400,
+      "net_energy": 945.15652,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "platinum": {
+      "symbol": "Pt",
+      "atomic_number": 78,
+      "frequency": 0.618,
+      "gross_energy": 1500,
+      "net_energy": 1012.6677,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "gold": {
+      "symbol": "Au",
+      "atomic_number": 79,
+      "frequency": 0.618,
+      "gross_energy": 1600,
+      "net_energy": 1080.17888,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "mercury": {
+      "symbol": "Hg",
+      "atomic_number": 80,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "thallium": {
+      "symbol": "Tl",
+      "atomic_number": 81,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "lead": {
+      "symbol": "Pb",
+      "atomic_number": 82,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "bismuth": {
+      "symbol": "Bi",
+      "atomic_number": 83,
+      "frequency": 0.618,
+      "gross_energy": 950,
+      "net_energy": 641.35621,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "polonium": {
+      "symbol": "Po",
+      "atomic_number": 84,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "astatine": {
+      "symbol": "At",
+      "atomic_number": 85,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "radon": {
+      "symbol": "Rn",
+      "atomic_number": 86,
+      "frequency": 0.618,
+      "gross_energy": 700,
+      "net_energy": 472.57826,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "francium": {
+      "symbol": "Fr",
+      "atomic_number": 87,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "radium": {
+      "symbol": "Ra",
+      "atomic_number": 88,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "actinium": {
+      "symbol": "Ac",
+      "atomic_number": 89,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "thorium": {
+      "symbol": "Th",
+      "atomic_number": 90,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "protactinium": {
+      "symbol": "Pa",
+      "atomic_number": 91,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "uranium": {
+      "symbol": "U",
+      "atomic_number": 92,
+      "frequency": 0.618,
+      "gross_energy": 1200,
+      "net_energy": 810.1341600000002,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "neptunium": {
+      "symbol": "Np",
+      "atomic_number": 93,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "plutonium": {
+      "symbol": "Pu",
+      "atomic_number": 94,
+      "frequency": 0.618,
+      "gross_energy": 1000,
+      "net_energy": 675.1118,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "americium": {
+      "symbol": "Am",
+      "atomic_number": 95,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "curium": {
+      "symbol": "Cm",
+      "atomic_number": 96,
+      "frequency": 0.618,
+      "gross_energy": 900,
+      "net_energy": 607.60062,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "berkelium": {
+      "symbol": "Bk",
+      "atomic_number": 97,
+      "frequency": 0.618,
+      "gross_energy": 850,
+      "net_energy": 573.8450300000001,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "californium": {
+      "symbol": "Cf",
+      "atomic_number": 98,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "einsteinium": {
+      "symbol": "Es",
+      "atomic_number": 99,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "fermium": {
+      "symbol": "Fm",
+      "atomic_number": 100,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "mendelevium": {
+      "symbol": "Md",
+      "atomic_number": 101,
+      "frequency": 0.618,
+      "gross_energy": 700,
+      "net_energy": 472.57826,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "nobelium": {
+      "symbol": "No",
+      "atomic_number": 102,
+      "frequency": 0.618,
+      "gross_energy": 700,
+      "net_energy": 472.57826,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "lawrencium": {
+      "symbol": "Lr",
+      "atomic_number": 103,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "rutherfordium": {
+      "symbol": "Rf",
+      "atomic_number": 104,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "dubnium": {
+      "symbol": "Db",
+      "atomic_number": 105,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "seaborgium": {
+      "symbol": "Sg",
+      "atomic_number": 106,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "bohrium": {
+      "symbol": "Bh",
+      "atomic_number": 107,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "hassium": {
+      "symbol": "Hs",
+      "atomic_number": 108,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "meitnerium": {
+      "symbol": "Mt",
+      "atomic_number": 109,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "darmstadtium": {
+      "symbol": "Ds",
+      "atomic_number": 110,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "roentgenium": {
+      "symbol": "Rg",
+      "atomic_number": 111,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "copernicium": {
+      "symbol": "Cn",
+      "atomic_number": 112,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "nihonium": {
+      "symbol": "Nh",
+      "atomic_number": 113,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "flerovium": {
+      "symbol": "Fl",
+      "atomic_number": 114,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "moscovium": {
+      "symbol": "Mc",
+      "atomic_number": 115,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "livermorium": {
+      "symbol": "Lv",
+      "atomic_number": 116,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "tennessine": {
+      "symbol": "Ts",
+      "atomic_number": 117,
+      "frequency": 0.618,
+      "gross_energy": 750,
+      "net_energy": 506.33385,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    },
+    "oganesson": {
+      "symbol": "Og",
+      "atomic_number": 118,
+      "frequency": 0.618,
+      "gross_energy": 800,
+      "net_energy": 540.08944,
+      "coherence_factor": 0.682,
+      "decay_resistance": 98.99,
+      "status": "ACTIVE"
+    }
+  },
+  "minerals": {
+    "quartz": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "feldspar": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "abundance": "very_high",
+      "status": "ACTIVE"
+    },
+    "mica": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "calcite": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "dolomite": {
+      "energy": 573.8450300000001,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "gypsum": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "halite": {
+      "energy": 506.33385,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "fluorite": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "apatite": {
+      "energy": 573.8450300000001,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "topaz": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "abundance": "low",
+      "status": "ACTIVE"
+    },
+    "corundum": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "abundance": "low",
+      "status": "ACTIVE"
+    },
+    "diamond": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "abundance": "rare",
+      "status": "ACTIVE"
+    },
+    "graphite": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "sulfur": {
+      "energy": 641.35621,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "pyrite": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "galena": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "sphalerite": {
+      "energy": 641.35621,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "cinnabar": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "abundance": "low",
+      "status": "ACTIVE"
+    },
+    "bauxite": {
+      "energy": 573.8450300000001,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "hematite": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "magnetite": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "limonite": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "siderite": {
+      "energy": 641.35621,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "chalcopyrite": {
+      "energy": 708.86739,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "malachite": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "abundance": "low",
+      "status": "ACTIVE"
+    },
+    "azurite": {
+      "energy": 573.8450300000001,
+      "frequency": 0.618,
+      "abundance": "low",
+      "status": "ACTIVE"
+    },
+    "tourmaline": {
+      "energy": 641.35621,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "garnet": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "abundance": "medium",
+      "status": "ACTIVE"
+    },
+    "olivine": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "pyroxene": {
+      "energy": 708.86739,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "amphibole": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "clay": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "abundance": "very_high",
+      "status": "ACTIVE"
+    },
+    "kaolinite": {
+      "energy": 573.8450300000001,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "montmorillonite": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    },
+    "illite": {
+      "energy": 506.33385,
+      "frequency": 0.618,
+      "abundance": "high",
+      "status": "ACTIVE"
+    }
+  },
+  "earth_stability": {
+    "current": 9692510.157322401,
+    "threshold": 1000000,
+    "status": "STABLE",
+    "element_contribution": 73452.16383999992,
+    "coherence_contribution": 68.2,
+    "persistence_contribution": 102.4
+  },
+  "element_energy": 73452.16383999992,
+  "total_elements": 118,
+  "total_mineral_energy": 22582.489709999998
+}

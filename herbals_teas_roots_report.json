@@ -1,0 +1,554 @@
+{
+  "timestamp": "2026-09-04T10:24:18.548718",
+  "system": "Herbals_Teas_Roots",
+  "status": "ACTIVE",
+  "herbals": {
+    "Ashwagandha": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "adaptogen",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Rhodiola": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "energy_boost",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Reishi": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "type": "mushroom",
+      "status": "ACTIVE"
+    },
+    "Cordyceps": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "endurance",
+      "type": "mushroom",
+      "status": "ACTIVE"
+    },
+    "Lion's Mane": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "cognitive",
+      "type": "mushroom",
+      "status": "ACTIVE"
+    },
+    "Chaga": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_boost",
+      "type": "mushroom",
+      "status": "ACTIVE"
+    },
+    "Holy Basil": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "stress_reduction",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Schisandra": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "adaptogenic",
+      "type": "berry",
+      "status": "ACTIVE"
+    },
+    "Astragalus": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Eleuthero": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "energy_endurance",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Ginseng": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "benefit": "vitality",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Ginkgo": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "cognitive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Turmeric": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "benefit": "anti_inflammatory",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Ginger": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Echinacea": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Milk Thistle": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "liver_support",
+      "type": "seed",
+      "status": "ACTIVE"
+    },
+    "Dandelion": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "detox",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Nettle": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "nutrient_support",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Lemon Balm": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "calming",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Passionflower": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "relaxation",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Valerian": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "sleep",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Chamomile": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "calming",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Lavender": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "relaxation",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Peppermint": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Rosemary": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "cognitive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Sage": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "cognitive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Thyme": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Oregano": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "antimicrobial",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Basil": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "stress_reduction",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Cilantro": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "detox",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Parsley": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "nutrient_support",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Mint": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Fennel": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "seed",
+      "status": "ACTIVE"
+    },
+    "Cardamom": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "seed",
+      "status": "ACTIVE"
+    },
+    "Cinnamon": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "blood_sugar",
+      "type": "bark",
+      "status": "ACTIVE"
+    },
+    "Clove": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "antimicrobial",
+      "type": "flower",
+      "status": "ACTIVE"
+    }
+  },
+  "teas": {
+    "Green Tea": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "antioxidant",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Black Tea": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "energy",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Oolong Tea": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "metabolism",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "White Tea": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "antioxidant",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Pu-erh Tea": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Matcha": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "benefit": "energy_focus",
+      "type": "powder",
+      "status": "ACTIVE"
+    },
+    "Yerba Mate": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "energy",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Rooibos": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "antioxidant",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Chamomile Tea": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "calming",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Peppermint Tea": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Ginger Tea": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Turmeric Tea": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "anti_inflammatory",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Cinnamon Tea": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "blood_sugar",
+      "type": "bark",
+      "status": "ACTIVE"
+    },
+    "Lemon Tea": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "detox",
+      "type": "fruit",
+      "status": "ACTIVE"
+    },
+    "Hibiscus Tea": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "antioxidant",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Dandelion Tea": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "detox",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Nettle Tea": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "nutrient_support",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Fennel Tea": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "seed",
+      "status": "ACTIVE"
+    },
+    "Lavender Tea": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "relaxation",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Rose Tea": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "calming",
+      "type": "flower",
+      "status": "ACTIVE"
+    },
+    "Jasmine Tea": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "relaxation",
+      "type": "leaf",
+      "status": "ACTIVE"
+    },
+    "Chai Tea": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "energy_warmth",
+      "type": "blend",
+      "status": "ACTIVE"
+    },
+    "Earl Grey": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "energy_focus",
+      "type": "leaf",
+      "status": "ACTIVE"
+    }
+  },
+  "roots": {
+    "Ginseng": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "benefit": "vitality",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Ashwagandha": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "adaptogen",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Turmeric": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "benefit": "anti_inflammatory",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Ginger": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Echinacea": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Dandelion": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "detox",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Valerian": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "sleep",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Astragalus": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Eleuthero": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "energy_endurance",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Rhodiola": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "energy_boost",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Licorice": {
+      "energy": 607.60062,
+      "frequency": 0.618,
+      "benefit": "adrenal_support",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Maca": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "energy_vitality",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Yacon": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "prebiotic",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Burdock": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "blood_purifier",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Yellow Dock": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "digestive",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Sarsaparilla": {
+      "energy": 540.08944,
+      "frequency": 0.618,
+      "benefit": "adaptogen",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Wild Yam": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "hormonal",
+      "type": "root",
+      "status": "ACTIVE"
+    },
+    "Devil's Claw": {
+      "energy": 472.57826,
+      "frequency": 0.618,
+      "benefit": "anti_inflammatory",
+      "type": "root",
+      "status": "ACTIVE"
+    }
+  },
+  "total_energy": 48810.58313999999,
+  "herbal_energy": 23426.379459999993,
+  "tea_energy": 13704.76954,
+  "root_energy": 11679.43414
+}

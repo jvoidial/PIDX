@@ -1,0 +1,452 @@
+{
+  "timestamp": "2026-09-04T10:22:34.286238",
+  "system": "Senolytics_Immortal_Animals",
+  "status": "ACTIVE",
+  "senolytics": {
+    "Fisetin": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "strawberries",
+      "anti_aging_potential": 829.5773798400002,
+      "status": "ACTIVE"
+    },
+    "Quercetin": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "onions",
+      "anti_aging_potential": 760.4459315200002,
+      "status": "ACTIVE"
+    },
+    "Curcumin": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "turmeric",
+      "anti_aging_potential": 898.70882816,
+      "status": "ACTIVE"
+    },
+    "Resveratrol": {
+      "energy": 843.88975,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "grapes",
+      "anti_aging_potential": 864.1431040000001,
+      "status": "ACTIVE"
+    },
+    "EGCG": {
+      "energy": 776.3785700000001,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "green_tea",
+      "anti_aging_potential": 795.0116556800001,
+      "status": "ACTIVE"
+    },
+    "Apigenin": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "parsley",
+      "anti_aging_potential": 691.3144832,
+      "status": "ACTIVE"
+    },
+    "Luteolin": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "peppers",
+      "anti_aging_potential": 691.3144832,
+      "status": "ACTIVE"
+    },
+    "Kaempferol": {
+      "energy": 708.86739,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "kale",
+      "anti_aging_potential": 725.88020736,
+      "status": "ACTIVE"
+    },
+    "Myricetin": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "berries",
+      "anti_aging_potential": 760.4459315200002,
+      "status": "ACTIVE"
+    },
+    "Baicalein": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "skullcap",
+      "anti_aging_potential": 829.5773798400002,
+      "status": "ACTIVE"
+    },
+    "Pterostilbene": {
+      "energy": 776.3785700000001,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "blueberries",
+      "anti_aging_potential": 795.0116556800001,
+      "status": "ACTIVE"
+    },
+    "Naringenin": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "grapefruit",
+      "anti_aging_potential": 691.3144832,
+      "status": "ACTIVE"
+    },
+    "Hesperetin": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "oranges",
+      "anti_aging_potential": 691.3144832,
+      "status": "ACTIVE"
+    },
+    "Genistein": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "soy",
+      "anti_aging_potential": 760.4459315200002,
+      "status": "ACTIVE"
+    },
+    "Daidzein": {
+      "energy": 708.86739,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "soy",
+      "anti_aging_potential": 725.88020736,
+      "status": "ACTIVE"
+    },
+    "Cyanidin": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "berries",
+      "anti_aging_potential": 691.3144832,
+      "status": "ACTIVE"
+    },
+    "Pelargonidin": {
+      "energy": 641.35621,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "strawberries",
+      "anti_aging_potential": 656.7487590400001,
+      "status": "ACTIVE"
+    },
+    "Malvidin": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "grapes",
+      "anti_aging_potential": 691.3144832,
+      "status": "ACTIVE"
+    },
+    "Delphinidin": {
+      "energy": 708.86739,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "berries",
+      "anti_aging_potential": 725.88020736,
+      "status": "ACTIVE"
+    },
+    "Petunidin": {
+      "energy": 641.35621,
+      "frequency": 0.618,
+      "benefit": "senolytic",
+      "source": "berries",
+      "anti_aging_potential": 656.7487590400001,
+      "status": "ACTIVE"
+    }
+  },
+  "immortal_animals": {
+    "Phoenix": {
+      "energy": 1350.2236,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "fire",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Dragon": {
+      "energy": 1687.7795,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "fire",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Unicorn": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "light",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Griffin": {
+      "energy": 1282.71242,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "air",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Hydra": {
+      "energy": 1417.73478,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "water",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Pegasus": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "air",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Sphinx": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Chimera": {
+      "energy": 1350.2236,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "fire",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Cerberus": {
+      "energy": 1282.71242,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Minotaur": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Basilisk": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Mermaid": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "water",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Fairy": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "light",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Elf": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "light",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Dwarf": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Giant": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Troll": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Goblin": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Ogre": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Werewolf": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "moon",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Vampire": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "dark",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Angel": {
+      "energy": 1350.2236,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "light",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Demon": {
+      "energy": 1282.71242,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "dark",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Naga": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "water",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Garuda": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "air",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Kitsune": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "fire",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Tanuki": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "earth",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Bakeneko": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "moon",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Nekomata": {
+      "energy": 978.9121100000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "moon",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    },
+    "Kappa": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "element": "water",
+      "immortality_factor": 102.4,
+      "status": "IMMORTAL"
+    }
+  },
+  "total_energy": 49721.98406999999,
+  "immortality_status": {
+    "status": "IMMORTAL",
+    "senolytic_contribution": 29.327902240325876,
+    "animal_contribution": 70.67209775967413,
+    "persistence_factor": 1.024,
+    "coherence_factor": 0.682,
+    "total_energy": 49721.98406999999,
+    "threshold": 10000,
+    "immortality_achieved": true
+  },
+  "senolytic_energy": 14582.414880000002,
+  "immortal_animal_energy": 35139.56918999999
+}

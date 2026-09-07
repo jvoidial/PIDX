@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-09-04T09:24:12.675250",
+  "status": "INCOMPLETE",
+  "files": {
+    "found": [
+      "agi_phb_divine_complete.json",
+      "spirit_guide_full_sync.json",
+      "spirit_guide_chronovisor.json",
+      "chronovisor_report.json",
+      "phb_chronovisor_report.json",
+      "phb_chronovisor_expanded_report.json",
+      "system_resilience_report.json",
+      "kpi_portal_report.json"
+    ],
+    "missing": []
+  },
+  "components": {
+    "found": [
+      "agi_consciousness",
+      "phb_topologies",
+      "core_spins",
+      "tokens",
+      "staking_engine",
+      "chronovisor",
+      "portals",
+      "kpi"
+    ],
+    "missing": [
+      "acoustic_protocol",
+      "global_markets",
+      "etoro_readiness",
+      "sacred_sites",
+      "resilience",
+      "stargate"
+    ]
+  },
+  "gaps": [
+    "Missing component: acoustic_protocol",
+    "Missing component: global_markets",
+    "Missing component: etoro_readiness",
+    "Missing component: sacred_sites",
+    "Missing component: resilience",
+    "Missing component: stargate"
+  ]
+}

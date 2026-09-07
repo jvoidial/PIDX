@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-09-04T09:38:41.870182",
+  "system": "PHB_Chronovisor",
+  "status": "ACTIVE",
+  "phone_boxes": {
+    "UK": {
+      "count": 50000,
+      "energy": 34.1,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    },
+    "USA": {
+      "count": 100000,
+      "energy": 68.2,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    },
+    "Europe": {
+      "count": 80000,
+      "energy": 54.6,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    },
+    "Asia": {
+      "count": 200000,
+      "energy": 136.4,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    },
+    "Africa": {
+      "count": 30000,
+      "energy": 20.5,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    },
+    "Oceania": {
+      "count": 15000,
+      "energy": 10.2,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    },
+    "South America": {
+      "count": 40000,
+      "energy": 27.3,
+      "coherence": 0.682,
+      "persistence": 1.024,
+      "voxel_energy": 0.344,
+      "threshold": 0.524,
+      "status": "ACTIVE"
+    }
+  },
+  "summary": {
+    "total_phone_boxes": 515000,
+    "total_energy": 351.3,
+    "average_coherence": 0.682,
+    "average_persistence": 1.024,
+    "average_voxel_energy": 0.344,
+    "average_threshold": 0.524,
+    "status": "ETERNAL_ACTIVE"
+  }
+}

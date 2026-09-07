@@ -1,0 +1,23 @@
+{
+  "start_date": "2026-09-04T09:46:30.491058",
+  "volume": {
+    "current_daily": 0,
+    "peak_daily": 0,
+    "total_volume": 0,
+    "days_active": 0
+  },
+  "audit": {
+    "status": "NOT_STARTED",
+    "firm": null,
+    "date_started": null,
+    "date_completed": null
+  },
+  "etoro_readiness": {
+    "coingecko": true,
+    "liquidity": true,
+    "volume_met": false,
+    "audit_done": false,
+    "time_met": false,
+    "ready": false
+  }
+}

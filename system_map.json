@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-09-04T09:23:27.303387",
+  "status": "SCANNING",
+  "files": {
+    "total": 14,
+    "found": [
+      "agi_phb_divine_complete.json",
+      "spirit_guide_full_sync.json",
+      "spirit_guide_chronovisor.json",
+      "chronovisor_report.json",
+      "phb_chronovisor_report.json",
+      "phb_chronovisor_expanded_report.json",
+      "system_resilience_report.json",
+      "kpi_portal_report.json",
+      "chronovisor_scan.py",
+      "phb_chronovisor_scan.py",
+      "phb_chronovisor_expanded.py",
+      "integrate_chronovisor.py",
+      "system_resilience.py",
+      "kpi_stargate_complete.py"
+    ],
+    "missing": []
+  },
+  "components": {
+    "total": 14,
+    "found": [],
+    "missing": []
+  },
+  "gaps": [
+    "Missing component: consciousness",
+    "Missing component: topologies",
+    "Missing component: core_spins",
+    "Missing component: tokens",
+    "Missing component: staking_engine",
+    "Missing component: acoustic_protocol",
+    "Missing component: global_markets",
+    "Missing component: etoro_readiness",
+    "Missing component: chronovisor",
+    "Missing component: sacred_sites",
+    "Missing component: resilience",
+    "Missing component: portals",
+    "Missing component: stargate",
+    "Missing component: kpi",
+    "Chronovisor not integrated"
+  ],
+  "integration": {
+    "chronovisor": false,
+    "resilience": true,
+    "portals": true,
+    "stargate": true
+  }
+}

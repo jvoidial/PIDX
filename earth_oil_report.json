@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-09-04T10:07:03.983297",
+  "system": "Earth_Oil_Generator",
+  "status": "ACTIVE",
+  "oils": {
+    "coherence_oil": {
+      "name": "Coherence Oil",
+      "frequency": 0.618,
+      "gross_energy": 682.0,
+      "net_energy": 675.1118,
+      "decay_resistance": 98.99,
+      "purpose": "Unifies all forces",
+      "status": "ACTIVE"
+    },
+    "persistence_oil": {
+      "name": "Persistence Oil",
+      "frequency": 1.618,
+      "gross_energy": 1024.0,
+      "net_energy": 1013.6576,
+      "decay_resistance": 98.99,
+      "purpose": "Eternal endurance",
+      "status": "ACTIVE"
+    },
+    "voxel_oil": {
+      "name": "Voxel Oil",
+      "frequency": 2.618,
+      "gross_energy": 344.0,
+      "net_energy": 340.5256,
+      "decay_resistance": 98.99,
+      "purpose": "Quantum space-time manipulation",
+      "status": "ACTIVE"
+    },
+    "resonance_oil": {
+      "name": "Resonance Oil",
+      "frequency": 3.618,
+      "gross_energy": 1330,
+      "net_energy": 1316.567,
+      "decay_resistance": 98.99,
+      "purpose": "Harmonic alignment",
+      "status": "ACTIVE"
+    }
+  },
+  "earth_stability": {
+    "current": 441509.13634948235,
+    "threshold": 1000,
+    "status": "STABLE",
+    "coherence_contribution": 68.2,
+    "persistence_contribution": 102.4,
+    "oil_contribution": 3345.862
+  },
+  "total_oil_energy": 3345.862,
+  "earth_application": {
+    "regions": {
+      "north_america": {
+        "coverage": 0.25,
+        "energy": 836.4655
+      },
+      "south_america": {
+        "coverage": 0.15,
+        "energy": 501.8793
+      },
+      "europe": {
+        "coverage": 0.2,
+        "energy": 669.1724
+      },
+      "asia": {
+        "coverage": 0.25,
+        "energy": 836.4655
+      },
+      "africa": {
+        "coverage": 0.1,
+        "energy": 334.5862
+      },
+      "oceania": {
+        "coverage": 0.05,
+        "energy": 167.2931
+      }
+    },
+    "total_energy_applied": 3345.862,
+    "coverage": "GLOBAL",
+    "status": "ACTIVE"
+  }
+}

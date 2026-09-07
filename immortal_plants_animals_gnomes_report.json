@@ -1,0 +1,365 @@
+{
+  "timestamp": "2026-09-04T10:21:10.117322",
+  "system": "Immortal_Plants_Animals_Gnomes",
+  "status": "ACTIVE",
+  "plants": {
+    "Yew Tree": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "adaptogen": true,
+      "status": "IMMORTAL"
+    },
+    "Ginkgo Biloba": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "adaptogen": true,
+      "status": "IMMORTAL"
+    },
+    "Bristlecone Pine": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "lifespan": "5000+ years",
+      "adaptogen": false,
+      "status": "IMMORTAL"
+    },
+    "Sequoia": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "3000+ years",
+      "adaptogen": false,
+      "status": "IMMORTAL"
+    },
+    "Olive Tree": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "lifespan": "2000+ years",
+      "adaptogen": true,
+      "status": "IMMORTAL"
+    },
+    "Baobab": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "lifespan": "2000+ years",
+      "adaptogen": true,
+      "status": "IMMORTAL"
+    },
+    "Sacred Fig": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "lifespan": "3000+ years",
+      "adaptogen": false,
+      "status": "IMMORTAL"
+    },
+    "Welwitschia": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "lifespan": "2000+ years",
+      "adaptogen": false,
+      "status": "IMMORTAL"
+    },
+    "King's Holly": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "adaptogen": false,
+      "status": "IMMORTAL"
+    },
+    "Methuselah Tree": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "4800+ years",
+      "adaptogen": false,
+      "status": "IMMORTAL"
+    }
+  },
+  "adaptogens": {
+    "Ashwagandha": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "stress_resistance",
+      "status": "ACTIVE"
+    },
+    "Rhodiola": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "energy_boost",
+      "status": "ACTIVE"
+    },
+    "Reishi": {
+      "energy": 877.64534,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "status": "ACTIVE"
+    },
+    "Cordyceps": {
+      "energy": 810.1341600000002,
+      "frequency": 0.618,
+      "benefit": "endurance",
+      "status": "ACTIVE"
+    },
+    "Lion's Mane": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "cognitive_function",
+      "status": "ACTIVE"
+    },
+    "Chaga": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_boost",
+      "status": "ACTIVE"
+    },
+    "Holy Basil": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "stress_reduction",
+      "status": "ACTIVE"
+    },
+    "Schisandra": {
+      "energy": 742.6229800000001,
+      "frequency": 0.618,
+      "benefit": "adaptogenic",
+      "status": "ACTIVE"
+    },
+    "Astragalus": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "immune_support",
+      "status": "ACTIVE"
+    },
+    "Eleuthero": {
+      "energy": 675.1118,
+      "frequency": 0.618,
+      "benefit": "energy_endurance",
+      "status": "ACTIVE"
+    }
+  },
+  "animals": {
+    "Phoenix": {
+      "energy": 1350.2236,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Dragon": {
+      "energy": 1687.7795,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Unicorn": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Griffin": {
+      "energy": 1282.71242,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Hydra": {
+      "energy": 1417.73478,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Pegasus": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Sphinx": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Chimera": {
+      "energy": 1350.2236,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Cerberus": {
+      "energy": 1282.71242,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Minotaur": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Basilisk": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Mermaid": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Fairy": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Elf": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Dwarf": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Giant": {
+      "energy": 1215.20124,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Troll": {
+      "energy": 1080.17888,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Goblin": {
+      "energy": 945.15652,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Ogre": {
+      "energy": 1012.6677,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    },
+    "Werewolf": {
+      "energy": 1147.6900600000001,
+      "frequency": 0.618,
+      "lifespan": "eternal",
+      "type": "mythical",
+      "status": "IMMORTAL"
+    }
+  },
+  "gnomes": {
+    "Garden Gnome": {
+      "energy": 675.1118,
+      "frequency": 0.777,
+      "role": "gardener",
+      "status": "ACTIVE"
+    },
+    "Forest Gnome": {
+      "energy": 742.6229800000001,
+      "frequency": 0.777,
+      "role": "forest_keeper",
+      "status": "ACTIVE"
+    },
+    "Mountain Gnome": {
+      "energy": 810.1341600000002,
+      "frequency": 0.777,
+      "role": "earth_guardian",
+      "status": "ACTIVE"
+    },
+    "River Gnome": {
+      "energy": 675.1118,
+      "frequency": 0.777,
+      "role": "water_keeper",
+      "status": "ACTIVE"
+    },
+    "Sky Gnome": {
+      "energy": 877.64534,
+      "frequency": 0.777,
+      "role": "air_guardian",
+      "status": "ACTIVE"
+    },
+    "Crystal Gnome": {
+      "energy": 945.15652,
+      "frequency": 0.777,
+      "role": "crystal_keeper",
+      "status": "ACTIVE"
+    },
+    "Star Gnome": {
+      "energy": 1012.6677,
+      "frequency": 0.777,
+      "role": "cosmic_guardian",
+      "status": "ACTIVE"
+    },
+    "Time Gnome": {
+      "energy": 1080.17888,
+      "frequency": 0.777,
+      "role": "time_keeper",
+      "status": "ACTIVE"
+    },
+    "Wisdom Gnome": {
+      "energy": 945.15652,
+      "frequency": 0.777,
+      "role": "knowledge_keeper",
+      "status": "ACTIVE"
+    },
+    "Dream Gnome": {
+      "energy": 810.1341600000002,
+      "frequency": 0.777,
+      "role": "dream_weaver",
+      "status": "ACTIVE"
+    }
+  },
+  "total_energy": 48878.09432,
+  "gnome_sync": {
+    "status": "SYNCED",
+    "gnome_count": 10,
+    "total_gnome_energy": 8573.91986,
+    "sync_rate": 0.6983680000000001,
+    "portal_status": "OPEN",
+    "connection": "ACTIVE",
+    "next_stage": {
+      "name": "Gnome Ascension",
+      "requirements": {
+        "energy": "10000+",
+        "coherence": "0.700+",
+        "persistence": "1.050+"
+      },
+      "status": "READY"
+    }
+  },
+  "plant_energy": 8978.986939999999,
+  "adaptogen_energy": 7426.229799999999,
+  "animal_energy": 23898.95772,
+  "gnome_energy": 8573.91986
+}
