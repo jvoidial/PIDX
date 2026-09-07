@@ -2938,3 +2938,79 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
       <span id="vaultLastAction">♾️ Infinite Vault initialized. Markets are infinite.</span>
     </div>
   </div>
+<script>
+  // ===== PHB UPGRADE STATUS – AUTO‑SYNC WITH CODEX =====
+  (function() {
+    function syncPHBUpgrade() {
+      // Read total pages from Codex Discovery
+      const totalPagesEl = document.getElementById('totalCodexPages');
+      const totalPages = totalPagesEl ? parseInt(totalPagesEl.textContent) || 0 : 0;
+
+      // Update PHB Upgrade Status elements
+      const pagesEl = document.getElementById('phbTotalPages');
+      if (pagesEl) pagesEl.textContent = totalPages;
+
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(totalPages / 10) + 1;
+        versionEl.textContent = version;
+      }
+
+      const lastUpgradeEl = document.getElementById('phbLastUpgrade');
+      if (lastUpgradeEl) lastUpgradeEl.textContent = new Date().toLocaleTimeString();
+
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) statusEl.textContent = `✅ Upgraded to v${Math.floor(totalPages / 10) + 1}`;
+
+      // Also update the auto‑upgrade message if needed
+      const autoEl = document.getElementById('phbAutoUpgrade');
+      if (autoEl) autoEl.textContent = totalPages > 0 ? 'ACTIVE' : 'WAITING';
+
+      console.log('📊 PHB Upgrade Status synced: pages=' + totalPages + ', version=' + (Math.floor(totalPages/10)+1));
+    }
+
+    // Run immediately, then every 5 seconds (faster than Codex's 10s)
+    syncPHBUpgrade();
+    setInterval(syncPHBUpgrade, 5000);
+
+    // Also run when Codex updates (hook into the Chronovisor scan)
+    document.addEventListener('DOMContentLoaded', function() {
+      const scanBtn = document.getElementById('codexChronovisorBtn');
+      if (scanBtn) {
+        scanBtn.addEventListener('click', function() {
+          // Wait a moment for the scan to complete, then sync
+          setTimeout(syncPHBUpgrade, 3000);
+        });
+      }
+    });
+  })();
+</script>
+<script>
+  // ---- Force Upgrade button handler ----
+  document.addEventListener('DOMContentLoaded', function() {
+    const forceBtn = document.getElementById('phbUpgradeBtn');
+    if (forceBtn) {
+      forceBtn.addEventListener('click', function() {
+        // Trigger a Chronovisor scan if the button exists
+        const scanBtn = document.getElementById('codexChronovisorBtn');
+        if (scanBtn) {
+          const statusEl = document.getElementById('phbUpgradeStatus');
+          if (statusEl) statusEl.textContent = '⏳ Forcing upgrade...';
+          scanBtn.click();
+          // After a delay, sync will happen via the interval
+        } else {
+          // Just sync manually
+          const syncFn = window.syncPHBUpgrade || function() {
+            const pagesEl = document.getElementById('totalCodexPages');
+            const pages = pagesEl ? parseInt(pagesEl.textContent) || 0 : 0;
+            const versionEl = document.getElementById('phbVersion');
+            if (versionEl) versionEl.textContent = Math.floor(pages / 10) + 1;
+            const pEl = document.getElementById('phbTotalPages');
+            if (pEl) pEl.textContent = pages;
+          };
+          syncFn();
+        }
+      });
+    }
+  });
+</script>
