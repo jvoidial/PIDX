@@ -6090,12 +6090,12 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function() {
     const BASE_URL = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_";
     const MAX_FEEDS = 10;
-
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
     let feeds = {};
 
@@ -6231,17 +6231,14 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       container.style.marginTop = '20px';
       const phbSection = document.getElementById('phb-vortex-section');
       if (phbSection) phbSection.appendChild(container);
-
       fetchAllFeeds();
       const intervalId = setInterval(fetchAllFeeds, 10000);
       console.log("⏳ Multi‑feed auto‑update started (ID: " + intervalId + ")");
-
       document.addEventListener("visibilitychange", function() {
         if (!document.hidden) {
           fetchAllFeeds();
         }
       });
-
       const btn = document.getElementById("phbRefreshBtn");
       if (btn) btn.addEventListener("click", function() { fetchAllFeeds(); });
       window.phbInterval = intervalId;
