@@ -3462,3 +3462,75 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     setInterval(updatePHB, 1000);
   })();
 </script>
+<script>
+  // ===== UNIVERSAL LANGUAGE & WORD COUNT =====
+  (function() {
+    const LANGUAGE_RANGES = {
+      'Latin': /[A-Za-z]/,
+      'Cyrillic': /[\u0400-\u04FF]/,
+      'Greek': /[\u0370-\u03FF]/,
+      'Arabic': /[\u0600-\u06FF]/,
+      'Hebrew': /[\u0590-\u05FF]/,
+      'Devanagari': /[\u0900-\u097F]/,
+      'Chinese': /[\u4E00-\u9FFF]/,
+      'Japanese': /[\u3040-\u309F\u30A0-\u30FF]/,
+      'Korean': /[\uAC00-\uD7AF]/,
+      'Thai': /[\u0E00-\u0E7F]/,
+      'Magic': /[A-Za-z]{5,}/ // catch magic words as Latin
+    };
+
+    function detectLanguage(text) {
+      let detected = [];
+      for (const [lang, pattern] of Object.entries(LANGUAGE_RANGES)) {
+        if (pattern.test(text)) detected.push(lang);
+      }
+      return detected.length ? detected : ['Unknown'];
+    }
+
+    function updateLanguageWordCount() {
+      try {
+        const pages = JSON.parse(localStorage.getItem('codex_pages') || '[]');
+        let allWords = [];
+        let langSet = new Set();
+
+        pages.forEach(page => {
+          const seq = page.sequence || [];
+          seq.forEach(word => {
+            if (word && word.length > 1) {
+              allWords.push(word);
+              detectLanguage(word).forEach(l => langSet.add(l));
+            }
+          });
+        });
+
+        const wordCount = allWords.length;
+        const langCount = langSet.size;
+
+        const langEl = document.getElementById('codexLanguages');
+        const wordEl = document.getElementById('codexWordCount');
+
+        if (langEl) langEl.textContent = langCount;
+        if (wordEl) wordEl.textContent = wordCount;
+
+        console.log('🌍 Universal count: ' + wordCount + ' words, ' + langCount + ' languages');
+      } catch(e) {
+        // ignore
+      }
+    }
+
+    // Run every 5 seconds
+    updateLanguageWordCount();
+    setInterval(updateLanguageWordCount, 5000);
+
+    // Also run when Codex Discovery updates (if we can detect it)
+    const observer = new MutationObserver(function() {
+      updateLanguageWordCount();
+    });
+    const target = document.getElementById('codexPagesList');
+    if (target) {
+      observer.observe(target, { childList: true, subtree: true });
+    }
+
+    console.log('🌍 Universal language/word counter started.');
+  })();
+</script>
