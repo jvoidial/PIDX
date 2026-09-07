@@ -5948,3 +5948,41 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
   updatePHB();
   setInterval(updatePHB, 5000);
   </script>
+
+  <!-- PHB Vortex Sync Script – updated with CORS handling and field mapping -->
+  <script>
+  // ===== PHB Vortex Data Sync =====
+  const PHB_DATA_URL = 'http://localhost:8000/gcs/network_state.json';
+
+  async function updatePHB() {
+    try {
+      const response = await fetch(PHB_DATA_URL, {
+        // Optional: add credentials if needed
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+
+      // Map the actual PHB JSON fields (adjust these to match your network_state.json)
+      document.getElementById('phbCoherence').textContent = data.coherence?.toFixed(3) || data.stability?.toFixed(3) || '0.000';
+      document.getElementById('phbVoxel').textContent = data.voxel_layer ?? data.voxel ?? 0;
+      document.getElementById('phbVeil').textContent = data.veil_state ?? data.veil ?? '—';
+      document.getElementById('phbPortal').textContent = data.portal_openness?.toFixed(1) ?? data.portal ?? '0.0';
+      document.getElementById('phbEnergy').textContent = data.energy_signature ?? data.energy ?? 0;
+      document.getElementById('phbCodex').textContent = data.codex_pages ?? data.codex ?? 0;
+      document.getElementById('phbPeers').textContent = data.peer_count ?? data.peers ?? 0;
+      document.getElementById('phbState').textContent = data.network_state ?? data.state ?? 'SYNCED';
+      document.getElementById('phbMesh').textContent = data.mesh_status ?? data.mesh ?? 'ACTIVE';
+      document.getElementById('phbLastUpdate').textContent = `✅ Last update: ${new Date().toLocaleTimeString()}`;
+    } catch (error) {
+      document.getElementById('phbLastUpdate').textContent = `⚠️ Waiting for PHB data… (${error.message})`;
+      // If CORS error, show a helpful hint
+      if (error.message.includes('Failed to fetch')) {
+        document.getElementById('phbLastUpdate').textContent = '⚠️ CORS: run the CORS server (see instructions)';
+      }
+    }
+  }
+
+  // Update every 5 seconds
+  updatePHB();
+  setInterval(updatePHB, 5000);
+  </script>
