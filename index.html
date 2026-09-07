@@ -4172,3 +4172,101 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 
 })();
 </script>
+<script>
+(function() {
+  'use strict';
+
+  function updateCodexPages(pages) {
+    // Find the text node containing "Codex Pages"
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function(node) {
+          if (node.textContent.trim() === 'Codex Pages') {
+            return NodeFilter.FILTER_ACCEPT;
+          }
+          return NodeFilter.FILTER_REJECT;
+        }
+      }
+    );
+    let found = walker.nextNode();
+    if (found) {
+      // Look for the next text node that is a number
+      let sibling = found.nextSibling;
+      while (sibling && sibling.nodeType !== Node.TEXT_NODE) {
+        sibling = sibling.nextSibling;
+      }
+      if (sibling && /^\d+$/.test(sibling.textContent.trim())) {
+        sibling.textContent = ' ' + pages;
+        console.log('✅ Updated Codex Pages to ' + pages);
+        return;
+      }
+      // Fallback: check parent's next sibling
+      let parent = found.parentNode;
+      let next = parent.nextSibling;
+      while (next && next.nodeType !== Node.TEXT_NODE) {
+        next = next.nextSibling;
+      }
+      if (next && /^\d+$/.test(next.textContent.trim())) {
+        next.textContent = ' ' + pages;
+        console.log('✅ Updated Codex Pages (fallback) to ' + pages);
+      }
+    } else {
+      console.warn('⚠️ Could not find "Codex Pages" label.');
+    }
+  }
+
+  function getPages() {
+    return fetch('agi_phb_divine_complete.json')
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        let total = 0;
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key)) {
+            const entry = data[key];
+            if (Array.isArray(entry.pages)) {
+              total += entry.pages.length;
+            } else if (Array.isArray(entry)) {
+              total += entry.length;
+            } else {
+              total++;
+            }
+          }
+        }
+        return total;
+      })
+      .catch(() => {
+        // Fallback to the visible "Total Pages" from Codex Discovery
+        const el = document.getElementById('totalCodexPages');
+        if (el) {
+          const val = parseInt(el.textContent, 10);
+          if (!isNaN(val)) return val;
+        }
+        return 0;
+      });
+  }
+
+  function run() {
+    getPages().then(pages => {
+      if (pages > 0) {
+        updateCodexPages(pages);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(run, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(run, 500);
+    });
+  }
+  // Also run every 30 seconds to catch dynamic updates
+  setInterval(run, 30000);
+  console.log('⚡ Codex Pages patch installed.');
+})();
+</script>
