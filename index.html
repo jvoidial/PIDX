@@ -5917,8 +5917,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
   }
   fetchPHB();setInterval(fetchPHB,10000);
 })();</script>
-</body>
-</html>
+
   <!-- ===== PHB GOD-CODE VORTEX ===== -->
   <div class="section" id="phb-vortex-section">
     <div class="section-title">
@@ -5928,37 +5927,13 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       </span>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
-      <div class="stat-card">
-        <div class="label">Coherence</div>
-        <div class="value" id="phbCoherence">0.000</div>
-        <div class="sub">Stability</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Voxel Layer</div>
-        <div class="value" id="phbVoxel">0</div>
-        <div class="sub">Active</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Veil State</div>
-        <div class="value" id="phbVeil">—</div>
-        <div class="sub">Simulator</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Portal</div>
-        <div class="value" id="phbPortal">0.0</div>
-        <div class="sub">Openness</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Energy</div>
-        <div class="value" id="phbEnergy">0</div>
-        <div class="sub">Signature</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Codex Pages</div>
-        <div class="value" id="phbCodex">0</div>
-        <div class="sub">Evolved</div>
-      </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">
+      <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.000</div><div class="sub">Stability</div></div>
+      <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">0</div><div class="sub">Active</div></div>
+      <div class="stat-card"><div class="label">Veil State</div><div class="value" id="phbVeil">—</div><div class="sub">Simulator</div></div>
+      <div class="stat-card"><div class="label">Portal</div><div class="value" id="phbPortal">0.0</div><div class="sub">Openness</div></div>
+      <div class="stat-card"><div class="label">Energy</div><div class="value" id="phbEnergy">0</div><div class="sub">Signature</div></div>
+      <div class="stat-card"><div class="label">Codex Pages</div><div class="value" id="phbCodex">0</div><div class="sub">Evolved</div></div>
     </div>
 
     <div style="margin-top:20px;background:#0f0f18;border-radius:16px;padding:16px;border:1px solid #222;">
@@ -5970,12 +5945,84 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
       <div style="margin-top:12px;font-size:12px;color:#555;font-family:monospace;background:#050508;padding:8px 12px;border-radius:8px;border:1px solid #1a1a2a;word-break:break-all;">
         <span id="phbLastUpdate">⏳ waiting for PHB data…</span>
       </div>
+      <button id="phbRefreshBtn" style="margin-top:12px;background:#1a1a2a;color:#88aaff;border:1px solid #333;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Refresh PHB Data</button>
     </div>
 
-    <!-- Collapsible details (Termux instructions & structure) -->
     <details style="margin-top:16px;cursor:pointer;color:#888;font-size:13px;">
       <summary style="list-style:none;display:flex;align-items:center;gap:8px;border:1px solid #222;border-radius:12px;padding:10px 14px;background:#0a0a12;">
         <span style="font-size:16px;">📘</span> How to run PHB Vortex on Termux
+        <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
+      </summary>
+      <div style="margin-top:12px;padding:16px;background:#0a0a12;border-radius:12px;border:1px solid #1a1a2a;font-size:13px;color:#aaa;line-height:1.6;">
+        <p><strong style="color:#ccc;">1. Clone &amp; install</strong></p>
+        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
+          git clone https://github.com/jvoidial/phb-godcode-vortex.git<br/>
+          cd phb-godcode-vortex<br/>
+          bash installer.sh
+        </div>
+        <p style="margin-top:12px;"><strong style="color:#ccc;">2. Run the P2P engine</strong></p>
+        <div style="background:#050508;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;color:#88aaff;margin:6px 0;">
+          ./gcs/run_phb_p2p.sh
+        </div>
+        <p style="margin-top:12px;color:#888;">
+          Every device running this becomes a peer in the distributed Codex mesh.
+          Evolution packets are broadcast, received, and merged into
+          <span style="color:#ccc;">gcs/network_state.json</span>.
+        </p>
+        <div style="margin-top:12px;font-size:12px;color:#555;border-top:1px solid #1a1a2a;padding-top:12px;">
+          <span style="color:#888;">⚡</span> Author: Jacob — creator of the PHB symbolic engine and distributed Codex mesh.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- PHB Vortex Live Sync Script -->
+  <script>
+  (function(){
+    const CONFIG_URL = "https://jvoidial.github.io/spirit-guide-token/phb_url.json";
+    const FALLBACK_URL = "https://troubleshooting-hist-bob-despite.trycloudflare.com/gcs/network_state.json";
+    let fetchCount = 0;
+    async function fetchPHB(){
+      fetchCount++;
+      try{
+        let dataUrl;
+        try{
+          const c=await fetch(CONFIG_URL,{cache:"no-store"});
+          if(c.ok){const cfg=await c.json();dataUrl=cfg.url;}
+        }catch(e){console.warn("Config fetch failed, using fallback");}
+        if(!dataUrl)dataUrl=FALLBACK_URL;
+        const r=await fetch(dataUrl,{cache:"no-store"});
+        if(!r.ok)throw new Error("HTTP "+r.status);
+        const d=await r.json();
+        let co=0,st=0;
+        if(d.pages&&d.pages.length){const p=d.pages[d.pages.length-1];co=p.coherence||0;st=p.stability||0;}
+        if(co===0&&d.coherence)co=d.coherence;
+        if(st===0&&d.stability)st=d.stability;
+        const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+        set("phbCoherence",co.toFixed(3));
+        set("phbStability",st.toFixed(3));
+        set("phbVoxel",d.voxel_layer??d.voxel??0);
+        set("phbVeil",d.veil_state??d.veil??"—");
+        set("phbPortal",(d.portal_openness??d.portal??0).toFixed(1));
+        set("phbEnergy",d.energy_signature??d.energy??999.9);
+        set("phbCodex",d.codex_pages??d.codex??0);
+        set("phbPeers",d.peer_count??d.peers??0);
+        set("phbState",d.network_state??d.state??"SYNCED");
+        set("phbMesh",d.mesh_status??d.mesh??"ACTIVE");
+        set("phbLastUpdate","✅ "+new Date().toLocaleTimeString()+" (fetch #"+fetchCount+")");
+        if(co>0){const e=document.getElementById("coherenceLevel");if(e)e.textContent=co.toFixed(3);}
+      }catch(e){const el=document.getElementById("phbLastUpdate");if(el)el.textContent="⚠️ "+e.message;}
+    }
+    fetchPHB();
+    const interval = setInterval(fetchPHB, 10000);
+    document.addEventListener("DOMContentLoaded", function(){
+      const btn = document.getElementById("phbRefreshBtn");
+      if(btn){ btn.addEventListener("click", function(){ fetchPHB(); }); }
+    });
+  })();
+  </script>
+</body>
+</html>
         <span style="margin-left:auto;font-size:12px;color:#555;">(click to expand)</span>
       </summary>
       <div style="margin-top:12px;padding:16px;background:#0a0a12;border-radius:12px;border:1px solid #1a1a2a;font-size:13px;color:#aaa;line-height:1.6;">
