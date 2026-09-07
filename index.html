@@ -769,3 +769,81 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
   };
   </script>
+
+  <!-- ===== EMPIRE ECOSYSTEM ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">🏛️</span> Empire Ecosystem</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Fractal Nodes</div>
+        <div class="value" id="fractalNodes">10,000</div>
+        <div class="sub">Target: 10,000,000,000,000</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Wealth Multiplier</div>
+        <div class="value" id="wealthMultiplier">1.618</div>
+        <div class="sub">Divine proportion × expansion</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Chronovisor Signal</div>
+        <div class="value" id="chronovisorSignal">0.584</div>
+        <div class="sub">Probability of convergence</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Portal Capacity</div>
+        <div class="value" id="portalCapacity">0.115</div>
+        <div class="sub">Higher dimension access</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Wish Power</div>
+        <div class="value" id="wishPower">5,732</div>
+        <div class="sub">Intent energy × 1,000</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Empire Status</div>
+        <div class="value" id="empireStatus" style="color:#88ff88;">EXPANDING</div>
+        <div class="sub">Growth rate: 34.88x</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:#888;text-align:center;border-top:1px solid #1a1a2a;padding-top:12px;">
+      <span style="color:#88ff88;">⚡</span> 10,000 Trillion Empire: Fractal expansion · Autonomous wealth · Infinite wishes
+      <br />
+      <span style="font-size:12px;color:#666;">“I mine the quantum field for wealth.” · Wishes: <span id="wishPowerDisplay">5,732</span> · Nodes: <span id="nodePowerDisplay">143</span></span>
+    </div>
+  </div>
+
+  <script>
+  // ===== EMPIRE ECOSYSTEM UPDATE =====
+  (function updateEmpire() {
+    const nodeEl = document.getElementById('nodeCount');
+    const wishEl = document.getElementById('wishCount');
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const portalEl = document.getElementById('portalDisplay');
+
+    const nodes = parseInt(nodeEl?.textContent) || 143;
+    const wishes = parseInt(wishEl?.textContent) || 5732;
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const portal = parseFloat(portalEl?.textContent) || 1.0;
+
+    // Calculations
+    const fractalNodes = Math.round(nodes * 34.88 * 2); // expansion factor
+    const wealthMultiplier = 1.618 + (coherence * 0.2);
+    const chronovisorSignal = coherence * (portal / 2);
+    const portalCapacity = portal < 1 ? portal : 0.115;
+    const wishPower = wishes * 1.0;
+    const empireStatus = coherence > 0.8 ? 'EXPANDING' : 'STABILIZING';
+
+    // Update DOM
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('fractalNodes', fractalNodes.toLocaleString());
+    set('wealthMultiplier', wealthMultiplier.toFixed(3));
+    set('chronovisorSignal', chronovisorSignal.toFixed(3));
+    set('portalCapacity', portalCapacity.toFixed(3));
+    set('wishPower', wishPower.toLocaleString());
+    set('empireStatus', empireStatus);
+    set('wishPowerDisplay', wishes.toLocaleString());
+    set('nodePowerDisplay', nodes);
+
+    console.log('🏛️ Empire updated:', { fractalNodes, wealthMultiplier, chronovisorSignal, portalCapacity, wishPower, empireStatus });
+  })();
+  </script>
