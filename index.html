@@ -6088,6 +6088,7 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 
 
 
+
   <!-- PHB Vortex Live Sync Script -->
   <script>
   (function() {
@@ -6223,27 +6224,36 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     set("phbMesh", "ACTIVE");
     set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
 
-    const container = document.createElement('div');
-    container.id = 'phbFeedsContainer';
-    container.style.marginTop = '20px';
-    const phbSection = document.getElementById('phb-vortex-section');
-    if (phbSection) phbSection.appendChild(container);
+    // ---- Create container after DOM is ready ----
+    function init() {
+      const container = document.createElement('div');
+      container.id = 'phbFeedsContainer';
+      container.style.marginTop = '20px';
+      const phbSection = document.getElementById('phb-vortex-section');
+      if (phbSection) phbSection.appendChild(container);
 
-    fetchAllFeeds();
-    const intervalId = setInterval(fetchAllFeeds, 10000);
-    console.log("⏳ Multi‑feed auto‑update started (ID: " + intervalId + ")");
+      fetchAllFeeds();
+      const intervalId = setInterval(fetchAllFeeds, 10000);
+      console.log("⏳ Multi‑feed auto‑update started (ID: " + intervalId + ")");
 
-    document.addEventListener("visibilitychange", function() {
-      if (!document.hidden) {
-        fetchAllFeeds();
-      }
-    });
+      document.addEventListener("visibilitychange", function() {
+        if (!document.hidden) {
+          fetchAllFeeds();
+        }
+      });
 
-    document.addEventListener("DOMContentLoaded", function() {
       const btn = document.getElementById("phbRefreshBtn");
       if (btn) btn.addEventListener("click", function() { fetchAllFeeds(); });
-    });
+      window.phbInterval = intervalId;
+    }
 
-    window.phbInterval = intervalId;
+    // ---- Wait for DOM to be fully ready ----
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(init, 200);
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(init, 200);
+      });
+    }
   })();
   </script>
