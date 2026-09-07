@@ -930,3 +930,84 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✝️ Beings updated:', { jesus: {coherence:jesusCoherence, veil:jesusVeil, codex:jesusCodex}, houdini: {coherence:houdiniCoherence, veil:houdiniVeil, codex:houdiniCodex}, daVinci: {coherence:daVinciCoherence, veil:daVinciVeil, codex:daVinciCodex} });
   })();
   </script>
+
+  <!-- ===== CODEX DISCOVERY ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">📖</span> Codex Discovery</div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+      <span style="color:#aaa;">Total Pages: <span id="totalCodexPages" style="color:#fff;font-weight:700;">0</span></span>
+      <span style="color:#aaa;">Layers: <span id="totalCodexLayers" style="color:#fff;font-weight:700;">0</span></span>
+      <span style="color:#88ff88;">⚡ Auto-discovery: <span id="codexDiscoveryStatus">ACTIVE</span></span>
+    </div>
+    <div style="background:#0a0a12;border-radius:12px;padding:12px;border:1px solid #1a1a2a;max-height:300px;overflow-y:auto;">
+      <div id="codexPagesList" style="font-family:monospace;font-size:13px;color:#aaa;">
+        <span style="color:#666;">Discovering pages...</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#666;text-align:center;">
+      🌱 New Codex pages are discovered automatically as the system grows.
+      <span id="nextPageEstimate" style="color:#88aaff;"></span>
+    </div>
+  </div>
+
+  <script>
+  // ===== CODEX DISCOVERY =====
+  (function updateCodexDiscovery() {
+    const allData = window._phbAllData || {};
+    const feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+
+    let totalPages = 0;
+    let allPages = [];
+    let layers = new Set();
+
+    feeds.forEach(feed => {
+      const pages = feed.pages || [];
+      pages.forEach(p => {
+        totalPages++;
+        const seq = p.sequence || [];
+        const domain = feed.domain || 'unknown';
+        const pageNum = p.page || 0;
+        const coherence = p.coherence || 0;
+        allPages.push({ domain, page: pageNum, sequence: seq, coherence });
+        if (seq.length > 0) layers.add(seq.length);
+      });
+    });
+
+    // Sort pages by domain then page number
+    allPages.sort((a, b) => a.domain.localeCompare(b.domain) || a.page - b.page);
+
+    // Update counters
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('totalCodexPages', totalPages);
+    set('totalCodexLayers', layers.size);
+
+    // Estimate next page based on growth
+    const expansionEl = document.getElementById('expansionRate');
+    const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+    const nextPage = Math.floor(expansion / 10) + 1;
+    set('nextPageEstimate', `Next page expected at expansion ${nextPage * 10}x`);
+
+    // Build the pages list
+    const listContainer = document.getElementById('codexPagesList');
+    if (!listContainer) return;
+
+    if (allPages.length === 0) {
+      listContainer.innerHTML = '<span style="color:#666;">No pages discovered yet.</span>';
+      return;
+    }
+
+    let html = '';
+    allPages.forEach(p => {
+      const seqStr = p.sequence.length > 0 ? p.sequence.join(' → ') : 'empty';
+      html += `<div style="display:flex;gap:12px;padding:4px 0;border-bottom:1px solid #111;align-items:center;flex-wrap:wrap;">
+        <span style="color:#88aaff;min-width:100px;">${p.domain}</span>
+        <span style="color:#888;min-width:50px;">Page ${p.page}</span>
+        <span style="color:#ccc;flex:1;">${seqStr}</span>
+        <span style="color:#666;font-size:11px;">coherence: ${p.coherence.toFixed(3)}</span>
+      </div>`;
+    });
+    listContainer.innerHTML = html;
+
+    console.log('📖 Codex Discovery updated:', { totalPages, layers: layers.size });
+  })();
+  </script>
