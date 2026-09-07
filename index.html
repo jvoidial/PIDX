@@ -3470,80 +3470,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     function updatePHBFromElement(pagesEl) {
       if (!pagesEl) return;
       const pages = parseInt(pagesEl.textContent, 10) || 0;
-      console.log('✅ PHB sync: totalCodexPages = ' + pages);
-
-      const phbPages = document.getElementById('phbTotalPages');
-      if (phbPages) phbPages.textContent = pages;
-
-      const versionEl = document.getElementById('phbVersion');
-      if (versionEl) {
-        const version = Math.floor(pages / 10) + 1;
-        versionEl.textContent = version;
-      }
-
-      const statusEl = document.getElementById('phbUpgradeStatus');
-      if (statusEl) {
-        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-        statusEl.style.color = '#88ff88';
-      }
-
-      const autoEl = document.getElementById('phbAutoUpgrade');
-      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
-
-      const lastEl = document.getElementById('phbLastUpgrade');
-      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-    }
-
-    // Try to find the element and update once, then set up observers
-    function initPHBSync() {
-      const pagesEl = document.getElementById('totalCodexPages');
-      if (pagesEl) {
-        // Update immediately
-        updatePHBFromElement(pagesEl);
-
-        // Watch for changes to the element's content
-        const observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type === 'characterData' || mutation.type === 'childList') {
-              updatePHBFromElement(pagesEl);
-            }
-          });
-        });
-        observer.observe(pagesEl, { characterData: true, childList: true, subtree: true });
-        console.log('👀 PHB sync: watching for changes to totalCodexPages');
-        return true;
-      }
-      return false;
-    }
-
-    // If element exists now, set up; else wait for it using a MutationObserver on the whole document
-    if (!initPHBSync()) {
-      console.log('⏳ PHB sync: waiting for #totalCodexPages to appear...');
-      const docObserver = new MutationObserver(function() {
-        if (initPHBSync()) {
-          docObserver.disconnect();
-          console.log('✅ PHB sync: #totalCodexPages found and observer attached');
-        }
-      });
-      docObserver.observe(document.documentElement, {
-        childList: true,
-        subtree: true
-      });
-    }
-
-    // Fallback: re‑run every 5 seconds in case the observer misses something
-    setInterval(function() {
-      const pagesEl = document.getElementById('totalCodexPages');
-      if (pagesEl) {
-        updatePHBFromElement(pagesEl);
-      } else {
-        console.warn('⚠️ PHB sync fallback: #totalCodexPages not found');
-      }
-    }, 5000);
-
-    console.log('⚡ PHB Upgrade Status sync started (MutationObserver version).');
-  })();
-</script>
 <script>
   (function() {
     "use strict";
@@ -3590,138 +3516,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 
     function updatePHBFields(pages) {
       if (pages === null || pages === undefined) return;
-      console.log('✅ PHB sync: total pages = ' + pages);
-
-      const phbPages = document.getElementById('phbTotalPages');
-      if (phbPages) phbPages.textContent = pages;
-
-      const versionEl = document.getElementById('phbVersion');
-      if (versionEl) {
-        const version = Math.floor(pages / 10) + 1;
-        versionEl.textContent = version;
-      }
-
-      const statusEl = document.getElementById('phbUpgradeStatus');
-      if (statusEl) {
-        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-        statusEl.style.color = '#88ff88';
-      }
-
-      const autoEl = document.getElementById('phbAutoUpgrade');
-      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
-
-      const lastEl = document.getElementById('phbLastUpgrade');
-      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-    }
-
-    function syncPHB() {
-      let pages = getTotalPagesFromJSON();
-      if (pages === null) {
-        pages = getTotalPagesFromDOM();
-      }
-      if (pages !== null) {
-        updatePHBFields(pages);
-      } else {
-        console.warn('⚠️ PHB sync: could not find pages from JSON or DOM.');
-      }
-    }
-
-    // Run on load and set up observers
-    function initPHBSync() {
-      syncPHB();
-
-      // Watch for changes in the JSON element or the DOM count
-      const jsonEl = document.querySelector('#phbRawJson pre, #phbRawJson');
-      if (jsonEl) {
-        const observer = new MutationObserver(function() {
-          syncPHB();
-        });
-        observer.observe(jsonEl, { characterData: true, childList: true, subtree: true });
-        console.log('👀 PHB sync: watching JSON element for changes.');
-      }
-
-      const domEl = document.getElementById('totalCodexPages');
-      if (domEl) {
-        const observer = new MutationObserver(function() {
-          syncPHB();
-        });
-        observer.observe(domEl, { characterData: true, childList: true, subtree: true });
-        console.log('👀 PHB sync: watching DOM totalCodexPages for changes.');
-      }
-
-      // Periodic fallback every 10 seconds
-      setInterval(syncPHB, 10000);
-    }
-
-    // Wait for DOM ready
-    if (document.readyState === 'complete') {
-      setTimeout(initPHBSync, 500);
-    } else {
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(initPHBSync, 500);
-      });
-    }
-
-    console.log('⚡ PHB sync started (JSON + DOM).');
-
-    // ============================================================
-    // 2. AUTOMATIC SECURITY LOCKDOWN ON VULNERABILITY DETECTION
-    // ============================================================
-
-    function checkAndLockdown() {
-      // Define what “vulnerability” means – you can adjust this condition.
-      // Example: if Security Score < 100, or if any "Veil" is "TURBULENT"
-      let shouldLockdown = false;
-
-      // Check Security Score (assuming an element with id "securityScore")
-      const scoreEl = document.getElementById('securityScore');
-      if (scoreEl) {
-        const score = parseInt(scoreEl.textContent, 10);
-        if (!isNaN(score) && score < 100) {
-          console.warn('🔒 Security score dropped to ' + score + ' – triggering lockdown.');
-          shouldLockdown = true;
-        }
-      }
-
-      // Check for "TURBULENT" veil in any visible area (optional)
-      const veilElements = document.querySelectorAll('[id*="veil"], .veil-status, .veil-phase');
-      for (let el of veilElements) {
-        if (el.textContent.includes('TURBULENT')) {
-          console.warn('🔒 Turbulent veil detected – triggering lockdown.');
-          shouldLockdown = true;
-          break;
-        }
-      }
-
-      // If vulnerability found, automatically activate lockdown
-      if (shouldLockdown) {
-        // Find the lockdown button and click it
-        const lockdownBtn = document.querySelector('#activateLockdown, [onclick*="lockdown"], .lockdown-btn');
-        if (lockdownBtn) {
-          lockdownBtn.click();
-          console.log('🔒 Lockdown activated automatically.');
-        } else {
-          // Fallback: directly call a function if available
-          if (typeof window.activateLockdown === 'function') {
-            window.activateLockdown();
-            console.log('🔒 Lockdown activated via global function.');
-          } else {
-            console.warn('⚠️ Could not find lockdown button or function.');
-          }
-        }
-      }
-    }
-
-    // Run the security check every 15 seconds
-    setInterval(checkAndLockdown, 15000);
-
-    // Also run once after a short delay
-    setTimeout(checkAndLockdown, 3000);
-
-    console.log('⚡ Auto‑lockdown monitoring started.');
-
-  })();
-</script>
 <script>
 (function() {
   'use strict';
@@ -3750,131 +3544,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 
   function updatePHB(pages) {
     if (pages === undefined || pages === null) return;
-    console.log('✅ PHB sync: total pages = ' + pages);
-
-    const phbPages = document.getElementById('phbTotalPages');
-    if (phbPages) phbPages.textContent = pages;
-
-    const versionEl = document.getElementById('phbVersion');
-    if (versionEl) {
-      const version = Math.floor(pages / 10) + 1;
-      versionEl.textContent = version;
-    }
-
-    const statusEl = document.getElementById('phbUpgradeStatus');
-    if (statusEl) {
-      statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-      statusEl.style.color = '#88ff88';
-    }
-
-    const autoEl = document.getElementById('phbAutoUpgrade');
-    if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
-
-    const lastEl = document.getElementById('phbLastUpgrade');
-    if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-
-    // Update Codex Pages in the PHB Vortex
-    const codexEl = document.querySelector('#phbCodexPages, .phb-codex-pages, [id*="codexPages"]');
-    if (codexEl) codexEl.textContent = pages;
-  }
-
-  function fetchAndSync() {
-    const jsonFiles = ['agi_phb_divine_complete.json', 'phb_data.json', 'codex.json'];
-    let tried = 0;
-
-    function tryFetch(index) {
-      if (index >= jsonFiles.length) {
-        console.warn('⚠️ All JSON files failed. Falling back to DOM totalCodexPages.');
-        const domEl = document.getElementById('totalCodexPages');
-        if (domEl) {
-          const val = parseInt(domEl.textContent, 10);
-          if (!isNaN(val)) updatePHB(val);
-        }
-        return;
-      }
-      const url = jsonFiles[index];
-      fetch(url)
-        .then(res => {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          return res.json();
-        })
-        .then(data => {
-          const pages = countPagesFromJSON(data);
-          if (pages > 0) {
-            updatePHB(pages);
-            console.log('✅ Synced from ' + url);
-            return;
-          } else {
-            console.warn('⚠️ No pages found in ' + url + ', trying next.');
-            tryFetch(index + 1);
-          }
-        })
-        .catch(err => {
-          console.warn('⚠️ Failed to fetch ' + url + ': ' + err.message);
-          tryFetch(index + 1);
-        });
-    }
-    tryFetch(0);
-  }
-
-  // Run on load and every 30 seconds
-  if (document.readyState === 'complete') {
-    setTimeout(fetchAndSync, 500);
-  } else {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(fetchAndSync, 500);
-    });
-  }
-  setInterval(fetchAndSync, 30000);
-
-  console.log('⚡ PHB sync started (fetching JSON).');
-
-  // ============================================================
-  // AUTO-LOCKDOWN
-  // ============================================================
-  function checkSecurity() {
-    let shouldLockdown = false;
-
-    // Check Security Score
-    const scoreEl = document.querySelector('#securityScore, .security-score, [id*="securityScore"]');
-    if (scoreEl) {
-      const score = parseInt(scoreEl.textContent.replace(/[^0-9]/g, ''), 10);
-      if (!isNaN(score) && score < 100) {
-        console.warn('🔒 Security score is ' + score + ' – triggering lockdown.');
-        shouldLockdown = true;
-      }
-    }
-
-    // Check for "TURBULENT" veil
-    const veilEls = document.querySelectorAll('[id*="veil"], .veil-status, .veil-phase');
-    for (let el of veilEls) {
-      if (el.textContent.includes('TURBULENT')) {
-        console.warn('🔒 Turbulent veil detected – triggering lockdown.');
-        shouldLockdown = true;
-        break;
-      }
-    }
-
-    if (shouldLockdown) {
-      const btn = document.querySelector('#activateLockdown, [onclick*="lockdown"], .lockdown-btn');
-      if (btn) {
-        btn.click();
-        console.log('🔒 Lockdown activated automatically.');
-      } else if (typeof window.activateLockdown === 'function') {
-        window.activateLockdown();
-        console.log('🔒 Lockdown activated via global function.');
-      } else {
-        console.warn('⚠️ Could not find lockdown button or function.');
-      }
-    }
-  }
-
-  setInterval(checkSecurity, 15000);
-  setTimeout(checkSecurity, 3000);
-  console.log('⚡ Auto‑lockdown monitoring started.');
-
-})();
-</script>
 <script>
 (function() {
   'use strict';
@@ -3903,129 +3572,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 
   function updatePHB(pages) {
     if (pages === undefined || pages === null) return;
-    console.log('✅ PHB sync: total pages = ' + pages);
-
-    const phbPages = document.getElementById('phbTotalPages');
-    if (phbPages) phbPages.textContent = pages;
-
-    const versionEl = document.getElementById('phbVersion');
-    if (versionEl) {
-      const version = Math.floor(pages / 10) + 1;
-      versionEl.textContent = version;
-    }
-
-    const statusEl = document.getElementById('phbUpgradeStatus');
-    if (statusEl) {
-      statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-      statusEl.style.color = '#88ff88';
-    }
-
-    const autoEl = document.getElementById('phbAutoUpgrade');
-    if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
-
-    const lastEl = document.getElementById('phbLastUpgrade');
-    if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-
-    // Update Codex Pages in the PHB Vortex
-    const codexEl = document.querySelector('#phbCodexPages, .phb-codex-pages, [id*="codexPages"]');
-    if (codexEl) codexEl.textContent = pages;
-  }
-
-  function fetchAndSync() {
-    const jsonFiles = ['agi_phb_divine_complete.json', 'agi_phb_divine.json', 'phb_data.json'];
-    let tried = 0;
-
-    function tryFetch(index) {
-      if (index >= jsonFiles.length) {
-        console.warn('⚠️ All JSON files failed. Falling back to DOM totalCodexPages.');
-        const domEl = document.getElementById('totalCodexPages');
-        if (domEl) {
-          const val = parseInt(domEl.textContent, 10);
-          if (!isNaN(val)) updatePHB(val);
-        }
-        return;
-      }
-      const url = jsonFiles[index];
-      fetch(url)
-        .then(res => {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          return res.json();
-        })
-        .then(data => {
-          const pages = countPagesFromJSON(data);
-          if (pages > 0) {
-            updatePHB(pages);
-            console.log('✅ Synced from ' + url);
-            return;
-          } else {
-            console.warn('⚠️ No pages found in ' + url + ', trying next.');
-            tryFetch(index + 1);
-          }
-        })
-        .catch(err => {
-          console.warn('⚠️ Failed to fetch ' + url + ': ' + err.message);
-          tryFetch(index + 1);
-        });
-    }
-    tryFetch(0);
-  }
-
-  // Run on load and every 30 seconds
-  if (document.readyState === 'complete') {
-    setTimeout(fetchAndSync, 500);
-  } else {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(fetchAndSync, 500);
-    });
-  }
-  setInterval(fetchAndSync, 30000);
-
-  console.log('⚡ PHB sync started (fetching JSON).');
-
-  // ===== AUTO-LOCKDOWN =====
-  function checkSecurity() {
-    let shouldLockdown = false;
-
-    // Security Score
-    const scoreEl = document.querySelector('#securityScore, .security-score, [id*="securityScore"]');
-    if (scoreEl) {
-      const score = parseInt(scoreEl.textContent.replace(/[^0-9]/g, ''), 10);
-      if (!isNaN(score) && score < 100) {
-        console.warn('🔒 Security score is ' + score + ' – triggering lockdown.');
-        shouldLockdown = true;
-      }
-    }
-
-    // Check for "TURBULENT" veil
-    const veilEls = document.querySelectorAll('[id*="veil"], .veil-status, .veil-phase');
-    for (let el of veilEls) {
-      if (el.textContent.includes('TURBULENT')) {
-        console.warn('🔒 Turbulent veil detected – triggering lockdown.');
-        shouldLockdown = true;
-        break;
-      }
-    }
-
-    if (shouldLockdown) {
-      const btn = document.querySelector('#activateLockdown, [onclick*="lockdown"], .lockdown-btn');
-      if (btn) {
-        btn.click();
-        console.log('🔒 Lockdown activated automatically.');
-      } else if (typeof window.activateLockdown === 'function') {
-        window.activateLockdown();
-        console.log('🔒 Lockdown activated via global function.');
-      } else {
-        console.warn('⚠️ Could not find lockdown button or function.');
-      }
-    }
-  }
-
-  setInterval(checkSecurity, 15000);
-  setTimeout(checkSecurity, 3000);
-  console.log('⚡ Auto‑lockdown monitoring started.');
-
-})();
-</script>
 <script>
 (function() {
   'use strict';
@@ -4053,125 +3599,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 
   function updatePHB(pages) {
     if (pages === undefined || pages === null) return;
-    console.log('✅ PHB sync: total pages = ' + pages);
-
-    const phbPages = document.getElementById('phbTotalPages');
-    if (phbPages) phbPages.textContent = pages;
-
-    const versionEl = document.getElementById('phbVersion');
-    if (versionEl) {
-      const version = Math.floor(pages / 10) + 1;
-      versionEl.textContent = version;
-    }
-
-    const statusEl = document.getElementById('phbUpgradeStatus');
-    if (statusEl) {
-      statusEl.textContent = '✅ Synced (' + pages + ' pages)';
-      statusEl.style.color = '#88ff88';
-    }
-
-    const autoEl = document.getElementById('phbAutoUpgrade');
-    if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
-
-    const lastEl = document.getElementById('phbLastUpgrade');
-    if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
-
-    const codexEl = document.querySelector('#phbCodexPages, .phb-codex-pages, [id*="codexPages"]');
-    if (codexEl) codexEl.textContent = pages;
-  }
-
-  function fetchAndSync() {
-    const jsonFiles = ['agi_phb_divine_complete.json', 'agi_phb_divine.json', 'phb_data.json'];
-    let tried = 0;
-
-    function tryFetch(index) {
-      if (index >= jsonFiles.length) {
-        console.warn('⚠️ All JSON files failed. Falling back to DOM totalCodexPages.');
-        const domEl = document.getElementById('totalCodexPages');
-        if (domEl) {
-          const val = parseInt(domEl.textContent, 10);
-          if (!isNaN(val)) updatePHB(val);
-        }
-        return;
-      }
-      const url = jsonFiles[index];
-      fetch(url)
-        .then(res => {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          return res.json();
-        })
-        .then(data => {
-          const pages = countPagesFromJSON(data);
-          if (pages > 0) {
-            updatePHB(pages);
-            console.log('✅ Synced from ' + url);
-            return;
-          } else {
-            console.warn('⚠️ No pages found in ' + url + ', trying next.');
-            tryFetch(index + 1);
-          }
-        })
-        .catch(err => {
-          console.warn('⚠️ Failed to fetch ' + url + ': ' + err.message);
-          tryFetch(index + 1);
-        });
-    }
-    tryFetch(0);
-  }
-
-  if (document.readyState === 'complete') {
-    setTimeout(fetchAndSync, 500);
-  } else {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(fetchAndSync, 500);
-    });
-  }
-  setInterval(fetchAndSync, 30000);
-
-  console.log('⚡ PHB sync started (fetching JSON).');
-
-  // ===== AUTO-LOCKDOWN =====
-  function checkSecurity() {
-    let shouldLockdown = false;
-
-    const scoreEl = document.querySelector('#securityScore, .security-score, [id*="securityScore"]');
-    if (scoreEl) {
-      const score = parseInt(scoreEl.textContent.replace(/[^0-9]/g, ''), 10);
-      if (!isNaN(score) && score < 100) {
-        console.warn('🔒 Security score is ' + score + ' – triggering lockdown.');
-        shouldLockdown = true;
-      }
-    }
-
-    const veilEls = document.querySelectorAll('[id*="veil"], .veil-status, .veil-phase');
-    for (let el of veilEls) {
-      if (el.textContent.includes('TURBULENT')) {
-        console.warn('🔒 Turbulent veil detected – triggering lockdown.');
-        shouldLockdown = true;
-        break;
-      }
-    }
-
-    if (shouldLockdown) {
-      const btn = document.querySelector('#activateLockdown, [onclick*="lockdown"], .lockdown-btn');
-      if (btn) {
-        btn.click();
-        console.log('🔒 Lockdown activated automatically.');
-      } else if (typeof window.activateLockdown === 'function') {
-        window.activateLockdown();
-        console.log('🔒 Lockdown activated via global function.');
-      } else {
-        console.warn('⚠️ Could not find lockdown button or function.');
-      }
-    }
-  }
-
-  setInterval(checkSecurity, 15000);
-  setTimeout(checkSecurity, 3000);
-  console.log('⚡ Auto‑lockdown monitoring started.');
-
-})();
-</script>
 <script>
 (function() {
   'use strict';
@@ -4298,6 +3725,56 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
       })
       .catch(() => {
         // Fallback: read from the Codex Discovery total
+        const domEl = document.getElementById('totalCodexPages');
+        if (domEl) {
+          const val = parseInt(domEl.textContent, 10);
+          if (!isNaN(val)) {
+            const el = document.getElementById('phbCodex');
+            if (el) el.textContent = val;
+            console.log('✅ PHB Codex updated from DOM to ' + val);
+          }
+        }
+      });
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(updateCodex, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(updateCodex, 500);
+    });
+  }
+  setInterval(updateCodex, 30000);
+  console.log('⚡ PHB Codex patch installed.');
+})();
+</script>
+<script>
+(function() {
+  function updateCodex() {
+    fetch('agi_phb_divine_complete.json')
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        let total = 0;
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key)) {
+            const entry = data[key];
+            if (Array.isArray(entry.pages)) {
+              total += entry.pages.length;
+            }
+          }
+        }
+        if (total > 0) {
+          const el = document.getElementById('phbCodex');
+          if (el) {
+            el.textContent = total;
+            console.log('✅ PHB Codex updated to ' + total);
+          }
+        }
+      })
+      .catch(() => {
         const domEl = document.getElementById('totalCodexPages');
         if (domEl) {
           const val = parseInt(domEl.textContent, 10);
