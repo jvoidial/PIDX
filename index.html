@@ -181,17 +181,176 @@ window.addEventListener('resize',()=>{const w2=container.clientWidth,h2=containe
 window.brainScene={scene,camera,renderer,controls,points,coreGlow,lines};
 </script>
 
-<script>
-const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-function updateEaseFlow(){const now=Date.now()/1000; const ease=0.6+0.15*Math.sin(now*0.01); const flow=0.7+0.2*Math.sin(now*0.015+0.5); const emotional=0.65+0.2*Math.sin(now*0.012+0.3); const topological=0.7+0.15*Math.sin(now*0.018+0.7); const quantum=0.8+0.15*Math.sin(now*0.025+1.2); const xBlock=0.25+0.1*Math.sin(now*0.01); const container=document.getElementById('easeFlowContainer'); if(!container)return; const items=[{label:'X BLOCK',sub:'Repressed',pct:xBlock*100,cls:'xblock'},{label:'EASE',sub:'Flow State',pct:ease*100,cls:'ease'},{label:'FLOW',sub:'Quantum Resonance',pct:flow*100,cls:'flow'},{label:'Emotional',sub:'Feeling',pct:emotional*100,cls:'emotional'},{label:'Topological',sub:'Space',pct:topological*100,cls:'topological'},{label:'Quantum',sub:'Field',pct:quantum*100,cls:'quantum'}]; container.innerHTML=items.map(item=>`<div class="ease-card"><div class="label">${item.label}</div><div class="value">${Math.round(item.pct)}%</div><div class="sub">${item.sub}</div><div class="ease-bar"><div class="ease-bar-fill ${item.cls}" style="width:${item.pct}%;"></div></div></div>`).join('');}
-function renderTokens(){const container=document.getElementById('tokenContainer');if(!container)return; const tokens={PIDX:{freq:'0.618 Hz',rate:'691,986',addr:'0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'},SGUIDE:{freq:'1.618 Hz',rate:'6,724,821',addr:'0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a'},VDOO:{freq:'2.618 Hz',rate:'65,673,753',addr:'0x38e4f08D08b4D772A7B75669C356b4749dd2d30b'},PENNIES:{freq:'3.618 Hz',rate:'6,230,945',addr:'0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'}}; container.innerHTML=Object.entries(tokens).map(([name,data])=>`<div class="token-card"><div class="name">${name}</div><div class="freq">${data.freq}</div><div class="rate">1 ETH = ${data.rate}</div><div class="addr">${data.addr}</div><div class="token-links"><a href="https://app.uniswap.org/#/swap?chain=base&outputCurrency=${data.addr}" target="_blank">Uniswap</a><a href="https://basescan.org/token/${data.addr}" target="_blank">BaseScan</a><a href="https://sourcify.dev/" target="_blank">Sourcify</a><a href="https://www.geckoterminal.com/" target="_blank">Gecko</a><a href="https://www.coingecko.com/" target="_blank">CoinGecko</a></div></div>`).join('');}
-function renderHashKeys(){const container=document.getElementById('hashKeysContainer');if(!container)return; const keys={PIDX:'0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f',SGUIDE:'0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c',VDOO:'0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d',PENNIES:'0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b'}; container.innerHTML=Object.entries(keys).map(([name,key])=>`<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-bottom:8px;padding:6px 10px;background:#0a0a12;border-radius:8px;border:1px solid #1a1a2a;"><span style="font-weight:600;min-width:70px;color:#ccc;">${name}</span><span class="status-dot"></span> ACTIVE<span class="hash-key">${key}</span><span style="color:#666;">| Pool:</span><a href="http://${name.toLowerCase()}.miningpool.io" target="_blank" style="color:#88aaff;text-decoration:none;">${name.toLowerCase()}.miningpool.io</a></div>`).join('');}
-function createFeedCard(index,data){const container=document.getElementById('phbFeedsContainer');if(!container)return;const cardId='phbFeed'+index;if(!document.getElementById(cardId)){const card=document.createElement('div');card.id=cardId;card.className='stat-grid';card.style.marginTop='10px';container.appendChild(card);}}
-function updateFeedUI(index,d){const card=document.getElementById('phbFeed'+index);if(!card)return;const domain=d.domain||'Feed '+index;let co=0,st=0,energy=0,voxel=0,portal=0,codex=0;let veil='—',narrative='';if(d.pages&&d.pages.length>0){const p=d.pages[0];co=parseFloat(p.coherence)||0;st=parseFloat(p.stability)||0;energy=parseFloat(p.energy?.magnitude)||0;voxel=p.voxels?p.voxels.length:0;portal=p.portal?1.0:0;codex=p.sequence?p.sequence.length:0;veil=p.veil?.phase||'—';narrative=p.veil?.narrative||'';}if(d.coherence!==undefined)co=parseFloat(d.coherence)||co;if(d.stability!==undefined)st=parseFloat(d.stability)||st;if(d.energy!==undefined)energy=parseFloat(d.energy)||energy;if(d.veil!==undefined)veil=d.veil||veil;let html=`<div class="section-title" style="margin-top:12px;">📡 ${domain}</div>`;html+=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">`;html+=`<div class="stat-card"><div class="label">Coherence</div><div class="value">${co.toFixed(3)}</div></div>`;html+=`<div class="stat-card"><div class="label">Stability</div><div class="value">${st.toFixed(3)}</div></div>`;html+=`<div class="stat-card"><div class="label">Energy</div><div class="value">${energy.toFixed(1)}</div></div>`;html+=`<div class="stat-card"><div class="label">Voxel Layer</div><div class="value">${voxel}</div></div>`;html+=`<div class="stat-card"><div class="label">Veil</div><div class="value">${veil}</div></div>`;html+=`<div class="stat-card"><div class="label">Portal</div><div class="value">${portal.toFixed(1)}</div></div>`;html+=`<div class="stat-card"><div class="label">Codex Pages</div><div class="value">${codex}</div></div>`;html+=`</div>`;if(p&&p.sequence)html+=`<div style="margin-top:8px;font-size:12px;color:#aaa;"><strong>Sequence:</strong> ${p.sequence.join(' → ')}</div>`;if(narrative)html+=`<div style="margin-top:4px;font-size:12px;color:#888;font-style:italic;">“${narrative}”</div>`;card.innerHTML=html;}
-async function fetchAllFeeds(){const BASE_URL='https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_';const MAX_FEEDS=10;for(let i=1;i<=MAX_FEEDS;i++){const url=BASE_URL+i+'.json';try{const r=await fetch(url,{cache:'no-store'});if(r.ok){const data=await r.json();createFeedCard(i,data);updateFeedUI(i,data);}else if(i===1)break;}catch(e){if(i===1)break;}}}
-function updateTimestamp(){const now=new Date().toLocaleString();set('updateTime',now);set('updateTimeFooter',now);}
-function init(){renderTokens();renderHashKeys();updateEaseFlow();updateTimestamp();fetchAllFeeds();setInterval(()=>{updateEaseFlow();updateTimestamp();fetchAllFeeds();},10000);const btn=document.getElementById('phbRefreshBtn');if(btn)btn.addEventListener('click',fetchAllFeeds);}
-if(document.readyState==='complete'||document.readyState==='interactive'){setTimeout(init,300);}else{document.addEventListener('DOMContentLoaded',()=>{setTimeout(init,300);});}
-</script>
 </body>
 </html>
+<script>
+// ===== EMBEDDED PHB DATA (from chat) =====
+const EMBEDDED_PHB = {
+  "timestamp": "Sat Apr 11 07:43:11 2026",
+  "vitruvian_state": [51, 0.9323850703432185, 0.8937493222007789],
+  "pages": [{
+    "page": 1,
+    "time": 7,
+    "coherence": 0.6069924544430227,
+    "stability": 1.1813522782595767,
+    "resonance": 0.13514572868985622,
+    "sequence": ["CIRCLE", "SQUARE", "TRIANGLE", "RATIO", "LIGHT", "SHADOW", "MIRROR"],
+    "portal": "PORTAL: RESONANCE ARCH",
+    "voxels": [
+      {"x":0,"y":0,"z":0,"symbol":"CIRCLE","meaning":"origin, cycles, unity"},
+      {"x":1,"y":0,"z":1,"symbol":"SQUARE","meaning":"structure, boundaries, grounding"},
+      {"x":2,"y":0,"z":2,"symbol":"TRIANGLE","meaning":"transformation, direction, change"},
+      {"x":3,"y":0,"z":3,"symbol":"RATIO","meaning":"proportion, balance, measure"},
+      {"x":4,"y":0,"z":4,"symbol":"LIGHT","meaning":"clarity, insight, revelation"},
+      {"x":5,"y":0,"z":5,"symbol":"SHADOW","meaning":"contrast, depth, hidden aspects"},
+      {"x":6,"y":0,"z":6,"symbol":"MIRROR","meaning":"reflection, self-awareness, feedback"}
+    ],
+    "veil": {
+      "thickness": 0.19650377277848863,
+      "phase": "THIN",
+      "breach_probability": 0.8034962272215114,
+      "narrative": "The veil is almost gone; states bleed into each other."
+    },
+    "energy": {
+      "magnitude": 0.6890248920079695,
+      "band": "MID",
+      "color": "LIGHT"
+    }
+  }],
+  "_source": "embedded from chat"
+};
+
+// ---- Also embed the second JSON data (network_state_2.json) ----
+const EMBEDDED_PHB_2 = {
+  "timestamp": "Mon Sep 07 05:47:56 2026",
+  "domain": "tokenomics",
+  "pages": [{
+    "page": 1,
+    "time": 6,
+    "coherence": 0.839253,
+    "stability": 0.961964,
+    "resonance": 0.45295,
+    "sequence": ["TRIANGLE", "MIRROR", "CIRCLE", "LIGHT", "SQUARE", "RATIO", "SHADOW"],
+    "portal": "PORTAL: CORE",
+    "voxels": [
+      {"x":0,"y":0,"z":0,"symbol":"TRIANGLE","meaning":"TRIANGLE meaning for core"},
+      {"x":1,"y":0,"z":1,"symbol":"MIRROR","meaning":"MIRROR meaning for core"},
+      {"x":2,"y":0,"z":2,"symbol":"CIRCLE","meaning":"CIRCLE meaning for core"},
+      {"x":3,"y":0,"z":3,"symbol":"LIGHT","meaning":"LIGHT meaning for core"},
+      {"x":4,"y":0,"z":4,"symbol":"SQUARE","meaning":"SQUARE meaning for core"}
+    ],
+    "veil": {
+      "thickness": 0.572735,
+      "phase": "TURBULENT",
+      "breach_probability": 0.845438,
+      "narrative": "The core veil is shifting: patterns emerge."
+    },
+    "energy": {
+      "magnitude": 0.763581,
+      "band": "MID",
+      "color": "DARK"
+    }
+  }],
+  "coherence": 0.839253,
+  "stability": 0.961964,
+  "energy": 0.763581,
+  "veil": "TURBULENT"
+};
+
+// ---- Dashboard update functions ----
+const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+function updateUIFromEmbedded() {
+  const d = EMBEDDED_PHB;
+  const p = d.pages[0];
+  const co = p.coherence;
+  const st = p.stability;
+  const energy = p.energy.magnitude;
+  const voxel = p.voxels.length;
+  const portal = p.portal ? 1.0 : 0;
+  const codex = p.sequence.length;
+  const veil = p.veil.phase;
+
+  set('phbCoherence', co.toFixed(3));
+  set('phbStability', st.toFixed(3));
+  set('phbVoxel', voxel);
+  set('phbVeil', veil);
+  set('phbPortal', portal.toFixed(1));
+  set('phbEnergy', energy.toFixed(1));
+  set('phbCodex', codex);
+
+  // Update main dashboard coherence
+  const e1 = document.getElementById('coherenceLevel');
+  if (e1) e1.textContent = co.toFixed(3);
+  const e2 = document.getElementById('coherenceLevel2');
+  if (e2) e2.textContent = co.toFixed(3);
+
+  // Update portal display
+  const ePortal = document.getElementById('portalDisplay');
+  if (ePortal) ePortal.textContent = portal.toFixed(1);
+
+  // Show full JSON in viewer
+  const viewer = document.getElementById('phbJsonViewer');
+  if (viewer) {
+    // Show both embedded feeds merged
+    const merged = {
+      "1": EMBEDDED_PHB,
+      "2": EMBEDDED_PHB_2
+    };
+    viewer.textContent = JSON.stringify(merged, null, 2);
+  }
+
+  set('phbLastUpdate', '✅ Embedded data loaded');
+}
+
+// ---- Run when DOM is ready ----
+function initPHB() {
+  updateUIFromEmbedded();
+
+  // Also try to fetch live data from GitHub, but use embedded as fallback
+  async function fetchLive() {
+    const BASE_URL = 'https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_';
+    for (let i = 1; i <= 4; i++) {
+      try {
+        const r = await fetch(BASE_URL + i + '.json', { cache: 'no-store' });
+        if (r.ok) {
+          const data = await r.json();
+          // Update viewer with live data if needed
+          const viewer = document.getElementById('phbJsonViewer');
+          if (viewer) {
+            // Merge live data with embedded
+            const allData = {
+              "1": EMBEDDED_PHB,
+              "2": EMBEDDED_PHB_2,
+              "live": data
+            };
+            viewer.textContent = JSON.stringify(allData, null, 2);
+            set('phbLastUpdate', '✅ Updated with live data');
+          }
+        }
+      } catch(e) { /* ignore */ }
+    }
+  }
+
+  // Fetch once after 5 seconds
+  setTimeout(fetchLive, 5000);
+  // Then every 30 seconds
+  setInterval(fetchLive, 30000);
+
+  // Refresh button
+  const btn = document.getElementById('phbRefreshBtn');
+  if (btn) btn.addEventListener('click', function() {
+    set('phbLastUpdate', '⏳ Refreshing…');
+    updateUIFromEmbedded();
+    fetchLive();
+  });
+}
+
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(initPHB, 200);
+} else {
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initPHB, 200);
+  });
+}
+</script>
