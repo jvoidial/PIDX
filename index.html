@@ -5645,7 +5645,7 @@ function renderEaseFlow() {
 }
 renderEaseFlow();
 
-// ===== RENDER TOKENS =====
+// ===== RENDER TOKENS (with fixed Uniswap links) =====
 function renderTokens() {
   const container = document.getElementById('tokenContainer');
   if (!container) return;
@@ -5653,14 +5653,16 @@ function renderTokens() {
   for (const [name, data] of Object.entries(state.tokens)) {
     const card = document.createElement('div');
     card.className = 'token-card';
+    const uniswapLink = `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${data.addr}`;
+    const baseScanLink = `https://basescan.org/token/${data.addr}`;
     card.innerHTML = `
       <div class="name">${name}</div>
       <div class="freq">${data.freq}</div>
       <div class="rate">1 ETH = ${data.rate}</div>
       <div class="addr">${data.addr}</div>
       <div class="token-links">
-        <a href="https://app.uniswap.org/#/swap?chain=base&outputCurrency=${data.addr}" target="_blank">Uniswap</a>
-        <a href="https://basescan.org/token/${data.addr}" target="_blank">BaseScan</a>
+        <a href="${uniswapLink}" target="_blank">Uniswap</a>
+        <a href="${baseScanLink}" target="_blank">BaseScan</a>
         <a href="https://sourcify.dev/" target="_blank">Sourcify</a>
         <a href="https://www.geckoterminal.com/" target="_blank">Gecko</a>
         <a href="https://www.coingecko.com/" target="_blank">CoinGecko</a>
@@ -5811,7 +5813,7 @@ document.getElementById('jsonDumpLink').addEventListener('click', (e) => {
   URL.revokeObjectURL(url);
 });
 
-console.log('🧠 Gen 6 · Quantum Ease Flow · All sections included');
+console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
 </script>
 </body>
 </html>
