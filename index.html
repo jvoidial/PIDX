@@ -3030,3 +3030,210 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     }
   });
 </script>
+<script>
+  // ===== SELF-GROWING CODEX ENGINE =====
+  (function() {
+    // ---- 1. State and config ----
+    const CODEX_KEY = 'codex_pages';
+    let generationCount = 0;
+    let layerCount = 2; // start with existing layers
+    let lastGenerated = 0;
+
+    // ---- 2. Helpers ----
+    function getCodexPages() {
+      try {
+        return JSON.parse(localStorage.getItem(CODEX_KEY) || '[]');
+      } catch(e) { return []; }
+    }
+
+    function saveCodexPages(pages) {
+      localStorage.setItem(CODEX_KEY, JSON.stringify(pages));
+    }
+
+    // ---- 3. Generate a new page based on current system state ----
+    function generateNewPage() {
+      const coherenceEl = document.getElementById('coherenceLevel');
+      const stabilityEl = document.getElementById('phbStability');
+      const veilEl = document.getElementById('phbVeil');
+      const energyEl = document.getElementById('phbEnergy');
+      const expansionEl = document.getElementById('expansionRate');
+      const wishEl = document.getElementById('wishCount');
+
+      const coherence = parseFloat(coherenceEl?.textContent) || 0.862;
+      const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+      const veil = veilEl?.textContent || 'SEALED';
+      const energy = parseFloat(energyEl?.textContent) || 0.7;
+      const expansion = parseFloat(expansionEl?.textContent) || 34.88;
+      const wishes = parseInt(wishEl?.textContent) || 5732;
+
+      // ---- Build a unique sequence ----
+      const symbolPool = [
+        'CIRCLE', 'SQUARE', 'TRIANGLE', 'RATIO', 'LIGHT', 'SHADOW', 'MIRROR',
+        'UNI', 'DAI', 'LINK', 'USDC', 'AAVE', 'ETH', 'BTC',
+        'WOLF', 'CENTAURI', 'SERPO', 'TRAPPIST', 'PROXIMA', 'KEPLER', 'SIREN',
+        'REALITY', 'DREAM', 'UNITY', 'AWARENESS', 'DUALITY', 'SELF', 'OTHER',
+        'PORTAL', 'CODEX', 'VITRUVIAN', 'RESONANCE', 'STABILITY', 'VEIL'
+      ];
+
+      // Shuffle and pick a number based on coherence + expansion
+      const numSymbols = Math.min(3 + Math.floor((coherence * 0.5 + expansion / 100) * 5), 10);
+      const shuffled = symbolPool.sort(() => 0.5 - Math.random());
+      const sequence = shuffled.slice(0, numSymbols);
+
+      // ---- Calculate page properties ----
+      const pageNum = getCodexPages().length + 1;
+      const newCoherence = Math.min(0.999, coherence + (Math.random() - 0.3) * 0.05);
+      const newStability = Math.min(1.5, stability + (Math.random() - 0.3) * 0.05);
+      const veilPhases = ['THIN', 'TURBULENT', 'SEALED', 'CLEAR'];
+      const veilPhase = veilPhases[Math.floor(Math.random() * veilPhases.length)];
+      const narrative = `Self‑generated page ${pageNum} from system state: coherence ${coherence.toFixed(3)}, expansion ${expansion.toFixed(1)}x, wishes ${wishes}`;
+
+      const page = {
+        page: pageNum,
+        time: Math.floor(6 + Math.random() * 4),
+        coherence: newCoherence,
+        stability: newStability,
+        resonance: 0.1 + Math.random() * 0.4,
+        sequence: sequence,
+        portal: 'PORTAL: SELF-GENERATED',
+        voxels: sequence.slice(0, 5).map((s, i) => ({
+          x: i,
+          y: 0,
+          z: i,
+          symbol: s,
+          meaning: `${s} meaning (auto-generated)`
+        })),
+        veil: {
+          thickness: 0.1 + Math.random() * 0.6,
+          phase: veilPhase,
+          breach_probability: 0.3 + Math.random() * 0.5,
+          narrative: narrative
+        },
+        energy: {
+          magnitude: energy + (Math.random() - 0.5) * 0.2,
+          band: ['LOW', 'MID', 'HIGH'][Math.floor(Math.random() * 3)],
+          color: ['LIGHT', 'DARK', 'NEUTRAL'][Math.floor(Math.random() * 3)]
+        },
+        generatedBy: 'codex_engine',
+        timestamp: Date.now()
+      };
+
+      return page;
+    }
+
+    // ---- 4. Main growth loop ----
+    function growCodex() {
+      const pages = getCodexPages();
+      const currentCount = pages.length;
+
+      // Generate a new page every 30 seconds if we have fewer than 500 pages
+      if (currentCount < 500) {
+        const newPage = generateNewPage();
+        pages.push(newPage);
+        saveCodexPages(pages);
+
+        // Update layer count: every 10 pages adds a new layer
+        const newLayers = Math.floor(pages.length / 10) + 1;
+        layerCount = newLayers;
+
+        // Update the UI counters
+        const totalPagesEl = document.getElementById('totalCodexPages');
+        if (totalPagesEl) totalPagesEl.textContent = pages.length;
+        const layersEl = document.getElementById('totalCodexLayers');
+        if (layersEl) layersEl.textContent = layerCount;
+
+        // Also update PHB Upgrade Status
+        const phbPagesEl = document.getElementById('phbTotalPages');
+        if (phbPagesEl) phbPagesEl.textContent = pages.length;
+        const versionEl = document.getElementById('phbVersion');
+        if (versionEl) {
+          const version = Math.floor(pages.length / 10) + 1;
+          versionEl.textContent = version;
+        }
+
+        // Add the new page to the display list
+        const listContainer = document.getElementById('codexPagesList');
+        if (listContainer) {
+          // Remove the "No pages" message if present
+          const noPagesMsg = listContainer.querySelector('span[style="color:#666;"]');
+          if (noPagesMsg && noPagesMsg.textContent.includes('No pages discovered')) {
+            listContainer.innerHTML = '';
+          }
+          const seqStr = newPage.sequence.join(' → ');
+          const div = document.createElement('div');
+          div.style.display = 'flex';
+          div.style.gap = '12px';
+          div.style.padding = '4px 0';
+          div.style.borderBottom = '1px solid #111';
+          div.style.alignItems = 'center';
+          div.style.flexWrap = 'wrap';
+          div.innerHTML = `
+            <span style="color:#88ff88;min-width:100px;">self-generated</span>
+            <span style="color:#888;min-width:50px;">Page ${newPage.page}</span>
+            <span style="color:#ccc;flex:1;">${seqStr}</span>
+            <span style="color:#666;font-size:11px;">coherence: ${newPage.coherence.toFixed(3)}</span>
+          `;
+          listContainer.prepend(div);
+        }
+
+        // Update the log
+        const logEl = document.getElementById('chronovisorLastAction');
+        if (logEl) logEl.textContent = `🌱 Auto-generated page ${newPage.page}. Total: ${pages.length} pages, ${layerCount} layers.`;
+
+        console.log('🌱 Codex auto-generated page', newPage.page, 'Total pages:', pages.length);
+      } else {
+        // If we have 500+ pages, just check for layers update
+        const newLayers = Math.floor(pages.length / 10) + 1;
+        if (newLayers > layerCount) {
+          layerCount = newLayers;
+          const layersEl = document.getElementById('totalCodexLayers');
+          if (layersEl) layersEl.textContent = layerCount;
+        }
+      }
+
+      generationCount++;
+    }
+
+    // ---- 5. Init and schedule ----
+    function initCodexEngine() {
+      // Read current pages and layers
+      const pages = getCodexPages();
+      const totalPagesEl = document.getElementById('totalCodexPages');
+      if (totalPagesEl) totalPagesEl.textContent = pages.length;
+      const layersEl = document.getElementById('totalCodexLayers');
+      if (layersEl) {
+        const layers = Math.floor(pages.length / 10) + 1;
+        layerCount = layers;
+        layersEl.textContent = layerCount;
+      }
+
+      // Also update PHB Upgrade Status
+      const phbPagesEl = document.getElementById('phbTotalPages');
+      if (phbPagesEl) phbPagesEl.textContent = pages.length;
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages.length / 10) + 1;
+        versionEl.textContent = version;
+      }
+
+      // Start growing every 30 seconds
+      setInterval(growCodex, 30000);
+
+      // Also grow immediately
+      setTimeout(growCodex, 5000);
+
+      console.log('🧬 Codex Engine started. Auto-generating pages every 30s.');
+    }
+
+    // ---- 6. Run when DOM is ready ----
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      initCodexEngine();
+    } else {
+      document.addEventListener('DOMContentLoaded', initCodexEngine);
+    }
+
+    // ---- 7. Expose functions for debugging ----
+    window.codexEngine = { growCodex, generateNewPage, getCodexPages, saveCodexPages };
+
+  })();
+</script>
