@@ -3483,3 +3483,60 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   })();
 </script>
  
+<script>
+  // ===== FORCE PHB UPGRADE STATUS SYNC =====
+  (function() {
+    function updatePHB() {
+      // Try multiple ways to get the page count
+      let pages = 0;
+      const pagesEl = document.getElementById('totalCodexPages');
+      if (pagesEl) {
+        pages = parseInt(pagesEl.textContent) || 0;
+      } else {
+        // Fallback: search the page text for "Total Pages:"
+        const bodyText = document.body.innerText || '';
+        const match = bodyText.match(/Total Pages:\s*(\d+)/);
+        if (match) pages = parseInt(match[1]) || 0;
+      }
+
+      // Update PHB Upgrade Status
+      const phbPagesEl = document.getElementById('phbTotalPages');
+      if (phbPagesEl) phbPagesEl.textContent = pages;
+
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
+      }
+
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+
+      const autoEl = document.getElementById('phbAutoUpgrade');
+      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
+
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+
+      console.log('📊 PHB Upgrade Status forced update: pages=' + pages);
+    }
+
+    // Run immediately and every second
+    updatePHB();
+    setInterval(updatePHB, 1000);
+
+    // Also run when the page loads fully
+    if (document.readyState === 'complete') {
+      setTimeout(updatePHB, 500);
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(updatePHB, 500);
+      });
+    }
+
+    console.log('⚡ PHB Upgrade Status forced sync started.');
+  })();
+</script>
