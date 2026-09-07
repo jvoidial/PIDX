@@ -3896,3 +3896,22 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   console.log('⚡ PHB Codex patch installed (with retry).');
 })();
 </script>
+<script>
+(function() {
+  // Force sync from totalCodexPages every second
+  setInterval(function() {
+    var domPages = document.getElementById('totalCodexPages');
+    if (domPages) {
+      var pages = parseInt(domPages.textContent, 10);
+      if (!isNaN(pages) && pages > 0) {
+        var el = document.getElementById('phbCodex');
+        if (el && parseInt(el.textContent, 10) !== pages) {
+          el.textContent = pages;
+          console.log('✅ PHB Codex forced to ' + pages);
+        }
+      }
+    }
+  }, 1000);
+  console.log('⚡ PHB Codex force sync installed.');
+})();
+</script>
