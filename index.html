@@ -1163,3 +1163,73 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🌍 World Growth updated:', { avgCoherence, planetaryVeil, totalVox, avgEnergy, avgThreshold, avgDecay, growthMomentum, status });
   })();
   </script>
+
+  <!-- ===== PHB UPGRADE STATUS ===== -->
+  <div class="section" style="border-top: 1px solid #1a1a2a; padding-top: 12px;">
+    <div class="section-title"><span class="accent">⚡</span> PHB Upgrade Status</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <span style="color:#888;">Version: <span id="phbVersion" style="color:#fff;font-weight:700;">1</span></span>
+        <span style="color:#888;">Pages: <span id="phbTotalPages" style="color:#fff;font-weight:700;">0</span></span>
+        <span style="color:#888;">Auto-Upgrade: <span id="phbAutoUpgrade" style="color:#88ff88;">ACTIVE</span></span>
+        <span style="color:#888;">Last Upgrade: <span id="phbLastUpgrade" style="color:#aaa;">now</span></span>
+      </div>
+      <button id="phbUpgradeBtn" style="background:#1a2a2a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Force Upgrade</button>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#666;">
+      ⚡ System will auto-upgrade when new pages are detected (every 10s)
+      <span style="color:#88ff88;" id="phbUpgradeStatus">● Upgrading automatically</span>
+    </div>
+  </div>
+
+  <script>
+  // ===== PHB AUTO-UPGRADE =====
+  (function upgradePHB() {
+    let lastPageCount = 0;
+    let upgradeCount = 0;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    function checkUpgrade() {
+      const allData = window._phbAllData || {};
+      const feeds = Object.values(allData).filter(d => d.pages && d.pages.length > 0);
+      let totalPages = 0;
+      feeds.forEach(f => { totalPages += f.pages.length; });
+
+      if (totalPages > lastPageCount) {
+        upgradeCount++;
+        lastPageCount = totalPages;
+        set('phbVersion', upgradeCount + 1);
+        set('phbTotalPages', totalPages);
+        set('phbLastUpgrade', new Date().toLocaleTimeString());
+        set('phbUpgradeStatus', '✅ Upgraded to v' + (upgradeCount + 1));
+        console.log('⚡ PHB upgraded to version', upgradeCount + 1, 'with', totalPages, 'pages');
+      }
+    }
+
+    // Initial check
+    setTimeout(checkUpgrade, 500);
+    setInterval(checkUpgrade, 10000);
+
+    // Force upgrade button
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('phbUpgradeBtn');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          set('phbUpgradeStatus', '⏳ Forcing upgrade...');
+          // Trigger a fresh fetch
+          if (typeof window.fetchAllFeeds === 'function') {
+            window.fetchAllFeeds();
+          } else {
+            // Fallback: just refresh the page
+            location.reload();
+          }
+          // After a short delay, update status
+          setTimeout(function() {
+            set('phbUpgradeStatus', '✅ Upgrade triggered');
+            set('phbLastUpgrade', new Date().toLocaleTimeString());
+          }, 2000);
+        });
+      }
+    });
+  })();
+  </script>
