@@ -5986,3 +5986,142 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
   updatePHB();
   setInterval(updatePHB, 5000);
   </script>
+
+  <!-- Enhanced PHB Vortex Sync – Full Integration -->
+  <script>
+  (function() {
+    const PHB_DATA_URL = 'https://racing-revenues-extra-signs.trycloudflare.com/gcs/network_state.json';
+
+    // ---- Helper to update DOM ----
+    function setEl(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    // ---- Main update function ----
+    async function updatePHB() {
+      try {
+        const response = await fetch(PHB_DATA_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        // ---- 1. Update PHB section ----
+        // Map fields from your network_state.json
+        // Sample structure:
+        // {
+        //   "timestamp": "...",
+        //   "vitruvian_state": [51.0, 0.932, 0.893],
+        //   "pages": [ { "page": 1, "time": 7.0, "coherence": 0.932, ... } ],
+        //   "stability": 0.893,
+        //   "voxel_layer": 0,
+        //   "veil_state": "SEALED",
+        //   "portal_openness": 0.0,
+        //   "energy_signature": 0,
+        //   "codex_pages": 0,
+        //   "peer_count": 0,
+        //   "network_state": "SYNCED",
+        //   "mesh_status": "ACTIVE"
+        // }
+        // Use the latest page data if available
+        let coherence = 0;
+        let stability = 0;
+        if (data.pages && data.pages.length > 0) {
+          const latest = data.pages[data.pages.length - 1];
+          coherence = latest.coherence || 0;
+          stability = latest.stability || 0;
+        }
+        // Fallback to top-level if pages not present
+        if (coherence === 0 && data.coherence) coherence = data.coherence;
+        if (stability === 0 && data.stability) stability = data.stability;
+
+        setEl('phbCoherence', coherence.toFixed(3));
+        setEl('phbStability', stability.toFixed(3));
+        setEl('phbVoxel', data.voxel_layer ?? data.voxel ?? 0);
+        setEl('phbVeil', data.veil_state ?? data.veil ?? '—');
+        setEl('phbPortal', (data.portal_openness ?? data.portal ?? 0).toFixed(1));
+        setEl('phbEnergy', data.energy_signature ?? data.energy ?? 0);
+        setEl('phbCodex', data.codex_pages ?? data.codex ?? 0);
+        setEl('phbPeers', data.peer_count ?? data.peers ?? 0);
+        setEl('phbState', data.network_state ?? data.state ?? 'SYNCED');
+        setEl('phbMesh', data.mesh_status ?? data.mesh ?? 'ACTIVE');
+        setEl('phbLastUpdate', `✅ Last update: ${new Date().toLocaleTimeString()}`);
+
+        // ---- 2. Integrate PHB data into main dashboard ----
+        // Update main Resonance Coherence (if PHB coherence is available)
+        if (coherence > 0) {
+          const coherenceEl = document.getElementById('coherenceLevel');
+          if (coherenceEl) {
+            coherenceEl.textContent = coherence.toFixed(3);
+          }
+          const coherenceEl2 = document.getElementById('coherenceLevel2');
+          if (coherenceEl2) {
+            coherenceEl2.textContent = coherence.toFixed(3);
+          }
+          // Also update the state in localStorage (optional)
+          try {
+            const state = JSON.parse(localStorage.getItem('agi_quantum_state_full') || '{}');
+            if (state.resonance) {
+              state.resonance.coherence = coherence;
+              localStorage.setItem('agi_quantum_state_full', JSON.stringify(state));
+            }
+          } catch(e) {}
+        }
+
+        // Optionally, update Portal value from PHB portal
+        const portalVal = data.portal_openness ?? data.portal;
+        if (portalVal !== undefined) {
+          const portalEl = document.getElementById('portalDisplay');
+          if (portalEl) portalEl.textContent = portalVal.toFixed(1);
+        }
+
+      } catch (error) {
+        setEl('phbLastUpdate', `⚠️ Waiting for PHB data… (${error.message})`);
+        console.warn('PHB fetch error:', error);
+      }
+    }
+
+    // ---- Manual refresh button ----
+    const section = document.getElementById('phb-vortex-section');
+    if (section) {
+      const refreshBtn = document.createElement('button');
+      refreshBtn.textContent = '🔄 Refresh PHB Data';
+      refreshBtn.style.cssText = `
+        margin-top: 12px;
+        background: #1a1a2a;
+        color: #88aaff;
+        border: 1px solid #333;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      `;
+      refreshBtn.onmouseover = () => { refreshBtn.style.background = '#2a2a4a'; };
+      refreshBtn.onmouseout = () => { refreshBtn.style.background = '#1a1a2a'; };
+      refreshBtn.onclick = () => {
+        refreshBtn.textContent = '⏳ Updating…';
+        updatePHB().finally(() => {
+          refreshBtn.textContent = '🔄 Refresh PHB Data';
+        });
+      };
+      // Insert after the status div
+      const statusDiv = section.querySelector('div:has(#phbLastUpdate)');
+      if (statusDiv) {
+        statusDiv.after(refreshBtn);
+      }
+    }
+
+    // ---- Initial fetch and periodic sync ----
+    updatePHB();
+    setInterval(updatePHB, 5000);
+
+    // ---- Also update on page visibility change (when user returns) ----
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updatePHB();
+      }
+    });
+
+    console.log('🧠 PHB Vortex sync active – full integration enabled.');
+  })();
+  </script>
