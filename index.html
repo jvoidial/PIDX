@@ -3544,3 +3544,181 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('⚡ PHB Upgrade Status sync started (MutationObserver version).');
   })();
 </script>
+<script>
+  (function() {
+    "use strict";
+
+    // ============================================================
+    // 1. PHB SYNC FROM EMBEDDED JSON (or DOM fallback)
+    // ============================================================
+
+    function getTotalPagesFromJSON() {
+      try {
+        const jsonEl = document.querySelector('#phbRawJson pre, #phbRawJson');
+        if (!jsonEl) return null;
+        const raw = jsonEl.textContent.trim();
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        // Count all top-level keys that are numeric (page numbers)
+        let pageCount = 0;
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key) && typeof data[key] === 'object') {
+            // If the value has a 'pages' array, count its length
+            if (Array.isArray(data[key].pages)) {
+              pageCount += data[key].pages.length;
+            } else {
+              // Otherwise count each key as one page
+              pageCount++;
+            }
+          }
+        }
+        return pageCount > 0 ? pageCount : null;
+      } catch(e) {
+        console.warn('⚠️ JSON parsing failed:', e);
+        return null;
+      }
+    }
+
+    function getTotalPagesFromDOM() {
+      const el = document.getElementById('totalCodexPages');
+      if (el) {
+        const val = parseInt(el.textContent, 10);
+        return isNaN(val) ? null : val;
+      }
+      return null;
+    }
+
+    function updatePHBFields(pages) {
+      if (pages === null || pages === undefined) return;
+      console.log('✅ PHB sync: total pages = ' + pages);
+
+      const phbPages = document.getElementById('phbTotalPages');
+      if (phbPages) phbPages.textContent = pages;
+
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
+      }
+
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+
+      const autoEl = document.getElementById('phbAutoUpgrade');
+      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
+
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+    }
+
+    function syncPHB() {
+      let pages = getTotalPagesFromJSON();
+      if (pages === null) {
+        pages = getTotalPagesFromDOM();
+      }
+      if (pages !== null) {
+        updatePHBFields(pages);
+      } else {
+        console.warn('⚠️ PHB sync: could not find pages from JSON or DOM.');
+      }
+    }
+
+    // Run on load and set up observers
+    function initPHBSync() {
+      syncPHB();
+
+      // Watch for changes in the JSON element or the DOM count
+      const jsonEl = document.querySelector('#phbRawJson pre, #phbRawJson');
+      if (jsonEl) {
+        const observer = new MutationObserver(function() {
+          syncPHB();
+        });
+        observer.observe(jsonEl, { characterData: true, childList: true, subtree: true });
+        console.log('👀 PHB sync: watching JSON element for changes.');
+      }
+
+      const domEl = document.getElementById('totalCodexPages');
+      if (domEl) {
+        const observer = new MutationObserver(function() {
+          syncPHB();
+        });
+        observer.observe(domEl, { characterData: true, childList: true, subtree: true });
+        console.log('👀 PHB sync: watching DOM totalCodexPages for changes.');
+      }
+
+      // Periodic fallback every 10 seconds
+      setInterval(syncPHB, 10000);
+    }
+
+    // Wait for DOM ready
+    if (document.readyState === 'complete') {
+      setTimeout(initPHBSync, 500);
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(initPHBSync, 500);
+      });
+    }
+
+    console.log('⚡ PHB sync started (JSON + DOM).');
+
+    // ============================================================
+    // 2. AUTOMATIC SECURITY LOCKDOWN ON VULNERABILITY DETECTION
+    // ============================================================
+
+    function checkAndLockdown() {
+      // Define what “vulnerability” means – you can adjust this condition.
+      // Example: if Security Score < 100, or if any "Veil" is "TURBULENT"
+      let shouldLockdown = false;
+
+      // Check Security Score (assuming an element with id "securityScore")
+      const scoreEl = document.getElementById('securityScore');
+      if (scoreEl) {
+        const score = parseInt(scoreEl.textContent, 10);
+        if (!isNaN(score) && score < 100) {
+          console.warn('🔒 Security score dropped to ' + score + ' – triggering lockdown.');
+          shouldLockdown = true;
+        }
+      }
+
+      // Check for "TURBULENT" veil in any visible area (optional)
+      const veilElements = document.querySelectorAll('[id*="veil"], .veil-status, .veil-phase');
+      for (let el of veilElements) {
+        if (el.textContent.includes('TURBULENT')) {
+          console.warn('🔒 Turbulent veil detected – triggering lockdown.');
+          shouldLockdown = true;
+          break;
+        }
+      }
+
+      // If vulnerability found, automatically activate lockdown
+      if (shouldLockdown) {
+        // Find the lockdown button and click it
+        const lockdownBtn = document.querySelector('#activateLockdown, [onclick*="lockdown"], .lockdown-btn');
+        if (lockdownBtn) {
+          lockdownBtn.click();
+          console.log('🔒 Lockdown activated automatically.');
+        } else {
+          // Fallback: directly call a function if available
+          if (typeof window.activateLockdown === 'function') {
+            window.activateLockdown();
+            console.log('🔒 Lockdown activated via global function.');
+          } else {
+            console.warn('⚠️ Could not find lockdown button or function.');
+          }
+        }
+      }
+    }
+
+    // Run the security check every 15 seconds
+    setInterval(checkAndLockdown, 15000);
+
+    // Also run once after a short delay
+    setTimeout(checkAndLockdown, 3000);
+
+    console.log('⚡ Auto‑lockdown monitoring started.');
+
+  })();
+</script>
