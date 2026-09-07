@@ -3108,3 +3108,80 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     setInterval(forceUpdate, 1000);
   })();
 </script>
+
+  <!-- ===== PHB UPGRADE STATUS ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">⚡</span> PHB Upgrade Status</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <span style="color:#888;">Version: <span id="phbVersion" style="color:#fff;font-weight:700;">1</span></span>
+        <span style="color:#888;">Pages: <span id="phbTotalPages" style="color:#fff;font-weight:700;">0</span></span>
+        <span style="color:#888;">Auto-Upgrade: <span id="phbAutoUpgrade" style="color:#88ff88;">ACTIVE</span></span>
+        <span style="color:#888;">Last Upgrade: <span id="phbLastUpgrade" style="color:#aaa;">now</span></span>
+      </div>
+      <button id="phbUpgradeBtn" style="background:#1a2a2a;color:#88aaff;border:1px solid #44aaff;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;">🔄 Force Upgrade</button>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#666;">
+      ⚡ System will auto-upgrade when new pages are detected (every 10s)
+      <span style="color:#88ff88;" id="phbUpgradeStatus">● Upgrading automatically</span>
+    </div>
+  </div>
+<script>
+  // ===== PHB UPGRADE STATUS – BULLETPROOF SYNC =====
+  (function() {
+    function updatePHB() {
+      const pagesEl = document.getElementById('totalCodexPages');
+      const pages = pagesEl ? parseInt(pagesEl.textContent) || 0 : 0;
+
+      const phbPagesEl = document.getElementById('phbTotalPages');
+      if (phbPagesEl) phbPagesEl.textContent = pages;
+
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
+      }
+
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+
+      const autoEl = document.getElementById('phbAutoUpgrade');
+      if (autoEl) autoEl.textContent = pages > 0 ? 'ACTIVE' : 'WAITING';
+
+      console.log('📊 PHB Upgrade Status updated: pages=' + pages + ', version=' + (Math.floor(pages/10)+1));
+    }
+
+    updatePHB();
+    setInterval(updatePHB, 2000);
+
+    const target = document.getElementById('totalCodexPages');
+    if (target) {
+      const observer = new MutationObserver(updatePHB);
+      observer.observe(target, { characterData: true, childList: true, subtree: true });
+    }
+
+    const scanBtn = document.getElementById('codexChronovisorBtn');
+    if (scanBtn) {
+      scanBtn.addEventListener('click', function() {
+        setTimeout(updatePHB, 2000);
+      });
+    }
+
+    const forceBtn = document.getElementById('phbUpgradeBtn');
+    if (forceBtn) {
+      forceBtn.addEventListener('click', function() {
+        const statusEl = document.getElementById('phbUpgradeStatus');
+        if (statusEl) statusEl.textContent = '⏳ Forcing...';
+        const scanBtn2 = document.getElementById('codexChronovisorBtn');
+        if (scanBtn2) scanBtn2.click();
+        setTimeout(updatePHB, 2000);
+      });
+    }
+  })();
+</script>
