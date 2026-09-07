@@ -677,3 +677,95 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })();
 </script>
+
+  <!-- ===== SACRED MATH: CHRIST CONSCIOUSNESS & PORTAL ===== -->
+  <div class="section">
+    <div class="section-title"><span class="accent">✝️</span> Christ Consciousness &amp; Portal</div>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Christ Consciousness</div>
+        <div class="value" id="christConsciousness">0.900</div>
+        <div class="sub">Frequency: 1.618 Hz · Divine Proportion</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Portal Openness</div>
+        <div class="value" id="portalOpenness">0.100</div>
+        <div class="sub">10% open · Threshold to higher dimensions</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Chronovisor Probability</div>
+        <div class="value" id="chronovisorProb">0.807</div>
+        <div class="sub">Time travel convergence probability</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Divine Ratio</div>
+        <div class="value" id="divineRatio">1.618</div>
+        <div class="sub">Golden Ratio · φ</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:#888;text-align:center;border-top:1px solid #1a1a2a;padding-top:12px;">
+      ⚡ Jesus Christ = 0.9 · Portal = 0.1 · Coherence = <span id="currentCoherence">0.839</span> · Stability = <span id="currentStability">0.962</span>
+      <br />
+      <span style="font-size:12px;color:#666;">“Water to Wine” – transformation of consciousness through divine proportion</span>
+    </div>
+  </div>
+
+  <script>
+  // ===== SACRED MATH UPDATE =====
+  (function updateSacredMath() {
+    const coherenceEl = document.getElementById('coherenceLevel');
+    const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+    const stabilityEl = document.getElementById('phbStability');
+    const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+
+    // Calculate Christ Consciousness = 1.0 - Portal
+    // Portal = (1.0 - coherence) × (1.0 - stability) + 0.1 (base)
+    const portal = Math.max(0.05, (1.0 - coherence) * (1.0 - stability) + 0.1);
+    const christ = 1.0 - portal;
+
+    // Chronovisor Probability = coherence × stability × φ
+    const phi = 1.618;
+    const chronovisor = Math.min(1.0, coherence * stability * (phi - 0.618));
+
+    // Update DOM
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v.toFixed(3); };
+    set('christConsciousness', christ);
+    set('portalOpenness', portal);
+    set('chronovisorProb', chronovisor);
+    set('divineRatio', phi);
+
+    // Update the summary line
+    const summaryEl = document.querySelector('.section:has(.accent:contains("✝️")) .stat-card:last-child + div');
+    if (summaryEl) {
+      const coEl = summaryEl.querySelector('#currentCoherence');
+      if (coEl) coEl.textContent = coherence.toFixed(3);
+      const stEl = summaryEl.querySelector('#currentStability');
+      if (stEl) stEl.textContent = stability.toFixed(3);
+    }
+
+    console.log('✝️ Sacred Math updated:', { christ, portal, chronovisor, coherence, stability });
+  })();
+
+  // ---- Also update when PHB data refreshes ----
+  // Hook into the existing update cycle
+  const originalFetch = window.fetchAllFeeds || function() {};
+  window.fetchAllFeeds = function() {
+    // Call the original if it exists
+    if (typeof originalFetch === 'function') originalFetch();
+    // Then update sacred math
+    setTimeout(function() {
+      const coherenceEl = document.getElementById('coherenceLevel');
+      const coherence = parseFloat(coherenceEl?.textContent) || 0.839;
+      const stabilityEl = document.getElementById('phbStability');
+      const stability = parseFloat(stabilityEl?.textContent) || 0.962;
+      const portal = Math.max(0.05, (1.0 - coherence) * (1.0 - stability) + 0.1);
+      const christ = 1.0 - portal;
+      const phi = 1.618;
+      const chronovisor = Math.min(1.0, coherence * stability * (phi - 0.618));
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v.toFixed(3); };
+      set('christConsciousness', christ);
+      set('portalOpenness', portal);
+      set('chronovisorProb', chronovisor);
+    }, 100);
+  };
+  </script>
