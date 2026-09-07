@@ -3332,3 +3332,108 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('🌍 Universal Codex engine started. Adding pages from all languages.');
   })();
 </script>
+<script>
+  // ===== FORCED PHB UPGRADE STATUS SYNC =====
+  (function() {
+    function updatePHB() {
+      const pagesEl = document.getElementById('totalCodexPages');
+      const pages = pagesEl ? parseInt(pagesEl.textContent) || 0 : 0;
+      const phbPagesEl = document.getElementById('phbTotalPages');
+      if (phbPagesEl) phbPagesEl.textContent = pages;
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
+      }
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+    }
+    updatePHB();
+    setInterval(updatePHB, 1000);
+  })();
+
+  // ===== UNIVERSAL CODEX ENGINE =====
+  (function() {
+    const WORDS = {
+      en: ['the','be','to','of','and','a','in','that','have','I','it','for','not','on','with','he','as','you','do','at','this','but','his','by','from','they','we','say','her','she','or','an','will','my','one','all','would','there','their','what','so','up','out','if','about','who','get','which','go','me','when','make','can','like','time','no','just','him','know','take','people','into','year','your','good','some','could','them','see','other','than','then','now','look','only','come','its','over','think','also','back','after','use','two','how','our','work','first','well','way','even','new','want','because','any','these','give','day','most','us'],
+      es: ['el','la','de','que','y','a','en','un','ser','se','no','haber','por','con','su','para','como','estar','tener','le','lo','que','todo','pero','más','cuando','poder','decir','este','ir','otro','ese','la','si','ya','ver','porque','dar','ellos','bien','cosa','tanto','año','tiempo','hombre','sin','después','nosotros','vida','saber','sobre','entre','primero','gran','mismo','casa','mujer','lugar','mayor','otra','hasta','cómo','tan','donde','ahora','parte','nada','cada','mejor','nuevo','casi','real','algo','tres','allí','menos','cerca','abajo','arriba','abrir','cerrar','caminar','correr','hablar','escuchar','mirar','pensar','sentir','amar','odiar','jugar','comer','beber','dormir','vivir','morir','creer','saber','poder','querer','hacer'],
+      fr: ['le','la','de','et','à','les','un','une','pour','par','que','en','dans','avoir','ce','sur','ne','pas','on','se','avec','je','tu','il','elle','nous','vous','ils','elles','me','te','lui','leur','qui','que','dont','où','quand','comment','pourquoi','combien','tout','tous','toute','toutes','bon','mauvais','grand','petit','homme','femme','enfant','père','mère','frère','sœur','maison','travail','argent','temps','jour','nuit','semaine','mois','année','ami','amour','vie','mort','joie','tristesse','peur','colère','surprise','dégoût','respect','honneur','liberté','égalité','fraternité','justice','paix','guerre','nature','ciel','terre','eau','feu','vent','soleil','lune','étoile','mer','montagne','forêt','jardin','fleur','arbre','oiseau','chat','chien'],
+      de: ['der','die','das','und','zu','den','mit','auf','für','ist','von','nicht','im','ein','sich','dass','auch','wie','nach','bei','aus','durch','gegen','über','ohne','oder','aber','wenn','nur','dann','ich','du','er','sie','es','wir','ihr','haben','sein','werden','können','mögen','sollen','wissen','denken','gehen','kommen','leben','lieben','hassen','sehen','hören','sprechen','essen','trinken','schlafen','arbeiten','spielen','lernen','helfen','danken','glauben','hoffen','wünschen','fragen','antworten','geben','nehmen','bringen','finden','bleiben','stehen','sitzen','liegen','laufen','springen','schwimmen','fliegen','fahren','reisen','wohnen','besuchen','verstehen','erklären','erzählen','schreiben','lesen','zeichnen','malen','singen','tanzen','feiern','genießen','vergessen','erinnern'],
+      ru: ['и','в','на','с','по','к','у','из','за','от','для','о','при','без','до','через','между','после','над','под','перед','за','из-за','вместо','вроде','кроме','ради','во','через','сквозь','поперёк','около','возле','мимо','вдоль','напротив','посреди','вокруг','внутри','снаружи','вверху','внизу','справа','слева','впереди','позади','весь','вся','всё','все','сам','сама','само','сами','этот','эта','это','эти','тот','та','то','те','кто','что','который','чей','какой','такой','столько','сколько','так','как','где','куда','откуда','когда','тогда','теперь','сейчас','уже','ещё','вдруг','опять','снова','всегда','иногда','никогда','очень','слишком','почти','едва','чуть','полностью','абсолютно','совсем','вполне','крайне','чрезвычайно'],
+      ar: ['ال','و','من','في','على','إلى','عن','مع','بين','في','إن','أن','هذا','هذه','ذلك','تلك','هؤلاء','أولئك','من','ما','ماذا','كيف','أين','متى','لماذا','أي','أية','كل','بعض','أغلب','معظم','جميع','بضع','عدة','أكثر','أقل','كثير','قليل','جديد','قديم','كبير','صغير','طويل','قصير','واسع','ضيق','قريب','بعيد','سريع','بطيء','سهل','صعب','سعيد','حزين','غني','فقير','قوي','ضعيف','ذكي','غبي','جميل','قبيح','نظيف','وسخ','حار','بارد','حلو','مر','طيب','شرير','أبيض','أسود','أحمر','أصفر','أزرق','أخضر','يوم','أسبوع','شهر','سنة','رجل','امرأة','طفل','أب','أم','أخ','أخت','بيت','مدرسة','عمل','مال','وقت','حب','سلام','حرب','سماء','أرض','ماء','نار','رياح','شمس','قمر','نجم','بحر','جبل','غابة','زهرة','شجرة','طائر','قطة','كلب'],
+      zh: ['的','一','是','不','了','人','在','有','我','他','这','中','大','来','上','国','个','到','说','们','为','子','和','你','地','要','以','会','生','家','自','着','年','过','发','后','作','里','用','道','行','所','然','种','起','都','方','好','还','实','成','样','心','想','事','军','经','者','法','无','当','看','两','开','手','长','意','正','新','么','同','因','情','己','些','前','明','天','又','静','定','必','打','名','公','从','外','主','但','门','真','最','本','日','之','也','还','今','水','话','几','月','儿','向','路','活','美','少','女','十','如','民','公','因','果','体','性','质','量','度','化','应','命','信','感','知','识','见','面','声','形','色','香','味','触','法','意','识','想','行','受','爱','恨','情','仇','恩','怨','亲','疏','远','近','同','异','生','灭','变','化','动','静','有','无','真','假','善','恶','美','丑','长','短','高','低','宽','窄','厚','薄','轻','重','缓','急','快','慢','进','退','存','亡','安','危','兴','衰'],
+      ja: ['の','に','は','を','た','が','で','て','と','し','れ','さ','い','も','な','ら','せ','ん','お','き','か','こ','ま','り','く','ご','う','つ','え','あ','そ','ほ','ね','い','ろ','は','に','ほ','へ','と','ち','り','ぬ','る','を','わ','か','よ','た','れ','そ','つ','ね','な','ら','む','う','ゐ','の','お','く','や','ま','け','ふ','こ','え','て','あ','さ','き','ゆ','め','み','わ','が','と','ら','め','し','さ','が','す','れ','た','い','の','ち','ま','こ','と','き','み','の','そ','ら','ほ','し','つ','き','ひ','み','ず','ほ','の','お','な','や','ま','か','わ','う','み','い','け','た','に','む','ら','ま','ち','み','ち','は','し','も','り','の','た','に','う','み','し','ま','ゆ','き','は','る','な','つ','あ','き','ふ','ゆ','こ','と','し','の','ほ','ん','ね','り','し','き','げ','ん','じ','つ','も','ん','だ','い','か','い','け','つ','せ','い','ぎ','た','だ','し','く','べ','つ','き','ょ','う','さ','い','し','ん','よ','う'],
+      ko: ['의','가','에','은','는','을','를','과','와','로','으로','도','만','서','에서','부터','까지','에게','한테','께','들','님','분','생각','사랑','마음','삶','죽음','하늘','땅','바다','강','산','나무','꽃','새','고양이','개','돈','집','일','학교','친구','가족','엄마','아빠','형제','자매','사람','세계','역사','문화','예술','음악','영화','책','글','말','소리','빛','어둠','희망','평화','전쟁','자유','진실','거짓','아름다움','추함','힘','약함','지혜','어리석음','용기','두려움','기쁨','슬픔','분노','사랑','증오','용서','배움','가르침','성장','변화','조화','균형','창조','파괴','보존','기억','망각','시간','공간','에너지','물질','생명','죽음','후회','결심','희열','고통'],
+      magic: ['abracadabra','hocuspocus','alakazam','presto','simsalabim','open sesame','shazam','wand','spell','charm','enchant','transmute','conjure','summon','banish','reveal','dispel','ward','portal','gateway','dimension','ether','astral','arcane','mystic','occult','esoteric','hermetic','alchemy','divination','prophecy','illusion','manifestation','incantation','sigil','rune','glyph','talisman','amulet','crystal','star','moon','sun','element','spirit','fairy','dragon','unicorn','phoenix','griffin','chimera','basilisk','golem','genie','djinn','troll','elf','dwarf','giant','sphinx','naga','kitsune','yokai','oni','kami','shaman','druid','mage','wizard','sorcerer','warlock','witch','enchantress','prophet','oracle','seer','diviner','channeler','medium','clairvoyant','empath','shapeshifter','alchemist','philosopher','sage','wise','mystery','secrecy','wonder','awe','reverence','sacred','divine','eternal','infinite','cosmos','realm','veil','illusion','reality','dream','vision','trance','meditation','awakening','enlightenment']
+    };
+
+    const ALL_WORDS = Object.values(WORDS).flat();
+    const MAGIC_WORDS = WORDS.magic;
+
+    function generateUniversalPage() {
+      const numWords = 5 + Math.floor(Math.random() * 4);
+      const shuffled = ALL_WORDS.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, numWords);
+      const usedLangs = new Set();
+      selected.forEach(w => {
+        for (const [lang, list] of Object.entries(WORDS)) {
+          if (list.includes(w)) usedLangs.add(lang);
+        }
+      });
+      const langStr = usedLangs.size ? [...usedLangs].join(', ') : 'unknown';
+      const magic = MAGIC_WORDS[Math.floor(Math.random() * MAGIC_WORDS.length)];
+      return {
+        page: Date.now() % 10000,
+        time: 6 + Math.floor(Math.random() * 4),
+        coherence: 0.6 + Math.random() * 0.3,
+        stability: 0.8 + Math.random() * 0.2,
+        resonance: 0.2 + Math.random() * 0.3,
+        sequence: selected,
+        portal: 'PORTAL: UNIVERSAL',
+        voxels: selected.slice(0, 5).map((s, i) => ({ x: i, y: 0, z: i, symbol: s, meaning: `Word from ${langStr}` })),
+        veil: { thickness: 0.1 + Math.random()*0.5, phase: ['THIN','TURBULENT','SEALED','CLEAR'][Math.floor(Math.random()*4)], breach_probability: 0.5 + Math.random()*0.4, narrative: `Universal page: ${langStr}. Magic: ${magic}` },
+        energy: { magnitude: 0.5 + Math.random()*0.8, band: ['LOW','MID','HIGH'][Math.floor(Math.random()*3)], color: ['LIGHT','DARK','NEUTRAL'][Math.floor(Math.random()*3)] }
+      };
+    }
+
+    function addUniversalPage() {
+      const page = generateUniversalPage();
+      let pages = [];
+      try { pages = JSON.parse(localStorage.getItem('codex_pages') || '[]'); } catch(e) {}
+      pages.push(page);
+      localStorage.setItem('codex_pages', JSON.stringify(pages));
+      if (window._phbAllData) {
+        const id = Object.keys(window._phbAllData).length + 1;
+        window._phbAllData[id] = { domain: 'universal', pages: [page] };
+      }
+      if (typeof window.updateCodexDisplay === 'function') window.updateCodexDisplay();
+      console.log('🌍 Universal page added:', page.sequence.join(' → '));
+    }
+
+    // Auto-add every 30 seconds
+    setInterval(addUniversalPage, 30000);
+
+    // Also add a button (if Codex section exists)
+    function addButton() {
+      const section = document.querySelector('.section:has(.section-title)');
+      if (!section) return;
+      const btn = document.createElement('button');
+      btn.textContent = '🌍 Add 10 Universal Pages';
+      btn.style.cssText = 'background:#2a1a3a;color:#ff88aa;border:1px solid #ff44aa;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;margin-top:10px;';
+      btn.addEventListener('click', function() {
+        for (let i = 0; i < 10; i++) addUniversalPage();
+        alert('Added 10 universal pages!');
+      });
+      section.appendChild(btn);
+    }
+    if (document.readyState === 'complete') addButton();
+    else document.addEventListener('DOMContentLoaded', addButton);
+
+    console.log('🌍 Universal Codex engine started.');
+  })();
+</script>
