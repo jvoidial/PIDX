@@ -3848,3 +3848,51 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   console.log('⚡ PHB Codex patch installed.');
 })();
 </script>
+<script>
+(function() {
+  function updateCodex() {
+    const el = document.getElementById('phbCodex');
+    if (!el) {
+      // Element not ready yet — try again in 500ms
+      setTimeout(updateCodex, 500);
+      return;
+    }
+
+    fetch('agi_phb_divine_complete.json')
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        let total = 0;
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key)) {
+            const entry = data[key];
+            if (Array.isArray(entry.pages)) {
+              total += entry.pages.length;
+            }
+          }
+        }
+        if (total > 0) {
+          el.textContent = total;
+          console.log('✅ PHB Codex updated to ' + total);
+        }
+      })
+      .catch(() => {
+        const domEl = document.getElementById('totalCodexPages');
+        if (domEl) {
+          const val = parseInt(domEl.textContent, 10);
+          if (!isNaN(val)) {
+            el.textContent = val;
+            console.log('✅ PHB Codex updated from DOM to ' + val);
+          }
+        }
+      });
+  }
+
+  // Start the update loop — it will retry until the element exists
+  updateCodex();
+  setInterval(updateCodex, 30000);
+  console.log('⚡ PHB Codex patch installed (with retry).');
+})();
+</script>
