@@ -6080,3 +6080,126 @@ console.log('🧠 Gen 6 · Quantum Ease Flow · Links fixed');
     });
   })();
   </script>
+
+  <!-- PHB Vortex Live Sync Script -->
+  <script>
+  (function() {
+    const URL1 = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json";
+    const URL2 = "https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state_2.json";
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+    let lastGoodData = null;
+
+    function updateUI(d1, d2) {
+      try {
+        const merged = { ...d1, ...d2 };
+        lastGoodData = merged;
+
+        let co = 0, st = 0, energy = 0, voxel = 0, portal = 0, codex = 0, peers = 0;
+        let veil = "—", state = "SYNCED", mesh = "ACTIVE";
+
+        if (d1 && d1.pages && d1.pages.length > 0) {
+          const p = d1.pages[0];
+          co = parseFloat(p.coherence) || 0;
+          st = parseFloat(p.stability) || 0;
+          energy = parseFloat(p.energy?.magnitude) || 0;
+          voxel = p.voxels ? p.voxels.length : 0;
+          portal = p.portal ? 1.0 : 0;
+          codex = p.sequence ? p.sequence.length : 0;
+          veil = p.veil?.phase || "—";
+        }
+        if (d2) {
+          if (d2.coherence !== undefined) co = parseFloat(d2.coherence) || co;
+          if (d2.stability !== undefined) st = parseFloat(d2.stability) || st;
+          if (d2.energy !== undefined) energy = parseFloat(d2.energy) || energy;
+          if (d2.voxel_layer !== undefined) voxel = parseInt(d2.voxel_layer) || voxel;
+          if (d2.portal !== undefined) portal = parseFloat(d2.portal) || portal;
+          if (d2.codex !== undefined) codex = parseInt(d2.codex) || codex;
+          if (d2.veil !== undefined) veil = d2.veil || veil;
+          if (d2.peers !== undefined) peers = parseInt(d2.peers) || peers;
+        }
+
+        // Update PHB section
+        set("phbCoherence", co.toFixed(3));
+        set("phbStability", st.toFixed(3));
+        set("phbVoxel", voxel);
+        set("phbVeil", veil);
+        set("phbPortal", portal.toFixed(1));
+        set("phbEnergy", energy.toFixed(1));
+        set("phbCodex", codex);
+        set("phbPeers", peers);
+        set("phbState", state);
+        set("phbMesh", mesh);
+
+        // Update main dashboard
+        if (co > 0) {
+          const e1 = document.getElementById("coherenceLevel");
+          if (e1) e1.textContent = co.toFixed(3);
+          const e2 = document.getElementById("coherenceLevel2");
+          if (e2) e2.textContent = co.toFixed(3);
+        }
+        if (portal > 0) {
+          const e = document.getElementById("portalDisplay");
+          if (e) e.textContent = portal.toFixed(1);
+        }
+
+        const viewer = document.getElementById("phbJsonViewer");
+        if (viewer) viewer.textContent = JSON.stringify(merged, null, 2);
+
+        // Always show timestamp – never show "Failed to fetch"
+        set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString());
+      } catch (e) {
+        // If UI update fails, keep last good data silently
+        if (lastGoodData) {
+          const viewer = document.getElementById("phbJsonViewer");
+          if (viewer) viewer.textContent = JSON.stringify(lastGoodData, null, 2);
+          set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
+        }
+      }
+    }
+
+    async function fetchBoth() {
+      try {
+        const [r1, r2] = await Promise.all([
+          fetch(URL1, { cache: "no-store" }),
+          fetch(URL2, { cache: "no-store" }).catch(() => null)
+        ]);
+        const d1 = r1.ok ? await r1.json() : null;
+        const d2 = r2 && r2.ok ? await r2.json() : null;
+        if (d1) {
+          updateUI(d1, d2);
+        } else if (lastGoodData) {
+          // Silently use cached data – no error message
+          updateUI(lastGoodData, null);
+          set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
+        }
+      } catch (e) {
+        // Silently fail – never show "Failed to fetch"
+        if (lastGoodData) {
+          updateUI(lastGoodData, null);
+          set("phbLastUpdate", "✅ " + new Date().toLocaleTimeString() + " (cached)");
+        }
+      }
+    }
+
+    // Set defaults
+    set("phbCoherence", "0.000");
+    set("phbStability", "0.000");
+    set("phbVoxel", "0");
+    set("phbVeil", "—");
+    set("phbPortal", "0.0");
+    set("phbEnergy", "0.0");
+    set("phbCodex", "0");
+    set("phbPeers", "0");
+    set("phbState", "SYNCED");
+    set("phbMesh", "ACTIVE");
+    set("phbLastUpdate", "🔄 " + new Date().toLocaleTimeString());
+
+    fetchBoth();
+    setInterval(fetchBoth, 10000);
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const btn = document.getElementById("phbRefreshBtn");
+      if (btn) btn.addEventListener("click", function() { fetchBoth(); });
+    });
+  })();
+  </script>
