@@ -3437,3 +3437,28 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     console.log('🌍 Universal Codex engine started.');
   })();
 </script>
+<script>
+  // ===== FORCE PHB UPGRADE STATUS SYNC =====
+  (function() {
+    function updatePHB() {
+      const pagesEl = document.getElementById('totalCodexPages');
+      const pages = pagesEl ? parseInt(pagesEl.textContent) || 0 : 0;
+      const phbPagesEl = document.getElementById('phbTotalPages');
+      if (phbPagesEl) phbPagesEl.textContent = pages;
+      const versionEl = document.getElementById('phbVersion');
+      if (versionEl) {
+        const version = Math.floor(pages / 10) + 1;
+        versionEl.textContent = version;
+      }
+      const statusEl = document.getElementById('phbUpgradeStatus');
+      if (statusEl) {
+        statusEl.textContent = '✅ Synced (' + pages + ' pages)';
+        statusEl.style.color = '#88ff88';
+      }
+      const lastEl = document.getElementById('phbLastUpgrade');
+      if (lastEl) lastEl.textContent = new Date().toLocaleTimeString();
+    }
+    updatePHB();
+    setInterval(updatePHB, 1000);
+  })();
+</script>
