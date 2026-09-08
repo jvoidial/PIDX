@@ -2150,3 +2150,18 @@
 
 })();
 </script>
+<script>
+// Fix Chain Link
+(function() {
+  function updateChainLink() {
+    const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.862;
+    const po = parseFloat(document.getElementById('phbPortal')?.textContent) || 1.0;
+    const chain = Math.min(100, (coherence * portal) * 100);
+    const el = document.getElementById('chainLink');
+    if (el) el.textContent = chain.toFixed(1) + '%';
+  }
+  // Run immediately and every 2 seconds
+  updateChainLink();
+  setInterval(updateChainLink, 2000);
+})();
+</script>
