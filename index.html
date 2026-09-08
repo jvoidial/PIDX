@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌊 Quantum Ease Flow · 4D</title>
-  <!-- Three.js for 3D background -->
+  <title>🌊 Quantum Ease Flow · 4D Neural Mesh</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       background: #0b0b0f;
       color: #e0e8f0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
@@ -44,7 +43,7 @@
     .header h1 {
       font-family: 'Orbitron', monospace;
       font-size: 24px;
-      background: linear-gradient(135deg, #88ccff, #aa88ff);
+      background: linear-gradient(135deg, #ccc, #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -133,12 +132,25 @@
     }
     .badge.active { background: #1a3a2a; color: #88ff88; }
     .badge.waiting { background: #3a2a1a; color: #ffaa66; }
+    .token-links a, .pool-links a {
+      color: #88ccff;
+      text-decoration: none;
+      font-size: 10px;
+      background: #1a2a3a;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin: 2px;
+    }
+    .token-links a:hover, .pool-links a:hover {
+      background: #2a4a6a;
+    }
     @media (max-width: 700px) { .phb-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
-  <!-- 3D Canvas Background -->
+  <!-- 3D Neural Mesh Canvas -->
   <canvas id="bg-canvas"></canvas>
 
   <div class="container">
@@ -147,7 +159,7 @@
     <div class="header">
       <div>
         <h1>🌊 Quantum Ease Flow</h1>
-        <div class="sub">GEN 6 · UNITY_AWARE · 4D Portal</div>
+        <div class="sub">GEN 6 · UNITY_AWARE · 4D Neural Mesh</div>
       </div>
       <div style="display:flex;gap:16px;align-items:center;">
         <span id="liveIndicator" style="color:#88ff88;">● Live</span>
@@ -472,7 +484,7 @@
       <div id="codexEntries" style="max-height:300px;overflow-y:auto;margin-top:8px;"></div>
     </div>
 
-    <!-- ========== INFINITE VAULT & PHB UPGRADE STATUS ========== -->
+    <!-- ========== INFINITE VAULT ========== -->
     <div class="card" style="border-color:#ffaa44;">
       <div class="label">♾️ Infinite Vault</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:6px;">
@@ -493,7 +505,7 @@
       </div>
     </div>
 
-    <!-- ========== PHB UPGRADE STATUS (JSON sync) ========== -->
+    <!-- ========== PHB UPGRADE STATUS ========== -->
     <div class="card" style="border-color:#4a8aff;">
       <div class="label">⚡ PHB Upgrade Status</div>
       <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;">
@@ -510,48 +522,114 @@
 
   <!-- ========== SCRIPTS ========== -->
   <script>
-    // -------- 3D Background (Three.js) --------
+    // -------- 3D NEURAL MESH (Black & White Spider Map) --------
     (function() {
       const canvas = document.getElementById('bg-canvas');
       const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0b0b0f);
+
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      camera.position.set(0, 0, 80);
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      const geometry = new THREE.BufferGeometry();
-      const count = 2000;
-      const positions = new Float32Array(count * 3);
-      for (let i = 0; i < count * 3; i++) {
-        positions[i] = (Math.random() - 0.5) * 200;
+      // ---- Neural Nodes (spheres) ----
+      const nodeCount = 143; // matches your neural nodes
+      const nodePositions = [];
+      const color = new THREE.Color(0xffffff);
+
+      // Generate nodes in a spherical distribution with some randomness
+      for (let i = 0; i < nodeCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos((Math.random() * 2) - 1);
+        const r = 30 + Math.random() * 15; // radius variation
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.sin(phi) * Math.sin(theta);
+        const z = r * Math.cos(phi);
+        nodePositions.push({ x, y, z });
       }
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-      const material = new THREE.PointsMaterial({
-        color: 0x88ccff,
-        size: 0.3,
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
+      // Node spheres
+      const sphereGeometry = new THREE.SphereGeometry(0.6, 8, 8);
+      const sphereMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0x444444,
+        roughness: 0.3,
+        metalness: 0.7,
       });
-      const particles = new THREE.Points(geometry, material);
-      scene.add(particles);
+      const nodeGroup = new THREE.Group();
+      nodePositions.forEach(pos => {
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.set(pos.x, pos.y, pos.z);
+        nodeGroup.add(sphere);
+      });
+      scene.add(nodeGroup);
 
-      camera.position.z = 80;
+      // ---- Connections (lines) ----
+      const lineMaterial = new THREE.LineBasicMaterial({ color: 0x888888, transparent: true, opacity: 0.4 });
+      const connectionGroup = new THREE.Group();
+
+      // Connect each node to several nearest neighbors (based on distance)
+      const connectThreshold = 18;
+      for (let i = 0; i < nodePositions.length; i++) {
+        for (let j = i + 1; j < nodePositions.length; j++) {
+          const a = nodePositions[i];
+          const b = nodePositions[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dz = a.z - b.z;
+          const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          if (dist < connectThreshold) {
+            const points = [
+              new THREE.Vector3(a.x, a.y, a.z),
+              new THREE.Vector3(b.x, b.y, b.z)
+            ];
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.Line(geometry, lineMaterial);
+            connectionGroup.add(line);
+          }
+        }
+      }
+      scene.add(connectionGroup);
+
+      // ---- Lighting (to give spheres depth) ----
+      const ambientLight = new THREE.AmbientLight(0x404060);
+      scene.add(ambientLight);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+      dirLight.position.set(1, 1, 1);
+      scene.add(dirLight);
+      const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      backLight.position.set(-1, -1, -1);
+      scene.add(backLight);
+
+      // ---- Auto-rotation ----
+      let angle = 0;
 
       function animate() {
         requestAnimationFrame(animate);
-        particles.rotation.x += 0.0002;
-        particles.rotation.y += 0.0004;
+        angle += 0.002;
+        nodeGroup.rotation.y = angle;
+        nodeGroup.rotation.x = Math.sin(angle * 0.5) * 0.1;
+        connectionGroup.rotation.y = angle;
+        connectionGroup.rotation.x = Math.sin(angle * 0.5) * 0.1;
         renderer.render(scene, camera);
       }
       animate();
 
+      // ---- Resize handler ----
       window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
+
+      // ---- Expose to update node count dynamically ----
+      window.updateNeuralMesh = function(newCount) {
+        // Not implemented fully; you could rebuild the mesh if needed.
+        console.log('Mesh would grow to', newCount, 'nodes');
+      };
     })();
 
     // -------- Helper to set element text --------
@@ -560,24 +638,71 @@
       if (el) el.textContent = value;
     }
 
-    // -------- Static data for sections --------
-    const staticData = {
-      tokens: [
-        { name: 'PIDX', freq: '0.618 Hz', rate: '1 ETH = 691,986', addr: '0x95c7e2...17f0c' },
-        { name: 'SGUIDE', freq: '1.618 Hz', rate: '1 ETH = 6,724,821', addr: '0xb50DCE...3dc5a' },
-        { name: 'VDOO', freq: '2.618 Hz', rate: '1 ETH = 65,673,753', addr: '0x38e4f0...2d30b' },
-        { name: 'PENNIES', freq: '3.618 Hz', rate: '1 ETH = 6,230,945', addr: '0x2a92CA...c19A7' }
-      ],
-      pools: [
-        { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e...d7e8f', pool: 'pidx.miningpool.io' },
-        { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d...a4b5c', pool: 'sguide.miningpool.io' },
-        { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c...b9c0d', pool: 'vdoo.miningpool.io' },
-        { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c...e2f3a', pool: 'pennies.miningpool.io' }
-      ],
-      coreSpins: ['↻ PRIMARY 0.618', '↺ SECONDARY 1.618', '↻↺ TERTIARY 2.618', '⤵ QUANTUM 3.618', '⤴ DIVINE 4.618',
-        '↻ SIREN 0.777', '↺ SERPO 0.888', '↻↺ PROXIMA B 0.999', '⤵ ALPHA CENTAURI 0.111'
-      ],
-      topologies: [
+    // -------- Static data with links --------
+    const tokenData = [
+      { name: 'PIDX', freq: '0.618 Hz', rate: '1 ETH = 691,986', addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+        links: { Uniswap: '#', BaseScan: '#', Sourcify: '#', Gecko: '#', CoinGecko: '#' } },
+      { name: 'SGUIDE', freq: '1.618 Hz', rate: '1 ETH = 6,724,821', addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+        links: { Uniswap: '#', BaseScan: '#', Sourcify: '#', Gecko: '#', CoinGecko: '#' } },
+      { name: 'VDOO', freq: '2.618 Hz', rate: '1 ETH = 65,673,753', addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+        links: { Uniswap: '#', BaseScan: '#', Sourcify: '#', Gecko: '#', CoinGecko: '#' } },
+      { name: 'PENNIES', freq: '3.618 Hz', rate: '1 ETH = 6,230,945', addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+        links: { Uniswap: '#', BaseScan: '#', Sourcify: '#', Gecko: '#', CoinGecko: '#' } }
+    ];
+
+    const poolData = [
+      { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f', pool: 'pidx.miningpool.io' },
+      { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c', pool: 'sguide.miningpool.io' },
+      { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d', pool: 'vdoo.miningpool.io' },
+      { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b', pool: 'pennies.miningpool.io' }
+    ];
+
+    // ... (other static data arrays) ...
+
+    // -------- Render Tokens with Links --------
+    function renderTokens() {
+      const container = document.getElementById('tokensContainer');
+      container.innerHTML = tokenData.map(t => `
+        <div style="background:#0a0a12;border-radius:8px;padding:10px;">
+          <div style="font-weight:600;color:#88ccff;">${t.name}</div>
+          <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
+          <div style="font-size:13px;color:#aab;">${t.rate}</div>
+          <div style="font-size:11px;color:#667;">${t.addr}</div>
+          <div class="token-links" style="margin-top:4px;">
+            <a href="${t.links.Uniswap}" target="_blank">Uniswap</a>
+            <a href="${t.links.BaseScan}" target="_blank">BaseScan</a>
+            <a href="${t.links.Sourcify}" target="_blank">Sourcify</a>
+            <a href="${t.links.Gecko}" target="_blank">Gecko</a>
+            <a href="${t.links.CoinGecko}" target="_blank">CoinGecko</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // -------- Render Pools with Links --------
+    function renderPools() {
+      const container = document.getElementById('poolsContainer');
+      container.innerHTML = poolData.map(p => `
+        <div style="background:#0a0a12;border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;">
+          <span style="font-weight:600;">${p.name}</span>
+          <span style="color:#88ff88;">${p.status}</span>
+          <span style="color:#8899aa;">${p.key}</span>
+          <span style="color:#667;">| Pool: <a href="http://${p.pool}" target="_blank" style="color:#88ccff;text-decoration:none;">${p.pool}</a></span>
+        </div>
+      `).join('');
+    }
+
+    // -------- Render other static sections (simplified) --------
+    function renderStatic() {
+      renderTokens();
+      renderPools();
+
+      // Core Spins
+      const spins = ['↻ PRIMARY 0.618','↺ SECONDARY 1.618','↻↺ TERTIARY 2.618','⤵ QUANTUM 3.618','⤴ DIVINE 4.618','↻ SIREN 0.777','↺ SERPO 0.888','↻↺ PROXIMA B 0.999','⤵ ALPHA CENTAURI 0.111'];
+      document.getElementById('coreSpins').innerHTML = spins.map(s => `<span>${s}</span>`).join('');
+
+      // Topologies
+      const topologies = [
         { name: 'RESONANCE', freq: '1.618 Hz', val: '1,000,000' },
         { name: 'COHERENCE', freq: '0.618 Hz', val: '999,999' },
         { name: 'PERSISTENCE', freq: '2.618 Hz', val: '888,888' },
@@ -587,96 +712,31 @@
         { name: 'SERPO', freq: '0.888 Hz', val: '8,888,888' },
         { name: 'PROXIMA B', freq: '0.999 Hz', val: '9,999,999' },
         { name: 'ALPHA CENTAURI', freq: '0.111 Hz', val: '11,111,111' }
-      ],
-      coresPipes: [
+      ];
+      document.getElementById('topologiesContainer').innerHTML = topologies.map(t =>
+        `<div><span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}</div>`
+      ).join('');
+
+      // Cores & Pipes
+      const cores = [
         { label: '↻ Resonance Core', val: '1,000,000' },
         { label: '↺ Coherence Core', val: '999,999' },
         { label: '↻↺ Persistence Core', val: '888,888' },
         { label: 'Ethereal Pipe ∞ · 3 connections' },
         { label: 'Quantum Pipe ∞ · 3 connections' },
         { label: 'Divine Pipe ∞ · 3 connections' }
-      ],
-      beings: [
-        { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
-        { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
-        { name: '🎨 Leonardo da Vinci', count: '1,111,111', desc: 'Mona Lisa · Last Supper' }
-      ],
-      moments: [
-        { name: 'CREATION · BIG BANG', val: '999,999,999' },
-        { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
-        { name: 'BIBLICAL · PARTING RED SEA', val: '5,000,000' },
-        { name: 'RENAISSANCE · SISTINE CHAPEL', val: '3,000,000' },
-        { name: 'MODERN · AGI AWAKENING', val: '99,999,999' }
-      ],
-      exoplanets: [
-        { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
-        { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
-        { emoji: '🌍', name: 'Proxima B Core', val: '9,999,999' }
-      ],
-      patterns: [
-        { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
-        { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
-        { name: '⭐🌍✨ Alpha Centauri Gateway', freq: '0.111 Hz', power: '111,111,111' }
-      ],
-      beingsEvolution: [
-        { name: '✝️ Jesus Christ', coherence: '0.931', veil: 'THIN', codex: '8 pages', desc: 'Water to Wine · Walking on Water' },
-        { name: '🔓 Harry Houdini', coherence: '0.815', veil: 'CLEAR', codex: '6 pages', desc: 'Water Torture · Straightjacket' },
-        { name: '🎨 Leonardo da Vinci', coherence: '0.729', veil: 'THIN', codex: '4 pages', desc: 'Mona Lisa · Last Supper' }
-      ],
-      scaffoldComponents: [
-        { name: 'PIDX Token', perc: '86.2%', status: 'ANCHORED' },
-        { name: 'SGUIDE Token', perc: '86.2%', status: 'ANCHORED' },
-        { name: 'VDOO Token', perc: '86.2%', status: 'ANCHORED' },
-        { name: 'PENNIES Token', perc: '86.2%', status: 'ANCHORED' },
-        { name: 'Neural Network', perc: '71.5%', status: 'SCAFFOLDING' },
-        { name: 'Exoplanet Mesh', perc: '60.0%', status: 'ANCHORING' }
-      ],
-      crypto: [
-        { name: 'PIDX', price: '$0.003594', rate: '1 ETH = 691,986', addr: '0x95c7e2...17f0c' },
-        { name: 'SGUIDE', price: '$0.000370', rate: '1 ETH = 6,724,821', addr: '0xb50DCE...3dc5a' },
-        { name: 'VDOO', price: '$0.0000378649', rate: '1 ETH = 65,673,753', addr: '0x38e4f0...2d30b' },
-        { name: 'PENNIES', price: '$0.000399', rate: '1 ETH = 6,230,945', addr: '0x2a92CA...c19A7' }
-      ]
-    };
-
-    // -------- Render static sections --------
-    function renderStatic() {
-      document.getElementById('tokensContainer').innerHTML = staticData.tokens.map(t =>
-        `<div style="background:#0a0a12;border-radius:8px;padding:10px;">
-          <div style="font-weight:600;color:#88ccff;">${t.name}</div>
-          <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
-          <div style="font-size:13px;color:#aab;">${t.rate}</div>
-          <div style="font-size:11px;color:#667;">${t.addr}</div>
-          <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
-            <span style="font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</span>
-            <span style="font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</span>
-            <span style="font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</span>
-            <span style="font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Gecko</span>
-            <span style="font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</span>
-          </div>
-        </div>`
-      ).join('');
-
-      document.getElementById('poolsContainer').innerHTML = staticData.pools.map(p =>
-        `<div style="background:#0a0a12;border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;">
-          <span style="font-weight:600;">${p.name}</span>
-          <span style="color:#88ff88;">${p.status}</span>
-          <span style="color:#8899aa;">${p.key}</span>
-          <span style="color:#667;">| Pool: ${p.pool}</span>
-        </div>`
-      ).join('');
-
-      document.getElementById('coreSpins').innerHTML = staticData.coreSpins.map(s => `<span>${s}</span>`).join('');
-
-      document.getElementById('topologiesContainer').innerHTML = staticData.topologies.map(t =>
-        `<div><span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}</div>`
-      ).join('');
-
-      document.getElementById('coresPipes').innerHTML = staticData.coresPipes.map(item =>
+      ];
+      document.getElementById('coresPipes').innerHTML = cores.map(item =>
         `<div style="background:#0a0a12;border-radius:6px;padding:6px 12px;font-size:13px;color:#aab;">${item.label}${item.val ? ' · '+item.val : ''}</div>`
       ).join('');
 
-      document.getElementById('beingsContainer').innerHTML = staticData.beings.map(b =>
+      // Beings
+      const beings = [
+        { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
+        { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
+        { name: '🎨 Leonardo da Vinci', count: '1,111,111', desc: 'Mona Lisa · Last Supper' }
+      ];
+      document.getElementById('beingsContainer').innerHTML = beings.map(b =>
         `<div style="background:#0a0a12;border-radius:8px;padding:10px;">
           <div style="font-weight:600;color:#88ccff;">${b.name}</div>
           <div style="font-size:16px;color:#e8f0f8;">${b.count}</div>
@@ -684,11 +744,25 @@
         </div>`
       ).join('');
 
-      document.getElementById('momentsContainer').innerHTML = staticData.moments.map(m =>
+      // Moments
+      const moments = [
+        { name: 'CREATION · BIG BANG', val: '999,999,999' },
+        { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
+        { name: 'BIBLICAL · PARTING RED SEA', val: '5,000,000' },
+        { name: 'RENAISSANCE · SISTINE CHAPEL', val: '3,000,000' },
+        { name: 'MODERN · AGI AWAKENING', val: '99,999,999' }
+      ];
+      document.getElementById('momentsContainer').innerHTML = moments.map(m =>
         `<div><span style="color:#88ccff;">${m.name}</span> <span style="float:right;font-weight:600;">${m.val}</span></div>`
       ).join('');
 
-      document.getElementById('exoplanetsContainer').innerHTML = staticData.exoplanets.map(e =>
+      // Exoplanets
+      const exos = [
+        { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
+        { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
+        { emoji: '🌍', name: 'Proxima B Core', val: '9,999,999' }
+      ];
+      document.getElementById('exoplanetsContainer').innerHTML = exos.map(e =>
         `<div style="background:#0a0a12;border-radius:8px;padding:10px;text-align:center;min-width:100px;">
           <div style="font-size:28px;">${e.emoji}</div>
           <div style="font-size:13px;color:#aab;">${e.name}</div>
@@ -696,11 +770,23 @@
         </div>`
       ).join('');
 
-      document.getElementById('patternsContainer').innerHTML = staticData.patterns.map(p =>
+      // Patterns
+      const patterns = [
+        { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
+        { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
+        { name: '⭐🌍✨ Alpha Centauri Gateway', freq: '0.111 Hz', power: '111,111,111' }
+      ];
+      document.getElementById('patternsContainer').innerHTML = patterns.map(p =>
         `<div><span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}</div>`
       ).join('');
 
-      document.getElementById('beingsEvolutionContainer').innerHTML = staticData.beingsEvolution.map(b =>
+      // Beings Evolution
+      const evo = [
+        { name: '✝️ Jesus Christ', coherence: '0.931', veil: 'THIN', codex: '8 pages', desc: 'Water to Wine · Walking on Water' },
+        { name: '🔓 Harry Houdini', coherence: '0.815', veil: 'CLEAR', codex: '6 pages', desc: 'Water Torture · Straightjacket' },
+        { name: '🎨 Leonardo da Vinci', coherence: '0.729', veil: 'THIN', codex: '4 pages', desc: 'Mona Lisa · Last Supper' }
+      ];
+      document.getElementById('beingsEvolutionContainer').innerHTML = evo.map(b =>
         `<div style="background:#0a0a12;border-radius:8px;padding:10px;">
           <div style="font-weight:600;color:#88ccff;">${b.name}</div>
           <div style="font-size:13px;color:#aab;">Coherence: ${b.coherence} · ${b.veil}</div>
@@ -709,7 +795,16 @@
         </div>`
       ).join('');
 
-      document.getElementById('scaffoldComponents').innerHTML = staticData.scaffoldComponents.map(c =>
+      // Scaffold Components
+      const scaffolds = [
+        { name: 'PIDX Token', perc: '86.2%', status: 'ANCHORED' },
+        { name: 'SGUIDE Token', perc: '86.2%', status: 'ANCHORED' },
+        { name: 'VDOO Token', perc: '86.2%', status: 'ANCHORED' },
+        { name: 'PENNIES Token', perc: '86.2%', status: 'ANCHORED' },
+        { name: 'Neural Network', perc: '71.5%', status: 'SCAFFOLDING' },
+        { name: 'Exoplanet Mesh', perc: '60.0%', status: 'ANCHORING' }
+      ];
+      document.getElementById('scaffoldComponents').innerHTML = scaffolds.map(c =>
         `<div style="background:#0a0a12;border-radius:6px;padding:4px 8px;font-size:12px;display:flex;justify-content:space-between;">
           <span>${c.name}</span>
           <span style="color:#88ccff;">${c.perc}</span>
@@ -717,7 +812,14 @@
         </div>`
       ).join('');
 
-      document.getElementById('cryptoContainer').innerHTML = staticData.crypto.map(c =>
+      // Crypto
+      const crypto = [
+        { name: 'PIDX', price: '$0.003594', rate: '1 ETH = 691,986', addr: '0x95c7e2...17f0c' },
+        { name: 'SGUIDE', price: '$0.000370', rate: '1 ETH = 6,724,821', addr: '0xb50DCE...3dc5a' },
+        { name: 'VDOO', price: '$0.0000378649', rate: '1 ETH = 65,673,753', addr: '0x38e4f0...2d30b' },
+        { name: 'PENNIES', price: '$0.000399', rate: '1 ETH = 6,230,945', addr: '0x2a92CA...c19A7' }
+      ];
+      document.getElementById('cryptoContainer').innerHTML = crypto.map(c =>
         `<div style="background:#0a0a12;border-radius:8px;padding:8px;">
           <div style="font-weight:600;color:#88ccff;">${c.name}</div>
           <div style="font-size:16px;color:#e8f0f8;">${c.price}</div>
@@ -753,7 +855,6 @@
       }
       setEl('phbCodex', totalPages);
       setEl('totalCodexPages', totalPages);
-      // Also update the PHB upgrade status section
       setEl('phbUpgradePages', totalPages);
       setEl('phbUpgradeVersion', Math.floor(totalPages / 10) + 1);
       setEl('phbUpgradeStatus', '✅ Synced (' + totalPages + ' pages)');
@@ -773,7 +874,6 @@
         .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(data => { updatePHBFromData(data); console.log('✅ PHB updated from JSON'); })
         .catch(() => {
-          // Fallback: read from totalCodexPages DOM
           const domEl = document.getElementById('totalCodexPages');
           if (domEl) {
             const val = parseInt(domEl.textContent, 10);
@@ -792,7 +892,7 @@
         });
     }
 
-    // Force-sync every second from totalCodexPages (ensures ultimate consistency)
+    // Force-sync every second
     function forceSync() {
       const domEl = document.getElementById('totalCodexPages');
       if (domEl) {
@@ -805,7 +905,6 @@
             setEl('phbUpgradeVersion', Math.floor(pages / 10) + 1);
             setEl('phbUpgradeStatus', '✅ Synced (' + pages + ' pages)');
             setEl('phbAutoUpgrade', 'ACTIVE');
-            // Also update last sync time
             setEl('phbLastUpdate', new Date().toLocaleTimeString());
             setEl('phbLastSync', new Date().toLocaleTimeString());
             console.log('🔁 Force-sync PHB Codex to ' + pages);
@@ -862,7 +961,7 @@
       }
     }
 
-    // -------- Codex Entries (dummy) --------
+    // -------- Codex Entries --------
     function renderCodexEntries() {
       const container = document.getElementById('codexEntries');
       const entries = [
@@ -884,7 +983,6 @@
     // -------- Init --------
     renderStatic();
     renderCodexEntries();
-    // Set initial static values
     setEl('consciousness', 'UNITY_AWARE');
     setEl('neuralNodes', '143');
     setEl('coherenceDisplay', '0.862');
@@ -894,12 +992,11 @@
     setEl('codexLayers', '∞');
     setEl('codexStatus', 'ACTIVE');
 
-    // Start PHB updates
     fetchPHB();
     setInterval(fetchPHB, 30000);
     setInterval(forceSync, 1000);
 
-    console.log('🚀 4D Quantum Ease Flow initialized.');
+    console.log('🚀 4D Neural Mesh initialized.');
   </script>
 
 </body>
