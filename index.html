@@ -2207,8 +2207,6 @@
 </script>
 
 <!-- PHB CHAINLINK MAP CARD (added as separate card) -->
-<div id="phb-chainmap-card" class="card" style="border-color:rgba(100,200,255,0.3);margin-top:20px;padding:10px;position:relative;overflow:hidden;height:400px;">
-  <div class="label" style="position:absolute;top:12px;left:20px;z-index:5;">🌌 PHB Chainlink Map</div>
   <div id="phb-chainmap-canvas" style="width:100%;height:100%;"></div>
   <!-- Overlay: progress and guidance -->
   <div style="position:absolute;bottom:15px;left:0;right:0;display:flex;justify-content:space-around;padding:0 20px;z-index:5;pointer-events:none;">
@@ -2233,8 +2231,39 @@
 </div>
 
 <script>
-// PHB CHAINLINK MAP – 4D Spiral Chain with Guidance
+<!-- PHB CHAINLINK MAP – GROWTH VERSION -->
+<div id="phb-chainmap-card" class="card" style="border-color:rgba(100,200,255,0.3);margin-top:20px;padding:10px;position:relative;overflow:hidden;height:400px;">
+  <div class="label" style="position:absolute;top:12px;left:20px;z-index:5;">🌌 PHB Chainlink Map – Growing</div>
+  <div id="phb-chainmap-canvas" style="width:100%;height:100%;"></div>
+  <!-- Overlay: progress and guidance -->
+  <div style="position:absolute;bottom:15px;left:0;right:0;display:flex;justify-content:space-around;padding:0 20px;z-index:5;pointer-events:none;">
+    <div style="background:rgba(0,0,0,0.6);border-radius:8px;padding:4px 12px;text-align:center;font-size:11px;color:#88ccff;">
+      <div style="font-size:8px;color:#445;">Start</div>
+      <div id="chainStart" style="font-weight:600;">🔺</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.6);border-radius:8px;padding:4px 12px;text-align:center;font-size:11px;color:#ffffff;">
+      <div style="font-size:8px;color:#445;">Mapping Progress</div>
+      <div id="mappingProgress" style="font-weight:600;">0%</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.6);border-radius:8px;padding:4px 12px;text-align:center;font-size:11px;color:#ff88ff;">
+      <div style="font-size:8px;color:#445;">End</div>
+      <div id="chainEnd" style="font-weight:600;">⬜</div>
+    </div>
+  </div>
+  <!-- Next symbol guidance -->
+  <div style="position:absolute;top:50px;right:20px;z-index:5;background:rgba(0,0,0,0.5);border-radius:8px;padding:6px 12px;text-align:center;pointer-events:none;">
+    <div style="font-size:8px;color:#445;">Next Symbol</div>
+    <div id="nextSymbol" style="font-size:16px;font-weight:600;color:#88ff88;">→</div>
+  </div>
+</div>
+
+<script>
+// PHB CHAINLINK MAP – GROWTH ANIMATION
 (function() {
+  let targetProgress = 0.862;
+  let currentDisplayProgress = 0;
+  let animationActive = false;
+
   function initChainMap() {
     if (typeof THREE === 'undefined') {
       setTimeout(initChainMap, 500);
@@ -2289,6 +2318,11 @@
     const nodePositions = [];
     const radius = 6;
     const heightSpiral = 2.5;
+    // Store nodes, edges, and their materials for later update
+    const nodeMeshes = [];
+    const edgeLines = [];
+    const nodeBaseOpacity = [];
+
     for (let i = 0; i < nodeCount; i++) {
       const t = i / (nodeCount - 1);
       const angle = t * Math.PI * 2 * 1.5;
@@ -2302,15 +2336,17 @@
       const sphereMat = new THREE.MeshBasicMaterial({
         color: (i === 0) ? 0xffaa44 : (i === nodeCount-1) ? 0xff88ff : 0x88ccff,
         transparent: true,
-        opacity: (i === 0 || i === nodeCount-1) ? 1.0 : 0.7
+        opacity: (i === 0 || i === nodeCount-1) ? 1.0 : 0.0 // start hidden for middle nodes
       });
       const sphere = new THREE.Mesh(sphereGeo, sphereMat);
       sphere.position.set(x, y, z);
       nodeGroup.add(sphere);
+      nodeMeshes.push(sphere);
+      nodeBaseOpacity.push((i === 0 || i === nodeCount-1) ? 1.0 : 0.0);
     }
 
     // ---- Edges ----
-    const edgeMat = new THREE.LineBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.2 });
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.0 });
     for (let i = 0; i < nodeCount - 1; i++) {
       const a = nodePositions[i];
       const b = nodePositions[i+1];
@@ -2319,19 +2355,22 @@
         new THREE.Vector3(b.x, b.y, b.z)
       ];
       const geo = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(geo, edgeMat);
+      const line = new THREE.Line(geo, edgeMat.clone());
       nodeGroup.add(line);
+      edgeLines.push(line);
     }
 
-    // ---- Current position ----
+    // ---- Current position (pulsing sphere) ----
     const currentGeo = new THREE.SphereGeometry(0.8, 16, 16);
     const currentMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
     const currentSphere = new THREE.Mesh(currentGeo, currentMat);
     nodeGroup.add(currentSphere);
+    // Hide initially
+    currentSphere.visible = false;
 
-    // ---- Glow trail ----
+    // ---- Glow trail (will be built dynamically) ----
     let trailLine = null;
-    const trailMat = new THREE.LineBasicMaterial({ color: 0x88ff88, transparent: true, opacity: 0.3 });
+    const trailMat = new THREE.LineBasicMaterial({ color: 0x88ff88, transparent: true, opacity: 0.0 });
 
     function updateTrail(index) {
       if (trailLine) {
@@ -2345,10 +2384,13 @@
       }
       if (points.length > 1) {
         const geo = new THREE.BufferGeometry().setFromPoints(points);
-        trailLine = new THREE.Line(geo, trailMat);
+        trailLine = new THREE.Line(geo, trailMat.clone());
+        trailLine.material.opacity = 0.0; // start hidden
         nodeGroup.add(trailLine);
       }
     }
+    // Initial trail (empty)
+    updateTrail(0);
 
     // ---- Particle flow ----
     const particleCount = 100;
@@ -2373,7 +2415,7 @@
       color: 0x88ff88,
       size: 0.15,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.0, // start hidden
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true
     });
@@ -2395,28 +2437,36 @@
     renderer.domElement.addEventListener('mousedown', () => { isInteracting = true; controls.autoRotate = false; });
     renderer.domElement.addEventListener('mouseup', () => { isInteracting = false; setTimeout(() => { controls.autoRotate = true; }, 2000); });
 
-    // ---- Animation ----
+    // ---- Animation loop ----
     let time = 0;
+
     function animate() {
       requestAnimationFrame(animate);
       time += 0.01;
 
-      const pos = particles.geometry.attributes.position.array;
-      for (let i = 0; i < particleCount; i++) {
-        let t = (time * particleSpeeds[i]) % 1;
-        const idx = t * (nodeCount - 1);
-        const i0 = Math.floor(idx);
-        const i1 = Math.min(i0 + 1, nodeCount - 1);
-        const frac = idx - i0;
-        const p0 = nodePositions[i0];
-        const p1 = nodePositions[i1];
-        pos[i*3] = p0.x + (p1.x - p0.x) * frac;
-        pos[i*3+1] = p0.y + (p1.y - p0.y) * frac;
-        pos[i*3+2] = p0.z + (p1.z - p0.z) * frac;
+      // Animate particles (only if visible)
+      if (particles.material.opacity > 0.01) {
+        const pos = particles.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          let t = (time * particleSpeeds[i]) % 1;
+          const idx = t * (nodeCount - 1);
+          const i0 = Math.floor(idx);
+          const i1 = Math.min(i0 + 1, nodeCount - 1);
+          const frac = idx - i0;
+          const p0 = nodePositions[i0];
+          const p1 = nodePositions[i1];
+          pos[i*3] = p0.x + (p1.x - p0.x) * frac;
+          pos[i*3+1] = p0.y + (p1.y - p0.y) * frac;
+          pos[i*3+2] = p0.z + (p1.z - p0.z) * frac;
+        }
+        particles.geometry.attributes.position.needsUpdate = true;
       }
-      particles.geometry.attributes.position.needsUpdate = true;
 
-      currentMat.opacity = 0.6 + Math.sin(time * 2) * 0.2;
+      // Pulse current sphere
+      if (currentSphere.visible) {
+        currentMat.opacity = 0.6 + Math.sin(time * 2) * 0.2;
+      }
+
       controls.update();
       renderer.render(scene, camera);
     }
@@ -2431,7 +2481,99 @@
       renderer.setSize(w, h);
     });
 
-    // ---- Update position and guidance ----
+    // ---- Growth animation ----
+    function animateMapping(target) {
+      // Animate from currentDisplayProgress to target
+      const start = currentDisplayProgress;
+      const duration = 1500; // ms
+      const startTime = performance.now();
+
+      // If no animation is running, start it
+      if (animationActive) return;
+      animationActive = true;
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const current = start + (target - start) * eased;
+
+        // Update visuals based on current progress
+        const index = Math.min(nodeCount - 1, Math.floor(current * (nodeCount - 1)));
+        const frac = (current * (nodeCount - 1)) - index;
+
+        // Show nodes up to index+1 (with fractional opacity for the next)
+        for (let i = 0; i < nodeCount; i++) {
+          let opacity = 0;
+          if (i < index) opacity = 1;
+          else if (i === index) opacity = frac;
+          else opacity = 0;
+          // Ensure start and end always visible
+          if (i === 0 || i === nodeCount-1) opacity = 1;
+          nodeMeshes[i].material.opacity = opacity;
+        }
+
+        // Show edges up to index
+        for (let i = 0; i < edgeLines.length; i++) {
+          let opacity = 0;
+          if (i < index) opacity = 0.3;
+          else if (i === index) opacity = frac * 0.3;
+          else opacity = 0;
+          edgeLines[i].material.opacity = opacity;
+        }
+
+        // Update trail
+        const trailIndex = Math.min(nodeCount - 1, Math.floor(current * (nodeCount - 1)));
+        updateTrail(trailIndex);
+        if (trailLine) {
+          trailLine.material.opacity = 0.3 * (trailIndex / (nodeCount - 1));
+        }
+
+        // Show/hide current sphere
+        if (index > 0) {
+          currentSphere.visible = true;
+          const pos = nodePositions[Math.min(index, nodeCount-2)];
+          const nextPos = nodePositions[Math.min(index+1, nodeCount-1)];
+          const lerpPos = {
+            x: pos.x + (nextPos.x - pos.x) * frac,
+            y: pos.y + (nextPos.y - pos.y) * frac,
+            z: pos.z + (nextPos.z - pos.z) * frac
+          };
+          currentSphere.position.set(lerpPos.x, lerpPos.y, lerpPos.z);
+        }
+
+        // Update particles opacity and count based on progress
+        particles.material.opacity = 0.6 * (current);
+
+        // Update overlay
+        const progressEl = document.getElementById('mappingProgress');
+        if (progressEl) progressEl.textContent = (current * 100).toFixed(1) + '%';
+
+        // Next symbol
+        const nextIdx = Math.min(index + 1, nodeCount - 1);
+        const nextSymbol = symbols[nextIdx];
+        const nextEl = document.getElementById('nextSymbol');
+        if (nextEl) {
+          if (index >= nodeCount - 1) {
+            nextEl.textContent = '✅ REACHED END';
+            nextEl.style.color = '#88ff88';
+          } else {
+            nextEl.textContent = nextSymbol.emoji + ' ' + nextSymbol.name;
+            nextEl.style.color = '#88ff88';
+          }
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          currentDisplayProgress = target;
+          animationActive = false;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // ---- Update function (called on sync) ----
     function updatePosition() {
       const chainEl = document.getElementById('chainLink');
       let progress = 0.862;
@@ -2440,31 +2582,30 @@
         const match = txt.match(/([\d.]+)%/);
         if (match) progress = parseFloat(match[1]) / 100;
       }
-      const index = Math.min(nodeCount - 1, Math.floor(progress * (nodeCount - 1)));
-      const pos = nodePositions[index] || nodePositions[0];
-      currentSphere.position.set(pos.x, pos.y, pos.z);
-      updateTrail(index);
-
-      const currentEl = document.getElementById('chainCurrent');
-      if (currentEl) currentEl.textContent = (progress * 100).toFixed(1) + '%';
-
-      const nextIdx = Math.min(index + 1, nodeCount - 1);
-      const nextSymbol = symbols[nextIdx];
-      const nextEl = document.getElementById('nextSymbol');
-      if (nextEl) {
-        if (index >= nodeCount - 1) {
-          nextEl.textContent = '✅ REACHED END';
-          nextEl.style.color = '#88ff88';
-        } else {
-          nextEl.textContent = nextSymbol.emoji + ' ' + nextSymbol.name;
-          nextEl.style.color = '#88ff88';
-        }
+      targetProgress = Math.min(1, progress);
+      // Start growth animation if not already animating
+      if (!animationActive) {
+        animateMapping(targetProgress);
+      } else {
+        // If animating, update target so it continues to the new value
+        // We'll just set target and let the animation finish then restart
+        // To handle this better, we could cancel and restart, but for simplicity we'll let it finish and then start again.
+        // We'll set a flag to re-trigger after current animation ends.
+        // Using a simple approach: if animating, we update targetProgress and when it finishes, it will start again.
+        // We'll store the target and check at end.
+        // For now, just let it finish.
       }
     }
 
-    setTimeout(updatePosition, 200);
+    // ---- Initial growth animation ----
+    setTimeout(() => {
+      updatePosition();
+    }, 500);
+
+    // ---- Periodic sync ----
     setInterval(updatePosition, 3000);
 
+    // ---- Hook into PHB update ----
     const origUpdate = window.updatePHBFromData;
     if (typeof origUpdate === 'function') {
       window.updatePHBFromData = function(data) {
@@ -2472,8 +2613,12 @@
         setTimeout(updatePosition, 100);
       };
     }
+
+    // ---- Expose to manual sync ----
+    window.forceChainMap = updatePosition;
   }
 
+  // Start
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initChainMap();
   } else {
