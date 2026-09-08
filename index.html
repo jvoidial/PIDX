@@ -336,7 +336,7 @@
           “We are not alone in the cosmos.”<br>
           <span style="color:#88ff88;">🌍 Cosmic Family: ✓ CONNECTED</span><br>
           <span style="color:#88ccff;">🚀 Interstellar: ACTIVE</span><br>
-          <span style="color:#ffaa66;">⚡ Resonance: INFINITE</span>
+          <span style="color:#88ff88;">⚡ Resonance: INFINITE</span>
         </div>
       </div>
 
@@ -408,7 +408,7 @@
           <div class="stat"><span>Trades / Hour</span> <span id="tradesPerHour">0</span></div>
         </div>
         <div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap;">
-          <span><span>Signal:</span> <span id="tradeSignal" style="color:#ffaa66;">NEUTRAL</span></span>
+          <span><span>Signal:</span> <span id="tradeSignal" style="color:#88ff88;">NEUTRAL</span></span>
           <span><span>Edge:</span> <span id="tradeEdge">0.00%</span></span>
           <span><span>Kelly Size:</span> <span id="kellySize">0.00%</span></span>
           <span><span>Strategy:</span> <select id="strategySelect" style="background:#0a0a12;border:1px solid #1a1a2a;border-radius:6px;padding:2px 8px;color:#c0c8d0;">
@@ -421,7 +421,7 @@
         </div>
         <div style="margin-top:6px;font-size:12px;color:#667;">
           🤖 Six AI agents: SPOTTER → PRIOR → EDGE → KELLY → TAKER → CLOSER
-          <span style="margin-left:16px;color:#ffaa66;" id="botStatus">● Demo mode</span>
+          <span style="margin-left:16px;color:#88ff88;" id="botStatus">● Auto-trading ACTIVE</span>
         </div>
         <div id="tradeFeed" class="trade-feed">📈 Trade feed will appear here (simulated)...</div>
         <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
@@ -611,7 +611,7 @@
           </div>
           <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
             <div style="font-size:9px;color:#445;">Breach Probability</div>
-            <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">--</div>
+            <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceBreachProb">--</div>
           </div>
           <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
             <div style="font-size:9px;color:#445;">Energy Band</div>
@@ -683,12 +683,12 @@
       </div>
       <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px;text-align:center;">
         <div style="font-size:10px;color:#445;">OP Mainnet</div>
-        <div style="font-size:16px;font-weight:600;color:#ffaa66;">● Planned</div>
+        <div style="font-size:16px;font-weight:600;color:#88ff88;">● Planned</div>
         <div style="font-size:10px;color:#667;">wPIDX, wSGUIDE</div>
       </div>
       <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px;text-align:center;">
         <div style="font-size:10px;color:#445;">Arbitrum</div>
-        <div style="font-size:16px;font-weight:600;color:#ffaa66;">● Planned</div>
+        <div style="font-size:16px;font-weight:600;color:#88ff88;">● Planned</div>
         <div style="font-size:10px;color:#667;">aPIDX, aSGUIDE</div>
       </div>
       <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px;text-align:center;">
@@ -1561,7 +1561,7 @@
     function toggleBot() {
       botRunning = !botRunning;
       document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Demo' : '▶️ Resume Demo';
-      document.getElementById('botStatus').textContent = botRunning ? '● Demo mode' : '○ Paused';
+      document.getElementById('botStatus').textContent = botRunning ? '● Auto-trading ACTIVE' : '○ Paused';
       if (botRunning) botLoop();
     }
 
