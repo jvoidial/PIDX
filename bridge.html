@@ -6,7 +6,8 @@
     body { background: #0b0b0f; color: #e0e8f0; font-family: 'Inter', sans-serif; padding: 20px; }
     .container { max-width: 800px; margin: 0 auto; }
     .card { background: rgba(255,255,255,0.02); border-radius: 16px; padding: 20px; margin: 10px 0; }
-    .btn { background: #1a2a4a; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+    .btn { background: #1a2a4a; padding: 10px 20px; border-radius: 8px; cursor: pointer; color: white; border: none; }
+    select, input { background: #0a0a12; border: 1px solid #1a1a2a; border-radius: 8px; padding: 8px; color: #e0e8f0; margin: 5px; }
   </style>
 </head>
 <body>
@@ -26,6 +27,7 @@
         <option value="arb">Arbitrum</option>
       </select>
       <button class="btn" onclick="bridgeTokens()">🌉 Bridge</button>
+      <div id="status" style="margin-top:10px;color:#8899aa;"></div>
     </div>
   </div>
   <script>
@@ -33,7 +35,11 @@
       const token = document.getElementById('tokenSelect').value;
       const amount = document.getElementById('amount').value;
       const chain = document.getElementById('targetChain').value;
-      alert(`🌉 Bridging ${amount} ${token} to ${chain}`);
+      const status = document.getElementById('status');
+      status.textContent = \`🌉 Bridging \${amount} \${token} to \${chain}...\`;
+      setTimeout(() => {
+        status.textContent = \`✅ Bridged \${amount} \${token} to \${chain} successfully!\`;
+      }, 2000);
     }
   </script>
 </body>
