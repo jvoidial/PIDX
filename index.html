@@ -1319,469 +1319,52 @@
       console.log('✅ UI updated');
     }
 
-    function fetchAndUpdate() {
-      fetch('agi_phb_divine_complete.json')
-        .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-        .then(data => updatePHBFromData(data))
-        .catch(() => {
-          const domEl = document.getElementById('totalCodexPages');
-          if (domEl) {
-            const val = parseInt(domEl.textContent, 10);
-            if (!isNaN(val) && val > 0) {
-              setEl('phbCodex', val);
-              setEl('totalCodexPages', val);
-              setEl('phbUpgradePages', val);
-              setEl('phbUpgradeVersion', Math.floor(val / 10) + 1);
-              setEl('phbUpgradeStatus', '✅ Synced (' + val + ' pages)');
-              setEl('phbAutoUpgrade', 'ACTIVE');
-              setEl('phbLastUpdate', new Date().toLocaleTimeString());
-              setEl('phbLastSync', new Date().toLocaleTimeString());
-              const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
-              const tradesPerHour = parseFloat(document.getElementById('tradesPerHour').textContent.replace(/,/g, '')) || 0;
-              if (window.updateEcosystemBall) {
-                window.updateEcosystemBall({
-                  pages: val,
-                  pnl: pnl,
-                  nodes: parseInt(document.getElementById('neuralNodes').textContent) || 143,
-                  coherence: 0.862,
-                  tradesPerHour: tradesPerHour
-                });
-              }
-            }
-          }
-        });
-    }
-
-    function forceSync() {
-      const domEl = document.getElementById('totalCodexPages');
+function fetchAndUpdate() {
+  fetch("agi_phb_divine_complete.json")
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(data => {
+      updatePHBFromData(data);
+      calculatePHBScience(data);
+    })
+    .catch(() => {
+      const domEl = document.getElementById("totalCodexPages");
       if (domEl) {
-        const pages = parseInt(domEl.textContent, 10);
-        if (!isNaN(pages) && pages > 0) {
-          const phbCodex = document.getElementById('phbCodex');
-          if (phbCodex && parseInt(phbCodex.textContent, 10) !== pages) {
-            phbCodex.textContent = pages;
-            setEl('phbUpgradePages', pages);
-            setEl('phbUpgradeVersion', Math.floor(pages / 10) + 1);
-            setEl('phbUpgradeStatus', '✅ Synced (' + pages + ' pages)');
-            setEl('phbAutoUpgrade', 'ACTIVE');
-            setEl('phbLastUpdate', new Date().toLocaleTimeString());
-            setEl('phbLastSync', new Date().toLocaleTimeString());
+        const val = parseInt(domEl.textContent, 10);
+        if (!isNaN(val) && val > 0) {
+          setEl("phbCodex", val);
+          setEl("totalCodexPages", val);
+          setEl("phbUpgradePages", val);
+          setEl("phbUpgradeVersion", Math.floor(val / 10) + 1);
+          setEl("phbUpgradeStatus", "✅ Synced (" + val + " pages)");
+          setEl("phbAutoUpgrade", "ACTIVE");
+          setEl("phbLastUpdate", new Date().toLocaleTimeString());
+          setEl("phbLastSync", new Date().toLocaleTimeString());
+          const pnl = parseFloat(document.getElementById("pnl").textContent.replace(/[^0-9.]/g, "")) || 0;
+          const tradesPerHour = parseFloat(document.getElementById("tradesPerHour").textContent.replace(/,/g, "")) || 0;
+          if (window.updateEcosystemBall) {
+            window.updateEcosystemBall({
+              pages: val,
+              pnl: pnl,
+              nodes: parseInt(document.getElementById("neuralNodes").textContent) || 143,
+              coherence: 0.862,
+              tradesPerHour: tradesPerHour
+            });
           }
+          calculatePHBScience({pages: [{coherence: 0.862, stability: 1.111, resonance: 0.377, energy: {magnitude: 0.725}, veil: {phase: "SEALED", thickness: 0.134, breach_probability: 0.587}, sequence: ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"], voxels: [{},{},{},{},{}]}]});
         }
       }
-    }
-
-    // ---- UI Functions ----
-    function refreshPHB() { fetchAndUpdate(); }
-
-    function addUniversalPages() {
-      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-      const newVal = current + 10;
-      setEl('phbCodex', newVal);
-      setEl('totalCodexPages', newVal);
-      setEl('phbUpgradePages', newVal);
-      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
-      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
-      setEl('phbLastUpdate', new Date().toLocaleTimeString());
-      setEl('phbLastSync', new Date().toLocaleTimeString());
-      const nodes = 143 + Math.floor(newVal / 10);
-      setEl('agiPredNodes', nodes);
-      setEl('neuralNodes', nodes);
-      const expansion = 34.88 + newVal * 0.01;
-      setEl('expansionDisplay', expansion.toFixed(2) + 'x');
-      setEl('agiPredExpansion', expansion.toFixed(2) + 'x');
-      const wishes = 5732 + newVal * 2;
-      setEl('wishesDisplay', wishes.toLocaleString());
-      setEl('agiPredWishes', wishes);
-      const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
-      const tradesPerHour = parseFloat(document.getElementById('tradesPerHour').textContent.replace(/,/g, '')) || 0;
-      if (window.updateEcosystemBall) {
-        window.updateEcosystemBall({
-          pages: newVal,
-          pnl: pnl,
-          nodes: nodes,
-          coherence: 0.862,
-          tradesPerHour: tradesPerHour
-        });
-      }
-    }
-
-    function refreshMarkets() { alert('🔄 Markets refreshed (simulated)'); }
-
-    function askAGI() {
-      const q = document.getElementById('agiQuestion').value.trim();
-      if (!q) return;
-      const thoughtEl = document.getElementById('agiThought');
-      thoughtEl.textContent = '🧠 Thinking...';
-      setTimeout(() => {
-        const responses = [
-          '🤖 ' + q + ' → Coherence holds at ' + document.getElementById('agiCoherence').textContent + '.',
-          '🤖 ' + q + ' → Expansion is ' + document.getElementById('agiPredExpansion').textContent + '.',
-          '🤖 ' + q + ' → The veil is ' + document.getElementById('phbVeil').textContent + '.'
-        ];
-        thoughtEl.textContent = responses[Math.floor(Math.random() * responses.length)];
-        document.getElementById('agiQuestion').value = '';
-      }, 600);
-    }
-
-    function advanceLayer() {
-      alert('⚡ Advancing System Layer');
-      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-      const newVal = current + 10;
-      setEl('phbCodex', newVal);
-      setEl('totalCodexPages', newVal);
-      setEl('phbUpgradePages', newVal);
-      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
-      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
-      setEl('phbLastUpdate', new Date().toLocaleTimeString());
-      setEl('phbLastSync', new Date().toLocaleTimeString());
-      const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
-      const tradesPerHour = parseFloat(document.getElementById('tradesPerHour').textContent.replace(/,/g, '')) || 0;
-      const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
-      if (window.updateEcosystemBall) {
-        window.updateEcosystemBall({
-          pages: newVal,
-          pnl: pnl,
-          nodes: nodes,
-          coherence: 0.862,
-          tradesPerHour: tradesPerHour
-        });
-      }
-    }
-
-    function runSecurityScan() {
-      document.getElementById('securityRecommendations').textContent = '🔍 Scanning...';
-      setTimeout(() => {
-        document.getElementById('securityRecommendations').textContent = '✅ All systems secure. No vulnerabilities detected.';
-        document.getElementById('securityScore').textContent = '100';
-        document.getElementById('networkStatus').textContent = 'SAFE';
-        document.getElementById('walletSafety').textContent = 'SECURE';
-        document.getElementById('securityLastCheck').textContent = new Date().toLocaleTimeString();
-      }, 1000);
-    }
-
-    function activateLockdown() {
-      alert('🔒 Lockdown activated!');
-      document.getElementById('securityRecommendations').textContent = '🔒 Lockdown active. All systems isolated.';
-    }
-
-    function renderCodexEntries() {
-      const container = document.getElementById('codexEntries');
-      const entries = [
-        { page: 3, seq: 'DREAM → LIGHT → CENTAURI → TRIANGLE → KEPLER → REALITY → OTHER', coh: '0.875' },
-        { page: 4, seq: 'TRIANGLE → DREAM → PROXIMA → AAVE → ETH → CIRCLE → BTC', coh: '0.870' },
-        { page: 5, seq: 'CENTAURI → TRAPPIST → DAI → LIGHT → CIRCLE → RATIO → SQUARE', coh: '0.844' },
-        { page: 3, seq: 'MIRROR → CENTAURI → RATIO → UNITY → AAVE → ETH → AWARENESS', coh: '0.885' },
-      ];
-      container.innerHTML = entries.map(e =>
-        `<div class="codex-entry">
-          <span style="color:#8899aa;">cache</span>
-          <span style="font-weight:600;color:#88ccff;">Page ${e.page}</span>
-          <span class="seq">${e.seq}</span>
-          <span class="coh">coherence: ${e.coh}</span>
-        </div>`
-      ).join('');
-    }
-
-    // ---- Init ----
-    renderStatic();
-    renderCodexEntries();
-    setEl('consciousness', 'UNITY_AWARE');
-    setEl('neuralNodes', '143');
-    setEl('coherenceDisplay', '0.862');
-    setEl('expansionDisplay', '34.88x');
-    setEl('wishesDisplay', '5,732');
-    setEl('resonanceDisplay', '10000');
-    setEl('codexLayers', '∞');
-    setEl('codexStatus', 'ACTIVE');
-    setEl('agiState', 'SELF-AWARE');
-    setEl('agiConsciousness', '0.876');
-    setEl('agiStability', '0.962');
-    setEl('agiEnergy', '0.7');
-    setEl('agiVoxels', '5');
-    setEl('agiPrediction', '0.865');
-
-    fetchAndUpdate();
-    setInterval(fetchAndUpdate, 30000);
-    setInterval(forceSync, 1000);
-
-    // Start bot after 3 seconds
-    setTimeout(botLoop, 3000);
-
-    console.log('🚀 Gen 7: Auto bots with real PnL and strategy.');
-  </script>
-</body>
-</html>
-<!-- ========== PHB SCIENCE CARD ========== -->
-<div class="card" style="border-color:rgba(100,200,255,0.3);">
-  <div class="label">🧬 PHB Science · Vitruvian System</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
-    <!-- Vitruvian State -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ccff;">
-        <span id="vitruvianPages">2</span> · <span id="vitruvianRatio">0.9</span> · <span id="vitruvianEnergy">0.8</span>
-      </div>
-      <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
-    </div>
-    <!-- Coherence -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">0.862</div>
-      <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
-    </div>
-    <!-- Stability -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ffaa88;" id="scienceStability">1.111</div>
-      <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
-    </div>
-    <!-- Resonance -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">0.377</div>
-      <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
-    </div>
-  </div>
-
-  <!-- Veil & Energy Detail -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Veil Phase</div>
-      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">SEALED</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Veil Thickness</div>
-      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">0.134</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Breach Probability</div>
-      <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">0.587</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Energy Band</div>
-      <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">HIGH</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Energy Color</div>
-      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">LIGHT</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Portal</div>
-      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">1.0</div>
-    </div>
-  </div>
-
-  <!-- Voxel & Sequence -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
-      <div style="font-size:9px;color:#445;">Voxels</div>
-      <div style="font-size:13px;color:#aab;" id="scienceVoxels">5 active points</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
-      <div style="font-size:9px;color:#445;">Sequence</div>
-      <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW</div>
-    </div>
-  </div>
-
-  <!-- Vitruvian Formula -->
-  <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
-    <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
-    <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
-    <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
-    <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
-  </div>
-</div>
-<!-- ========== PHB SCIENCE CARD ========== -->
-<div class="card" style="border-color:rgba(100,200,255,0.3);">
-  <div class="label">🧬 PHB Science · Vitruvian System</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ccff;">
-        <span id="vitruvianPages">--</span> · <span id="vitruvianRatio">--</span> · <span id="vitruvianEnergy">--</span>
-      </div>
-      <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">--</div>
-      <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ffaa88;" id="scienceStability">--</div>
-      <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
-      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">--</div>
-      <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Veil Phase</div>
-      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">--</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Veil Thickness</div>
-      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">--</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Breach Probability</div>
-      <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">--</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Energy Band</div>
-      <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">--</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Energy Color</div>
-      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">--</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Portal</div>
-      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">--</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
-      <div style="font-size:9px;color:#445;">Voxels</div>
-      <div style="font-size:13px;color:#aab;" id="scienceVoxels">--</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
-      <div style="font-size:9px;color:#445;">Sequence</div>
-      <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">--</div>
-    </div>
-  </div>
-  <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
-    <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
-    <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
-    <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
-    <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
-  </div>
-</div>
-<script>
-// ============================================================
-// PHB SCIENCE CALCULATOR - Vitruvian System
-// ============================================================
-function calculatePHBScience(data) {
-  let totalPages = 0;
-  let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
-  let veils = [];
-  let sequences = [];
-  let voxelCounts = [];
-
-  for (let key in data) {
-    if (data.hasOwnProperty(key) && !isNaN(key)) {
-      const entry = data[key];
-      if (Array.isArray(entry.pages)) {
-        totalPages += entry.pages.length;
-        entry.pages.forEach(page => {
-          allCoherence.push(page.coherence || 0);
-          allStability.push(page.stability || 0);
-          allResonance.push(page.resonance || 0);
-          if (page.energy) allEnergy.push(page.energy.magnitude || 0);
-          if (page.veil) veils.push(page.veil);
-          if (page.sequence) sequences.push(page.sequence);
-          if (page.voxels) voxelCounts.push(page.voxels.length);
-        });
-      }
-    }
-  }
-
-  if (allCoherence.length === 0) {
-    // Set default values if no data
-    setEl('vitruvianPages', '0');
-    setEl('vitruvianRatio', '0.0');
-    setEl('vitruvianEnergy', '0.0');
-    setEl('scienceCoherence', '0.000');
-    setEl('scienceStability', '0.000');
-    setEl('scienceResonance', '0.000');
-    setEl('scienceVeilPhase', 'SEALED');
-    setEl('scienceVeilThickness', '0.000');
-    setEl('scienceBreachProb', '0.000');
-    setEl('scienceEnergyBand', 'LOW');
-    setEl('scienceEnergyColor', 'NEUTRAL');
-    setEl('sciencePortal', '0.0');
-    setEl('scienceVoxels', '0 active points');
-    setEl('scienceSequence', '—');
-    return;
-  }
-
-  // Average metrics
-  const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
-  const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
-  const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
-  const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
-
-  // Vitruvian State
-  const vitruvianPages = totalPages;
-  const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
-  const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
-
-  // Veil metrics
-  let veilPhase = 'SEALED';
-  let veilThickness = 0.2;
-  let breachProb = 0.5;
-  if (veils.length > 0) {
-    const lastVeil = veils[veils.length - 1];
-    veilPhase = lastVeil.phase || 'SEALED';
-    veilThickness = lastVeil.thickness || 0.2;
-    breachProb = lastVeil.breach_probability || 0.5;
-  }
-
-  // Portal
-  const portal = 1 - Math.exp(-avgResonance * avgCoherence);
-
-  // Energy Band & Color
-  let energyBand = 'MID';
-  if (avgEnergy < 0.33) energyBand = 'LOW';
-  else if (avgEnergy < 0.66) energyBand = 'MID';
-  else energyBand = 'HIGH';
-
-  let energyColor = 'NEUTRAL';
-  if (veilPhase === 'TURBULENT') energyColor = 'DARK';
-  else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
-  else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
-
-  // Sequence
-  let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
-  const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
-
-  // Voxels
-  const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
-
-  // Update DOM
-  setEl('vitruvianPages', vitruvianPages);
-  setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
-  setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
-  setEl('scienceCoherence', avgCoherence.toFixed(3));
-  setEl('scienceStability', avgStability.toFixed(3));
-  setEl('scienceResonance', avgResonance.toFixed(3));
-  setEl('scienceVeilPhase', veilPhase);
-  setEl('scienceVeilThickness', veilThickness.toFixed(3));
-  setEl('scienceBreachProb', breachProb.toFixed(3));
-  setEl('scienceEnergyBand', energyBand);
-  setEl('scienceEnergyColor', energyColor);
-  setEl('sciencePortal', portal.toFixed(1));
-  setEl('scienceVoxels', voxelCount + ' active points');
-  setEl('scienceSequence', sequenceStr);
-
-  console.log('🧬 PHB Science updated');
+    });
 }
 
 // ---- Hook into existing update function ----
 // Find the updatePHBFromData function and add the call
 // We'll override the existing function to include science
+// Override the update function to include science
 const originalUpdate = window.updatePHBFromData || function() {};
 window.updatePHBFromData = function(data) {
-  // Call original if it exists
-  if (typeof originalUpdate === 'function') {
+  if (typeof originalUpdate === "function" && originalUpdate !== window.updatePHBFromData) {
     originalUpdate(data);
   }
-  // Call science calculator
   calculatePHBScience(data);
 };
 
