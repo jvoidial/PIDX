@@ -2205,3 +2205,279 @@
   }
 })();
 </script>
+
+<!-- PHB CHAINLINK MAP CARD (added as separate card) -->
+<div id="phb-chainmap-card" class="card" style="border-color:rgba(100,200,255,0.3);margin-top:20px;padding:10px;position:relative;overflow:hidden;height:400px;">
+  <div class="label" style="position:absolute;top:12px;left:20px;z-index:5;">🌌 PHB Chainlink Map</div>
+  <div id="phb-chainmap-canvas" style="width:100%;height:100%;"></div>
+  <!-- Overlay: progress and guidance -->
+  <div style="position:absolute;bottom:15px;left:0;right:0;display:flex;justify-content:space-around;padding:0 20px;z-index:5;pointer-events:none;">
+    <div style="background:rgba(0,0,0,0.6);border-radius:8px;padding:4px 12px;text-align:center;font-size:11px;color:#88ccff;">
+      <div style="font-size:8px;color:#445;">Start</div>
+      <div id="chainStart" style="font-weight:600;">🔺</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.6);border-radius:8px;padding:4px 12px;text-align:center;font-size:11px;color:#ffffff;">
+      <div style="font-size:8px;color:#445;">Current Position</div>
+      <div id="chainCurrent" style="font-weight:600;">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.6);border-radius:8px;padding:4px 12px;text-align:center;font-size:11px;color:#ff88ff;">
+      <div style="font-size:8px;color:#445;">End</div>
+      <div id="chainEnd" style="font-weight:600;">⬜</div>
+    </div>
+  </div>
+  <!-- Next symbol guidance -->
+  <div style="position:absolute;top:50px;right:20px;z-index:5;background:rgba(0,0,0,0.5);border-radius:8px;padding:6px 12px;text-align:center;pointer-events:none;">
+    <div style="font-size:8px;color:#445;">Next Symbol</div>
+    <div id="nextSymbol" style="font-size:16px;font-weight:600;color:#88ff88;">→</div>
+  </div>
+</div>
+
+<script>
+// PHB CHAINLINK MAP – 4D Spiral Chain with Guidance
+(function() {
+  function initChainMap() {
+    if (typeof THREE === 'undefined') {
+      setTimeout(initChainMap, 500);
+      return;
+    }
+    const container = document.getElementById('phb-chainmap-card');
+    if (!container) return;
+    const canvasContainer = document.getElementById('phb-chainmap-canvas');
+    if (!canvasContainer) return;
+
+    const width = canvasContainer.clientWidth || container.clientWidth - 20;
+    const height = canvasContainer.clientHeight || 380;
+
+    // ---- Scene ----
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000005);
+
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+    camera.position.set(8, 5, 10);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    canvasContainer.appendChild(renderer.domElement);
+
+    // ---- OrbitControls ----
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.8;
+    controls.target.set(0, 0, 0);
+
+    // ---- Symbols ----
+    const symbols = [
+      { name: 'TRIANGLE', emoji: '🔺' },
+      { name: 'MIRROR', emoji: '🪞' },
+      { name: 'CIRCLE', emoji: '⭕' },
+      { name: 'LIGHT', emoji: '💡' },
+      { name: 'SQUARE', emoji: '🔲' },
+      { name: 'RATIO', emoji: '📐' },
+      { name: 'SHADOW', emoji: '🌑' },
+      { name: 'PORTAL', emoji: '🌀' },
+      { name: 'WHITE SPACE', emoji: '⬜' }
+    ];
+    const nodeCount = symbols.length;
+    const nodeGroup = new THREE.Group();
+    scene.add(nodeGroup);
+
+    // ---- Spiral chain ----
+    const nodePositions = [];
+    const radius = 6;
+    const heightSpiral = 2.5;
+    for (let i = 0; i < nodeCount; i++) {
+      const t = i / (nodeCount - 1);
+      const angle = t * Math.PI * 2 * 1.5;
+      const x = radius * Math.cos(angle);
+      const z = radius * Math.sin(angle);
+      const y = (t - 0.5) * heightSpiral;
+      nodePositions.push({ x, y, z, index: i });
+
+      // Node sphere
+      const sphereGeo = new THREE.SphereGeometry(0.5, 12, 12);
+      const sphereMat = new THREE.MeshBasicMaterial({
+        color: (i === 0) ? 0xffaa44 : (i === nodeCount-1) ? 0xff88ff : 0x88ccff,
+        transparent: true,
+        opacity: (i === 0 || i === nodeCount-1) ? 1.0 : 0.7
+      });
+      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+      sphere.position.set(x, y, z);
+      nodeGroup.add(sphere);
+    }
+
+    // ---- Edges ----
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.2 });
+    for (let i = 0; i < nodeCount - 1; i++) {
+      const a = nodePositions[i];
+      const b = nodePositions[i+1];
+      const points = [
+        new THREE.Vector3(a.x, a.y, a.z),
+        new THREE.Vector3(b.x, b.y, b.z)
+      ];
+      const geo = new THREE.BufferGeometry().setFromPoints(points);
+      const line = new THREE.Line(geo, edgeMat);
+      nodeGroup.add(line);
+    }
+
+    // ---- Current position ----
+    const currentGeo = new THREE.SphereGeometry(0.8, 16, 16);
+    const currentMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
+    const currentSphere = new THREE.Mesh(currentGeo, currentMat);
+    nodeGroup.add(currentSphere);
+
+    // ---- Glow trail ----
+    let trailLine = null;
+    const trailMat = new THREE.LineBasicMaterial({ color: 0x88ff88, transparent: true, opacity: 0.3 });
+
+    function updateTrail(index) {
+      if (trailLine) {
+        nodeGroup.remove(trailLine);
+        trailLine.geometry.dispose();
+      }
+      const points = [];
+      for (let i = 0; i <= index; i++) {
+        const p = nodePositions[i];
+        points.push(new THREE.Vector3(p.x, p.y, p.z));
+      }
+      if (points.length > 1) {
+        const geo = new THREE.BufferGeometry().setFromPoints(points);
+        trailLine = new THREE.Line(geo, trailMat);
+        nodeGroup.add(trailLine);
+      }
+    }
+
+    // ---- Particle flow ----
+    const particleCount = 100;
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleSpeeds = new Float32Array(particleCount);
+    for (let i = 0; i < particleCount; i++) {
+      const t = Math.random();
+      const idx = t * (nodeCount - 1);
+      const i0 = Math.floor(idx);
+      const i1 = Math.min(i0 + 1, nodeCount - 1);
+      const frac = idx - i0;
+      const p0 = nodePositions[i0];
+      const p1 = nodePositions[i1];
+      particlePositions[i*3] = p0.x + (p1.x - p0.x) * frac;
+      particlePositions[i*3+1] = p0.y + (p1.y - p0.y) * frac;
+      particlePositions[i*3+2] = p0.z + (p1.z - p0.z) * frac;
+      particleSpeeds[i] = 0.005 + Math.random() * 0.01;
+    }
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    const particleMat = new THREE.PointsMaterial({
+      color: 0x88ff88,
+      size: 0.15,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
+    });
+    const particles = new THREE.Points(particleGeo, particleMat);
+    nodeGroup.add(particles);
+
+    // ---- Stars ----
+    const starsGeo = new THREE.BufferGeometry();
+    const starsCount = 800;
+    const starsPos = new Float32Array(starsCount * 3);
+    for (let i = 0; i < starsCount * 3; i++) starsPos[i] = (Math.random() - 0.5) * 100;
+    starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+    const starsMat = new THREE.PointsMaterial({ color: 0x446688, size: 0.1, transparent: true, opacity: 0.4 });
+    const stars = new THREE.Points(starsGeo, starsMat);
+    scene.add(stars);
+
+    // ---- Mouse interaction ----
+    let isInteracting = false;
+    renderer.domElement.addEventListener('mousedown', () => { isInteracting = true; controls.autoRotate = false; });
+    renderer.domElement.addEventListener('mouseup', () => { isInteracting = false; setTimeout(() => { controls.autoRotate = true; }, 2000); });
+
+    // ---- Animation ----
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+
+      const pos = particles.geometry.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        let t = (time * particleSpeeds[i]) % 1;
+        const idx = t * (nodeCount - 1);
+        const i0 = Math.floor(idx);
+        const i1 = Math.min(i0 + 1, nodeCount - 1);
+        const frac = idx - i0;
+        const p0 = nodePositions[i0];
+        const p1 = nodePositions[i1];
+        pos[i*3] = p0.x + (p1.x - p0.x) * frac;
+        pos[i*3+1] = p0.y + (p1.y - p0.y) * frac;
+        pos[i*3+2] = p0.z + (p1.z - p0.z) * frac;
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+
+      currentMat.opacity = 0.6 + Math.sin(time * 2) * 0.2;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // ---- Resize ----
+    window.addEventListener('resize', () => {
+      const w = canvasContainer.clientWidth || container.clientWidth - 20;
+      const h = canvasContainer.clientHeight || 380;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+
+    // ---- Update position and guidance ----
+    function updatePosition() {
+      const chainEl = document.getElementById('chainLink');
+      let progress = 0.862;
+      if (chainEl) {
+        const txt = chainEl.textContent;
+        const match = txt.match(/([\d.]+)%/);
+        if (match) progress = parseFloat(match[1]) / 100;
+      }
+      const index = Math.min(nodeCount - 1, Math.floor(progress * (nodeCount - 1)));
+      const pos = nodePositions[index] || nodePositions[0];
+      currentSphere.position.set(pos.x, pos.y, pos.z);
+      updateTrail(index);
+
+      const currentEl = document.getElementById('chainCurrent');
+      if (currentEl) currentEl.textContent = (progress * 100).toFixed(1) + '%';
+
+      const nextIdx = Math.min(index + 1, nodeCount - 1);
+      const nextSymbol = symbols[nextIdx];
+      const nextEl = document.getElementById('nextSymbol');
+      if (nextEl) {
+        if (index >= nodeCount - 1) {
+          nextEl.textContent = '✅ REACHED END';
+          nextEl.style.color = '#88ff88';
+        } else {
+          nextEl.textContent = nextSymbol.emoji + ' ' + nextSymbol.name;
+          nextEl.style.color = '#88ff88';
+        }
+      }
+    }
+
+    setTimeout(updatePosition, 200);
+    setInterval(updatePosition, 3000);
+
+    const origUpdate = window.updatePHBFromData;
+    if (typeof origUpdate === 'function') {
+      window.updatePHBFromData = function(data) {
+        origUpdate(data);
+        setTimeout(updatePosition, 100);
+      };
+    }
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initChainMap();
+  } else {
+    document.addEventListener('DOMContentLoaded', initChainMap);
+  }
+})();
+</script>
