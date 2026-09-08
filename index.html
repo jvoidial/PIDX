@@ -1576,155 +1576,53 @@
 <!-- ============================================================ -->
 <script>
 // ============================================================
-// 4D AGENT SWARM – Card Version (continuous auto‑reset)
-// ============================================================
+<script>
+// 4D AGENT SWARM (simplified - safe version)
 (function() {
-  if (typeof THREE === "undefined") {
-    setTimeout(arguments.callee, 500);
-    return;
-  }
+  if (typeof THREE === "undefined") { setTimeout(arguments.callee, 500); return; }
   const container = document.getElementById("swarm-canvas-container");
-  const canvasContainer = document.getElementById("swarm-canvas");
-  if (!container || !canvasContainer) return;
+  if (!container) return;
   const width = container.clientWidth || 300;
   const height = container.clientHeight || 300;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000005);
   const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
   camera.position.set(0, 0, 12);
-  camera.lookAt(0, 0, 0);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  canvasContainer.appendChild(renderer.domElement);
+  const canvas = document.getElementById("swarm-canvas");
+  if (canvas) canvas.appendChild(renderer.domElement);
   const count = 2000;
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
-  const sizes = new Float32Array(count);
   const basePositions = [];
   for (let i = 0; i < count; i++) {
     const radius = 4 + Math.random() * 3;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos((Math.random() * 2) - 1);
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
-    positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
-    basePositions.push({x, y, z});
+    positions[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+    positions[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
+    positions[i*3+2] = radius * Math.cos(phi);
+    basePositions.push({x: positions[i*3], y: positions[i*3+1], z: positions[i*3+2]});
     const col = new THREE.Color().setHSL(0.6 + Math.random() * 0.3, 0.7, 0.5 + Math.random() * 0.3);
     colors[i*3] = col.r; colors[i*3+1] = col.g; colors[i*3+2] = col.b;
-    sizes[i] = 0.05 + Math.random() * 0.1;
   }
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
-  const material = new THREE.PointsMaterial({ size: 0.15, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, sizeAttenuation: true });
-  const particleSystem = new THREE.Points(geometry, material);
-  scene.add(particleSystem);
+  const material = new THREE.PointsMaterial({ size: 0.15, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
   const glowGeo = new THREE.SphereGeometry(0.6, 16, 16);
   const glowMat = new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.3, wireframe: true });
-  const glowSphere = new THREE.Mesh(glowGeo, glowMat);
-  scene.add(glowSphere);
-  const starsGeo = new THREE.BufferGeometry();
-  const starCount = 400;
-  const starPos = new Float32Array(starCount * 3);
-  for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 60;
-  starsGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
-  const starsMat = new THREE.PointsMaterial({ color: 0x446688, size: 0.08, transparent: true, opacity: 0.4 });
-  const stars = new THREE.Points(starsGeo, starsMat);
-  scene.add(stars);
-  const progressBar = document.getElementById("swarm-progress-4d");
-  const percentEl = document.getElementById("swarm-percent-4d");
-  const messagesEl = document.getElementById("swarm-messages-4d");
-  const timeEl = document.getElementById("swarm-time-4d");
-  const thoughtsEl = document.getElementById("swarm-thoughts-4d");
-  const statusEl = document.getElementById("swarm-status");
-  const toggleBtn = document.getElementById("swarm-toggle-4d");
-  const resetBtn = document.getElementById("swarm-reset-4d");
-  let progress = 0, messages = 0, seconds = 0, running = true, intervalId = null, resetTimeout = null;
-  const thoughts = ["📐 Euler equations…","🔄 Navier-Stokes…","🔍 Boundary check","📈 Turbulence refine","🧩 Lean proof verify","✅ Subproof 42","⚡ Agent sync","🧠 10k collaborating","📄 Proof page 23","🔬 Energy conserve","🌊 Vortex solved","🎯 Millennium Prize"];
-  function addThought(msg) {
-    const div = document.createElement("div");
-    div.textContent = "> " + msg;
-    thoughtsEl.appendChild(div);
-    if (thoughtsEl.children.length > 8) thoughtsEl.removeChild(thoughtsEl.firstChild);
-    thoughtsEl.scrollTop = thoughtsEl.scrollHeight;
-  }
-  function updateUI() {
-    messagesEl.textContent = messages.toLocaleString();
-    timeEl.textContent = seconds + "s";
-    const pct = Math.min(100, progress);
-    progressBar.style.width = pct + "%";
-    percentEl.textContent = pct.toFixed(1) + "%";
-  }
-  function scheduleReset() {
-    if (resetTimeout) clearTimeout(resetTimeout);
-    resetTimeout = setTimeout(() => {
-      if (progress >= 100) {
-        reset();
-        addThought("🔄 Auto‑reset – solving again…");
-      }
-    }, 5000);
-  }
-  function step() {
-    if (!running) return;
-    seconds++;
-    const increment = progress < 50 ? 0.2 + Math.random() * 0.3 : progress < 85 ? 0.1 + Math.random() * 0.2 : progress < 98 ? 0.05 + Math.random() * 0.1 : 0.01;
-    progress = Math.min(100, progress + increment);
-    messages += Math.floor(50 + Math.random() * 200);
-    if (Math.random() < 0.12) addThought(thoughts[Math.floor(Math.random() * thoughts.length)]);
-    if (progress >= 50 && progress < 51) addThought("🎉 Euler solved (simulated)");
-    if (progress >= 80 && progress < 81) addThought("🚀 Extending to Navier-Stokes…");
-    if (progress >= 98 && progress < 99) addThought("📄 Proof complete!");
-    if (progress >= 100) {
-      addThought("🏆 Millennium Prize achieved! (auto‑reset in 5s)");
-      running = false;
-      statusEl.textContent = "● complete";
-      statusEl.style.color = "#ffaa66";
-      toggleBtn.textContent = "▶️";
-      clearInterval(intervalId);
-      intervalId = null;
-      scheduleReset();
-    }
-    updateUI();
-  }
-  function start() {
-    if (intervalId) return;
-    running = true;
-    statusEl.textContent = "● running";
-    statusEl.style.color = "#88ff88";
-    toggleBtn.textContent = "⏸️";
-    intervalId = setInterval(step, 1000);
-  }
-  function pause() {
-    running = false;
-    if (intervalId) { clearInterval(intervalId); intervalId = null; }
-    statusEl.textContent = "○ paused";
-    statusEl.style.color = "#ffaa66";
-    toggleBtn.textContent = "▶️";
-  }
-  function toggle() { running ? pause() : start(); }
-  function reset() {
-    pause();
-    if (resetTimeout) clearTimeout(resetTimeout);
-    resetTimeout = null;
-    progress = 0; messages = 0; seconds = 0;
-    thoughtsEl.innerHTML = "<div style="color:#667;">🌀 Reinitializing…</div>";
-    running = true;
-    statusEl.textContent = "● running";
-    statusEl.style.color = "#88ff88";
-    toggleBtn.textContent = "⏸️";
-    updateUI();
-    start();
-  }
-  toggleBtn.addEventListener("click", toggle);
-  resetBtn.addEventListener("click", reset);
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  scene.add(glow);
   let time = 0;
   function animate() {
     requestAnimationFrame(animate);
     time += 0.01;
-    const pos = particleSystem.geometry.attributes.position.array;
+    const pos = particles.geometry.attributes.position.array;
     for (let i = 0; i < count; i++) {
       const base = basePositions[i];
       const rOff = Math.sin(time * 0.1 + i) * 0.3;
@@ -1735,40 +1633,19 @@
       pos[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
       pos[i*3+2] = radius * Math.cos(phi);
     }
-    particleSystem.geometry.attributes.position.needsUpdate = true;
-    particleSystem.rotation.y += 0.001;
-    particleSystem.rotation.x += 0.0005;
-    glowSphere.material.opacity = 0.2 + Math.sin(time * 1.5) * 0.1;
+    particles.geometry.attributes.position.needsUpdate = true;
+    particles.rotation.y += 0.001;
+    glow.material.opacity = 0.2 + Math.sin(time * 1.5) * 0.1;
     renderer.render(scene, camera);
   }
   animate();
-  window.addEventListener("resize", () => {
+  window.addEventListener("resize", function() {
     const w = container.clientWidth || 300;
     const h = container.clientHeight || 300;
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
   });
-  const origUpdate = window.updatePHBFromData;
-  if (typeof origUpdate === "function") {
-    window.updatePHBFromData = function(data) {
-      origUpdate(data);
-      const chainEl = document.getElementById("chainLink");
-      if (chainEl) {
-        const txt = chainEl.textContent;
-        const match = txt.match(/([d.]+)%/);
-        if (match) {
-          const chain = parseFloat(match[1]);
-          if (chain > progress && progress < 100) {
-            progress = Math.min(100, progress + (chain - progress) * 0.02);
-            updateUI();
-          }
-        }
-      }
-    };
-  }
-  start();
-  console.log("🧠 4D Agent Swarm card initialized.");
 })();
 </script>
 </body>
@@ -2747,54 +2624,16 @@
 </script>
 
 <!-- ============================================================ -->
-<!--  4D AGENT SWARM – Auto‑Resetting (continuous)                 -->
-<!-- ============================================================ -->
-  <!-- Three.js canvas container -->
-  <div id="swarm-three-container" style="flex:1;position:relative;overflow:hidden;background:#000005;">
-    <div id="swarm-canvas" style="width:100%;height:100%;"></div>
-    <!-- Overlay: progress bar -->
-    <div style="position:absolute;bottom:12px;left:16px;right:16px;z-index:10;">
-      <div style="background:#1a1a2a;border-radius:6px;height:6px;overflow:hidden;">
-        <div id="swarm-progress-4d" style="width:0%;height:100%;background:linear-gradient(90deg,#88ccff,#aa88ff,#ff88ff);border-radius:6px;transition:width 0.3s;"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:#667;margin-top:2px;">
-        <span>Proof progress</span>
-        <span id="swarm-percent-4d">0%</span>
-      </div>
-    </div>
-    <!-- Stats -->
-    <div style="position:absolute;top:8px;right:12px;z-index:10;text-align:right;font-size:10px;color:#8899aa;line-height:1.4;">
-      <div>🧬 <span id="swarm-agents-4d">10,000</span></div>
-      <div>💬 <span id="swarm-messages-4d">0</span></div>
-      <div>⏱️ <span id="swarm-time-4d">0s</span></div>
-    </div>
-    <!-- Thought feed -->
-    <div id="swarm-thoughts-4d" style="position:absolute;bottom:48px;left:16px;right:16px;z-index:10;background:rgba(0,0,0,0.5);border-radius:6px;padding:4px 8px;max-height:60px;overflow-y:auto;font-size:10px;color:#aab;border:1px solid rgba(255,255,255,0.04);">
-      <div style="color:#667;">🌀 Agents initializing…</div>
-    </div>
-    <!-- Controls -->
-    <div style="position:absolute;bottom:48px;left:16px;z-index:10;display:flex;gap:6px;">
-      <button id="swarm-toggle-4d" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#c0c8d0;padding:2px 8px;border-radius:4px;font-size:9px;cursor:pointer;">⏸️</button>
-      <button id="swarm-reset-4d" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#c0c8d0;padding:2px 8px;border-radius:4px;font-size:9px;cursor:pointer;">🔄</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ============================================================
-
-<!-- ============================================================ -->
-<!--  4D AGENT SWARM CARD                                          -->
-<!-- ============================================================ -->
+<!-- 4D AGENT SWARM CARD -->
+<div class="card" style="border-color:rgba(100,200,255,0.3);margin-top:20px;padding:10px;position:relative;overflow:hidden;height:400px;">
+  <div class="label" style="position:absolute;top:12px;left:20px;z-index:5;">🧠 4D Agent Swarm</div>
   <div id="swarm-canvas-container" style="width:100%;height:100%;position:relative;">
     <div id="swarm-canvas" style="width:100%;height:100%;"></div>
-    <!-- Overlay stats -->
     <div style="position:absolute;top:10px;right:16px;z-index:10;text-align:right;font-size:10px;color:#8899aa;line-height:1.4;pointer-events:none;">
       <div>🧬 <span id="swarm-agents-4d">10,000</span></div>
       <div>💬 <span id="swarm-messages-4d">0</span></div>
       <div>⏱️ <span id="swarm-time-4d">0s</span></div>
     </div>
-    <!-- Progress bar -->
     <div style="position:absolute;bottom:12px;left:16px;right:16px;z-index:10;">
       <div style="background:#1a1a2a;border-radius:6px;height:6px;overflow:hidden;">
         <div id="swarm-progress-4d" style="width:0%;height:100%;background:linear-gradient(90deg,#88ccff,#aa88ff,#ff88ff);border-radius:6px;transition:width 0.3s;"></div>
@@ -2804,255 +2643,12 @@
         <span id="swarm-percent-4d">0%</span>
       </div>
     </div>
-    <!-- Thought feed -->
     <div id="swarm-thoughts-4d" style="position:absolute;bottom:48px;left:16px;right:16px;z-index:10;background:rgba(0,0,0,0.5);border-radius:6px;padding:4px 8px;max-height:60px;overflow-y:auto;font-size:10px;color:#aab;border:1px solid rgba(255,255,255,0.04);pointer-events:none;">
       <div style="color:#667;">🌀 Agents initializing…</div>
     </div>
-    <!-- Controls -->
     <div style="position:absolute;bottom:48px;left:16px;z-index:10;display:flex;gap:6px;">
       <button id="swarm-toggle-4d" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#c0c8d0;padding:2px 8px;border-radius:4px;font-size:9px;cursor:pointer;">⏸️</button>
       <button id="swarm-reset-4d" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#c0c8d0;padding:2px 8px;border-radius:4px;font-size:9px;cursor:pointer;">🔄</button>
     </div>
   </div>
 </div>
-
-<script>
-// ============================================================
-// 4D AGENT SWARM – Card Version (continuous auto‑reset)
-// ============================================================
-(function() {
-  if (typeof THREE === 'undefined') {
-    setTimeout(arguments.callee, 500);
-    return;
-  }
-
-  const container = document.getElementById('swarm-canvas-container');
-  const canvasContainer = document.getElementById('swarm-canvas');
-  if (!container || !canvasContainer) return;
-
-  const width = container.clientWidth || 300;
-  const height = container.clientHeight || 300;
-
-  // ---- Scene ----
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000005);
-
-  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-  camera.position.set(0, 0, 12);
-  camera.lookAt(0, 0, 0);
-
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(width, height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  canvasContainer.appendChild(renderer.domElement);
-
-  // ---- Particles ----
-  const count = 2000;
-  const positions = new Float32Array(count * 3);
-  const colors = new Float32Array(count * 3);
-  const sizes = new Float32Array(count);
-  const basePositions = [];
-
-  for (let i = 0; i < count; i++) {
-    const radius = 4 + Math.random() * 3;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos((Math.random() * 2) - 1);
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
-    positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
-    basePositions.push({x, y, z});
-    const col = new THREE.Color().setHSL(0.6 + Math.random() * 0.3, 0.7, 0.5 + Math.random() * 0.3);
-    colors[i*3] = col.r; colors[i*3+1] = col.g; colors[i*3+2] = col.b;
-    sizes[i] = 0.05 + Math.random() * 0.1;
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-  const material = new THREE.PointsMaterial({
-    size: 0.15,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending,
-    sizeAttenuation: true
-  });
-  const particleSystem = new THREE.Points(geometry, material);
-  scene.add(particleSystem);
-
-  // ---- Glow ----
-  const glowGeo = new THREE.SphereGeometry(0.6, 16, 16);
-  const glowMat = new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.3, wireframe: true });
-  const glowSphere = new THREE.Mesh(glowGeo, glowMat);
-  scene.add(glowSphere);
-
-  // ---- Stars ----
-  const starsGeo = new THREE.BufferGeometry();
-  const starCount = 400;
-  const starPos = new Float32Array(starCount * 3);
-  for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 60;
-  starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  const starsMat = new THREE.PointsMaterial({ color: 0x446688, size: 0.08, transparent: true, opacity: 0.4 });
-  const stars = new THREE.Points(starsGeo, starsMat);
-  scene.add(stars);
-
-  // ---- UI ----
-  const progressBar = document.getElementById('swarm-progress-4d');
-  const percentEl = document.getElementById('swarm-percent-4d');
-  const messagesEl = document.getElementById('swarm-messages-4d');
-  const timeEl = document.getElementById('swarm-time-4d');
-  const thoughtsEl = document.getElementById('swarm-thoughts-4d');
-  const statusEl = document.getElementById('swarm-status');
-  const toggleBtn = document.getElementById('swarm-toggle-4d');
-  const resetBtn = document.getElementById('swarm-reset-4d');
-
-  let progress = 0, messages = 0, seconds = 0, running = true, intervalId = null, resetTimeout = null;
-
-  const thoughts = ["📐 Euler equations…","🔄 Navier-Stokes…","🔍 Boundary check","📈 Turbulence refine","🧩 Lean proof verify","✅ Subproof 42","⚡ Agent sync","🧠 10k collaborating","📄 Proof page 23","🔬 Energy conserve","🌊 Vortex solved","🎯 Millennium Prize"];
-
-  function addThought(msg) {
-    const div = document.createElement('div');
-    div.textContent = '> ' + msg;
-    thoughtsEl.appendChild(div);
-    if (thoughtsEl.children.length > 8) thoughtsEl.removeChild(thoughtsEl.firstChild);
-    thoughtsEl.scrollTop = thoughtsEl.scrollHeight;
-  }
-
-  function updateUI() {
-    messagesEl.textContent = messages.toLocaleString();
-    timeEl.textContent = seconds + 's';
-    const pct = Math.min(100, progress);
-    progressBar.style.width = pct + '%';
-    percentEl.textContent = pct.toFixed(1) + '%';
-  }
-
-  function scheduleReset() {
-    if (resetTimeout) clearTimeout(resetTimeout);
-    resetTimeout = setTimeout(() => {
-      if (progress >= 100) {
-        reset();
-        addThought('🔄 Auto‑reset – solving again…');
-      }
-    }, 5000);
-  }
-
-  function step() {
-    if (!running) return;
-    seconds++;
-    const increment = progress < 50 ? 0.2 + Math.random() * 0.3 :
-                      progress < 85 ? 0.1 + Math.random() * 0.2 :
-                      progress < 98 ? 0.05 + Math.random() * 0.1 : 0.01;
-    progress = Math.min(100, progress + increment);
-    messages += Math.floor(50 + Math.random() * 200);
-    if (Math.random() < 0.12) addThought(thoughts[Math.floor(Math.random() * thoughts.length)]);
-    if (progress >= 50 && progress < 51) addThought('🎉 Euler solved (simulated)');
-    if (progress >= 80 && progress < 81) addThought('🚀 Extending to Navier-Stokes…');
-    if (progress >= 98 && progress < 99) addThought('📄 Proof complete!');
-    if (progress >= 100) {
-      addThought('🏆 Millennium Prize achieved! (auto‑reset in 5s)');
-      running = false;
-      statusEl.textContent = '● complete';
-      statusEl.style.color = '#ffaa66';
-      toggleBtn.textContent = '▶️';
-      clearInterval(intervalId);
-      intervalId = null;
-      scheduleReset();
-    }
-    updateUI();
-  }
-
-  function start() {
-    if (intervalId) return;
-    running = true;
-    statusEl.textContent = '● running';
-    statusEl.style.color = '#88ff88';
-    toggleBtn.textContent = '⏸️';
-    intervalId = setInterval(step, 1000);
-  }
-
-  function pause() {
-    running = false;
-    if (intervalId) { clearInterval(intervalId); intervalId = null; }
-    statusEl.textContent = '○ paused';
-    statusEl.style.color = '#ffaa66';
-    toggleBtn.textContent = '▶️';
-  }
-
-  function toggle() { running ? pause() : start(); }
-
-  function reset() {
-    pause();
-    if (resetTimeout) clearTimeout(resetTimeout);
-    resetTimeout = null;
-    progress = 0; messages = 0; seconds = 0;
-    thoughtsEl.innerHTML = '<div style="color:#667;">🌀 Reinitializing…</div>';
-    running = true;
-    statusEl.textContent = '● running';
-    statusEl.style.color = '#88ff88';
-    toggleBtn.textContent = '⏸️';
-    updateUI();
-    start();
-  }
-
-  toggleBtn.addEventListener('click', toggle);
-  resetBtn.addEventListener('click', reset);
-
-  // ---- Animation ----
-  let time = 0;
-  function animate() {
-    requestAnimationFrame(animate);
-    time += 0.01;
-    const pos = particleSystem.geometry.attributes.position.array;
-    for (let i = 0; i < count; i++) {
-      const base = basePositions[i];
-      const rOff = Math.sin(time * 0.1 + i) * 0.3;
-      const radius = Math.sqrt(base.x*base.x + base.y*base.y + base.z*base.z) + rOff;
-      const theta = Math.atan2(base.y, base.x) + Math.sin(time * 0.05 + i) * 0.005;
-      const phi = Math.acos(base.z / radius) + Math.sin(time * 0.03 + i * 0.5) * 0.005;
-      pos[i*3] = radius * Math.sin(phi) * Math.cos(theta);
-      pos[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
-      pos[i*3+2] = radius * Math.cos(phi);
-    }
-    particleSystem.geometry.attributes.position.needsUpdate = true;
-    particleSystem.rotation.y += 0.001;
-    particleSystem.rotation.x += 0.0005;
-    glowSphere.material.opacity = 0.2 + Math.sin(time * 1.5) * 0.1;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  window.addEventListener('resize', () => {
-    const w = container.clientWidth || 300;
-    const h = container.clientHeight || 300;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  });
-
-  // ---- Sync with Chain Link ----
-  const origUpdate = window.updatePHBFromData;
-  if (typeof origUpdate === 'function') {
-    window.updatePHBFromData = function(data) {
-      origUpdate(data);
-      const chainEl = document.getElementById('chainLink');
-      if (chainEl) {
-        const txt = chainEl.textContent;
-        const match = txt.match(/([\d.]+)%/);
-        if (match) {
-          const chain = parseFloat(match[1]);
-          if (chain > progress && progress < 100) {
-            progress = Math.min(100, progress + (chain - progress) * 0.02);
-            updateUI();
-          }
-        }
-      }
-    };
-  }
-
-  start();
-  console.log('🧠 4D Agent Swarm card initialized.');
-})();
-</script>
