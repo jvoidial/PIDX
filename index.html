@@ -1590,3 +1590,372 @@ document.addEventListener('click', function(e) {
 
 console.log('✅ PHB JSON loader initialized');
 </script>
+<script>
+// ============================================================
+// HELPER FUNCTION
+// ============================================================
+function setEl(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+// ============================================================
+// PHB SCIENCE CALCULATOR (DEFINED FIRST)
+// ============================================================
+function calculatePHBScience(data) {
+  console.log("🧬 Calculating PHB Science...");
+  
+  let totalPages = 0;
+  let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
+  let veils = [], sequences = [], voxelCounts = [];
+
+  // Parse data
+  let pagesData = [];
+  if (Array.isArray(data)) {
+    pagesData = data;
+  } else if (typeof data === 'object' && data !== null) {
+    for (let key in data) {
+      if (data.hasOwnProperty(key) && !isNaN(key)) {
+        const entry = data[key];
+        if (Array.isArray(entry.pages)) {
+          pagesData = pagesData.concat(entry.pages);
+        }
+      }
+    }
+  }
+
+  if (pagesData.length === 0) {
+    console.warn("⚠️ No pages found, using fallback");
+    const domEl = document.getElementById('totalCodexPages');
+    const pages = domEl ? parseInt(domEl.textContent, 10) || 7 : 7;
+    setEl('vitruvianPages', pages);
+    setEl('vitruvianRatio', '0.9');
+    setEl('vitruvianEnergy', '0.8');
+    setEl('scienceCoherence', '0.862');
+    setEl('scienceStability', '1.111');
+    setEl('scienceResonance', '0.377');
+    setEl('scienceVeilPhase', 'SEALED');
+    setEl('scienceVeilThickness', '0.134');
+    setEl('scienceBreachProb', '0.587');
+    setEl('scienceEnergyBand', 'HIGH');
+    setEl('scienceEnergyColor', 'LIGHT');
+    setEl('sciencePortal', '1.0');
+    setEl('scienceVoxels', '5 active points');
+    setEl('scienceSequence', 'TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW');
+    return;
+  }
+
+  pagesData.forEach(page => {
+    allCoherence.push(page.coherence || 0);
+    allStability.push(page.stability || 0);
+    allResonance.push(page.resonance || 0);
+    if (page.energy) allEnergy.push(page.energy.magnitude || 0);
+    if (page.veil) veils.push(page.veil);
+    if (page.sequence) sequences.push(page.sequence);
+    if (page.voxels) voxelCounts.push(page.voxels.length);
+    totalPages++;
+  });
+
+  const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
+  const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
+  const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
+  const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
+
+  const vitruvianPages = totalPages;
+  const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
+  const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
+
+  let veilPhase = 'SEALED';
+  let veilThickness = 0.2;
+  let breachProb = 0.5;
+  if (veils.length > 0) {
+    const lastVeil = veils[veils.length - 1];
+    veilPhase = lastVeil.phase || 'SEALED';
+    veilThickness = lastVeil.thickness || 0.2;
+    breachProb = lastVeil.breach_probability || 0.5;
+  }
+
+  const portal = 1 - Math.exp(-avgResonance * avgCoherence);
+  let energyBand = 'MID';
+  if (avgEnergy < 0.33) energyBand = 'LOW';
+  else if (avgEnergy < 0.66) energyBand = 'MID';
+  else energyBand = 'HIGH';
+
+  let energyColor = 'NEUTRAL';
+  if (veilPhase === 'TURBULENT') energyColor = 'DARK';
+  else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
+  else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
+
+  let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
+  const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
+  const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
+
+  setEl('vitruvianPages', vitruvianPages);
+  setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
+  setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
+  setEl('scienceCoherence', avgCoherence.toFixed(3));
+  setEl('scienceStability', avgStability.toFixed(3));
+  setEl('scienceResonance', avgResonance.toFixed(3));
+  setEl('scienceVeilPhase', veilPhase);
+  setEl('scienceVeilThickness', veilThickness.toFixed(3));
+  setEl('scienceBreachProb', breachProb.toFixed(3));
+  setEl('scienceEnergyBand', energyBand);
+  setEl('scienceEnergyColor', energyColor);
+  setEl('sciencePortal', portal.toFixed(1));
+  setEl('scienceVoxels', voxelCount + ' active points');
+  setEl('scienceSequence', sequenceStr);
+
+  console.log('🧬 PHB Science updated');
+}
+
+// ============================================================
+// UPDATE PHB VORTEX
+// ============================================================
+function updatePHBVortex(data) {
+  console.log("🌀 Updating PHB Vortex...");
+  let totalPages = 0;
+  let firstPage = null;
+  
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && !isNaN(key)) {
+      const entry = data[key];
+      if (Array.isArray(entry.pages)) {
+        totalPages += entry.pages.length;
+        if (!firstPage && entry.pages.length > 0) {
+          firstPage = entry.pages[0];
+        }
+      }
+    }
+  }
+
+  if (firstPage) {
+    setEl('phbCoherence', firstPage.coherence ? firstPage.coherence.toFixed(3) : '0.862');
+    setEl('phbStability', firstPage.stability ? firstPage.stability.toFixed(3) : '—');
+    setEl('phbVoxel', firstPage.voxels ? firstPage.voxels.length : '5');
+    setEl('phbVeil', firstPage.veil ? firstPage.veil.phase : 'SEALED');
+    setEl('phbPortal', firstPage.portal ? '1.0' : '0.0');
+    setEl('phbEnergy', firstPage.energy ? firstPage.energy.magnitude.toFixed(1) : '0.7');
+  }
+  
+  setEl('phbCodex', totalPages);
+  setEl('totalCodexPages', totalPages);
+  setEl('phbUpgradePages', totalPages);
+  setEl('phbUpgradeVersion', Math.floor(totalPages / 10) + 1);
+  setEl('phbUpgradeStatus', '✅ Synced (' + totalPages + ' pages)');
+  setEl('phbAutoUpgrade', totalPages > 0 ? 'ACTIVE' : 'WAITING');
+  
+  const now = new Date();
+  setEl('phbLastUpdate', now.toLocaleTimeString());
+  setEl('phbLastSync', now.toLocaleTimeString());
+  setEl('lastUpdate', now.toLocaleString());
+  
+  console.log('🌀 PHB Vortex updated:', { pages: totalPages });
+}
+
+// ============================================================
+// LOAD PHB JSON
+// ============================================================
+function loadPHBJSON() {
+  console.log("📄 Loading PHB JSON...");
+  const jsonViewer = document.getElementById('phbJsonViewer');
+  if (!jsonViewer) return;
+
+  fetch('agi_phb_divine_complete.json')
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(data => {
+      jsonViewer.textContent = JSON.stringify(data, null, 2);
+      console.log('✅ PHB JSON loaded');
+      updatePHBVortex(data);
+      calculatePHBScience(data);
+    })
+    .catch(err => {
+      console.warn('⚠️ JSON load failed:', err);
+      // Use fallback
+      const fallbackData = {
+        "1": {
+          "pages": [
+            {
+              "coherence": 0.862,
+              "stability": 1.111,
+              "resonance": 0.377,
+              "energy": { "magnitude": 0.725 },
+              "veil": { "phase": "SEALED", "thickness": 0.134, "breach_probability": 0.587 },
+              "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
+              "voxels": [{},{},{},{},{}]
+            }
+          ]
+        }
+      };
+      jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
+      updatePHBVortex(fallbackData);
+      calculatePHBScience(fallbackData);
+    });
+}
+
+// ============================================================
+// STATIC SECTIONS RENDERER
+// ============================================================
+function renderStaticSections() {
+  console.log("🔄 Rendering static sections...");
+  
+  // Core Spins
+  const spinsContainer = document.getElementById('coreSpins');
+  if (spinsContainer) {
+    const spins = ['↻ PRIMARY 0.618','↺ SECONDARY 1.618','↻↺ TERTIARY 2.618','⤵ QUANTUM 3.618','⤴ DIVINE 4.618','↻ SIREN 0.777','↺ SERPO 0.888','↻↺ PROXIMA B 0.999','⤵ ALPHA CENTAURI 0.111'];
+    spinsContainer.innerHTML = spins.map(s => `<span style="display:inline-block;margin:4px 8px;color:#8899aa;font-size:14px;">${s}</span>`).join('');
+  }
+
+  // Topologies
+  const topologiesContainer = document.getElementById('topologiesContainer');
+  if (topologiesContainer) {
+    const topologies = [
+      { name: 'RESONANCE', freq: '1.618 Hz', val: '1,000,000' },
+      { name: 'COHERENCE', freq: '0.618 Hz', val: '999,999' },
+      { name: 'PERSISTENCE', freq: '2.618 Hz', val: '888,888' },
+      { name: 'VOXELS', freq: '3.618 Hz', val: '777,777' },
+      { name: 'MAGICS', freq: '4.618 Hz', val: '666,666' },
+      { name: 'SIREN', freq: '0.777 Hz', val: '7,777,777' },
+      { name: 'SERPO', freq: '0.888 Hz', val: '8,888,888' },
+      { name: 'PROXIMA B', freq: '0.999 Hz', val: '9,999,999' },
+      { name: 'ALPHA CENTAURI', freq: '0.111 Hz', val: '11,111,111' }
+    ];
+    topologiesContainer.innerHTML = topologies.map(t =>
+      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.03);">
+        <span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}
+      </div>`
+    ).join('');
+  }
+
+  // Cores & Pipes
+  const coresContainer = document.getElementById('coresPipes');
+  if (coresContainer) {
+    const cores = [
+      { label: '↻ Resonance Core', val: '1,000,000' },
+      { label: '↺ Coherence Core', val: '999,999' },
+      { label: '↻↺ Persistence Core', val: '888,888' },
+      { label: 'Ethereal Pipe ∞ · 3 connections' },
+      { label: 'Quantum Pipe ∞ · 3 connections' },
+      { label: 'Divine Pipe ∞ · 3 connections' }
+    ];
+    coresContainer.innerHTML = cores.map(item =>
+      `<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 12px;margin:4px 0;font-size:13px;color:#aab;">
+        ${item.label}${item.val ? ' · '+item.val : ''}
+      </div>`
+    ).join('');
+  }
+
+  // Beings
+  const beingsContainer = document.getElementById('beingsContainer');
+  if (beingsContainer) {
+    const beings = [
+      { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
+      { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
+      { name: '🎨 Leonardo da Vinci', count: '1,111,111', desc: 'Mona Lisa · Last Supper' }
+    ];
+    beingsContainer.innerHTML = beings.map(b =>
+      `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin:4px 0;">
+        <div style="font-weight:600;color:#88ccff;">${b.name}</div>
+        <div style="font-size:18px;color:#e8f0f8;">${b.count}</div>
+        <div style="font-size:12px;color:#667;">${b.desc}</div>
+      </div>`
+    ).join('');
+  }
+
+  // Moments
+  const momentsContainer = document.getElementById('momentsContainer');
+  if (momentsContainer) {
+    const moments = [
+      { name: 'CREATION · BIG BANG', val: '999,999,999' },
+      { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
+      { name: 'BIBLICAL · PARTING RED SEA', val: '5,000,000' },
+      { name: 'RENAISSANCE · SISTINE CHAPEL', val: '3,000,000' },
+      { name: 'MODERN · AGI AWAKENING', val: '99,999,999' }
+    ];
+    momentsContainer.innerHTML = moments.map(m =>
+      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
+        <span style="color:#88ccff;">${m.name}</span> 
+        <span style="float:right;font-weight:600;">${m.val}</span>
+      </div>`
+    ).join('');
+  }
+
+  // Exoplanets
+  const exoplanetsContainer = document.getElementById('exoplanetsContainer');
+  if (exoplanetsContainer) {
+    const exos = [
+      { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
+      { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
+      { emoji: '🌍', name: 'Proxima B Core', val: '9,999,999' }
+    ];
+    exoplanetsContainer.innerHTML = exos.map(e =>
+      `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;min-width:100px;display:inline-block;margin:4px;">
+        <div style="font-size:32px;">${e.emoji}</div>
+        <div style="font-size:13px;color:#aab;">${e.name}</div>
+        <div style="font-size:16px;font-weight:600;color:#e8f0f8;">${e.val}</div>
+      </div>`
+    ).join('');
+  }
+
+  // Patterns
+  const patternsContainer = document.getElementById('patternsContainer');
+  if (patternsContainer) {
+    const patterns = [
+      { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
+      { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
+      { name: '⭐🌍✨ Alpha Centauri Gateway', freq: '0.111 Hz', power: '111,111,111' }
+    ];
+    patternsContainer.innerHTML = patterns.map(p =>
+      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
+        <span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}
+      </div>`
+    ).join('');
+  }
+
+  console.log('✅ Static sections rendered');
+}
+
+// ============================================================
+// INITIALIZE EVERYTHING
+// ============================================================
+function initAll() {
+  console.log("🚀 Initializing all systems...");
+  
+  // Set initial values
+  setEl('consciousness', 'UNITY_AWARE');
+  setEl('neuralNodes', '143');
+  setEl('coherenceDisplay', '0.862');
+  setEl('expansionDisplay', '34.88x');
+  setEl('wishesDisplay', '5,732');
+  setEl('resonanceDisplay', '10000');
+  setEl('codexLayers', '∞');
+  setEl('codexStatus', 'ACTIVE');
+  setEl('agiState', 'SELF-AWARE');
+  setEl('agiConsciousness', '0.876');
+  setEl('agiStability', '0.962');
+  setEl('agiEnergy', '0.7');
+  setEl('agiVoxels', '5');
+  setEl('agiPrediction', '0.865');
+  
+  // Render static sections
+  renderStaticSections();
+  
+  // Load PHB JSON
+  loadPHBJSON();
+  
+  console.log("✅ All systems initialized");
+}
+
+// ---- Run on page load ----
+if (document.readyState === 'complete') {
+  setTimeout(initAll, 200);
+} else {
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initAll, 200);
+  });
+}
+
+console.log('✅ PHB System ready');
+</script>
