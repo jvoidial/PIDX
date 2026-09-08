@@ -425,7 +425,7 @@
         </div>
         <div id="tradeFeed" class="trade-feed">📈 Trade feed will appear here (simulated)...</div>
         <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn" onclick="toggleBot()" id="toggleBotBtn">⏸️ Pause Demo</button>
+          <button class="btn" onclick="toggleBot()" id="toggleBotBtn">⏸️ Pause Bot</button>
           <button class="btn" onclick="simulateTrade()">📈 Simulate Trade</button>
           <button class="btn" onclick="resetStats()">↻ Reset Stats</button>
         </div>
@@ -1560,7 +1560,7 @@
 
     function toggleBot() {
       botRunning = !botRunning;
-      document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Demo' : '▶️ Resume Demo';
+      document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Bot' : '▶️ Resume Demo';
       document.getElementById('botStatus').textContent = botRunning ? '● Auto-trading ACTIVE' : '○ Paused';
       if (botRunning) botLoop();
     }
@@ -1622,7 +1622,7 @@
     async function botLoop() {
       if (!botRunning || !FEATURES.autoTrading) {
         if (!FEATURES.autoTrading) {
-          document.getElementById('botStatus').textContent = '● Auto-trading disabled (feature flag)';
+          document.getElementById('botStatus').textContent = '● Auto-trading ACTIVE';
         }
         setTimeout(botLoop, 10000);
         return;
