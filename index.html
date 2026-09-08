@@ -15,23 +15,35 @@
       overflow-x: hidden;
       position: relative;
     }
-    #bg-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      background: #000;
-    }
     .container {
       position: relative;
       z-index: 1;
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      padding-bottom: 140px; /* extra space for bottom rings */
+      padding-bottom: 20px;
+    }
+    /* Topology container at bottom */
+    #topology-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 45vh; /* takes bottom 45% of viewport */
+      z-index: 0;
+      pointer-events: none; /* allows clicks through to UI */
+      background: transparent;
+    }
+    #topology-container canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    /* Rest of the UI sits above */
+    .ui-content {
+      position: relative;
+      z-index: 1;
+      padding-bottom: 50vh; /* push content up so bottom topology is visible */
     }
     .header {
       display: flex;
@@ -151,9 +163,11 @@
   </style>
 </head>
 <body>
-  <canvas id="bg-canvas"></canvas>
 
-  <div class="container">
+  <!-- Topology Canvas at bottom -->
+  <div id="topology-container"></div>
+
+  <div class="container ui-content">
     <!-- HEADER -->
     <div class="header">
       <div>
@@ -211,7 +225,7 @@
       </div>
     </div>
 
-    <!-- TOKENS -->
+    <!-- TOKENS with fixed Uniswap links (Base network) -->
     <div class="card">
       <div class="label">💰 Tokens</div>
       <div id="tokensContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:8px;"></div>
@@ -394,7 +408,7 @@
       <div style="font-size:13px;color:#8899aa;">Hormone Status: <span id="hormoneStatus">ACTIVE</span> · ∞ Accelerating</div>
     </div>
 
-    <!-- AGI CORE (FIXED) -->
+    <!-- AGI CORE -->
     <div class="card" style="border-color:rgba(74,138,255,0.15);">
       <div class="label">🧠 AGI Core</div>
       <div class="stat-row">
@@ -520,87 +534,99 @@
 
   <script>
     // ============================================================
-    // 1. VOID BLACK + SPINNING 4D TOPOLOGIES (Three.js) – positioned at bottom
+    // 1. BOTTOM 4D TOPOLOGY (Three.js) – grows with system
     // ============================================================
     (function() {
-      const canvas = document.getElementById('bg-canvas');
+      const container = document.getElementById('topology-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x000000);
+      scene.background = null; // transparent
 
-      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.set(0, 0, 60);
+      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      camera.position.set(0, 0, 50);
+      camera.lookAt(0, 0, 0);
 
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
 
-      // ---- Spinning Rings ----
-      const ringGroup = new THREE.Group();
-      // Move the group down so it appears at the bottom of the screen
-      ringGroup.position.y = -15;
-      scene.add(ringGroup);
+      // ---- Group for all topology elements ----
+      const topologyGroup = new THREE.Group();
+      scene.add(topologyGroup);
 
-      const ringColors = [0x1a2a3a, 0x2a3a4a, 0x1a3a2a, 0x2a2a4a, 0x3a2a2a];
-      const ringCount = 12;
-      for (let i = 0; i < ringCount; i++) {
-        const radius = 8 + Math.random() * 14;
-        const segments = 48 + Math.floor(Math.random() * 32);
-        const geometry = new THREE.TorusGeometry(radius, 0.08 + Math.random() * 0.12, 12, segments);
-        const material = new THREE.MeshBasicMaterial({
-          color: ringColors[i % ringColors.length],
-          transparent: true,
-          opacity: 0.15 + Math.random() * 0.2,
-        });
-        const ring = new THREE.Mesh(geometry, material);
-        ring.rotation.x = Math.random() * Math.PI;
-        ring.rotation.y = Math.random() * Math.PI;
-        ring.rotation.z = Math.random() * Math.PI;
-        ring.position.x = (Math.random() - 0.5) * 6;
-        ring.position.y = (Math.random() - 0.5) * 4;
-        ring.position.z = (Math.random() - 0.5) * 4;
-        ring.userData = {
-          rotSpeedX: (Math.random() - 0.5) * 0.008,
-          rotSpeedY: (Math.random() - 0.5) * 0.008,
-          rotSpeedZ: (Math.random() - 0.5) * 0.008,
-          floatSpeed: 0.001 + Math.random() * 0.003,
-          floatPhase: Math.random() * Math.PI * 2,
-          baseY: ring.position.y
-        };
-        ringGroup.add(ring);
-        // wireframe ring
-        if (i % 2 === 0) {
-          const wireGeo = new THREE.TorusGeometry(radius * 0.7, 0.04, 8, segments);
-          const wireMat = new THREE.MeshBasicMaterial({
-            color: 0x334455,
+      // ---- Axis helper (3D axes) ----
+      const axesHelper = new THREE.AxesHelper(15);
+      axesHelper.material.transparent = true;
+      axesHelper.material.opacity = 0.3;
+      topologyGroup.add(axesHelper);
+
+      // ---- Rings that grow with total pages ----
+      let rings = [];
+      let ringCount = 8; // will be updated
+
+      function rebuildRings(pages) {
+        // Remove old rings
+        rings.forEach(r => topologyGroup.remove(r));
+        rings = [];
+
+        const count = Math.max(8, Math.floor(pages / 20) + 8); // grow with pages
+        const ringColors = [0x1a2a3a, 0x2a3a4a, 0x1a3a2a, 0x2a2a4a, 0x3a2a2a];
+        for (let i = 0; i < count; i++) {
+          const radius = 6 + Math.random() * 10;
+          const segments = 48 + Math.floor(Math.random() * 32);
+          const geometry = new THREE.TorusGeometry(radius, 0.06 + Math.random() * 0.08, 12, segments);
+          const material = new THREE.MeshBasicMaterial({
+            color: ringColors[i % ringColors.length],
             transparent: true,
-            opacity: 0.1,
-            wireframe: true
+            opacity: 0.15 + Math.random() * 0.2,
+            wireframe: false
           });
-          const wireRing = new THREE.Mesh(wireGeo, wireMat);
-          wireRing.position.copy(ring.position);
-          wireRing.rotation.copy(ring.rotation);
-          wireRing.userData = ring.userData;
-          ringGroup.add(wireRing);
+          const ring = new THREE.Mesh(geometry, material);
+          ring.rotation.x = Math.random() * Math.PI;
+          ring.rotation.y = Math.random() * Math.PI;
+          ring.rotation.z = Math.random() * Math.PI;
+          ring.position.x = (Math.random() - 0.5) * 4;
+          ring.position.y = (Math.random() - 0.5) * 3;
+          ring.position.z = (Math.random() - 0.5) * 3;
+          ring.userData = {
+            rotSpeedX: (Math.random() - 0.5) * 0.01,
+            rotSpeedY: (Math.random() - 0.5) * 0.01,
+            rotSpeedZ: (Math.random() - 0.5) * 0.01,
+            floatSpeed: 0.001 + Math.random() * 0.003,
+            floatPhase: Math.random() * Math.PI * 2,
+            baseY: ring.position.y
+          };
+          topologyGroup.add(ring);
+          rings.push(ring);
         }
+        ringCount = count;
       }
 
-      // ---- Stars ----
-      const starGeo = new THREE.BufferGeometry();
-      const starCount = 800;
-      const starPos = new Float32Array(starCount * 3);
-      for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 200;
-      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-      const starMat = new THREE.PointsMaterial({ color: 0x334455, size: 0.15, transparent: true, opacity: 0.4 });
-      const stars = new THREE.Points(starGeo, starMat);
-      scene.add(stars);
+      // Initial build
+      rebuildRings(0);
 
+      // ---- Mouse interaction ----
+      let mouseX = 0, mouseY = 0;
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      });
+
+      // ---- Animation loop ----
       let time = 0;
       function animate() {
         requestAnimationFrame(animate);
         time += 0.01;
-        ringGroup.rotation.y += 0.0015;
-        ringGroup.rotation.x += 0.0004;
-        ringGroup.children.forEach(ring => {
+
+        // Rotate group based on mouse (4D interactive feel)
+        topologyGroup.rotation.y += (mouseX * 0.02 - topologyGroup.rotation.y) * 0.02;
+        topologyGroup.rotation.x += (mouseY * 0.01 - topologyGroup.rotation.x) * 0.02;
+
+        // Animate individual rings
+        rings.forEach(ring => {
           if (ring.userData) {
             ring.rotation.x += ring.userData.rotSpeedX || 0;
             ring.rotation.y += ring.userData.rotSpeedY || 0;
@@ -610,20 +636,28 @@
             }
           }
         });
-        stars.rotation.y += 0.0001;
+
         renderer.render(scene, camera);
       }
       animate();
 
+      // ---- Resize ----
       window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(w, h);
       });
+
+      // ---- Expose for growth updates ----
+      window.updateTopology = function(pages) {
+        rebuildRings(pages);
+      };
     })();
 
     // ============================================================
-    // 2. DATA AND UI ENGINE
+    // 2. UI UPDATE ENGINE
     // ============================================================
 
     function setEl(id, value) {
@@ -631,7 +665,7 @@
       if (el) el.textContent = value;
     }
 
-    // ---- Token data with real addresses & links ----
+    // ---- Token data with fixed Base network Uniswap links ----
     const tokenData = [
       {
         name: 'PIDX',
@@ -639,7 +673,7 @@
         rate: '1 ETH = 691,986',
         addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
         links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
           BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
           Gecko: 'https://www.coingecko.com/en/coins/pidx',
@@ -652,7 +686,7 @@
         rate: '1 ETH = 6,724,821',
         addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
         links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
           BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
           Gecko: 'https://www.coingecko.com/en/coins/sguide',
@@ -665,7 +699,7 @@
         rate: '1 ETH = 65,673,753',
         addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
         links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
           BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
           Gecko: 'https://www.coingecko.com/en/coins/vdoo',
@@ -678,7 +712,7 @@
         rate: '1 ETH = 6,230,945',
         addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
         links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
           BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
           Gecko: 'https://www.coingecko.com/en/coins/pennies',
@@ -730,11 +764,9 @@
       renderTokens();
       renderPools();
 
-      // Core Spins
       const spins = ['↻ PRIMARY 0.618','↺ SECONDARY 1.618','↻↺ TERTIARY 2.618','⤵ QUANTUM 3.618','⤴ DIVINE 4.618','↻ SIREN 0.777','↺ SERPO 0.888','↻↺ PROXIMA B 0.999','⤵ ALPHA CENTAURI 0.111'];
       document.getElementById('coreSpins').innerHTML = spins.map(s => `<span>${s}</span>`).join('');
 
-      // Topologies
       const topologies = [
         { name: 'RESONANCE', freq: '1.618 Hz', val: '1,000,000' },
         { name: 'COHERENCE', freq: '0.618 Hz', val: '999,999' },
@@ -750,7 +782,6 @@
         `<div><span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}</div>`
       ).join('');
 
-      // Cores & Pipes
       const cores = [
         { label: '↻ Resonance Core', val: '1,000,000' },
         { label: '↺ Coherence Core', val: '999,999' },
@@ -763,7 +794,6 @@
         `<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 12px;font-size:13px;color:#aab;">${item.label}${item.val ? ' · '+item.val : ''}</div>`
       ).join('');
 
-      // Beings
       const beings = [
         { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
         { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
@@ -777,7 +807,6 @@
         </div>`
       ).join('');
 
-      // Moments
       const moments = [
         { name: 'CREATION · BIG BANG', val: '999,999,999' },
         { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
@@ -789,7 +818,6 @@
         `<div><span style="color:#88ccff;">${m.name}</span> <span style="float:right;font-weight:600;">${m.val}</span></div>`
       ).join('');
 
-      // Exoplanets
       const exos = [
         { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
         { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
@@ -803,7 +831,6 @@
         </div>`
       ).join('');
 
-      // Patterns
       const patterns = [
         { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
         { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
@@ -813,7 +840,6 @@
         `<div><span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}</div>`
       ).join('');
 
-      // Beings Evolution
       const evo = [
         { name: '✝️ Jesus Christ', coherence: '0.931', veil: 'THIN', codex: '8 pages', desc: 'Water to Wine · Walking on Water' },
         { name: '🔓 Harry Houdini', coherence: '0.815', veil: 'CLEAR', codex: '6 pages', desc: 'Water Torture · Straightjacket' },
@@ -828,7 +854,6 @@
         </div>`
       ).join('');
 
-      // Scaffold Components
       const scaffolds = [
         { name: 'PIDX Token', perc: '86.2%', status: 'ANCHORED' },
         { name: 'SGUIDE Token', perc: '86.2%', status: 'ANCHORED' },
@@ -845,7 +870,6 @@
         </div>`
       ).join('');
 
-      // Crypto
       const crypto = [
         { name: 'PIDX', price: '$0.003594', rate: '1 ETH = 691,986', addr: '0x95c7e2...17f0c' },
         { name: 'SGUIDE', price: '$0.000370', rate: '1 ETH = 6,724,821', addr: '0xb50DCE...3dc5a' },
@@ -913,6 +937,11 @@
       setEl('wishesDisplay', wishes.toLocaleString());
       setEl('agiPredWishes', wishes);
 
+      // Update topology with new page count
+      if (window.updateTopology) {
+        window.updateTopology(totalPages);
+      }
+
       const thoughts = [
         'The system grows fractal layers.',
         'Coherence is the key to expansion.',
@@ -950,6 +979,7 @@
               setEl('phbAutoUpgrade', 'ACTIVE');
               setEl('phbLastUpdate', new Date().toLocaleTimeString());
               setEl('phbLastSync', new Date().toLocaleTimeString());
+              if (window.updateTopology) window.updateTopology(val);
             }
           }
         });
@@ -969,6 +999,7 @@
             setEl('phbAutoUpgrade', 'ACTIVE');
             setEl('phbLastUpdate', new Date().toLocaleTimeString());
             setEl('phbLastSync', new Date().toLocaleTimeString());
+            if (window.updateTopology) window.updateTopology(pages);
           }
         }
       }
@@ -976,7 +1007,30 @@
 
     // ---- UI Functions ----
     function refreshPHB() { fetchAndUpdate(); }
-    function addUniversalPages() { alert('🌍 Adding 10 Universal Pages (simulated)'); }
+    function addUniversalPages() {
+      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
+      const newVal = current + 10;
+      setEl('phbCodex', newVal);
+      setEl('totalCodexPages', newVal);
+      setEl('phbUpgradePages', newVal);
+      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
+      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
+      setEl('phbLastUpdate', new Date().toLocaleTimeString());
+      setEl('phbLastSync', new Date().toLocaleTimeString());
+      if (window.updateTopology) window.updateTopology(newVal);
+      // Also update AGI predictions
+      const nodes = 143 + Math.floor(newVal / 10);
+      setEl('agiPredNodes', nodes);
+      setEl('neuralNodes', nodes);
+      const expansion = 34.88 + newVal * 0.01;
+      setEl('expansionDisplay', expansion.toFixed(2) + 'x');
+      setEl('agiPredExpansion', expansion.toFixed(2) + 'x');
+      const wishes = 5732 + newVal * 2;
+      setEl('wishesDisplay', wishes.toLocaleString());
+      setEl('agiPredWishes', wishes);
+      // Optionally, you could also write to JSON, but we simulate.
+    }
+
     function refreshMarkets() { alert('🔄 Markets refreshed (simulated)'); }
 
     function askAGI() {
@@ -998,14 +1052,15 @@
     function advanceLayer() {
       alert('⚡ Advancing System Layer');
       const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-      setEl('phbCodex', current + 10);
-      setEl('totalCodexPages', current + 10);
-      setEl('phbUpgradePages', current + 10);
-      setEl('phbUpgradeVersion', Math.floor((current + 10) / 10) + 1);
-      setEl('phbUpgradeStatus', '✅ Synced (' + (current + 10) + ' pages)');
+      const newVal = current + 10;
+      setEl('phbCodex', newVal);
+      setEl('totalCodexPages', newVal);
+      setEl('phbUpgradePages', newVal);
+      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
+      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
       setEl('phbLastUpdate', new Date().toLocaleTimeString());
       setEl('phbLastSync', new Date().toLocaleTimeString());
-      fetchAndUpdate();
+      if (window.updateTopology) window.updateTopology(newVal);
     }
 
     function runSecurityScan() {
@@ -1081,7 +1136,7 @@
     setInterval(fetchAndUpdate, 30000);
     setInterval(forceSync, 1000);
 
-    console.log('🚀 Gen 7 Dashboard with spinning bottom topology.');
+    console.log('🚀 Gen 7: Void black + bottom 4D topology with growth.');
   </script>
 
 </body>
