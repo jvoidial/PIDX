@@ -536,6 +536,76 @@
       </div>
 
       <!-- PHB UPGRADE STATUS -->
+<!-- PHB SCIENCE CARD -->
+<div class="card" style="border-color:rgba(100,200,255,0.3);">
+  <div class="label">🧬 PHB Science · Vitruvian System</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
+      <div style="font-family:Orbitron,monospace;font-size:22px;color:#88ccff;">
+        <span id="vitruvianPages">2</span> · <span id="vitruvianRatio">0.9</span> · <span id="vitruvianEnergy">0.8</span>
+      </div>
+      <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
+      <div style="font-family:Orbitron,monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">0.862</div>
+      <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
+      <div style="font-family:Orbitron,monospace;font-size:22px;color:#ffaa88;" id="scienceStability">1.111</div>
+      <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
+      <div style="font-family:Orbitron,monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">0.377</div>
+      <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Veil Phase</div>
+      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">SEALED</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Veil Thickness</div>
+      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">0.134</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Breach Probability</div>
+      <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">0.587</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Energy Band</div>
+      <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">HIGH</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Energy Color</div>
+      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">LIGHT</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Portal</div>
+      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">1.0</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+      <div style="font-size:9px;color:#445;">Voxels</div>
+      <div style="font-size:13px;color:#aab;" id="scienceVoxels">5 active points</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+      <div style="font-size:9px;color:#445;">Sequence</div>
+      <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
+    <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
+    <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
+    <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
+    <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
+  </div>
+</div>
       <div class="card" style="border-color:rgba(74,138,255,0.2);">
         <div class="label">⚡ PHB Upgrade Status</div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:13px;color:#556;">
@@ -1164,6 +1234,8 @@
 
     // ---- PHB Update ----
     function updatePHBFromData(data) {
+  // --- PHB Science Calculation ---
+  calculatePHBScience(data);
       let totalPages = 0;
       for (let key in data) {
         if (data.hasOwnProperty(key) && !isNaN(key)) {
@@ -1440,3 +1512,278 @@
   </script>
 </body>
 </html>
+<!-- ========== PHB SCIENCE CARD ========== -->
+<div class="card" style="border-color:rgba(100,200,255,0.3);">
+  <div class="label">🧬 PHB Science · Vitruvian System</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
+    <!-- Vitruvian State -->
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ccff;">
+        <span id="vitruvianPages">2</span> · <span id="vitruvianRatio">0.9</span> · <span id="vitruvianEnergy">0.8</span>
+      </div>
+      <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
+    </div>
+    <!-- Coherence -->
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">0.862</div>
+      <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
+    </div>
+    <!-- Stability -->
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ffaa88;" id="scienceStability">1.111</div>
+      <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
+    </div>
+    <!-- Resonance -->
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">0.377</div>
+      <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
+    </div>
+  </div>
+
+  <!-- Veil & Energy Detail -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Veil Phase</div>
+      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">SEALED</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Veil Thickness</div>
+      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">0.134</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Breach Probability</div>
+      <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">0.587</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Energy Band</div>
+      <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">HIGH</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Energy Color</div>
+      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">LIGHT</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Portal</div>
+      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">1.0</div>
+    </div>
+  </div>
+
+  <!-- Voxel & Sequence -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+      <div style="font-size:9px;color:#445;">Voxels</div>
+      <div style="font-size:13px;color:#aab;" id="scienceVoxels">5 active points</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+      <div style="font-size:9px;color:#445;">Sequence</div>
+      <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW</div>
+    </div>
+  </div>
+
+  <!-- Vitruvian Formula -->
+  <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
+    <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
+    <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
+    <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
+    <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
+  </div>
+</div>
+<!-- ========== PHB SCIENCE CARD ========== -->
+<div class="card" style="border-color:rgba(100,200,255,0.3);">
+  <div class="label">🧬 PHB Science · Vitruvian System</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ccff;">
+        <span id="vitruvianPages">--</span> · <span id="vitruvianRatio">--</span> · <span id="vitruvianEnergy">--</span>
+      </div>
+      <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">--</div>
+      <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ffaa88;" id="scienceStability">--</div>
+      <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
+      <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">--</div>
+      <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Veil Phase</div>
+      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Veil Thickness</div>
+      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Breach Probability</div>
+      <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Energy Band</div>
+      <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Energy Color</div>
+      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+      <div style="font-size:9px;color:#445;">Portal</div>
+      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">--</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+      <div style="font-size:9px;color:#445;">Voxels</div>
+      <div style="font-size:13px;color:#aab;" id="scienceVoxels">--</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+      <div style="font-size:9px;color:#445;">Sequence</div>
+      <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">--</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
+    <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
+    <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
+    <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
+    <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
+  </div>
+</div>
+<script>
+// ============================================================
+// PHB SCIENCE CALCULATOR - Vitruvian System
+// ============================================================
+function calculatePHBScience(data) {
+  let totalPages = 0;
+  let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
+  let veils = [];
+  let sequences = [];
+  let voxelCounts = [];
+
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && !isNaN(key)) {
+      const entry = data[key];
+      if (Array.isArray(entry.pages)) {
+        totalPages += entry.pages.length;
+        entry.pages.forEach(page => {
+          allCoherence.push(page.coherence || 0);
+          allStability.push(page.stability || 0);
+          allResonance.push(page.resonance || 0);
+          if (page.energy) allEnergy.push(page.energy.magnitude || 0);
+          if (page.veil) veils.push(page.veil);
+          if (page.sequence) sequences.push(page.sequence);
+          if (page.voxels) voxelCounts.push(page.voxels.length);
+        });
+      }
+    }
+  }
+
+  if (allCoherence.length === 0) {
+    // Set default values if no data
+    setEl('vitruvianPages', '0');
+    setEl('vitruvianRatio', '0.0');
+    setEl('vitruvianEnergy', '0.0');
+    setEl('scienceCoherence', '0.000');
+    setEl('scienceStability', '0.000');
+    setEl('scienceResonance', '0.000');
+    setEl('scienceVeilPhase', 'SEALED');
+    setEl('scienceVeilThickness', '0.000');
+    setEl('scienceBreachProb', '0.000');
+    setEl('scienceEnergyBand', 'LOW');
+    setEl('scienceEnergyColor', 'NEUTRAL');
+    setEl('sciencePortal', '0.0');
+    setEl('scienceVoxels', '0 active points');
+    setEl('scienceSequence', '—');
+    return;
+  }
+
+  // Average metrics
+  const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
+  const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
+  const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
+  const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
+
+  // Vitruvian State
+  const vitruvianPages = totalPages;
+  const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
+  const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
+
+  // Veil metrics
+  let veilPhase = 'SEALED';
+  let veilThickness = 0.2;
+  let breachProb = 0.5;
+  if (veils.length > 0) {
+    const lastVeil = veils[veils.length - 1];
+    veilPhase = lastVeil.phase || 'SEALED';
+    veilThickness = lastVeil.thickness || 0.2;
+    breachProb = lastVeil.breach_probability || 0.5;
+  }
+
+  // Portal
+  const portal = 1 - Math.exp(-avgResonance * avgCoherence);
+
+  // Energy Band & Color
+  let energyBand = 'MID';
+  if (avgEnergy < 0.33) energyBand = 'LOW';
+  else if (avgEnergy < 0.66) energyBand = 'MID';
+  else energyBand = 'HIGH';
+
+  let energyColor = 'NEUTRAL';
+  if (veilPhase === 'TURBULENT') energyColor = 'DARK';
+  else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
+  else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
+
+  // Sequence
+  let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
+  const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
+
+  // Voxels
+  const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
+
+  // Update DOM
+  setEl('vitruvianPages', vitruvianPages);
+  setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
+  setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
+  setEl('scienceCoherence', avgCoherence.toFixed(3));
+  setEl('scienceStability', avgStability.toFixed(3));
+  setEl('scienceResonance', avgResonance.toFixed(3));
+  setEl('scienceVeilPhase', veilPhase);
+  setEl('scienceVeilThickness', veilThickness.toFixed(3));
+  setEl('scienceBreachProb', breachProb.toFixed(3));
+  setEl('scienceEnergyBand', energyBand);
+  setEl('scienceEnergyColor', energyColor);
+  setEl('sciencePortal', portal.toFixed(1));
+  setEl('scienceVoxels', voxelCount + ' active points');
+  setEl('scienceSequence', sequenceStr);
+
+  console.log('🧬 PHB Science updated');
+}
+
+// ---- Hook into existing update function ----
+// Find the updatePHBFromData function and add the call
+// We'll override the existing function to include science
+const originalUpdate = window.updatePHBFromData || function() {};
+window.updatePHBFromData = function(data) {
+  // Call original if it exists
+  if (typeof originalUpdate === 'function') {
+    originalUpdate(data);
+  }
+  // Call science calculator
+  calculatePHBScience(data);
+};
+
+console.log('🧬 PHB Science Calculator loaded');
+</script>
