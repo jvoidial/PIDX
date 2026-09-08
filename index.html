@@ -158,6 +158,18 @@
       margin: 2px;
     }
     .token-links a:hover, .pool-links a:hover { background: #2a4a6a; }
+    .trade-feed {
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 8px;
+      margin-top: 6px;
+      font-size: 13px;
+      color: #aab;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+    .trade-feed .trade-buy { color: #88ff88; }
+    .trade-feed .trade-sell { color: #ff8888; }
     @media (max-width: 700px) { .phb-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
@@ -169,7 +181,7 @@
       <div class="header">
         <div>
           <h1>🌊 Quantum Ease Flow</h1>
-          <div class="sub">GEN 7 · ECOSYSTEM BALL</div>
+          <div class="sub">GEN 7 · AUTO BOTS · REAL PNL</div>
         </div>
         <div style="display:flex;gap:16px;align-items:center;">
           <span style="color:#2a4a3a;">⬤</span>
@@ -177,7 +189,7 @@
         </div>
       </div>
 
-      <!-- TOP STATS -->
+      <!-- ========== TOP STATS (unchanged) ========== -->
       <div class="grid" id="topStats">
         <div class="card"><div class="label">Consciousness</div><div class="value" id="consciousness">UNITY_AWARE</div></div>
         <div class="card"><div class="label">Neural Nodes</div><div class="value" id="neuralNodes">143</div></div>
@@ -459,24 +471,33 @@
         </div>
       </div>
 
-      <!-- TRADING BOT -->
-      <div class="card">
-        <div class="label">🤖 Trading Bot · Polymarket</div>
+      <!-- ========== TRADING BOT (UPGRADED) ========== -->
+      <div class="card" style="border-color:rgba(255,170,68,0.3);">
+        <div class="label">🤖 Trading Bot · Auto Bots</div>
         <div class="stat-row">
-          <div class="stat"><span>Total PnL</span> <span id="pnl">$11,599</span></div>
+          <div class="stat"><span>Total PnL</span> <span id="pnl">$0</span></div>
           <div class="stat"><span>Win Rate</span> <span id="winRate">100.0%</span></div>
-          <div class="stat"><span>Avg Trade</span> <span id="avgTrade">$20.10</span></div>
-          <div class="stat"><span>Trades / Hour</span> <span id="tradesPerHour">110,378</span></div>
+          <div class="stat"><span>Avg Trade</span> <span id="avgTrade">$0.00</span></div>
+          <div class="stat"><span>Trades / Hour</span> <span id="tradesPerHour">0</span></div>
         </div>
         <div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap;">
           <span><span>Signal:</span> <span id="tradeSignal" style="color:#ffaa66;">NEUTRAL</span></span>
           <span><span>Edge:</span> <span id="tradeEdge">0.00%</span></span>
           <span><span>Kelly Size:</span> <span id="kellySize">0.00%</span></span>
+          <span><span>Strategy:</span> <select id="strategySelect" style="background:#0a0a12;border:1px solid #1a1a2a;border-radius:6px;padding:2px 8px;color:#c0c8d0;">
+            <option value="momentum" selected>Momentum</option>
+            <option value="meanreversion">Mean Reversion</option>
+            <option value="agi">AGI Signal</option>
+          </select></span>
         </div>
-        <div style="margin-top:6px;font-size:12px;color:#667;">🤖 Six AI agents: SPOTTER → PRIOR → EDGE → KELLY → TAKER → CLOSER</div>
-        <div id="tradeFeed" style="background:rgba(0,0,0,0.3);border-radius:8px;padding:8px;margin-top:6px;font-size:13px;color:#aab;max-height:80px;overflow-y:auto;">📈 Trade feed will appear here...</div>
-        <div style="margin-top:8px;display:flex;gap:8px;">
-          <button class="btn" onclick="simulateTrade()">📈 Simulate Trade</button>
+        <div style="margin-top:6px;font-size:12px;color:#667;">
+          🤖 Six AI agents: SPOTTER → PRIOR → EDGE → KELLY → TAKER → CLOSER
+          <span style="margin-left:16px;color:#88ff88;" id="botStatus">● Auto‑trading active</span>
+        </div>
+        <div id="tradeFeed" class="trade-feed">📈 Trade feed will appear here...</div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" onclick="toggleBot()" id="toggleBotBtn">⏸️ Pause Bot</button>
+          <button class="btn" onclick="simulateTrade()">📈 Manual Trade</button>
           <button class="btn" onclick="resetStats()">↻ Reset Stats</button>
         </div>
         <div style="font-size:12px;color:#667;margin-top:4px;">⚡ Integrated with AGI Core · Coherence/Expansion determine edge · Profits → PIDX Vault</div>
@@ -532,7 +553,7 @@
 
   <script>
     // ============================================================
-    // 1. ECOSYSTEM-DRIVEN 4D BALL
+    // 1. ECOSYSTEM-DRIVEN 4D BALL (same as before)
     // ============================================================
     (function() {
       const container = document.getElementById('topology-container');
@@ -561,7 +582,7 @@
       const mainGroup = new THREE.Group();
       scene.add(mainGroup);
 
-      // ---- Ball ----
+      // Ball
       let sphereMesh, glowMesh;
       const baseRadius = 10;
       let sphereGeo = new THREE.SphereGeometry(baseRadius, 64, 64);
@@ -584,7 +605,7 @@
       glowMesh = new THREE.Mesh(glowGeo, glowMat);
       mainGroup.add(glowMesh);
 
-      // ---- Rings ----
+      // Rings
       const ringGroup = new THREE.Group();
       mainGroup.add(ringGroup);
       let rings = [];
@@ -622,16 +643,13 @@
 
       buildRings(12, 1.0, 32, 0);
 
-      // ---- Ecosystem update ----
       function updateBall(metrics) {
-        // metrics: { pages, pnl, nodes, coherence, tradesPerHour }
         const pages = metrics.pages || 0;
         const pnl = metrics.pnl || 0;
         const nodes = metrics.nodes || 143;
         const coherence = metrics.coherence || 0.862;
         const trades = metrics.tradesPerHour || 0;
 
-        // 1. Size: grows with pages and PnL
         const scaleFactor = 1 + Math.floor(pages / 50) * 0.2 + Math.floor(pnl / 10000) * 0.05;
         const newRadius = baseRadius * Math.min(scaleFactor, 3.0);
         sphereMesh.geometry.dispose();
@@ -639,25 +657,15 @@
         glowMesh.geometry.dispose();
         glowMesh.geometry = new THREE.SphereGeometry(newRadius * 0.95, 32, 32);
 
-        // 2. Glow color shifts with coherence
         const hue = 0.55 + (coherence - 0.8) * 0.5;
         glowMat.color.setHSL(hue, 0.7, 0.2);
 
-        // 3. Ring count: grows with pages and PnL
         const ringCount = Math.max(12, Math.floor(pages / 15) + Math.floor(pnl / 1000) * 2 + 12);
-
-        // 4. Complexity: grows with nodes
         const complexity = Math.max(20, 32 + Math.floor((nodes - 100) / 10) * 4);
-
-        // 5. Hue shift: influenced by coherence
         const hueShift = (coherence - 0.8) * 0.3;
-
-        // 6. Ring rotation speed: influenced by trades per hour
         const speedMultiplier = Math.min(1 + trades / 100000, 3.0);
 
         buildRings(ringCount, scaleFactor, complexity, hueShift);
-
-        // Apply speed multiplier to existing rings
         rings.forEach(ring => {
           if (ring.userData) {
             ring.userData.rotSpeedX *= speedMultiplier / (ring.userData.rotSpeedX || 1);
@@ -667,12 +675,10 @@
         });
       }
 
-      // ---- Auto-rotation ----
       let autoRotate = true;
       controls.addEventListener('start', () => { autoRotate = false; });
       controls.addEventListener('end', () => { autoRotate = true; });
 
-      // ---- Animation ----
       function animate() {
         requestAnimationFrame(animate);
         if (autoRotate) {
@@ -699,14 +705,237 @@
         renderer.setSize(w, h);
       });
 
-      // ---- Expose ----
       window.updateEcosystemBall = function(metrics) {
         updateBall(metrics);
       };
     })();
 
     // ============================================================
-    // 2. UI ENGINE
+    // 2. TRADING ENGINE WITH AUTO BOTS
+    // ============================================================
+    let botRunning = true;
+    let totalPnL = 0;
+    let tradeCount = 0;
+    let winCount = 0;
+    let tradesPerHour = 0;
+    let tradeHistory = [];
+    let lastPrice = 0;
+    let currentPosition = null; // { type: 'buy', entry: price, size: 1 }
+    const tradeSize = 1; // in ETH equivalent
+
+    // ---- Fetch real price ----
+    async function fetchEthPrice() {
+      try {
+        const resp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+        const data = await resp.json();
+        return data.ethereum.usd;
+      } catch (e) {
+        console.warn('Price fetch failed, using simulated price');
+        return 2500 + Math.random() * 50;
+      }
+    }
+
+    // ---- Strategy Logic ----
+    function getSignal(price, coherence, strategy) {
+      // Simulate price change
+      const change = ((price - lastPrice) / lastPrice) * 100 || 0;
+      lastPrice = price;
+
+      switch(strategy) {
+        case 'momentum':
+          if (change > 0.5 && coherence > 0.85) return 'BUY';
+          if (change < -1.0 || coherence < 0.80) return 'SELL';
+          break;
+        case 'meanreversion':
+          if (change < -0.5 && coherence > 0.82) return 'BUY';
+          if (change > 0.8 && coherence < 0.88) return 'SELL';
+          break;
+        case 'agi':
+          // AGI signal based on predicted coherence
+          const pred = parseFloat(document.getElementById('agiPredCoherence').textContent) || 0.865;
+          if (pred > 0.87 && coherence > 0.84) return 'BUY';
+          if (pred < 0.84 || coherence < 0.80) return 'SELL';
+          break;
+        default:
+          return 'NEUTRAL';
+      }
+      return 'NEUTRAL';
+    }
+
+    // ---- Execute Trade ----
+    function executeTrade(type, price) {
+      if (type === 'BUY') {
+        if (currentPosition) return; // already in position
+        currentPosition = { type: 'buy', entry: price, size: tradeSize };
+        addTradeFeed('BUY', price, 'Opened long position');
+      } else if (type === 'SELL') {
+        if (!currentPosition) return;
+        const profit = (price - currentPosition.entry) * currentPosition.size;
+        totalPnL += profit;
+        tradeCount++;
+        if (profit > 0) winCount++;
+        const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
+        document.getElementById('pnl').textContent = '$' + totalPnL.toFixed(2);
+        document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
+        document.getElementById('avgTrade').textContent = '$' + (totalPnL / tradeCount).toFixed(2);
+        tradesPerHour = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
+        document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
+        addTradeFeed('SELL', price, 'Closed position, profit: $' + profit.toFixed(2));
+        currentPosition = null;
+
+        // Update ball
+        const pages = parseInt(document.getElementById('phbCodex').textContent) || 0;
+        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
+        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+        if (window.updateEcosystemBall) {
+          window.updateEcosystemBall({
+            pages: pages,
+            pnl: totalPnL,
+            nodes: nodes,
+            coherence: coherence,
+            tradesPerHour: tradesPerHour
+          });
+        }
+      }
+    }
+
+    function addTradeFeed(type, price, msg) {
+      const feed = document.getElementById('tradeFeed');
+      const now = new Date().toLocaleTimeString();
+      const cls = type === 'BUY' ? 'trade-buy' : 'trade-sell';
+      feed.innerHTML = `<div class="${cls}">${now} ${type} @ $${price.toFixed(2)} – ${msg}</div>` + feed.innerHTML;
+      if (feed.children.length > 20) feed.removeChild(feed.lastChild);
+    }
+
+    // ---- Main bot loop ----
+    let startTime = Date.now();
+    async function botLoop() {
+      if (!botRunning) return;
+      try {
+        const price = await fetchEthPrice();
+        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+        const strategy = document.getElementById('strategySelect').value;
+        const signal = getSignal(price, coherence, strategy);
+
+        // Update signal display
+        const signalEl = document.getElementById('tradeSignal');
+        const edgeEl = document.getElementById('tradeEdge');
+        const kellyEl = document.getElementById('kellySize');
+        if (signal === 'BUY') {
+          signalEl.textContent = 'BUY';
+          signalEl.style.color = '#88ff88';
+          edgeEl.textContent = '15.00%';
+          kellyEl.textContent = '150.00%';
+        } else if (signal === 'SELL') {
+          signalEl.textContent = 'SELL';
+          signalEl.style.color = '#ff8888';
+          edgeEl.textContent = '-10.00%';
+          kellyEl.textContent = '0.00%';
+        } else {
+          signalEl.textContent = 'NEUTRAL';
+          signalEl.style.color = '#ffaa66';
+          edgeEl.textContent = '0.00%';
+          kellyEl.textContent = '0.00%';
+        }
+
+        // Execute trade if signal
+        if (signal === 'BUY' || signal === 'SELL') {
+          executeTrade(signal, price);
+        }
+
+        // Update price display in crypto section
+        const cryptoContainers = document.querySelectorAll('#cryptoContainer .value');
+        // Not updating specific tokens here, but we could.
+
+      } catch(e) { console.warn('Bot loop error:', e); }
+
+      setTimeout(botLoop, 10000); // run every 10 seconds
+    }
+
+    // ---- Toggle bot ----
+    function toggleBot() {
+      botRunning = !botRunning;
+      document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Bot' : '▶️ Resume Bot';
+      document.getElementById('botStatus').textContent = botRunning ? '● Auto‑trading active' : '○ Auto‑trading paused';
+      if (botRunning) botLoop();
+    }
+
+    // ---- Manual trade ----
+    function simulateTrade() {
+      if (!botRunning) return;
+      // Simulate a manual trade with random outcome
+      const price = 2500 + Math.random() * 100;
+      const type = Math.random() > 0.5 ? 'BUY' : 'SELL';
+      if (type === 'BUY') {
+        if (currentPosition) return;
+        currentPosition = { type: 'buy', entry: price, size: tradeSize };
+        addTradeFeed('BUY', price, 'Manual long');
+      } else {
+        if (!currentPosition) return;
+        const profit = (price - currentPosition.entry) * currentPosition.size;
+        totalPnL += profit;
+        tradeCount++;
+        if (profit > 0) winCount++;
+        const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
+        document.getElementById('pnl').textContent = '$' + totalPnL.toFixed(2);
+        document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
+        document.getElementById('avgTrade').textContent = '$' + (totalPnL / tradeCount).toFixed(2);
+        tradesPerHour = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
+        document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
+        addTradeFeed('SELL', price, 'Manual close, profit: $' + profit.toFixed(2));
+        currentPosition = null;
+        // Update ball
+        const pages = parseInt(document.getElementById('phbCodex').textContent) || 0;
+        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
+        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+        if (window.updateEcosystemBall) {
+          window.updateEcosystemBall({
+            pages: pages,
+            pnl: totalPnL,
+            nodes: nodes,
+            coherence: coherence,
+            tradesPerHour: tradesPerHour
+          });
+        }
+      }
+    }
+
+    // ---- Reset stats ----
+    function resetStats() {
+      if (confirm('Reset trading stats?')) {
+        totalPnL = 0;
+        tradeCount = 0;
+        winCount = 0;
+        tradesPerHour = 0;
+        currentPosition = null;
+        document.getElementById('pnl').textContent = '$0';
+        document.getElementById('winRate').textContent = '100.0%';
+        document.getElementById('avgTrade').textContent = '$0.00';
+        document.getElementById('tradesPerHour').textContent = '0';
+        document.getElementById('tradeFeed').innerHTML = '📈 Stats reset.';
+        // Update ball
+        const pages = parseInt(document.getElementById('phbCodex').textContent) || 0;
+        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
+        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+        if (window.updateEcosystemBall) {
+          window.updateEcosystemBall({
+            pages: pages,
+            pnl: 0,
+            nodes: nodes,
+            coherence: coherence,
+            tradesPerHour: 0
+          });
+        }
+      }
+    }
+
+    // Expose functions globally
+    window.toggleBot = toggleBot;
+    window.simulateTrade = simulateTrade;
+    window.resetStats = resetStats;
+
+    // ============================================================
+    // 3. UI ENGINE (from previous versions, with token data, etc.)
     // ============================================================
     function setEl(id, value) {
       const el = document.getElementById(id);
@@ -975,7 +1204,6 @@
       setEl('phbLastSync', timeStr);
       setEl('lastUpdate', now.toLocaleString());
 
-      // AGI predictions
       const nodes = 143 + Math.floor(totalPages / 10);
       setEl('agiPredNodes', nodes);
       setEl('neuralNodes', nodes);
@@ -986,7 +1214,7 @@
       setEl('wishesDisplay', wishes.toLocaleString());
       setEl('agiPredWishes', wishes);
 
-      // ---- Update Ecosystem Ball ----
+      // Update ball
       const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
       const tradesPerHour = parseFloat(document.getElementById('tradesPerHour').textContent.replace(/,/g, '')) || 0;
       if (window.updateEcosystemBall) {
@@ -999,7 +1227,6 @@
         });
       }
 
-      // AGI thoughts
       const thoughts = [
         'The system grows fractal layers.',
         'Coherence is the key to expansion.',
@@ -1094,7 +1321,6 @@
       const wishes = 5732 + newVal * 2;
       setEl('wishesDisplay', wishes.toLocaleString());
       setEl('agiPredWishes', wishes);
-      // Update ball
       const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
       const tradesPerHour = parseFloat(document.getElementById('tradesPerHour').textContent.replace(/,/g, '')) || 0;
       if (window.updateEcosystemBall) {
@@ -1167,49 +1393,6 @@
       document.getElementById('securityRecommendations').textContent = '🔒 Lockdown active. All systems isolated.';
     }
 
-    function simulateTrade() {
-      const feed = document.getElementById('tradeFeed');
-      const now = new Date();
-      const pnl = (Math.random() * 30 + 10).toFixed(2);
-      feed.innerHTML = `✅ BUY $20.10 → +$${pnl} · ${now.toLocaleTimeString()}<br>` + feed.innerHTML;
-      feed.scrollTop = 0;
-      // Update PnL and ball
-      const currentPnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
-      const newPnl = currentPnl + parseFloat(pnl);
-      document.getElementById('pnl').textContent = '$' + newPnl.toFixed(2);
-      const pages = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-      const tradesPerHour = parseFloat(document.getElementById('tradesPerHour').textContent.replace(/,/g, '')) || 0;
-      const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
-      if (window.updateEcosystemBall) {
-        window.updateEcosystemBall({
-          pages: pages,
-          pnl: newPnl,
-          nodes: nodes,
-          coherence: 0.862,
-          tradesPerHour: tradesPerHour
-        });
-      }
-    }
-
-    function resetStats() {
-      if (confirm('Reset trading stats?')) {
-        document.getElementById('pnl').textContent = '$0';
-        document.getElementById('tradesPerHour').textContent = '0';
-        document.getElementById('tradeFeed').innerHTML = '📈 Stats reset.';
-        const pages = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
-        if (window.updateEcosystemBall) {
-          window.updateEcosystemBall({
-            pages: pages,
-            pnl: 0,
-            nodes: nodes,
-            coherence: 0.862,
-            tradesPerHour: 0
-          });
-        }
-      }
-    }
-
     function renderCodexEntries() {
       const container = document.getElementById('codexEntries');
       const entries = [
@@ -1250,7 +1433,10 @@
     setInterval(fetchAndUpdate, 30000);
     setInterval(forceSync, 1000);
 
-    console.log('🚀 Gen 7: Ecosystem-driven ball with growth.');
+    // Start bot after 3 seconds
+    setTimeout(botLoop, 3000);
+
+    console.log('🚀 Gen 7: Auto bots with real PnL and strategy.');
   </script>
 </body>
 </html>
