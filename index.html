@@ -2165,3 +2165,43 @@
   setInterval(updateChainLink, 2000);
 })();
 </script>
+<script>
+// DIRECT CHAIN LINK FIX
+(function() {
+  function updateChainLink() {
+    const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.862;
+    const po = parseFloat(document.getElementById('phbPortal')?.textContent) || 1.0;
+    const chain = Math.min(100, (co * po) * 100);
+    
+    // Find all elements that might contain Chain Link
+    const elements = document.querySelectorAll('div');
+    for (let el of elements) {
+      if (el.textContent.trim() === '--' && el.parentElement?.textContent?.includes('Chain Link')) {
+        el.textContent = chain.toFixed(1) + '%';
+        console.log('✅ Chain Link updated to:', chain.toFixed(1) + '%');
+        return;
+      }
+    }
+    
+    // Fallback: find by ID
+    const chainEl = document.getElementById('chainLink');
+    if (chainEl) {
+      chainEl.textContent = chain.toFixed(1) + '%';
+      console.log('✅ Chain Link (ID) updated to:', chain.toFixed(1) + '%');
+    }
+  }
+
+  // Run immediately and every second
+  updateChainLink();
+  setInterval(updateChainLink, 1000);
+
+  // Also run when PHB updates
+  const origUpdate = window.updatePHBFromData;
+  if (typeof origUpdate === 'function') {
+    window.updatePHBFromData = function(data) {
+      origUpdate(data);
+      setTimeout(updateChainLink, 200);
+    };
+  }
+})();
+</script>
