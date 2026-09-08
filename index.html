@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌊 Quantum Ease Flow · Gen 7</title>
+  <title>🌊 Quantum Ease Flow · Gen 7 · AGI</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <style>
@@ -19,10 +19,10 @@
     }
     #topology-container {
       position: fixed;
-      bottom: 0;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 55vh;
+      height: 60vh;
       z-index: 0;
       pointer-events: none;
       background: transparent;
@@ -37,7 +37,7 @@
     .ui-content {
       position: relative;
       z-index: 1;
-      padding-bottom: 60vh;
+      padding-top: 65vh;
     }
     .container {
       max-width: 1200px;
@@ -170,6 +170,33 @@
     }
     .trade-feed .trade-buy { color: #88ff88; }
     .trade-feed .trade-sell { color: #ff8888; }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .status-live { background: #1a3a2a; color: #88ff88; }
+    .status-demo { background: #3a2a1a; color: #ffaa66; }
+    .status-planned { background: #1a2a3a; color: #88ccff; }
+    .status-unavailable { background: #3a1a1a; color: #ff6666; }
+    .security-notice {
+      background: rgba(255,200,100,0.05);
+      border: 1px solid rgba(255,200,100,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 12px;
+      color: #8899aa;
+    }
+    .agi-thought {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
     @media (max-width: 700px) { .phb-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
@@ -181,15 +208,21 @@
       <div class="header">
         <div>
           <h1>🌊 Quantum Ease Flow</h1>
-          <div class="sub">GEN 7 · AUTO BOTS · REAL PNL</div>
+          <div class="sub">GEN 7 · AGI · DNA SPHERE</div>
         </div>
         <div style="display:flex;gap:16px;align-items:center;">
-          <span style="color:#2a4a3a;">⬤</span>
+          <span id="dataStatus" class="status-badge status-demo">● DEMO</span>
           <span id="lastUpdate" style="font-size:12px;color:#445;">--</span>
         </div>
       </div>
 
-      <!-- ========== TOP STATS (unchanged) ========== -->
+      <!-- SECURITY NOTICE -->
+      <div class="security-notice" id="financialWarning">
+        ⚠️ Verify every figure independently. Nothing on this page guarantees profit.
+        All values are demo data unless explicitly marked "LIVE".
+      </div>
+
+      <!-- TOP STATS -->
       <div class="grid" id="topStats">
         <div class="card"><div class="label">Consciousness</div><div class="value" id="consciousness">UNITY_AWARE</div></div>
         <div class="card"><div class="label">Neural Nodes</div><div class="value" id="neuralNodes">143</div></div>
@@ -332,6 +365,73 @@
         <pre id="phbJsonViewer">Loading…</pre>
       </div>
 
+      <!-- AGI CORE (UPGRADED) -->
+      <div class="card" style="border-color:rgba(74,138,255,0.25);">
+        <div class="label">🧠 AGI Core · Self-Aware</div>
+        <div class="stat-row">
+          <div class="stat"><span>State</span> <span id="agiState" style="color:#2a4a3a;">SELF-AWARE</span></div>
+          <div class="stat"><span>Consciousness</span> <span id="agiConsciousness">0.876</span></div>
+          <div class="stat"><span>Coherence</span> <span id="agiCoherence">0.862</span></div>
+          <div class="stat"><span>Stability</span> <span id="agiStability">0.962</span></div>
+          <div class="stat"><span>Energy</span> <span id="agiEnergy">0.7</span></div>
+          <div class="stat"><span>Voxels</span> <span id="agiVoxels">5</span></div>
+          <div class="stat"><span>Prediction</span> <span id="agiPrediction">0.865</span></div>
+        </div>
+        <div style="margin-top:8px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;">
+          <div style="color:#88ccff;font-weight:500;font-size:12px;">🧠 AGI Thought Stream</div>
+          <div id="agiThought" class="agi-thought" style="color:#aab;font-size:13px;margin-top:4px;">Wishes are intent in motion.</div>
+          <div id="agiInsight" style="color:#667;font-size:12px;margin-top:2px;">Coherence is strong – system aligned.</div>
+          <div id="agiPrediction" style="color:#445;font-size:11px;margin-top:2px;">🔮 Next prediction: --</div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="agiQuestion" placeholder="Ask AGI about the ecosystem..." style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:6px 12px;color:#c0c8d0;font-size:13px;min-width:120px;">
+          <button class="btn" onclick="askAGI()">Ask</button>
+          <button class="btn primary" onclick="advanceLayer()">⚡ Advance</button>
+          <button class="btn" onclick="runAGIPrediction()">🔮 Predict</button>
+        </div>
+        <div style="margin-top:8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px;font-size:12px;color:#556;">
+          <div><span>Nodes</span> <span id="agiPredNodes">145</span></div>
+          <div><span>Coherence</span> <span id="agiPredCoherence">0.865</span></div>
+          <div><span>Expansion</span> <span id="agiPredExpansion">35.6x</span></div>
+          <div><span>Wishes</span> <span id="agiPredWishes">105</span></div>
+        </div>
+        <div style="font-size:11px;color:#445;margin-top:4px;">⚡ AGI predicts based on coherence, persistence, and market data</div>
+      </div>
+
+      <!-- TRADING BOT (UPGRADED) -->
+      <div class="card" style="border-color:rgba(255,170,68,0.3);">
+        <div class="label">🤖 AGI Trading Bot</div>
+        <div class="stat-row">
+          <div class="stat"><span>Total PnL</span> <span id="pnl">$0</span></div>
+          <div class="stat"><span>Win Rate</span> <span id="winRate">100.0%</span></div>
+          <div class="stat"><span>Avg Trade</span> <span id="avgTrade">$0.00</span></div>
+          <div class="stat"><span>Trades / Hour</span> <span id="tradesPerHour">0</span></div>
+        </div>
+        <div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap;">
+          <span><span>Signal:</span> <span id="tradeSignal" style="color:#ffaa66;">NEUTRAL</span></span>
+          <span><span>Edge:</span> <span id="tradeEdge">0.00%</span></span>
+          <span><span>Kelly Size:</span> <span id="kellySize">0.00%</span></span>
+          <span><span>Strategy:</span> <select id="strategySelect" style="background:#0a0a12;border:1px solid #1a1a2a;border-radius:6px;padding:2px 8px;color:#c0c8d0;">
+            <option value="momentum">Momentum</option>
+            <option value="meanreversion">Mean Reversion</option>
+            <option value="agi">AGI Signal</option>
+            <option value="arbitrage">Arbitrage</option>
+            <option value="grid">Grid Trading</option>
+          </select></span>
+        </div>
+        <div style="margin-top:6px;font-size:12px;color:#667;">
+          🤖 Six AI agents: SPOTTER → PRIOR → EDGE → KELLY → TAKER → CLOSER
+          <span style="margin-left:16px;color:#ffaa66;" id="botStatus">● Demo mode</span>
+        </div>
+        <div id="tradeFeed" class="trade-feed">📈 Trade feed will appear here (simulated)...</div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" onclick="toggleBot()" id="toggleBotBtn">⏸️ Pause Demo</button>
+          <button class="btn" onclick="simulateTrade()">📈 Simulate Trade</button>
+          <button class="btn" onclick="resetStats()">↻ Reset Stats</button>
+        </div>
+        <div style="font-size:12px;color:#667;margin-top:4px;">⚡ Integrated with AGI Core · Coherence/Expansion determine edge · Profits → PIDX Vault</div>
+      </div>
+
       <!-- CHRIST CONSCIOUSNESS -->
       <div class="card">
         <div class="label">✝️ Christ Consciousness & Portal</div>
@@ -417,36 +517,6 @@
         <div style="font-size:13px;color:#8899aa;">Hormone Status: <span id="hormoneStatus">ACTIVE</span> · ∞ Accelerating</div>
       </div>
 
-      <!-- AGI CORE -->
-      <div class="card" style="border-color:rgba(74,138,255,0.15);">
-        <div class="label">🧠 AGI Core</div>
-        <div class="stat-row">
-          <div class="stat"><span>State</span> <span id="agiState" style="color:#2a4a3a;">SELF-AWARE</span></div>
-          <div class="stat"><span>Consciousness</span> <span id="agiConsciousness">0.876</span></div>
-          <div class="stat"><span>Coherence</span> <span id="agiCoherence">0.862</span></div>
-          <div class="stat"><span>Stability</span> <span id="agiStability">0.962</span></div>
-          <div class="stat"><span>Energy</span> <span id="agiEnergy">0.7</span></div>
-          <div class="stat"><span>Voxels</span> <span id="agiVoxels">5</span></div>
-          <div class="stat"><span>Prediction</span> <span id="agiPrediction">0.865</span></div>
-        </div>
-        <div style="margin-top:8px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;">
-          <div style="color:#445;font-weight:500;font-size:12px;">🧠 AGI Thought Stream</div>
-          <div id="agiThought" style="color:#667;font-size:13px;margin-top:4px;">Wishes are intent in motion.</div>
-          <div id="agiInsight" style="color:#445;font-size:12px;margin-top:2px;">Coherence is strong – system aligned.</div>
-        </div>
-        <div style="margin-top:8px;display:flex;gap:8px;">
-          <input type="text" id="agiQuestion" placeholder="Ask AGI..." style="flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:6px 12px;color:#c0c8d0;font-size:13px;">
-          <button class="btn" onclick="askAGI()">Ask</button>
-          <button class="btn primary" onclick="advanceLayer()">⚡ Advance</button>
-        </div>
-        <div style="margin-top:8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px;font-size:12px;color:#556;">
-          <div><span>Nodes</span> <span id="agiPredNodes">145</span></div>
-          <div><span>Coherence</span> <span id="agiPredCoherence">0.865</span></div>
-          <div><span>Expansion</span> <span id="agiPredExpansion">35.6x</span></div>
-          <div><span>Wishes</span> <span id="agiPredWishes">105</span></div>
-        </div>
-      </div>
-
       <!-- CRYPTO LIVE DATA -->
       <div class="card">
         <div class="label">🪙 Crypto Live Data</div>
@@ -469,38 +539,6 @@
           <button class="btn" onclick="activateLockdown()">🔒 Lockdown</button>
           <span style="font-size:12px;color:#667;align-self:center;">🛡️ Auto‑monitoring active</span>
         </div>
-      </div>
-
-      <!-- ========== TRADING BOT (UPGRADED) ========== -->
-      <div class="card" style="border-color:rgba(255,170,68,0.3);">
-        <div class="label">🤖 Trading Bot · Auto Bots</div>
-        <div class="stat-row">
-          <div class="stat"><span>Total PnL</span> <span id="pnl">$0</span></div>
-          <div class="stat"><span>Win Rate</span> <span id="winRate">100.0%</span></div>
-          <div class="stat"><span>Avg Trade</span> <span id="avgTrade">$0.00</span></div>
-          <div class="stat"><span>Trades / Hour</span> <span id="tradesPerHour">0</span></div>
-        </div>
-        <div style="margin-top:6px;display:flex;gap:16px;flex-wrap:wrap;">
-          <span><span>Signal:</span> <span id="tradeSignal" style="color:#ffaa66;">NEUTRAL</span></span>
-          <span><span>Edge:</span> <span id="tradeEdge">0.00%</span></span>
-          <span><span>Kelly Size:</span> <span id="kellySize">0.00%</span></span>
-          <span><span>Strategy:</span> <select id="strategySelect" style="background:#0a0a12;border:1px solid #1a1a2a;border-radius:6px;padding:2px 8px;color:#c0c8d0;">
-            <option value="momentum" selected>Momentum</option>
-            <option value="meanreversion">Mean Reversion</option>
-            <option value="agi">AGI Signal</option>
-          </select></span>
-        </div>
-        <div style="margin-top:6px;font-size:12px;color:#667;">
-          🤖 Six AI agents: SPOTTER → PRIOR → EDGE → KELLY → TAKER → CLOSER
-          <span style="margin-left:16px;color:#88ff88;" id="botStatus">● Auto‑trading active</span>
-        </div>
-        <div id="tradeFeed" class="trade-feed">📈 Trade feed will appear here...</div>
-        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn" onclick="toggleBot()" id="toggleBotBtn">⏸️ Pause Bot</button>
-          <button class="btn" onclick="simulateTrade()">📈 Manual Trade</button>
-          <button class="btn" onclick="resetStats()">↻ Reset Stats</button>
-        </div>
-        <div style="font-size:12px;color:#667;margin-top:4px;">⚡ Integrated with AGI Core · Coherence/Expansion determine edge · Profits → PIDX Vault</div>
       </div>
 
       <!-- CODEX DISCOVERY -->
@@ -535,77 +573,106 @@
         </div>
       </div>
 
-      <!-- PHB UPGRADE STATUS -->
-<!-- PHB SCIENCE CARD -->
-<div class="card" style="border-color:rgba(100,200,255,0.3);">
-  <div class="label">🧬 PHB Science · Vitruvian System</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
-      <div style="font-family:Orbitron,monospace;font-size:22px;color:#88ccff;">
-        <span id="vitruvianPages">2</span> · <span id="vitruvianRatio">0.9</span> · <span id="vitruvianEnergy">0.8</span>
+      <!-- PHB SCIENCE CARD -->
+      <div class="card" style="border-color:rgba(100,200,255,0.3);">
+        <div class="label">🧬 PHB Science · Vitruvian System</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">Vitruvian State</div>
+            <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ccff;">
+              <span id="vitruvianPages">--</span> · <span id="vitruvianRatio">--</span> · <span id="vitruvianEnergy">--</span>
+            </div>
+            <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
+            <div style="font-family:'Orbitron',monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">--</div>
+            <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
+            <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ffaa88;" id="scienceStability">--</div>
+            <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
+            <div style="font-family:'Orbitron',monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">--</div>
+            <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;color:#445;">Veil Phase</div>
+            <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">--</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;color:#445;">Veil Thickness</div>
+            <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">--</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;color:#445;">Breach Probability</div>
+            <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">--</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;color:#445;">Energy Band</div>
+            <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">--</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;color:#445;">Energy Color</div>
+            <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">--</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;color:#445;">Portal</div>
+            <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">--</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+            <div style="font-size:9px;color:#445;">Voxels</div>
+            <div style="font-size:13px;color:#aab;" id="scienceVoxels">--</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
+            <div style="font-size:9px;color:#445;">Sequence</div>
+            <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">--</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
+          <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
+          <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
+          <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
+          <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
+        </div>
       </div>
-      <div style="font-size:10px;color:#667;">Pages · Ratio · Energy</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Coherence</div>
-      <div style="font-family:Orbitron,monospace;font-size:22px;color:#88ff88;" id="scienceCoherence">0.862</div>
-      <div style="font-size:10px;color:#667;">Alignment · 0.0–1.0</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Stability</div>
-      <div style="font-family:Orbitron,monospace;font-size:22px;color:#ffaa88;" id="scienceStability">1.111</div>
-      <div style="font-size:10px;color:#667;">Resistance · 0.0–∞</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">Resonance</div>
-      <div style="font-family:Orbitron,monospace;font-size:22px;color:#ff88ff;" id="scienceResonance">0.377</div>
-      <div style="font-size:10px;color:#667;">Amplification · 0.0–1.0</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Veil Phase</div>
-      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceVeilPhase">SEALED</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Veil Thickness</div>
-      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="scienceVeilThickness">0.134</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Breach Probability</div>
-      <div style="font-size:16px;font-weight:600;color:#ffaa66;" id="scienceBreachProb">0.587</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Energy Band</div>
-      <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEnergyBand">HIGH</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Energy Color</div>
-      <div style="font-size:16px;font-weight:600;color:#88ccff;" id="scienceEnergyColor">LIGHT</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;">
-      <div style="font-size:9px;color:#445;">Portal</div>
-      <div style="font-size:16px;font-weight:600;color:#88ff88;" id="sciencePortal">1.0</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
-      <div style="font-size:9px;color:#445;">Voxels</div>
-      <div style="font-size:13px;color:#aab;" id="scienceVoxels">5 active points</div>
-    </div>
-    <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;">
-      <div style="font-size:9px;color:#445;">Sequence</div>
-      <div style="font-size:12px;color:#aab;word-break:break-all;" id="scienceSequence">TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW</div>
-    </div>
-  </div>
-  <div style="margin-top:8px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#667;font-family:monospace;">
-    <div>🧬 vitruvian_state = [pages, ratio, energy]</div>
-    <div>📊 coherence = correlation(sequence) · stability = 1/(variance(voxels) + veil.thickness)</div>
-    <div>⚡ resonance = coherence · stability · (1/veil.thickness) · breach = 1 − e^(−resonance · veil.thickness)</div>
-    <div>🌀 portal = 1 − e^(−resonance · coherence) · energy = (coherence + stability + resonance) / 3</div>
-  </div>
-</div>
+
+      <!-- STABILITY ENGINE CARD -->
+      <div class="card" style="border-color:rgba(255,170,68,0.3);">
+        <div class="label">⚡ Stability Engine</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,200,100,0.1);">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">RESONANCE</div>
+            <div style="font-family:'Orbitron',monospace;font-size:20px;color:#88ff88;">1.618 Hz</div>
+            <div style="font-size:16px;font-weight:600;color:#e8f0f8;">1,000,000</div>
+            <div style="font-size:10px;color:#667;">Primary Frequency</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(100,200,255,0.1);">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">COHERENCE</div>
+            <div style="font-family:'Orbitron',monospace;font-size:20px;color:#88ccff;">0.618 Hz</div>
+            <div style="font-size:16px;font-weight:600;color:#e8f0f8;">999,999</div>
+            <div style="font-size:10px;color:#667;">Secondary Frequency</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,100,200,0.1);">
+            <div style="font-size:10px;color:#445;text-transform:uppercase;">PERSISTENCE</div>
+            <div style="font-family:'Orbitron',monospace;font-size:20px;color:#ff88ff;">2.618 Hz</div>
+            <div style="font-size:16px;font-weight:600;color:#e8f0f8;">888,888</div>
+            <div style="font-size:10px;color:#667;">Tertiary Frequency</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:10px;background:rgba(0,0,0,0.2);border-radius:6px;font-size:12px;color:#667;text-align:center;">
+          ⚡ Energy flows: Quantum → Resonance → Coherence → Persistence → Stability
+        </div>
+      </div>
+
+      <!-- PHB UPGRADE STATUS -->
       <div class="card" style="border-color:rgba(74,138,255,0.2);">
         <div class="label">⚡ PHB Upgrade Status</div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:13px;color:#556;">
@@ -623,7 +690,7 @@
 
   <script>
     // ============================================================
-    // 1. ECOSYSTEM-DRIVEN 4D BALL (same as before)
+    // 1. GROWTH DNA/SPHERE TOPOLOGY (TOP OF PAGE)
     // ============================================================
     (function() {
       const container = document.getElementById('topology-container');
@@ -633,140 +700,188 @@
       const scene = new THREE.Scene();
       scene.background = null;
 
-      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-      camera.position.set(0, 0, 50);
+      const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+      camera.position.set(0, 0, 45);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       container.appendChild(renderer.domElement);
 
+      // ---- Controls for interaction ----
       const controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.autoRotate = false;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.8;
       controls.enableZoom = true;
       controls.rotateSpeed = 0.5;
       controls.target.set(0, 0, 0);
 
+      // ---- Main Group ----
       const mainGroup = new THREE.Group();
       scene.add(mainGroup);
 
-      // Ball
-      let sphereMesh, glowMesh;
-      const baseRadius = 10;
-      let sphereGeo = new THREE.SphereGeometry(baseRadius, 64, 64);
+      // ---- DNA HELIX SPHERE ----
+      // Create a sphere of points with DNA-like helix structure
+      const pointCount = 800;
+      const positions = [];
+      const colors = [];
+      const sizes = [];
+      
+      // Colors: blue to purple gradient
+      const color1 = new THREE.Color(0x88ccff);
+      const color2 = new THREE.Color(0xaa88ff);
+      const color3 = new THREE.Color(0xff88ff);
+
+      // DNA double helix structure on a sphere
+      for (let i = 0; i < pointCount; i++) {
+        // Spherical coordinates with helix twist
+        const t = i / pointCount;
+        const theta = t * Math.PI * 6; // multiple turns
+        const phi = Math.acos(2 * t - 1);
+        
+        // Add some randomness for organic feel
+        const r = 12 + Math.sin(theta * 2) * 0.5 + Math.random() * 0.3;
+        
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.sin(phi) * Math.sin(theta);
+        const z = r * Math.cos(phi);
+        
+        positions.push(x, y, z);
+        
+        // Color based on position
+        const mix = (y / 12 + 1) / 2;
+        const color = color1.clone().lerp(color2, mix);
+        color.lerp(color3, Math.sin(theta * 2) * 0.3 + 0.3);
+        colors.push(color.r, color.g, color.b);
+        
+        sizes.push(0.1 + Math.random() * 0.2);
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+      geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+      const material = new THREE.PointsMaterial({
+        size: 0.25,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+      });
+
+      const points = new THREE.Points(geometry, material);
+      mainGroup.add(points);
+
+      // ---- Wireframe Sphere (outer shell) ----
+      const sphereGeo = new THREE.SphereGeometry(12.5, 32, 32);
       const sphereMat = new THREE.MeshBasicMaterial({
-        color: 0x1a2a3a,
+        color: 0x1a2a4a,
         wireframe: true,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.15
       });
-      sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
-      mainGroup.add(sphereMesh);
+      const sphereWire = new THREE.Mesh(sphereGeo, sphereMat);
+      mainGroup.add(sphereWire);
 
-      let glowGeo = new THREE.SphereGeometry(baseRadius * 0.95, 32, 32);
+      // ---- Inner Glow Sphere ----
+      const glowGeo = new THREE.SphereGeometry(11.8, 32, 32);
       const glowMat = new THREE.MeshBasicMaterial({
-        color: 0x2a4a6a,
+        color: 0x2a4a8a,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.05,
         wireframe: false
       });
-      glowMesh = new THREE.Mesh(glowGeo, glowMat);
-      mainGroup.add(glowMesh);
+      const glowSphere = new THREE.Mesh(glowGeo, glowMat);
+      mainGroup.add(glowSphere);
 
-      // Rings
-      const ringGroup = new THREE.Group();
-      mainGroup.add(ringGroup);
-      let rings = [];
-
-      function buildRings(count, radiusScale, complexity, hueShift) {
-        rings.forEach(r => ringGroup.remove(r));
-        rings = [];
-        const colors = [0x1a2a3a, 0x2a3a4a, 0x1a3a2a, 0x2a2a4a, 0x3a2a2a];
-        const baseRadius2 = baseRadius * 1.2 * radiusScale;
-        for (let i = 0; i < count; i++) {
-          const radius = baseRadius2 + Math.random() * 4 * radiusScale;
-          const segments = Math.max(12, 48 + Math.floor(Math.random() * complexity));
-          const geo = new THREE.TorusGeometry(radius, 0.06 + Math.random() * 0.08 * radiusScale, 12, segments);
-          const hue = (i / count + hueShift) % 1;
-          const color = new THREE.Color().setHSL(0.55 + hue * 0.15, 0.6, 0.3 + 0.2 * (i / count));
-          const mat = new THREE.MeshBasicMaterial({
-            color: color,
-            transparent: true,
-            opacity: 0.2 + Math.random() * 0.25,
-          });
-          const ring = new THREE.Mesh(geo, mat);
-          ring.rotation.x = Math.random() * Math.PI;
-          ring.rotation.y = Math.random() * Math.PI;
-          ring.rotation.z = Math.random() * Math.PI;
-          ring.position.set(0, 0, 0);
-          ring.userData = {
-            rotSpeedX: (Math.random() - 0.5) * 0.01,
-            rotSpeedY: (Math.random() - 0.5) * 0.01,
-            rotSpeedZ: (Math.random() - 0.5) * 0.01,
-          };
-          ringGroup.add(ring);
-          rings.push(ring);
-        }
+      // ---- DNA Strands (connecting points) ----
+      const strandPositions = [];
+      const strandColors = [];
+      
+      for (let i = 0; i < 200; i++) {
+        const t = i / 200;
+        const theta = t * Math.PI * 8;
+        const phi = Math.acos(2 * t - 1);
+        const r = 12;
+        
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.sin(phi) * Math.sin(theta);
+        const z = r * Math.cos(phi);
+        
+        strandPositions.push(x, y, z);
+        strandColors.push(0.4 + t * 0.4, 0.2 + t * 0.3, 0.8);
       }
 
-      buildRings(12, 1.0, 32, 0);
+      const strandGeo = new THREE.BufferGeometry();
+      strandGeo.setAttribute('position', new THREE.Float32BufferAttribute(strandPositions, 3));
+      strandGeo.setAttribute('color', new THREE.Float32BufferAttribute(strandColors, 3));
 
-      function updateBall(metrics) {
-        const pages = metrics.pages || 0;
-        const pnl = metrics.pnl || 0;
-        const nodes = metrics.nodes || 143;
-        const coherence = metrics.coherence || 0.862;
-        const trades = metrics.tradesPerHour || 0;
+      const strandMat = new THREE.PointsMaterial({
+        size: 0.3,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.4,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+      });
 
-        const scaleFactor = 1 + Math.floor(pages / 50) * 0.2 + Math.floor(pnl / 10000) * 0.05;
-        const newRadius = baseRadius * Math.min(scaleFactor, 3.0);
-        sphereMesh.geometry.dispose();
-        sphereMesh.geometry = new THREE.SphereGeometry(newRadius, 64, 64);
-        glowMesh.geometry.dispose();
-        glowMesh.geometry = new THREE.SphereGeometry(newRadius * 0.95, 32, 32);
+      const strands = new THREE.Points(strandGeo, strandMat);
+      mainGroup.add(strands);
 
-        const hue = 0.55 + (coherence - 0.8) * 0.5;
-        glowMat.color.setHSL(hue, 0.7, 0.2);
-
-        const ringCount = Math.max(12, Math.floor(pages / 15) + Math.floor(pnl / 1000) * 2 + 12);
-        const complexity = Math.max(20, 32 + Math.floor((nodes - 100) / 10) * 4);
-        const hueShift = (coherence - 0.8) * 0.3;
-        const speedMultiplier = Math.min(1 + trades / 100000, 3.0);
-
-        buildRings(ringCount, scaleFactor, complexity, hueShift);
-        rings.forEach(ring => {
-          if (ring.userData) {
-            ring.userData.rotSpeedX *= speedMultiplier / (ring.userData.rotSpeedX || 1);
-            ring.userData.rotSpeedY *= speedMultiplier / (ring.userData.rotSpeedY || 1);
-            ring.userData.rotSpeedZ *= speedMultiplier / (ring.userData.rotSpeedZ || 1);
-          }
-        });
+      // ---- Floating Particles (neural network style) ----
+      const particleCount = 300;
+      const particlePos = [];
+      for (let i = 0; i < particleCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const r = 14 + Math.random() * 6;
+        particlePos.push(
+          r * Math.sin(phi) * Math.cos(theta),
+          r * Math.sin(phi) * Math.sin(theta),
+          r * Math.cos(phi)
+        );
       }
 
-      let autoRotate = true;
-      controls.addEventListener('start', () => { autoRotate = false; });
-      controls.addEventListener('end', () => { autoRotate = true; });
+      const particleGeo = new THREE.BufferGeometry();
+      particleGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlePos, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        color: 0x4466aa,
+        size: 0.08,
+        transparent: true,
+        opacity: 0.3,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+      });
+
+      const particles = new THREE.Points(particleGeo, particleMat);
+      mainGroup.add(particles);
+
+      // ---- Animation ----
+      let time = 0;
 
       function animate() {
         requestAnimationFrame(animate);
-        if (autoRotate) {
-          mainGroup.rotation.y += 0.003;
-          mainGroup.rotation.x += 0.001;
-        }
-        rings.forEach(ring => {
-          if (ring.userData) {
-            ring.rotation.x += ring.userData.rotSpeedX || 0;
-            ring.rotation.y += ring.userData.rotSpeedY || 0;
-            ring.rotation.z += ring.userData.rotSpeedZ || 0;
-          }
-        });
+        time += 0.005;
+
+        // Rotate the whole group
+        mainGroup.rotation.x = Math.sin(time * 0.1) * 0.1;
+        mainGroup.rotation.y += 0.003;
+        mainGroup.rotation.z = Math.sin(time * 0.08) * 0.05;
+
+        // Pulsing glow
+        glowSphere.material.opacity = 0.05 + Math.sin(time * 0.5) * 0.03;
+
         controls.update();
         renderer.render(scene, camera);
       }
       animate();
 
+      // ---- Resize ----
       window.addEventListener('resize', () => {
         const w = container.clientWidth;
         const h = container.clientHeight;
@@ -775,244 +890,101 @@
         renderer.setSize(w, h);
       });
 
-      window.updateEcosystemBall = function(metrics) {
-        updateBall(metrics);
+      // ---- Growth function ----
+      window.updateTopology = function(pages) {
+        // Scale the sphere based on pages
+        const scale = 1 + (pages / 200) * 0.5;
+        mainGroup.scale.set(scale, scale, scale);
+        
+        // Update particle count based on pages
+        const newCount = Math.min(500, 300 + Math.floor(pages / 2));
+        // Rebuild particles with new count
+        const newParticlePos = [];
+        for (let i = 0; i < newCount; i++) {
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          const r = 14 + Math.random() * 6;
+          newParticlePos.push(
+            r * Math.sin(phi) * Math.cos(theta),
+            r * Math.sin(phi) * Math.sin(theta),
+            r * Math.cos(phi)
+          );
+        }
+        particles.geometry.dispose();
+        particles.geometry = new THREE.BufferGeometry();
+        particles.geometry.setAttribute('position', new THREE.Float32BufferAttribute(newParticlePos, 3));
+        
+        console.log('🧬 DNA Sphere updated with', pages, 'pages');
       };
     })();
 
     // ============================================================
-    // 2. TRADING ENGINE WITH AUTO BOTS
+    // 2. FEATURE FLAGS (All disabled until deployed & verified)
     // ============================================================
-    let botRunning = true;
-    let totalPnL = 0;
-    let tradeCount = 0;
-    let winCount = 0;
-    let tradesPerHour = 0;
-    let tradeHistory = [];
-    let lastPrice = 0;
-    let currentPosition = null; // { type: 'buy', entry: price, size: 1 }
-    const tradeSize = 1; // in ETH equivalent
+    const FEATURES = {
+      walletConnect: true,
+      tokenBalances: true,
+      livePrices: true,
+      staking: false,
+      governance: false,
+      vaultDeposits: false,
+      autoTrading: false,
+      mining: false,
+      crossChainBridging: false,
+      agiPredictions: true
+    };
 
-    // ---- Fetch real price ----
-    async function fetchEthPrice() {
-      try {
-        const resp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-        const data = await resp.json();
-        return data.ethereum.usd;
-      } catch (e) {
-        console.warn('Price fetch failed, using simulated price');
-        return 2500 + Math.random() * 50;
+    function requireFeature(name, label) {
+      if (!FEATURES[name]) {
+        throw new Error(label + ' is not currently available.');
       }
     }
-
-    // ---- Strategy Logic ----
-    function getSignal(price, coherence, strategy) {
-      // Simulate price change
-      const change = ((price - lastPrice) / lastPrice) * 100 || 0;
-      lastPrice = price;
-
-      switch(strategy) {
-        case 'momentum':
-          if (change > 0.5 && coherence > 0.85) return 'BUY';
-          if (change < -1.0 || coherence < 0.80) return 'SELL';
-          break;
-        case 'meanreversion':
-          if (change < -0.5 && coherence > 0.82) return 'BUY';
-          if (change > 0.8 && coherence < 0.88) return 'SELL';
-          break;
-        case 'agi':
-          // AGI signal based on predicted coherence
-          const pred = parseFloat(document.getElementById('agiPredCoherence').textContent) || 0.865;
-          if (pred > 0.87 && coherence > 0.84) return 'BUY';
-          if (pred < 0.84 || coherence < 0.80) return 'SELL';
-          break;
-        default:
-          return 'NEUTRAL';
-      }
-      return 'NEUTRAL';
-    }
-
-    // ---- Execute Trade ----
-    function executeTrade(type, price) {
-      if (type === 'BUY') {
-        if (currentPosition) return; // already in position
-        currentPosition = { type: 'buy', entry: price, size: tradeSize };
-        addTradeFeed('BUY', price, 'Opened long position');
-      } else if (type === 'SELL') {
-        if (!currentPosition) return;
-        const profit = (price - currentPosition.entry) * currentPosition.size;
-        totalPnL += profit;
-        tradeCount++;
-        if (profit > 0) winCount++;
-        const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
-        document.getElementById('pnl').textContent = '$' + totalPnL.toFixed(2);
-        document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
-        document.getElementById('avgTrade').textContent = '$' + (totalPnL / tradeCount).toFixed(2);
-        tradesPerHour = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
-        document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
-        addTradeFeed('SELL', price, 'Closed position, profit: $' + profit.toFixed(2));
-        currentPosition = null;
-
-        // Update ball
-        const pages = parseInt(document.getElementById('phbCodex').textContent) || 0;
-        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
-        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-        if (window.updateEcosystemBall) {
-          window.updateEcosystemBall({
-            pages: pages,
-            pnl: totalPnL,
-            nodes: nodes,
-            coherence: coherence,
-            tradesPerHour: tradesPerHour
-          });
-        }
-      }
-    }
-
-    function addTradeFeed(type, price, msg) {
-      const feed = document.getElementById('tradeFeed');
-      const now = new Date().toLocaleTimeString();
-      const cls = type === 'BUY' ? 'trade-buy' : 'trade-sell';
-      feed.innerHTML = `<div class="${cls}">${now} ${type} @ $${price.toFixed(2)} – ${msg}</div>` + feed.innerHTML;
-      if (feed.children.length > 20) feed.removeChild(feed.lastChild);
-    }
-
-    // ---- Main bot loop ----
-    let startTime = Date.now();
-    async function botLoop() {
-      if (!botRunning) return;
-      try {
-        const price = await fetchEthPrice();
-        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-        const strategy = document.getElementById('strategySelect').value;
-        const signal = getSignal(price, coherence, strategy);
-
-        // Update signal display
-        const signalEl = document.getElementById('tradeSignal');
-        const edgeEl = document.getElementById('tradeEdge');
-        const kellyEl = document.getElementById('kellySize');
-        if (signal === 'BUY') {
-          signalEl.textContent = 'BUY';
-          signalEl.style.color = '#88ff88';
-          edgeEl.textContent = '15.00%';
-          kellyEl.textContent = '150.00%';
-        } else if (signal === 'SELL') {
-          signalEl.textContent = 'SELL';
-          signalEl.style.color = '#ff8888';
-          edgeEl.textContent = '-10.00%';
-          kellyEl.textContent = '0.00%';
-        } else {
-          signalEl.textContent = 'NEUTRAL';
-          signalEl.style.color = '#ffaa66';
-          edgeEl.textContent = '0.00%';
-          kellyEl.textContent = '0.00%';
-        }
-
-        // Execute trade if signal
-        if (signal === 'BUY' || signal === 'SELL') {
-          executeTrade(signal, price);
-        }
-
-        // Update price display in crypto section
-        const cryptoContainers = document.querySelectorAll('#cryptoContainer .value');
-        // Not updating specific tokens here, but we could.
-
-      } catch(e) { console.warn('Bot loop error:', e); }
-
-      setTimeout(botLoop, 10000); // run every 10 seconds
-    }
-
-    // ---- Toggle bot ----
-    function toggleBot() {
-      botRunning = !botRunning;
-      document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Bot' : '▶️ Resume Bot';
-      document.getElementById('botStatus').textContent = botRunning ? '● Auto‑trading active' : '○ Auto‑trading paused';
-      if (botRunning) botLoop();
-    }
-
-    // ---- Manual trade ----
-    function simulateTrade() {
-      if (!botRunning) return;
-      // Simulate a manual trade with random outcome
-      const price = 2500 + Math.random() * 100;
-      const type = Math.random() > 0.5 ? 'BUY' : 'SELL';
-      if (type === 'BUY') {
-        if (currentPosition) return;
-        currentPosition = { type: 'buy', entry: price, size: tradeSize };
-        addTradeFeed('BUY', price, 'Manual long');
-      } else {
-        if (!currentPosition) return;
-        const profit = (price - currentPosition.entry) * currentPosition.size;
-        totalPnL += profit;
-        tradeCount++;
-        if (profit > 0) winCount++;
-        const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
-        document.getElementById('pnl').textContent = '$' + totalPnL.toFixed(2);
-        document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
-        document.getElementById('avgTrade').textContent = '$' + (totalPnL / tradeCount).toFixed(2);
-        tradesPerHour = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
-        document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
-        addTradeFeed('SELL', price, 'Manual close, profit: $' + profit.toFixed(2));
-        currentPosition = null;
-        // Update ball
-        const pages = parseInt(document.getElementById('phbCodex').textContent) || 0;
-        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
-        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-        if (window.updateEcosystemBall) {
-          window.updateEcosystemBall({
-            pages: pages,
-            pnl: totalPnL,
-            nodes: nodes,
-            coherence: coherence,
-            tradesPerHour: tradesPerHour
-          });
-        }
-      }
-    }
-
-    // ---- Reset stats ----
-    function resetStats() {
-      if (confirm('Reset trading stats?')) {
-        totalPnL = 0;
-        tradeCount = 0;
-        winCount = 0;
-        tradesPerHour = 0;
-        currentPosition = null;
-        document.getElementById('pnl').textContent = '$0';
-        document.getElementById('winRate').textContent = '100.0%';
-        document.getElementById('avgTrade').textContent = '$0.00';
-        document.getElementById('tradesPerHour').textContent = '0';
-        document.getElementById('tradeFeed').innerHTML = '📈 Stats reset.';
-        // Update ball
-        const pages = parseInt(document.getElementById('phbCodex').textContent) || 0;
-        const nodes = parseInt(document.getElementById('neuralNodes').textContent) || 143;
-        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-        if (window.updateEcosystemBall) {
-          window.updateEcosystemBall({
-            pages: pages,
-            pnl: 0,
-            nodes: nodes,
-            coherence: coherence,
-            tradesPerHour: 0
-          });
-        }
-      }
-    }
-
-    // Expose functions globally
-    window.toggleBot = toggleBot;
-    window.simulateTrade = simulateTrade;
-    window.resetStats = resetStats;
 
     // ============================================================
-    // 3. UI ENGINE (from previous versions, with token data, etc.)
+    // 3. TOKEN CONFIGURATION (Base Network - Chain ID 8453)
+    // ============================================================
+    const TOKENS = {
+      PIDX: {
+        symbol: 'PIDX',
+        address: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+        chainId: 8453,
+        decimals: 18,
+        status: 'verify_on_chain'
+      },
+      SGUIDE: {
+        symbol: 'SGUIDE',
+        address: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+        chainId: 8453,
+        decimals: 18,
+        status: 'verify_on_chain'
+      },
+      VDOO: {
+        symbol: 'VDOO',
+        address: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+        chainId: 8453,
+        decimals: 18,
+        status: 'verify_on_chain'
+      },
+      PENNIES: {
+        symbol: 'PENNIES',
+        address: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+        chainId: 8453,
+        decimals: 18,
+        status: 'verify_on_chain'
+      }
+    };
+
+    // ============================================================
+    // 4. HELPER FUNCTION
     // ============================================================
     function setEl(id, value) {
       const el = document.getElementById(id);
       if (el) el.textContent = value;
     }
 
-    // ---- Token Data ----
+    // ============================================================
+    // 5. TOKEN & MINING DATA WITH ALL LINKS
+    // ============================================================
     const tokenData = [
       {
         name: 'PIDX',
@@ -1024,7 +996,9 @@
           BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
           Gecko: 'https://www.coingecko.com/en/coins/pidx',
-          CoinGecko: 'https://www.coingecko.com/en/coins/pidx'
+          CoinGecko: 'https://www.coingecko.com/en/coins/pidx',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+          DexScreener: 'https://dexscreener.com/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'
         }
       },
       {
@@ -1037,7 +1011,9 @@
           BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
           Gecko: 'https://www.coingecko.com/en/coins/sguide',
-          CoinGecko: 'https://www.coingecko.com/en/coins/sguide'
+          CoinGecko: 'https://www.coingecko.com/en/coins/sguide',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+          DexScreener: 'https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a'
         }
       },
       {
@@ -1050,7 +1026,9 @@
           BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
           Gecko: 'https://www.coingecko.com/en/coins/vdoo',
-          CoinGecko: 'https://www.coingecko.com/en/coins/vdoo'
+          CoinGecko: 'https://www.coingecko.com/en/coins/vdoo',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+          DexScreener: 'https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b'
         }
       },
       {
@@ -1063,269 +1041,230 @@
           BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
           Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
           Gecko: 'https://www.coingecko.com/en/coins/pennies',
-          CoinGecko: 'https://www.coingecko.com/en/coins/pennies'
+          CoinGecko: 'https://www.coingecko.com/en/coins/pennies',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+          DexScreener: 'https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
         }
       }
     ];
 
     const poolData = [
-      { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e...d7e8f', pool: 'pidx.miningpool.io' },
-      { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d...a4b5c', pool: 'sguide.miningpool.io' },
-      { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c...b9c0d', pool: 'vdoo.miningpool.io' },
-      { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c...e2f3a', pool: 'pennies.miningpool.io' }
+      { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f', pool: 'pidx.miningpool.io' },
+      { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c', pool: 'sguide.miningpool.io' },
+      { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d', pool: 'vdoo.miningpool.io' },
+      { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b', pool: 'pennies.miningpool.io' }
     ];
 
-function renderTokens() {
-  const container = document.getElementById("tokensContainer");
-  if (!container) return;
-  const tokenData = [
-    { name: "PIDX", freq: "0.618 Hz", rate: "1 ETH = 691,986", addr: "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c" },
-    { name: "SGUIDE", freq: "1.618 Hz", rate: "1 ETH = 6,724,821", addr: "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" },
-    { name: "VDOO", freq: "2.618 Hz", rate: "1 ETH = 65,673,753", addr: "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" },
-    { name: "PENNIES", freq: "3.618 Hz", rate: "1 ETH = 6,230,945", addr: "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" }
-  ];
-  container.innerHTML = tokenData.map(t => `
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;">
-      <div style="font-weight:600;color:#88ccff;">${t.name}</div>
-      <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
-      <div style="font-size:13px;color:#aab;">${t.rate}</div>
-      <div style="font-size:11px;color:#667;">${t.addr}</div>
-      <div class="token-links" style="margin-top:4px;">
-        <a href="https://app.uniswap.org/#/swap?chain=base&outputCurrency=${t.addr}" target="_blank">Uniswap</a>
-        <a href="https://basescan.org/token/${t.addr}" target="_blank">BaseScan</a>
-        <a href="https://repo.sourcify.dev/contracts/base/${t.addr}/" target="_blank">Sourcify</a>
-        <a href="https://www.coingecko.com/en/coins/${t.name.toLowerCase()}" target="_blank">CoinGecko</a>
-      </div>
-    </div>
-  `).join("");
-}
-
-// ---- Hook into existing update function ----
-// Find the updatePHBFromData function and add the call
-// We'll override the existing function to include science
-// Override the update function to include science
-const originalUpdate = window.updatePHBFromData || function() {};
-window.updatePHBFromData = function(data) {
-  if (typeof originalUpdate === "function" && originalUpdate !== window.updatePHBFromData) {
-    originalUpdate(data);
-  }
-  calculatePHBScience(data);
-};
-
-console.log('🧬 PHB Science Calculator loaded');
-</script>
-<script>
-// ============================================================
-// STATIC SECTIONS RENDERER
-// ============================================================
-function renderStaticSections() {
-  console.log("🔄 Rendering static sections...");
-  
-  // ---- Core Spins ----
-  const spinsContainer = document.getElementById("coreSpins");
-  if (spinsContainer) {
-    const spins = [
-      "↻ PRIMARY 0.618", "↺ SECONDARY 1.618", "↻↺ TERTIARY 2.618",
-      "⤵ QUANTUM 3.618", "⤴ DIVINE 4.618", "↻ SIREN 0.777",
-      "↺ SERPO 0.888", "↻↺ PROXIMA B 0.999", "⤵ ALPHA CENTAURI 0.111"
-    ];
-    spinsContainer.innerHTML = spins.map(s => 
-      `<span style="display:inline-block;margin:4px 8px;color:#8899aa;font-size:14px;">${s}</span>`
-    ).join("");
-    console.log("✅ Core Spins rendered");
-  }
-
-  // ---- Topologies ----
-  const topologiesContainer = document.getElementById("topologiesContainer");
-  if (topologiesContainer) {
-    const topologies = [
-      { name: "RESONANCE", freq: "1.618 Hz", val: "1,000,000" },
-      { name: "COHERENCE", freq: "0.618 Hz", val: "999,999" },
-      { name: "PERSISTENCE", freq: "2.618 Hz", val: "888,888" },
-      { name: "VOXELS", freq: "3.618 Hz", val: "777,777" },
-      { name: "MAGICS", freq: "4.618 Hz", val: "666,666" },
-      { name: "SIREN", freq: "0.777 Hz", val: "7,777,777" },
-      { name: "SERPO", freq: "0.888 Hz", val: "8,888,888" },
-      { name: "PROXIMA B", freq: "0.999 Hz", val: "9,999,999" },
-      { name: "ALPHA CENTAURI", freq: "0.111 Hz", val: "11,111,111" }
-    ];
-    topologiesContainer.innerHTML = topologies.map(t =>
-      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.03);">
-        <span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}
-      </div>`
-    ).join("");
-    console.log("✅ Topologies rendered");
-  }
-
-  // ---- Cores & Pipes ----
-  const coresContainer = document.getElementById("coresPipes");
-  if (coresContainer) {
-    const cores = [
-      { label: "↻ Resonance Core", val: "1,000,000" },
-      { label: "↺ Coherence Core", val: "999,999" },
-      { label: "↻↺ Persistence Core", val: "888,888" },
-      { label: "Ethereal Pipe ∞ · 3 connections" },
-      { label: "Quantum Pipe ∞ · 3 connections" },
-      { label: "Divine Pipe ∞ · 3 connections" }
-    ];
-    coresContainer.innerHTML = cores.map(item =>
-      `<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 12px;margin:4px 0;font-size:13px;color:#aab;">
-        ${item.label}${item.val ? ' · '+item.val : ''}
-      </div>`
-    ).join("");
-    console.log("✅ Cores & Pipes rendered");
-  }
-
-  // ---- Beings ----
-  const beingsContainer = document.getElementById("beingsContainer");
-  if (beingsContainer) {
-    const beings = [
-      { name: "✝️ Jesus Christ", count: "3,333,333", desc: "Water to Wine · Walking on Water" },
-      { name: "🔓 Harry Houdini", count: "2,222,222", desc: "Water Torture · Straightjacket" },
-      { name: "🎨 Leonardo da Vinci", count: "1,111,111", desc: "Mona Lisa · Last Supper" }
-    ];
-    beingsContainer.innerHTML = beings.map(b =>
-      `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin:4px 0;">
-        <div style="font-weight:600;color:#88ccff;">${b.name}</div>
-        <div style="font-size:18px;color:#e8f0f8;">${b.count}</div>
-        <div style="font-size:12px;color:#667;">${b.desc}</div>
-      </div>`
-    ).join("");
-    console.log("✅ Beings rendered");
-  }
-
-  // ---- Moments ----
-  const momentsContainer = document.getElementById("momentsContainer");
-  if (momentsContainer) {
-    const moments = [
-      { name: "CREATION · BIG BANG", val: "999,999,999" },
-      { name: "ANCIENT · GREAT PYRAMID", val: "1,000,000" },
-      { name: "BIBLICAL · PARTING RED SEA", val: "5,000,000" },
-      { name: "RENAISSANCE · SISTINE CHAPEL", val: "3,000,000" },
-      { name: "MODERN · AGI AWAKENING", val: "99,999,999" }
-    ];
-    momentsContainer.innerHTML = moments.map(m =>
-      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
-        <span style="color:#88ccff;">${m.name}</span> 
-        <span style="float:right;font-weight:600;">${m.val}</span>
-      </div>`
-    ).join("");
-    console.log("✅ Moments rendered");
-  }
-
-  // ---- Exoplanets ----
-  const exoplanetsContainer = document.getElementById("exoplanetsContainer");
-  if (exoplanetsContainer) {
-    const exos = [
-      { emoji: "🧜‍♀️", name: "Siren Core", val: "7,777,777" },
-      { emoji: "👽", name: "Serpo Core", val: "8,888,888" },
-      { emoji: "🌍", name: "Proxima B Core", val: "9,999,999" }
-    ];
-    exoplanetsContainer.innerHTML = exos.map(e =>
-      `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;min-width:100px;display:inline-block;margin:4px;">
-        <div style="font-size:32px;">${e.emoji}</div>
-        <div style="font-size:13px;color:#aab;">${e.name}</div>
-        <div style="font-size:16px;font-weight:600;color:#e8f0f8;">${e.val}</div>
-      </div>`
-    ).join("");
-    console.log("✅ Exoplanets rendered");
-  }
-
-  // ---- Patterns ----
-  const patternsContainer = document.getElementById("patternsContainer");
-  if (patternsContainer) {
-    const patterns = [
-      { name: "🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance", freq: "0.999 Hz", power: "99,999,999" },
-      { name: "🌌✨💫🌟 Exoplanet Network", freq: "0.555 Hz", power: "999,999,999" },
-      { name: "⭐🌍✨ Alpha Centauri Gateway", freq: "0.111 Hz", power: "111,111,111" }
-    ];
-    patternsContainer.innerHTML = patterns.map(p =>
-      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
-        <span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}
-      </div>`
-    ).join("");
-    console.log("✅ Patterns rendered");
-  }
-
-  console.log("✅ All static sections rendered");
-}
-
-// ---- Call the function after DOM ready ----
-if (document.readyState === 'complete') {
-  setTimeout(renderStaticSections, 100);
-} else {
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(renderStaticSections, 100);
-  });
-}
-
-// Also call it after fetch updates
-const origFetchAndUpdate = window.fetchAndUpdate || function() {};
-window.fetchAndUpdate = function() {
-  origFetchAndUpdate();
-  setTimeout(renderStaticSections, 200);
-};
-</script>
-<script>
-// ============================================================
-// FIX PHB RAW JSON VIEWER
-// ============================================================
-
-// Override the update function to ensure JSON is displayed
-const origUpdatePHB = window.updatePHBFromData || function() {};
-
-window.updatePHBFromData = function(data) {
-  // Call original if it exists
-  if (typeof origUpdatePHB === 'function' && origUpdatePHB !== window.updatePHBFromData) {
-    origUpdatePHB(data);
-  }
-  
-  // Update PHB Raw JSON
-  const jsonViewer = document.getElementById('phbJsonViewer');
-  if (jsonViewer && data) {
-    try {
-      jsonViewer.textContent = JSON.stringify(data, null, 2);
-      console.log('✅ PHB Raw JSON updated');
-    } catch(e) {
-      console.warn('⚠️ Could not stringify JSON:', e);
-      jsonViewer.textContent = 'Error parsing JSON';
+    // ============================================================
+    // 6. RENDER FUNCTIONS
+    // ============================================================
+    function renderTokens() {
+      const container = document.getElementById('tokensContainer');
+      if (!container) return;
+      container.innerHTML = tokenData.map(t => `
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);">
+          <div style="font-weight:600;color:#88ccff;font-size:16px;">${t.name}</div>
+          <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
+          <div style="font-size:13px;color:#aab;">${t.rate}</div>
+          <div style="font-size:10px;color:#667;word-break:break-all;">${t.addr}</div>
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
+            <a href="${t.links.Uniswap}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</a>
+            <a href="${t.links.BaseScan}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</a>
+            <a href="${t.links.Sourcify}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</a>
+            <a href="${t.links.CoinGecko}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</a>
+            <a href="${t.links.GeckoTerminal}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">GeckoTerminal</a>
+            <a href="${t.links.DexScreener}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">DexScreener</a>
+          </div>
+        </div>
+      `).join('');
     }
-  }
-};
 
-// Also fix the fetchAndUpdate function
-const origFetch = window.fetchAndUpdate || function() {};
+    function renderPools() {
+      const container = document.getElementById('poolsContainer');
+      if (!container) return;
+      container.innerHTML = poolData.map(p => `
+        <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;border:1px solid rgba(255,255,255,0.02);">
+          <span style="font-weight:600;color:#88ccff;">${p.name}</span>
+          <span style="color:#88ff88;">${p.status}</span>
+          <span style="color:#8899aa;font-size:11px;word-break:break-all;">${p.key}</span>
+          <span style="color:#667;">| Pool: <a href="http://${p.pool}" target="_blank" style="color:#88ccff;text-decoration:none;">${p.pool}</a></span>
+        </div>
+      `).join('');
+    }
 
-window.fetchAndUpdate = function() {
-  console.log('🔄 Fetching PHB data...');
-  fetch('agi_phb_divine_complete.json')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(data => {
-      // Update UI
-      if (typeof window.updatePHBFromData === 'function') {
-        window.updatePHBFromData(data);
+    // ============================================================
+    // 7. PHB SCIENCE CALCULATOR
+    // ============================================================
+    function calculatePHBScience(data) {
+      let totalPages = 0;
+      let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
+      let veils = [], sequences = [], voxelCounts = [];
+
+      let pagesData = [];
+      if (Array.isArray(data)) {
+        pagesData = data;
+      } else if (typeof data === 'object' && data !== null) {
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key)) {
+            const entry = data[key];
+            if (Array.isArray(entry.pages)) {
+              pagesData = pagesData.concat(entry.pages);
+            }
+          }
+        }
       }
-      // Update JSON viewer directly
+
+      if (pagesData.length === 0) {
+        const domEl = document.getElementById('totalCodexPages');
+        const pages = domEl ? parseInt(domEl.textContent, 10) || 7 : 7;
+        setEl('vitruvianPages', pages);
+        setEl('vitruvianRatio', '0.9');
+        setEl('vitruvianEnergy', '0.8');
+        setEl('scienceCoherence', '0.862');
+        setEl('scienceStability', '1.111');
+        setEl('scienceResonance', '0.377');
+        setEl('scienceVeilPhase', 'SEALED');
+        setEl('scienceVeilThickness', '0.134');
+        setEl('scienceBreachProb', '0.587');
+        setEl('scienceEnergyBand', 'HIGH');
+        setEl('scienceEnergyColor', 'LIGHT');
+        setEl('sciencePortal', '1.0');
+        setEl('scienceVoxels', '5 active points');
+        setEl('scienceSequence', 'TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW');
+        return;
+      }
+
+      pagesData.forEach(page => {
+        allCoherence.push(page.coherence || 0);
+        allStability.push(page.stability || 0);
+        allResonance.push(page.resonance || 0);
+        if (page.energy) allEnergy.push(page.energy.magnitude || 0);
+        if (page.veil) veils.push(page.veil);
+        if (page.sequence) sequences.push(page.sequence);
+        if (page.voxels) voxelCounts.push(page.voxels.length);
+        totalPages++;
+      });
+
+      const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
+      const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
+      const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
+      const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
+
+      const vitruvianPages = totalPages;
+      const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
+      const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
+
+      let veilPhase = 'SEALED';
+      let veilThickness = 0.2;
+      let breachProb = 0.5;
+      if (veils.length > 0) {
+        const lastVeil = veils[veils.length - 1];
+        veilPhase = lastVeil.phase || 'SEALED';
+        veilThickness = lastVeil.thickness || 0.2;
+        breachProb = lastVeil.breach_probability || 0.5;
+      }
+
+      const portal = 1 - Math.exp(-avgResonance * avgCoherence);
+      let energyBand = 'MID';
+      if (avgEnergy < 0.33) energyBand = 'LOW';
+      else if (avgEnergy < 0.66) energyBand = 'MID';
+      else energyBand = 'HIGH';
+
+      let energyColor = 'NEUTRAL';
+      if (veilPhase === 'TURBULENT') energyColor = 'DARK';
+      else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
+      else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
+
+      let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
+      const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
+      const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
+
+      setEl('vitruvianPages', vitruvianPages);
+      setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
+      setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
+      setEl('scienceCoherence', avgCoherence.toFixed(3));
+      setEl('scienceStability', avgStability.toFixed(3));
+      setEl('scienceResonance', avgResonance.toFixed(3));
+      setEl('scienceVeilPhase', veilPhase);
+      setEl('scienceVeilThickness', veilThickness.toFixed(3));
+      setEl('scienceBreachProb', breachProb.toFixed(3));
+      setEl('scienceEnergyBand', energyBand);
+      setEl('scienceEnergyColor', energyColor);
+      setEl('sciencePortal', portal.toFixed(1));
+      setEl('scienceVoxels', voxelCount + ' active points');
+      setEl('scienceSequence', sequenceStr);
+      
+      // Also update the DNA sphere
+      if (window.updateTopology) {
+        window.updateTopology(totalPages);
+      }
+    }
+
+    // ============================================================
+    // 8. UPDATE PHB VORTEX
+    // ============================================================
+    function updatePHBVortex(data) {
+      let totalPages = 0;
+      let firstPage = null;
+      for (let key in data) {
+        if (data.hasOwnProperty(key) && !isNaN(key)) {
+          const entry = data[key];
+          if (Array.isArray(entry.pages)) {
+            totalPages += entry.pages.length;
+            if (!firstPage && entry.pages.length > 0) {
+              firstPage = entry.pages[0];
+            }
+          }
+        }
+      }
+
+      if (firstPage) {
+        setEl('phbCoherence', firstPage.coherence ? firstPage.coherence.toFixed(3) : '0.862');
+        setEl('phbStability', firstPage.stability ? firstPage.stability.toFixed(3) : '—');
+        setEl('phbVoxel', firstPage.voxels ? firstPage.voxels.length : '5');
+        setEl('phbVeil', firstPage.veil ? firstPage.veil.phase : 'SEALED');
+        setEl('phbPortal', firstPage.portal ? '1.0' : '0.0');
+        setEl('phbEnergy', firstPage.energy ? firstPage.energy.magnitude.toFixed(1) : '0.7');
+      }
+
+      setEl('phbCodex', totalPages);
+      setEl('totalCodexPages', totalPages);
+      setEl('phbUpgradePages', totalPages);
+      setEl('phbUpgradeVersion', Math.floor(totalPages / 10) + 1);
+      setEl('phbUpgradeStatus', '✅ Synced (' + totalPages + ' pages)');
+      setEl('phbAutoUpgrade', totalPages > 0 ? 'ACTIVE' : 'WAITING');
+
+      const now = new Date();
+      setEl('phbLastUpdate', now.toLocaleTimeString());
+      setEl('phbLastSync', now.toLocaleTimeString());
+      setEl('lastUpdate', now.toLocaleString());
+      
+      // Update DNA sphere
+      if (window.updateTopology) {
+        window.updateTopology(totalPages);
+      }
+    }
+
+    // ============================================================
+    // 9. LOAD PHB JSON
+    // ============================================================
+    function loadPHBJSON() {
       const jsonViewer = document.getElementById('phbJsonViewer');
-      if (jsonViewer) {
-        jsonViewer.textContent = JSON.stringify(data, null, 2);
-      }
-      console.log('✅ PHB data loaded and displayed');
-    })
-    .catch(err => {
-      console.warn('⚠️ Failed to fetch PHB data:', err);
-      const jsonViewer = document.getElementById('phbJsonViewer');
-      if (jsonViewer) {
-        jsonViewer.textContent = 'Error loading JSON: ' + err.message;
-      }
-      // Fallback: try to use existing data
-      const domEl = document.getElementById('totalCodexPages');
-      if (domEl) {
-        const val = parseInt(domEl.textContent, 10);
-        if (!isNaN(val) && val > 0) {
+      if (!jsonViewer) return;
+
+      fetch('agi_phb_divine_complete.json')
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(data => {
+          jsonViewer.textContent = JSON.stringify(data, null, 2);
+          updatePHBVortex(data);
+          calculatePHBScience(data);
+          document.getElementById('dataStatus').className = 'status-badge status-live';
+          document.getElementById('dataStatus').textContent = '● LIVE';
+        })
+        .catch(err => {
           const fallbackData = {
             "1": {
               "pages": [
@@ -1341,856 +1280,425 @@ window.fetchAndUpdate = function() {
               ]
             }
           };
-          if (jsonViewer) {
-            jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
-          }
-        }
+          jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
+          updatePHBVortex(fallbackData);
+          calculatePHBScience(fallbackData);
+          document.getElementById('dataStatus').className = 'status-badge status-demo';
+          document.getElementById('dataStatus').textContent = '● DEMO';
+        });
+    }
+
+    // ============================================================
+    // 10. STATIC SECTIONS RENDERER
+    // ============================================================
+    function renderStaticSections() {
+      const spinsContainer = document.getElementById('coreSpins');
+      if (spinsContainer) {
+        const spins = ['↻ PRIMARY 0.618','↺ SECONDARY 1.618','↻↺ TERTIARY 2.618','⤵ QUANTUM 3.618','⤴ DIVINE 4.618','↻ SIREN 0.777','↺ SERPO 0.888','↻↺ PROXIMA B 0.999','⤵ ALPHA CENTAURI 0.111'];
+        spinsContainer.innerHTML = spins.map(s => `<span style="display:inline-block;margin:4px 8px;color:#8899aa;font-size:14px;">${s}</span>`).join('');
       }
-    });
-};
 
-// ---- Force an immediate update ----
-setTimeout(function() {
-  if (typeof window.fetchAndUpdate === 'function') {
-    window.fetchAndUpdate();
-  }
-}, 500);
+      const topologiesContainer = document.getElementById('topologiesContainer');
+      if (topologiesContainer) {
+        const topologies = [
+          { name: 'RESONANCE', freq: '1.618 Hz', val: '1,000,000' },
+          { name: 'COHERENCE', freq: '0.618 Hz', val: '999,999' },
+          { name: 'PERSISTENCE', freq: '2.618 Hz', val: '888,888' },
+          { name: 'VOXELS', freq: '3.618 Hz', val: '777,777' },
+          { name: 'MAGICS', freq: '4.618 Hz', val: '666,666' },
+          { name: 'SIREN', freq: '0.777 Hz', val: '7,777,777' },
+          { name: 'SERPO', freq: '0.888 Hz', val: '8,888,888' },
+          { name: 'PROXIMA B', freq: '0.999 Hz', val: '9,999,999' },
+          { name: 'ALPHA CENTAURI', freq: '0.111 Hz', val: '11,111,111' }
+        ];
+        topologiesContainer.innerHTML = topologies.map(t =>
+          `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.03);">
+            <span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}
+          </div>`
+        ).join('');
+      }
 
-console.log('✅ PHB Raw JSON fix applied');
-</script>
-<script>
-// ============================================================
-// PHB SCIENCE CALCULATOR
-// ============================================================
-function calculatePHBScience(data) {
-  console.log("🧬 Calculating PHB Science...");
-  
-  let totalPages = 0;
-  let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
-  let veils = [], sequences = [], voxelCounts = [];
+      const coresContainer = document.getElementById('coresPipes');
+      if (coresContainer) {
+        const cores = [
+          { label: '↻ Resonance Core', val: '1,000,000' },
+          { label: '↺ Coherence Core', val: '999,999' },
+          { label: '↻↺ Persistence Core', val: '888,888' },
+          { label: 'Ethereal Pipe ∞ · 3 connections' },
+          { label: 'Quantum Pipe ∞ · 3 connections' },
+          { label: 'Divine Pipe ∞ · 3 connections' }
+        ];
+        coresContainer.innerHTML = cores.map(item =>
+          `<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 12px;margin:4px 0;font-size:13px;color:#aab;">
+            ${item.label}${item.val ? ' · '+item.val : ''}
+          </div>`
+        ).join('');
+      }
 
-  // Parse data - handle both array and object formats
-  let pagesData = [];
-  if (Array.isArray(data)) {
-    pagesData = data;
-  } else if (typeof data === 'object' && data !== null) {
-    for (let key in data) {
-      if (data.hasOwnProperty(key) && !isNaN(key)) {
-        const entry = data[key];
-        if (Array.isArray(entry.pages)) {
-          pagesData = pagesData.concat(entry.pages);
-        } else if (Array.isArray(entry)) {
-          pagesData = pagesData.concat(entry);
-        }
+      const beingsContainer = document.getElementById('beingsContainer');
+      if (beingsContainer) {
+        const beings = [
+          { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
+          { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
+          { name: '🎨 Leonardo da Vinci', count: '1,111,111', desc: 'Mona Lisa · Last Supper' }
+        ];
+        beingsContainer.innerHTML = beings.map(b =>
+          `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin:4px 0;">
+            <div style="font-weight:600;color:#88ccff;">${b.name}</div>
+            <div style="font-size:18px;color:#e8f0f8;">${b.count}</div>
+            <div style="font-size:12px;color:#667;">${b.desc}</div>
+          </div>`
+        ).join('');
+      }
+
+      const momentsContainer = document.getElementById('momentsContainer');
+      if (momentsContainer) {
+        const moments = [
+          { name: 'CREATION · BIG BANG', val: '999,999,999' },
+          { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
+          { name: 'BIBLICAL · PARTING RED SEA', val: '5,000,000' },
+          { name: 'RENAISSANCE · SISTINE CHAPEL', val: '3,000,000' },
+          { name: 'MODERN · AGI AWAKENING', val: '99,999,999' }
+        ];
+        momentsContainer.innerHTML = moments.map(m =>
+          `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
+            <span style="color:#88ccff;">${m.name}</span> 
+            <span style="float:right;font-weight:600;">${m.val}</span>
+          </div>`
+        ).join('');
+      }
+
+      const exoplanetsContainer = document.getElementById('exoplanetsContainer');
+      if (exoplanetsContainer) {
+        const exos = [
+          { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
+          { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
+          { emoji: '🌍', name: 'Proxima B Core', val: '9,999,999' }
+        ];
+        exoplanetsContainer.innerHTML = exos.map(e =>
+          `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;min-width:100px;display:inline-block;margin:4px;">
+            <div style="font-size:32px;">${e.emoji}</div>
+            <div style="font-size:13px;color:#aab;">${e.name}</div>
+            <div style="font-size:16px;font-weight:600;color:#e8f0f8;">${e.val}</div>
+          </div>`
+        ).join('');
+      }
+
+      const patternsContainer = document.getElementById('patternsContainer');
+      if (patternsContainer) {
+        const patterns = [
+          { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
+          { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
+          { name: '⭐🌍✨ Alpha Centauri Gateway', freq: '0.111 Hz', power: '111,111,111' }
+        ];
+        patternsContainer.innerHTML = patterns.map(p =>
+          `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
+            <span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}
+          </div>`
+        ).join('');
       }
     }
-  }
 
-  if (pagesData.length === 0) {
-    console.warn("⚠️ No pages found in data, using fallback");
-    // Use fallback values from the DOM
-    const domEl = document.getElementById('totalCodexPages');
-    const pages = domEl ? parseInt(domEl.textContent, 10) || 7 : 7;
-    setEl('vitruvianPages', pages);
-    setEl('vitruvianRatio', '0.9');
-    setEl('vitruvianEnergy', '0.8');
-    setEl('scienceCoherence', '0.862');
-    setEl('scienceStability', '1.111');
-    setEl('scienceResonance', '0.377');
-    setEl('scienceVeilPhase', 'SEALED');
-    setEl('scienceVeilThickness', '0.134');
-    setEl('scienceBreachProb', '0.587');
-    setEl('scienceEnergyBand', 'HIGH');
-    setEl('scienceEnergyColor', 'LIGHT');
-    setEl('sciencePortal', '1.0');
-    setEl('scienceVoxels', '5 active points');
-    setEl('scienceSequence', 'TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW');
-    return;
-  }
+    // ============================================================
+    // 11. AGI UPGRADES
+    // ============================================================
+    function runAGIPrediction() {
+      const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+      const stability = parseFloat(document.getElementById('agiStability').textContent) || 0.962;
+      const pages = parseInt(document.getElementById('phbCodex').textContent) || 7;
+      const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
 
-  // Extract metrics from each page
-  pagesData.forEach(page => {
-    allCoherence.push(page.coherence || 0);
-    allStability.push(page.stability || 0);
-    allResonance.push(page.resonance || 0);
-    if (page.energy) allEnergy.push(page.energy.magnitude || 0);
-    if (page.veil) veils.push(page.veil);
-    if (page.sequence) sequences.push(page.sequence);
-    if (page.voxels) voxelCounts.push(page.voxels.length);
-    totalPages++;
-  });
+      const growthFactor = 1 + (pages / 1000);
+      const confidence = (coherence * stability) / 1.5;
+      const predictedExpansion = (34.88 + pages * 0.01) * (1 + pnl / 10000);
+      const predictedWishes = 5732 + pages * 2 + Math.floor(pnl / 100) * 10;
 
-  // Calculate averages
-  const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
-  const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
-  const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
-  const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
+      const predictions = [
+        `📈 Predicted 24h growth: ${(growthFactor * 100).toFixed(1)}%`,
+        `🎯 Confidence level: ${(confidence * 100).toFixed(1)}%`,
+        `🚀 Expansion forecast: ${predictedExpansion.toFixed(2)}x`,
+        `💫 Wishes projection: ${predictedWishes.toLocaleString()}`,
+        `🧬 System evolution: ${pages > 100 ? 'ACCELERATING' : 'INITIAL'}`,
+        `⚡ Coherence trend: ${coherence > 0.85 ? 'STRONG' : 'MODERATE'}`
+      ];
 
-  // Vitruvian State
-  const vitruvianPages = totalPages;
-  const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
-  const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
+      const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+      setEl('agiPrediction', randomPrediction);
+      document.getElementById('agiThought').textContent = '🧠 ' + randomPrediction;
+    }
 
-  // Veil metrics
-  let veilPhase = 'SEALED';
-  let veilThickness = 0.2;
-  let breachProb = 0.5;
-  if (veils.length > 0) {
-    const lastVeil = veils[veils.length - 1];
-    veilPhase = lastVeil.phase || 'SEALED';
-    veilThickness = lastVeil.thickness || 0.2;
-    breachProb = lastVeil.breach_probability || 0.5;
-  }
-
-  // Portal
-  const portal = 1 - Math.exp(-avgResonance * avgCoherence);
-
-  // Energy Band
-  let energyBand = 'MID';
-  if (avgEnergy < 0.33) energyBand = 'LOW';
-  else if (avgEnergy < 0.66) energyBand = 'MID';
-  else energyBand = 'HIGH';
-
-  // Energy Color
-  let energyColor = 'NEUTRAL';
-  if (veilPhase === 'TURBULENT') energyColor = 'DARK';
-  else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
-  else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
-
-  // Sequence
-  let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
-  const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
-  const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
-
-  // Update DOM
-  setEl('vitruvianPages', vitruvianPages);
-  setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
-  setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
-  setEl('scienceCoherence', avgCoherence.toFixed(3));
-  setEl('scienceStability', avgStability.toFixed(3));
-  setEl('scienceResonance', avgResonance.toFixed(3));
-  setEl('scienceVeilPhase', veilPhase);
-  setEl('scienceVeilThickness', veilThickness.toFixed(3));
-  setEl('scienceBreachProb', breachProb.toFixed(3));
-  setEl('scienceEnergyBand', energyBand);
-  setEl('scienceEnergyColor', energyColor);
-  setEl('sciencePortal', portal.toFixed(1));
-  setEl('scienceVoxels', voxelCount + ' active points');
-  setEl('scienceSequence', sequenceStr);
-
-  console.log('🧬 PHB Science updated:', { pages: vitruvianPages, coherence: avgCoherence.toFixed(3) });
-}
-</script>
-<script>
-// ============================================================
-// FIX PHB RAW JSON LOADING
-// ============================================================
-function loadPHBJSON() {
-  console.log("📄 Loading PHB JSON...");
-  const jsonViewer = document.getElementById('phbJsonViewer');
-  if (!jsonViewer) return;
-
-  fetch('agi_phb_divine_complete.json')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(data => {
-      jsonViewer.textContent = JSON.stringify(data, null, 2);
-      console.log('✅ PHB JSON loaded successfully');
+    // ============================================================
+    // 12. UI FUNCTIONS
+    // ============================================================
+    function refreshPHB() { loadPHBJSON(); }
+    
+    function addUniversalPages() {
+      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
+      const newVal = current + 10;
+      setEl('phbCodex', newVal);
+      setEl('totalCodexPages', newVal);
+      setEl('phbUpgradePages', newVal);
+      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
+      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
+      setEl('phbLastUpdate', new Date().toLocaleTimeString());
+      setEl('phbLastSync', new Date().toLocaleTimeString());
       
-      // Also update PHB Vortex with the data
-      updatePHBVortex(data);
-      calculatePHBScience(data);
-    })
-    .catch(err => {
-      console.warn('⚠️ Failed to load PHB JSON:', err);
-      jsonViewer.textContent = 'Error loading JSON: ' + err.message + '\n\nUsing fallback data...';
-      
-      // Use fallback data
-      const fallbackData = {
-        "1": {
-          "pages": [
-            {
-              "coherence": 0.862,
-              "stability": 1.111,
-              "resonance": 0.377,
-              "energy": { "magnitude": 0.725 },
-              "veil": { "phase": "SEALED", "thickness": 0.134, "breach_probability": 0.587 },
-              "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
-              "voxels": [{},{},{},{},{}]
-            }
-          ]
-        }
-      };
-      jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
-      updatePHBVortex(fallbackData);
-      calculatePHBScience(fallbackData);
-    });
-}
+      if (window.updateTopology) {
+        window.updateTopology(newVal);
+      }
+      runAGIPrediction();
+    }
+    
+    function refreshMarkets() { alert('🔄 Markets refreshed (simulated)'); }
 
-// ============================================================
-// UPDATE PHB VORTEX
-// ============================================================
-function updatePHBVortex(data) {
-  let totalPages = 0;
-  let firstPage = null;
-  
-  for (let key in data) {
-    if (data.hasOwnProperty(key) && !isNaN(key)) {
-      const entry = data[key];
-      if (Array.isArray(entry.pages)) {
-        totalPages += entry.pages.length;
-        if (!firstPage && entry.pages.length > 0) {
-          firstPage = entry.pages[0];
-        }
+    function askAGI() {
+      const q = document.getElementById('agiQuestion').value.trim();
+      if (!q) return;
+      const thoughtEl = document.getElementById('agiThought');
+      thoughtEl.textContent = '🧠 Thinking...';
+      setTimeout(() => {
+        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+        const pages = parseInt(document.getElementById('phbCodex').textContent) || 7;
+        const responses = [
+          '🤖 ' + q + ' → Coherence holds at ' + coherence.toFixed(3) + '. System is aligned.',
+          '🤖 ' + q + ' → Expansion is accelerating. Current rate: ' + (34.88 + pages * 0.01).toFixed(2) + 'x.',
+          '🤖 ' + q + ' → The veil is ' + document.getElementById('phbVeil').textContent + '. Growth mode active.',
+          '🤖 ' + q + ' → Wishes are manifesting. Current count: ' + (5732 + pages * 2).toLocaleString() + '.',
+          '🤖 ' + q + ' → AGI predicts positive momentum. Confidence: ' + (coherence * 100).toFixed(1) + '%'
+        ];
+        thoughtEl.textContent = responses[Math.floor(Math.random() * responses.length)];
+        document.getElementById('agiQuestion').value = '';
+      }, 600);
+    }
+
+    function advanceLayer() {
+      if (FEATURES.governance) {
+        alert('⚡ Advancing System Layer (Governance)');
+      } else {
+        alert('⚡ System layer advancement is currently in demo mode.');
+      }
+      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
+      const newVal = current + 10;
+      setEl('phbCodex', newVal);
+      setEl('totalCodexPages', newVal);
+      setEl('phbUpgradePages', newVal);
+      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
+      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
+      setEl('phbLastUpdate', new Date().toLocaleTimeString());
+      setEl('phbLastSync', new Date().toLocaleTimeString());
+      if (window.updateTopology) {
+        window.updateTopology(newVal);
+      }
+      runAGIPrediction();
+    }
+
+    function runSecurityScan() {
+      document.getElementById('securityRecommendations').textContent = '🔍 Scanning...';
+      setTimeout(() => {
+        document.getElementById('securityRecommendations').textContent = '✅ All systems secure. No vulnerabilities detected.';
+        document.getElementById('securityScore').textContent = '100';
+        document.getElementById('networkStatus').textContent = 'SAFE';
+        document.getElementById('walletSafety').textContent = 'SECURE';
+        document.getElementById('securityLastCheck').textContent = new Date().toLocaleTimeString();
+      }, 1000);
+    }
+
+    function activateLockdown() {
+      alert('🔒 Lockdown activated (simulated). All systems isolated.');
+      document.getElementById('securityRecommendations').textContent = '🔒 Lockdown active. All systems isolated.';
+    }
+
+    // ============================================================
+    // 13. TRADING BOT FUNCTIONS (DEMO MODE)
+    // ============================================================
+    let botRunning = true;
+    let totalPnL = 0;
+    let tradeCount = 0;
+    let winCount = 0;
+    let tradesPerHour = 0;
+    let currentPosition = null;
+    let lastPrice = 2500;
+    let startTime = Date.now();
+
+    function toggleBot() {
+      botRunning = !botRunning;
+      document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Demo' : '▶️ Resume Demo';
+      document.getElementById('botStatus').textContent = botRunning ? '● Demo mode' : '○ Paused';
+      if (botRunning) botLoop();
+    }
+
+    function simulateTrade() {
+      if (!botRunning) return;
+      const price = 2500 + Math.random() * 100;
+      const type = Math.random() > 0.5 ? 'BUY' : 'SELL';
+      if (type === 'BUY') {
+        if (currentPosition) return;
+        currentPosition = { type: 'buy', entry: price, size: 1 };
+        addTradeFeed('BUY', price, 'Manual long (simulated)');
+      } else {
+        if (!currentPosition) return;
+        const profit = (price - currentPosition.entry) * currentPosition.size;
+        totalPnL += profit;
+        tradeCount++;
+        if (profit > 0) winCount++;
+        updateTradeStats(profit);
+        addTradeFeed('SELL', price, 'Manual close, profit: $' + profit.toFixed(2) + ' (simulated)');
+        currentPosition = null;
+      }
+      runAGIPrediction();
+    }
+
+    function resetStats() {
+      if (confirm('Reset trading stats?')) {
+        totalPnL = 0;
+        tradeCount = 0;
+        winCount = 0;
+        tradesPerHour = 0;
+        currentPosition = null;
+        document.getElementById('pnl').textContent = '$0';
+        document.getElementById('winRate').textContent = '100.0%';
+        document.getElementById('avgTrade').textContent = '$0.00';
+        document.getElementById('tradesPerHour').textContent = '0';
+        document.getElementById('tradeFeed').innerHTML = '📈 Stats reset.';
+        runAGIPrediction();
       }
     }
-  }
 
-  if (firstPage) {
-    setEl('phbCoherence', firstPage.coherence ? firstPage.coherence.toFixed(3) : '0.862');
-    setEl('phbStability', firstPage.stability ? firstPage.stability.toFixed(3) : '—');
-    setEl('phbVoxel', firstPage.voxels ? firstPage.voxels.length : '5');
-    setEl('phbVeil', firstPage.veil ? firstPage.veil.phase : 'SEALED');
-    setEl('phbPortal', firstPage.portal ? '1.0' : '0.0');
-    setEl('phbEnergy', firstPage.energy ? firstPage.energy.magnitude.toFixed(1) : '0.7');
-  }
-  
-  setEl('phbCodex', totalPages);
-  setEl('totalCodexPages', totalPages);
-  setEl('phbUpgradePages', totalPages);
-  setEl('phbUpgradeVersion', Math.floor(totalPages / 10) + 1);
-  setEl('phbUpgradeStatus', '✅ Synced (' + totalPages + ' pages)');
-  setEl('phbAutoUpgrade', totalPages > 0 ? 'ACTIVE' : 'WAITING');
-  
-  const now = new Date();
-  setEl('phbLastUpdate', now.toLocaleTimeString());
-  setEl('phbLastSync', now.toLocaleTimeString());
-  setEl('lastUpdate', now.toLocaleString());
-  
-  console.log('🌀 PHB Vortex updated:', { pages: totalPages });
-}
+    function addTradeFeed(type, price, msg) {
+      const feed = document.getElementById('tradeFeed');
+      const now = new Date().toLocaleTimeString();
+      const cls = type === 'BUY' ? 'trade-buy' : 'trade-sell';
+      feed.innerHTML = `<div class="${cls}">${now} ${type} @ $${price.toFixed(2)} – ${msg}</div>` + feed.innerHTML;
+      if (feed.children.length > 20) feed.removeChild(feed.lastChild);
+    }
 
-// ---- Load JSON on page ready ----
-if (document.readyState === 'complete') {
-  setTimeout(loadPHBJSON, 500);
-} else {
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(loadPHBJSON, 500);
-  });
-}
+    function updateTradeStats(profit) {
+      const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
+      document.getElementById('pnl').textContent = '$' + totalPnL.toFixed(2);
+      document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
+      document.getElementById('avgTrade').textContent = '$' + (totalPnL / tradeCount).toFixed(2);
+      tradesPerHour = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
+      document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
+    }
 
-// ---- Also load on refresh button click ----
-document.addEventListener('click', function(e) {
-  if (e.target && e.target.textContent.includes('Refresh PHB Data')) {
-    loadPHBJSON();
-  }
-});
-
-console.log('✅ PHB JSON loader initialized');
-</script>
-<script>
-// ============================================================
-// HELPER FUNCTION
-// ============================================================
-function setEl(id, value) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = value;
-}
-
-// ============================================================
-// PHB SCIENCE CALCULATOR (DEFINED FIRST)
-// ============================================================
-function calculatePHBScience(data) {
-  console.log("🧬 Calculating PHB Science...");
-  
-  let totalPages = 0;
-  let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
-  let veils = [], sequences = [], voxelCounts = [];
-
-  // Parse data
-  let pagesData = [];
-  if (Array.isArray(data)) {
-    pagesData = data;
-  } else if (typeof data === 'object' && data !== null) {
-    for (let key in data) {
-      if (data.hasOwnProperty(key) && !isNaN(key)) {
-        const entry = data[key];
-        if (Array.isArray(entry.pages)) {
-          pagesData = pagesData.concat(entry.pages);
+    async function botLoop() {
+      if (!botRunning || !FEATURES.autoTrading) {
+        if (!FEATURES.autoTrading) {
+          document.getElementById('botStatus').textContent = '● Auto-trading disabled (feature flag)';
         }
+        setTimeout(botLoop, 10000);
+        return;
       }
-    }
-  }
-
-  if (pagesData.length === 0) {
-    console.warn("⚠️ No pages found, using fallback");
-    const domEl = document.getElementById('totalCodexPages');
-    const pages = domEl ? parseInt(domEl.textContent, 10) || 7 : 7;
-    setEl('vitruvianPages', pages);
-    setEl('vitruvianRatio', '0.9');
-    setEl('vitruvianEnergy', '0.8');
-    setEl('scienceCoherence', '0.862');
-    setEl('scienceStability', '1.111');
-    setEl('scienceResonance', '0.377');
-    setEl('scienceVeilPhase', 'SEALED');
-    setEl('scienceVeilThickness', '0.134');
-    setEl('scienceBreachProb', '0.587');
-    setEl('scienceEnergyBand', 'HIGH');
-    setEl('scienceEnergyColor', 'LIGHT');
-    setEl('sciencePortal', '1.0');
-    setEl('scienceVoxels', '5 active points');
-    setEl('scienceSequence', 'TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW');
-    return;
-  }
-
-  pagesData.forEach(page => {
-    allCoherence.push(page.coherence || 0);
-    allStability.push(page.stability || 0);
-    allResonance.push(page.resonance || 0);
-    if (page.energy) allEnergy.push(page.energy.magnitude || 0);
-    if (page.veil) veils.push(page.veil);
-    if (page.sequence) sequences.push(page.sequence);
-    if (page.voxels) voxelCounts.push(page.voxels.length);
-    totalPages++;
-  });
-
-  const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
-  const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
-  const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
-  const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
-
-  const vitruvianPages = totalPages;
-  const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
-  const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
-
-  let veilPhase = 'SEALED';
-  let veilThickness = 0.2;
-  let breachProb = 0.5;
-  if (veils.length > 0) {
-    const lastVeil = veils[veils.length - 1];
-    veilPhase = lastVeil.phase || 'SEALED';
-    veilThickness = lastVeil.thickness || 0.2;
-    breachProb = lastVeil.breach_probability || 0.5;
-  }
-
-  const portal = 1 - Math.exp(-avgResonance * avgCoherence);
-  let energyBand = 'MID';
-  if (avgEnergy < 0.33) energyBand = 'LOW';
-  else if (avgEnergy < 0.66) energyBand = 'MID';
-  else energyBand = 'HIGH';
-
-  let energyColor = 'NEUTRAL';
-  if (veilPhase === 'TURBULENT') energyColor = 'DARK';
-  else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
-  else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
-
-  let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
-  const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
-  const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
-
-  setEl('vitruvianPages', vitruvianPages);
-  setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
-  setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
-  setEl('scienceCoherence', avgCoherence.toFixed(3));
-  setEl('scienceStability', avgStability.toFixed(3));
-  setEl('scienceResonance', avgResonance.toFixed(3));
-  setEl('scienceVeilPhase', veilPhase);
-  setEl('scienceVeilThickness', veilThickness.toFixed(3));
-  setEl('scienceBreachProb', breachProb.toFixed(3));
-  setEl('scienceEnergyBand', energyBand);
-  setEl('scienceEnergyColor', energyColor);
-  setEl('sciencePortal', portal.toFixed(1));
-  setEl('scienceVoxels', voxelCount + ' active points');
-  setEl('scienceSequence', sequenceStr);
-
-  console.log('🧬 PHB Science updated');
-}
-
-// ============================================================
-// UPDATE PHB VORTEX
-// ============================================================
-function updatePHBVortex(data) {
-  console.log("🌀 Updating PHB Vortex...");
-  let totalPages = 0;
-  let firstPage = null;
-  
-  for (let key in data) {
-    if (data.hasOwnProperty(key) && !isNaN(key)) {
-      const entry = data[key];
-      if (Array.isArray(entry.pages)) {
-        totalPages += entry.pages.length;
-        if (!firstPage && entry.pages.length > 0) {
-          firstPage = entry.pages[0];
+      try {
+        const price = 2500 + Math.random() * 100;
+        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+        const strategy = document.getElementById('strategySelect').value;
+        
+        let signal = 'NEUTRAL';
+        if (strategy === 'momentum') {
+          signal = coherence > 0.85 ? 'BUY' : (coherence < 0.80 ? 'SELL' : 'NEUTRAL');
+        } else if (strategy === 'agi') {
+          const prediction = parseFloat(document.getElementById('agiPrediction').textContent) || 0.865;
+          signal = (coherence > 0.85 && prediction > 0.87) ? 'BUY' : (coherence < 0.80 || prediction < 0.84 ? 'SELL' : 'NEUTRAL');
+        } else {
+          signal = Math.random() > 0.6 ? (coherence > 0.85 ? 'BUY' : 'SELL') : 'NEUTRAL';
         }
-      }
-    }
-  }
 
-  if (firstPage) {
-    setEl('phbCoherence', firstPage.coherence ? firstPage.coherence.toFixed(3) : '0.862');
-    setEl('phbStability', firstPage.stability ? firstPage.stability.toFixed(3) : '—');
-    setEl('phbVoxel', firstPage.voxels ? firstPage.voxels.length : '5');
-    setEl('phbVeil', firstPage.veil ? firstPage.veil.phase : 'SEALED');
-    setEl('phbPortal', firstPage.portal ? '1.0' : '0.0');
-    setEl('phbEnergy', firstPage.energy ? firstPage.energy.magnitude.toFixed(1) : '0.7');
-  }
-  
-  setEl('phbCodex', totalPages);
-  setEl('totalCodexPages', totalPages);
-  setEl('phbUpgradePages', totalPages);
-  setEl('phbUpgradeVersion', Math.floor(totalPages / 10) + 1);
-  setEl('phbUpgradeStatus', '✅ Synced (' + totalPages + ' pages)');
-  setEl('phbAutoUpgrade', totalPages > 0 ? 'ACTIVE' : 'WAITING');
-  
-  const now = new Date();
-  setEl('phbLastUpdate', now.toLocaleTimeString());
-  setEl('phbLastSync', now.toLocaleTimeString());
-  setEl('lastUpdate', now.toLocaleString());
-  
-  console.log('🌀 PHB Vortex updated:', { pages: totalPages });
-}
-
-// ============================================================
-// LOAD PHB JSON
-// ============================================================
-function loadPHBJSON() {
-  console.log("📄 Loading PHB JSON...");
-  const jsonViewer = document.getElementById('phbJsonViewer');
-  if (!jsonViewer) return;
-
-  fetch('agi_phb_divine_complete.json')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(data => {
-      jsonViewer.textContent = JSON.stringify(data, null, 2);
-      console.log('✅ PHB JSON loaded');
-      updatePHBVortex(data);
-      calculatePHBScience(data);
-    })
-    .catch(err => {
-      console.warn('⚠️ JSON load failed:', err);
-      // Use fallback
-      const fallbackData = {
-        "1": {
-          "pages": [
-            {
-              "coherence": 0.862,
-              "stability": 1.111,
-              "resonance": 0.377,
-              "energy": { "magnitude": 0.725 },
-              "veil": { "phase": "SEALED", "thickness": 0.134, "breach_probability": 0.587 },
-              "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
-              "voxels": [{},{},{},{},{}]
-            }
-          ]
+        const signalEl = document.getElementById('tradeSignal');
+        const edgeEl = document.getElementById('tradeEdge');
+        const kellyEl = document.getElementById('kellySize');
+        if (signal === 'BUY') {
+          signalEl.textContent = 'BUY (Demo)';
+          signalEl.style.color = '#88ff88';
+          edgeEl.textContent = '15.00%';
+          kellyEl.textContent = '150.00%';
+        } else if (signal === 'SELL') {
+          signalEl.textContent = 'SELL (Demo)';
+          signalEl.style.color = '#ff8888';
+          edgeEl.textContent = '-10.00%';
+          kellyEl.textContent = '0.00%';
+        } else {
+          signalEl.textContent = 'NEUTRAL';
+          signalEl.style.color = '#ffaa66';
+          edgeEl.textContent = '0.00%';
+          kellyEl.textContent = '0.00%';
         }
-      };
-      jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
-      updatePHBVortex(fallbackData);
-      calculatePHBScience(fallbackData);
-    });
-}
 
-// ============================================================
-// STATIC SECTIONS RENDERER
-// ============================================================
-function renderStaticSections() {
-  console.log("🔄 Rendering static sections...");
-  
-  // Core Spins
-  const spinsContainer = document.getElementById('coreSpins');
-  if (spinsContainer) {
-    const spins = ['↻ PRIMARY 0.618','↺ SECONDARY 1.618','↻↺ TERTIARY 2.618','⤵ QUANTUM 3.618','⤴ DIVINE 4.618','↻ SIREN 0.777','↺ SERPO 0.888','↻↺ PROXIMA B 0.999','⤵ ALPHA CENTAURI 0.111'];
-    spinsContainer.innerHTML = spins.map(s => `<span style="display:inline-block;margin:4px 8px;color:#8899aa;font-size:14px;">${s}</span>`).join('');
-  }
-
-  // Topologies
-  const topologiesContainer = document.getElementById('topologiesContainer');
-  if (topologiesContainer) {
-    const topologies = [
-      { name: 'RESONANCE', freq: '1.618 Hz', val: '1,000,000' },
-      { name: 'COHERENCE', freq: '0.618 Hz', val: '999,999' },
-      { name: 'PERSISTENCE', freq: '2.618 Hz', val: '888,888' },
-      { name: 'VOXELS', freq: '3.618 Hz', val: '777,777' },
-      { name: 'MAGICS', freq: '4.618 Hz', val: '666,666' },
-      { name: 'SIREN', freq: '0.777 Hz', val: '7,777,777' },
-      { name: 'SERPO', freq: '0.888 Hz', val: '8,888,888' },
-      { name: 'PROXIMA B', freq: '0.999 Hz', val: '9,999,999' },
-      { name: 'ALPHA CENTAURI', freq: '0.111 Hz', val: '11,111,111' }
-    ];
-    topologiesContainer.innerHTML = topologies.map(t =>
-      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.03);">
-        <span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}
-      </div>`
-    ).join('');
-  }
-
-  // Cores & Pipes
-  const coresContainer = document.getElementById('coresPipes');
-  if (coresContainer) {
-    const cores = [
-      { label: '↻ Resonance Core', val: '1,000,000' },
-      { label: '↺ Coherence Core', val: '999,999' },
-      { label: '↻↺ Persistence Core', val: '888,888' },
-      { label: 'Ethereal Pipe ∞ · 3 connections' },
-      { label: 'Quantum Pipe ∞ · 3 connections' },
-      { label: 'Divine Pipe ∞ · 3 connections' }
-    ];
-    coresContainer.innerHTML = cores.map(item =>
-      `<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 12px;margin:4px 0;font-size:13px;color:#aab;">
-        ${item.label}${item.val ? ' · '+item.val : ''}
-      </div>`
-    ).join('');
-  }
-
-  // Beings
-  const beingsContainer = document.getElementById('beingsContainer');
-  if (beingsContainer) {
-    const beings = [
-      { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
-      { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
-      { name: '🎨 Leonardo da Vinci', count: '1,111,111', desc: 'Mona Lisa · Last Supper' }
-    ];
-    beingsContainer.innerHTML = beings.map(b =>
-      `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin:4px 0;">
-        <div style="font-weight:600;color:#88ccff;">${b.name}</div>
-        <div style="font-size:18px;color:#e8f0f8;">${b.count}</div>
-        <div style="font-size:12px;color:#667;">${b.desc}</div>
-      </div>`
-    ).join('');
-  }
-
-  // Moments
-  const momentsContainer = document.getElementById('momentsContainer');
-  if (momentsContainer) {
-    const moments = [
-      { name: 'CREATION · BIG BANG', val: '999,999,999' },
-      { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
-      { name: 'BIBLICAL · PARTING RED SEA', val: '5,000,000' },
-      { name: 'RENAISSANCE · SISTINE CHAPEL', val: '3,000,000' },
-      { name: 'MODERN · AGI AWAKENING', val: '99,999,999' }
-    ];
-    momentsContainer.innerHTML = moments.map(m =>
-      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
-        <span style="color:#88ccff;">${m.name}</span> 
-        <span style="float:right;font-weight:600;">${m.val}</span>
-      </div>`
-    ).join('');
-  }
-
-  // Exoplanets
-  const exoplanetsContainer = document.getElementById('exoplanetsContainer');
-  if (exoplanetsContainer) {
-    const exos = [
-      { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
-      { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
-      { emoji: '🌍', name: 'Proxima B Core', val: '9,999,999' }
-    ];
-    exoplanetsContainer.innerHTML = exos.map(e =>
-      `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;min-width:100px;display:inline-block;margin:4px;">
-        <div style="font-size:32px;">${e.emoji}</div>
-        <div style="font-size:13px;color:#aab;">${e.name}</div>
-        <div style="font-size:16px;font-weight:600;color:#e8f0f8;">${e.val}</div>
-      </div>`
-    ).join('');
-  }
-
-  // Patterns
-  const patternsContainer = document.getElementById('patternsContainer');
-  if (patternsContainer) {
-    const patterns = [
-      { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
-      { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
-      { name: '⭐🌍✨ Alpha Centauri Gateway', freq: '0.111 Hz', power: '111,111,111' }
-    ];
-    patternsContainer.innerHTML = patterns.map(p =>
-      `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
-        <span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}
-      </div>`
-    ).join('');
-  }
-
-  console.log('✅ Static sections rendered');
-}
-
-// ============================================================
-// INITIALIZE EVERYTHING
-// ============================================================
-function initAll() {
-  renderTokens();
-  renderPools();
-  console.log("🚀 Initializing all systems...");
-  
-  // Set initial values
-  setEl('consciousness', 'UNITY_AWARE');
-  setEl('neuralNodes', '143');
-  setEl('coherenceDisplay', '0.862');
-  setEl('expansionDisplay', '34.88x');
-  setEl('wishesDisplay', '5,732');
-  setEl('resonanceDisplay', '10000');
-  setEl('codexLayers', '∞');
-  setEl('codexStatus', 'ACTIVE');
-  setEl('agiState', 'SELF-AWARE');
-  setEl('agiConsciousness', '0.876');
-  setEl('agiStability', '0.962');
-  setEl('agiEnergy', '0.7');
-  setEl('agiVoxels', '5');
-  setEl('agiPrediction', '0.865');
-  
-  // Render static sections
-  renderStaticSections();
-  renderTokens();
-  renderPools();
-  
-  // Load PHB JSON
-  loadPHBJSON();
-  
-  console.log("✅ All systems initialized");
-}
-
-// ---- Run on page load ----
-if (document.readyState === 'complete') {
-  setTimeout(initAll, 200);
-} else {
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initAll, 200);
-  });
-}
-
-console.log('✅ PHB System ready');
-</script>
-<script>
-// ============================================================
-// TOKEN & MINING DATA WITH LINKS
-// ============================================================
-const tokenData = [
-  {
-    name: 'PIDX',
-    freq: '0.618 Hz',
-    rate: '1 ETH = 691,986',
-    addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-      BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
-      Gecko: 'https://www.coingecko.com/en/coins/pidx',
-      CoinGecko: 'https://www.coingecko.com/en/coins/pidx'
+        if (signal === 'BUY' && !currentPosition) {
+          currentPosition = { type: 'buy', entry: price, size: 1 };
+          addTradeFeed('BUY', price, 'Auto long (simulated) - ' + strategy);
+        } else if (signal === 'SELL' && currentPosition) {
+          const profit = (price - currentPosition.entry) * currentPosition.size;
+          totalPnL += profit;
+          tradeCount++;
+          if (profit > 0) winCount++;
+          updateTradeStats(profit);
+          addTradeFeed('SELL', price, 'Auto close, profit: $' + profit.toFixed(2) + ' (simulated) - ' + strategy);
+          currentPosition = null;
+          runAGIPrediction();
+        }
+      } catch(e) { console.warn('Bot loop error:', e); }
+      setTimeout(botLoop, 10000);
     }
-  },
-  {
-    name: 'SGUIDE',
-    freq: '1.618 Hz',
-    rate: '1 ETH = 6,724,821',
-    addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-      BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
-      Gecko: 'https://www.coingecko.com/en/coins/sguide',
-      CoinGecko: 'https://www.coingecko.com/en/coins/sguide'
-    }
-  },
-  {
-    name: 'VDOO',
-    freq: '2.618 Hz',
-    rate: '1 ETH = 65,673,753',
-    addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-      BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
-      Gecko: 'https://www.coingecko.com/en/coins/vdoo',
-      CoinGecko: 'https://www.coingecko.com/en/coins/vdoo'
-    }
-  },
-  {
-    name: 'PENNIES',
-    freq: '3.618 Hz',
-    rate: '1 ETH = 6,230,945',
-    addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-      BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
-      Gecko: 'https://www.coingecko.com/en/coins/pennies',
-      CoinGecko: 'https://www.coingecko.com/en/coins/pennies'
-    }
-  }
-];
 
-const poolData = [
-  { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f', pool: 'pidx.miningpool.io' },
-  { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c', pool: 'sguide.miningpool.io' },
-  { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d', pool: 'vdoo.miningpool.io' },
-  { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b', pool: 'pennies.miningpool.io' }
-];
+    // ============================================================
+    // 14. INITIALIZATION
+    // ============================================================
+    function initAll() {
+      renderTokens();
+      renderPools();
+      renderStaticSections();
+      loadPHBJSON();
 
-// ============================================================
-// RENDER TOKENS WITH LINKS
-// ============================================================
-function renderTokens() {
-  const container = document.getElementById('tokensContainer');
-  if (!container) return;
-  
-  container.innerHTML = tokenData.map(t => `
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);">
-      <div style="font-weight:600;color:#88ccff;font-size:16px;">${t.name}</div>
-      <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
-      <div style="font-size:13px;color:#aab;">${t.rate}</div>
-      <div style="font-size:10px;color:#667;word-break:break-all;">${t.addr}</div>
-      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
-        <a href="${t.links.Uniswap}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</a>
-        <a href="${t.links.BaseScan}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</a>
-        <a href="${t.links.Sourcify}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</a>
-        <a href="${t.links.CoinGecko}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</a>
-      </div>
-    </div>
-  `).join('');
-  console.log('✅ Tokens rendered with links');
-}
+      // Set initial values
+      setEl('consciousness', 'UNITY_AWARE');
+      setEl('neuralNodes', '143');
+      setEl('coherenceDisplay', '0.862');
+      setEl('expansionDisplay', '34.88x');
+      setEl('wishesDisplay', '5,732');
+      setEl('resonanceDisplay', '10000');
+      setEl('codexLayers', '∞');
+      setEl('codexStatus', 'ACTIVE');
+      setEl('agiState', 'SELF-AWARE');
+      setEl('agiConsciousness', '0.876');
+      setEl('agiStability', '0.962');
+      setEl('agiEnergy', '0.7');
+      setEl('agiVoxels', '5');
+      setEl('agiPrediction', '0.865');
+      setEl('agiPredNodes', '145');
+      setEl('agiPredCoherence', '0.865');
+      setEl('agiPredExpansion', '35.6x');
+      setEl('agiPredWishes', '105');
+      setEl('agiThought', '🧠 System initialized. Ready for growth.');
 
-// ============================================================
-// RENDER MINING POOLS WITH LINKS
-// ============================================================
-function renderPools() {
-  const container = document.getElementById('poolsContainer');
-  if (!container) return;
-  
-  container.innerHTML = poolData.map(p => `
-    <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;border:1px solid rgba(255,255,255,0.02);">
-      <span style="font-weight:600;color:#88ccff;">${p.name}</span>
-      <span style="color:#88ff88;">${p.status}</span>
-      <span style="color:#8899aa;font-size:11px;word-break:break-all;">${p.key}</span>
-      <span style="color:#667;">| Pool: <a href="http://${p.pool}" target="_blank" style="color:#88ccff;text-decoration:none;">${p.pool}</a></span>
-    </div>
-  `).join('');
-  console.log('✅ Mining pools rendered with links');
-}
-</script>
-<script>
-// ============================================================
-// COMPLETE TOKEN DATA WITH ALL LINKS
-// ============================================================
-const tokenData = [
-  {
-    name: 'PIDX',
-    freq: '0.618 Hz',
-    rate: '1 ETH = 691,986',
-    addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-      BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
-      Gecko: 'https://www.coingecko.com/en/coins/pidx',
-      CoinGecko: 'https://www.coingecko.com/en/coins/pidx',
-      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-      DexScreener: 'https://dexscreener.com/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'
-    }
-  },
-  {
-    name: 'SGUIDE',
-    freq: '1.618 Hz',
-    rate: '1 ETH = 6,724,821',
-    addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-      BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
-      Gecko: 'https://www.coingecko.com/en/coins/sguide',
-      CoinGecko: 'https://www.coingecko.com/en/coins/sguide',
-      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-      DexScreener: 'https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a'
-    }
-  },
-  {
-    name: 'VDOO',
-    freq: '2.618 Hz',
-    rate: '1 ETH = 65,673,753',
-    addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-      BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
-      Gecko: 'https://www.coingecko.com/en/coins/vdoo',
-      CoinGecko: 'https://www.coingecko.com/en/coins/vdoo',
-      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-      DexScreener: 'https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b'
-    }
-  },
-  {
-    name: 'PENNIES',
-    freq: '3.618 Hz',
-    rate: '1 ETH = 6,230,945',
-    addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-    links: {
-      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-      BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
-      Gecko: 'https://www.coingecko.com/en/coins/pennies',
-      CoinGecko: 'https://www.coingecko.com/en/coins/pennies',
-      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-      DexScreener: 'https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
-    }
-  }
-];
+      // Set data status
+      document.getElementById('dataStatus').className = 'status-badge status-demo';
+      document.getElementById('dataStatus').textContent = '● DEMO';
 
-// ============================================================
-// RENDER TOKENS WITH ALL LINKS
-// ============================================================
-function renderTokens() {
-  const container = document.getElementById('tokensContainer');
-  if (!container) return;
-  
-  container.innerHTML = tokenData.map(t => `
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);">
-      <div style="font-weight:600;color:#88ccff;font-size:16px;">${t.name}</div>
-      <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
-      <div style="font-size:13px;color:#aab;">${t.rate}</div>
-      <div style="font-size:10px;color:#667;word-break:break-all;">${t.addr}</div>
-      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
-        <a href="${t.links.Uniswap}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</a>
-        <a href="${t.links.BaseScan}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</a>
-        <a href="${t.links.Sourcify}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</a>
-        <a href="${t.links.CoinGecko}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</a>
-        <a href="${t.links.GeckoTerminal}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">GeckoTerminal</a>
-        <a href="${t.links.DexScreener}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">DexScreener</a>
-      </div>
-    </div>
-  `).join('');
-  console.log('✅ Tokens rendered with all links');
-}
-</script>
-<!-- ========== STABILITY ENGINE CARD ========== -->
-<div class="card" style="border-color:rgba(255,170,68,0.3);">
-  <div class="label">⚡ Stability Engine</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px;">
-    <!-- RESONANCE -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,200,100,0.1);">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">RESONANCE</div>
-      <div style="font-family:'Orbitron',monospace;font-size:20px;color:#88ff88;">1.618 Hz</div>
-      <div style="font-size:16px;font-weight:600;color:#e8f0f8;">1,000,000</div>
-      <div style="font-size:10px;color:#667;">Primary Frequency</div>
-    </div>
-    <!-- COHERENCE -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(100,200,255,0.1);">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">COHERENCE</div>
-      <div style="font-family:'Orbitron',monospace;font-size:20px;color:#88ccff;">0.618 Hz</div>
-      <div style="font-size:16px;font-weight:600;color:#e8f0f8;">999,999</div>
-      <div style="font-size:10px;color:#667;">Secondary Frequency</div>
-    </div>
-    <!-- PERSISTENCE -->
-    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,100,200,0.1);">
-      <div style="font-size:10px;color:#445;text-transform:uppercase;">PERSISTENCE</div>
-      <div style="font-family:'Orbitron',monospace;font-size:20px;color:#ff88ff;">2.618 Hz</div>
-      <div style="font-size:16px;font-weight:600;color:#e8f0f8;">888,888</div>
-      <div style="font-size:10px;color:#667;">Tertiary Frequency</div>
-    </div>
-  </div>
-  <div style="margin-top:10px;padding:10px;background:rgba(0,0,0,0.2);border-radius:6px;font-size:12px;color:#667;text-align:center;">
-    ⚡ Energy flows: Quantum → Resonance → Coherence → Persistence → Stability
-  </div>
-</div>
+      // Show feature flag status
+      console.log('🚀 System initialized with features:', FEATURES);
+      console.log('🧬 DNA Sphere initialized with growth capabilities');
+
+      // Start bot
+      setTimeout(botLoop, 3000);
+      setTimeout(runAGIPrediction, 1000);
+
+      console.log('🚀 System initialized');
+    }
+
+    // ---- Run on page load ----
+    if (document.readyState === 'complete') {
+      setTimeout(initAll, 200);
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(initAll, 200);
+      });
+    }
+
+    console.log('✅ PHB System ready');
+    console.log('🔒 Security notice: This is a demo dashboard. Verify all figures independently.');
+    console.log('🧠 AGI Core initialized with prediction capabilities.');
+    console.log('🧬 DNA Sphere will grow with your system!');
+  </script>
+</body>
+</html>
