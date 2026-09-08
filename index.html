@@ -1562,8 +1562,6 @@
       botRunning = !botRunning;
       document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Bot' : '▶️ Resume Demo';
       document.getElementById('botStatus').textContent = botRunning ? '● Auto-trading ACTIVE' : '○ Paused';
-      if (botRunning) botLoop();
-    }
 
     function simulateTrade() {
       if (!botRunning) return;
@@ -1619,14 +1617,6 @@
       document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
     }
 
-    async function botLoop() {
-      if (!botRunning || !FEATURES.autoTrading) {
-        if (!FEATURES.autoTrading) {
-          document.getElementById('botStatus').textContent = '● Auto-trading ACTIVE';
-        }
-        setTimeout(botLoop, 10000);
-        return;
-      }
       try {
         const price = 2500 + Math.random() * 100;
         const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
@@ -1676,8 +1666,6 @@
           runAGIPrediction();
         }
       } catch(e) { console.warn('Bot loop error:', e); }
-      setTimeout(botLoop, 10000);
-    }
 
     // ============================================================
     // 14. INITIALIZATION
@@ -1718,11 +1706,6 @@
       console.log('🧬 DNA Sphere initialized with growth capabilities');
 
       // Start bot
-      setTimeout(botLoop, 3000);
-      setTimeout(runAGIPrediction, 1000);
-
-      console.log('🚀 System initialized');
-    }
 
     // ---- Run on page load ----
     if (document.readyState === 'complete') {
@@ -1762,17 +1745,6 @@ setTimeout(function() {
 
 // Also intercept the bot loop to ensure it runs
 setTimeout(function() {
-  if (typeof botLoop === "function") {
-    console.log("🤖 Starting bot loop...");
-    botLoop();
-  } else {
-    console.warn("⚠️ botLoop not found, defining it...");
-    window.botLoop = function() {
-      console.log("🤖 Bot loop running (simulated)");
-      setTimeout(botLoop, 10000);
-    };
-    botLoop();
-  }
 }, 1000);
 
 console.log("🚀 Auto-trading fix applied");
@@ -1812,17 +1784,7 @@ function fixToggleButton() {
 
 // Start the bot loop if it exists, or define it
 function startBot() {
-  if (typeof botLoop === "function") {
-    console.log("🤖 Starting existing bot loop...");
-    botLoop();
-  } else {
     console.log("🤖 Defining and starting bot loop...");
-    window.botLoop = function() {
-      console.log("🤖 Bot loop running (simulated)");
-      setTimeout(botLoop, 10000);
-    };
-    botLoop();
-  }
 }
 
 // Also override the toggleBot function to keep it active
@@ -1848,6 +1810,130 @@ document.addEventListener("click", function() {
 });
 
 console.log("🚀 Force auto-trading script complete");
+</script>
+<script>
+// ============================================================
+// AGI TRADING BOT - FULL WORKING SIMULATION
+// ============================================================
+console.log("🤖 Trading bot initializing...");
+
+// State
+let totalPnL = 0;
+let tradeCount = 0;
+let winCount = 0;
+let tradesPerHour = 0;
+let currentPosition = null;
+let startTime = Date.now();
+let botRunning = true;
+
+// Update UI helpers
+function updateTradeUI(profit) {
+  const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
+  document.getElementById("pnl").textContent = "$" + totalPnL.toFixed(2);
+  document.getElementById("winRate").textContent = winRate.toFixed(1) + "%";
+  document.getElementById("avgTrade").textContent = "$" + (totalPnL / tradeCount).toFixed(2);
+  const tradesPerHourCalc = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
+  document.getElementById("tradesPerHour").textContent = tradesPerHourCalc.toFixed(0);
+}
+
+function addTradeFeed(type, price, msg) {
+  const feed = document.getElementById("tradeFeed");
+  const now = new Date().toLocaleTimeString();
+  const cls = type === "BUY" ? "trade-buy" : "trade-sell";
+  feed.innerHTML = `<div class="${cls}">${now} ${type} @ $${price.toFixed(2)} – ${msg}</div>` + feed.innerHTML;
+  if (feed.children.length > 20) feed.removeChild(feed.lastChild);
+}
+
+// Simulate a trade
+function executeTrade(type) {
+  const price = 2500 + Math.random() * 200;
+  if (type === "BUY") {
+    if (currentPosition) return;
+    currentPosition = { type: "buy", entry: price, size: 1 };
+    addTradeFeed("BUY", price, "Auto long");
+    document.getElementById("tradeSignal").textContent = "BUY";
+    document.getElementById("tradeSignal").style.color = "#88ff88";
+    document.getElementById("tradeEdge").textContent = "15.00%";
+    document.getElementById("kellySize").textContent = "150.00%";
+  } else if (type === "SELL") {
+    if (!currentPosition) return;
+    const profit = (price - currentPosition.entry) * currentPosition.size;
+    totalPnL += profit;
+    tradeCount++;
+    if (profit > 0) winCount++;
+    updateTradeUI(profit);
+    addTradeFeed("SELL", price, "Auto close, profit: $"+profit.toFixed(2));
+    document.getElementById("tradeSignal").textContent = "SELL";
+    document.getElementById("tradeSignal").style.color = "#ff8888";
+    document.getElementById("tradeEdge").textContent = "-10.00%";
+    document.getElementById("kellySize").textContent = "0.00%";
+    currentPosition = null;
+  }
+}
+
+// Manual trade (from button)
+function simulateTrade() {
+  if (!botRunning) return;
+  const type = Math.random() > 0.5 ? "BUY" : "SELL";
+  executeTrade(type);
+}
+
+// Bot loop – runs every 5 seconds
+function botLoop() {
+  if (!botRunning) {
+    setTimeout(botLoop, 5000);
+    return;
+  }
+  // Simulate market conditions
+  const signal = Math.random() > 0.6 ? (Math.random() > 0.5 ? "BUY" : "SELL") : "NEUTRAL";
+  if (signal === "BUY" || signal === "SELL") {
+    executeTrade(signal);
+  } else {
+    // Update signal to NEUTRAL
+    document.getElementById("tradeSignal").textContent = "NEUTRAL";
+    document.getElementById("tradeSignal").style.color = "#ffaa66";
+    document.getElementById("tradeEdge").textContent = "0.00%";
+    document.getElementById("kellySize").textContent = "0.00%";
+  }
+  setTimeout(botLoop, 5000 + Math.random() * 3000);
+}
+
+// Pause/Resume toggle
+function toggleBot() {
+  botRunning = !botRunning;
+  document.getElementById("toggleBotBtn").textContent = botRunning ? "⏸️ Pause Bot" : "▶️ Resume Bot";
+  document.getElementById("botStatus").textContent = botRunning ? "● Auto-trading ACTIVE" : "○ Auto-trading PAUSED";
+  document.getElementById("botStatus").style.color = botRunning ? "#88ff88" : "#ffaa66";
+  if (botRunning) botLoop();
+}
+
+// Reset stats
+function resetStats() {
+  if (confirm("Reset trading stats?")) {
+    totalPnL = 0;
+    tradeCount = 0;
+    winCount = 0;
+    currentPosition = null;
+    document.getElementById("pnl").textContent = "$0";
+    document.getElementById("winRate").textContent = "100.0%";
+    document.getElementById("avgTrade").textContent = "$0.00";
+    document.getElementById("tradesPerHour").textContent = "0";
+    document.getElementById("tradeFeed").innerHTML = "📈 Stats reset.";
+  }
+}
+
+// Expose functions globally
+window.simulateTrade = simulateTrade;
+window.toggleBot = toggleBot;
+window.resetStats = resetStats;
+
+// Start the bot
+setTimeout(function() {
+  console.log("🤖 Starting trading bot...");
+  botLoop();
+}, 1000);
+
+console.log("🤖 Trading bot initialized");
 </script>
 </body>
 </html>
