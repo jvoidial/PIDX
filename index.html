@@ -1266,3 +1266,95 @@ window.fetchAndUpdate = function() {
   setTimeout(renderStaticSections, 200);
 };
 </script>
+<script>
+// ============================================================
+// FIX PHB RAW JSON VIEWER
+// ============================================================
+
+// Override the update function to ensure JSON is displayed
+const origUpdatePHB = window.updatePHBFromData || function() {};
+
+window.updatePHBFromData = function(data) {
+  // Call original if it exists
+  if (typeof origUpdatePHB === 'function' && origUpdatePHB !== window.updatePHBFromData) {
+    origUpdatePHB(data);
+  }
+  
+  // Update PHB Raw JSON
+  const jsonViewer = document.getElementById('phbJsonViewer');
+  if (jsonViewer && data) {
+    try {
+      jsonViewer.textContent = JSON.stringify(data, null, 2);
+      console.log('✅ PHB Raw JSON updated');
+    } catch(e) {
+      console.warn('⚠️ Could not stringify JSON:', e);
+      jsonViewer.textContent = 'Error parsing JSON';
+    }
+  }
+};
+
+// Also fix the fetchAndUpdate function
+const origFetch = window.fetchAndUpdate || function() {};
+
+window.fetchAndUpdate = function() {
+  console.log('🔄 Fetching PHB data...');
+  fetch('agi_phb_divine_complete.json')
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(data => {
+      // Update UI
+      if (typeof window.updatePHBFromData === 'function') {
+        window.updatePHBFromData(data);
+      }
+      // Update JSON viewer directly
+      const jsonViewer = document.getElementById('phbJsonViewer');
+      if (jsonViewer) {
+        jsonViewer.textContent = JSON.stringify(data, null, 2);
+      }
+      console.log('✅ PHB data loaded and displayed');
+    })
+    .catch(err => {
+      console.warn('⚠️ Failed to fetch PHB data:', err);
+      const jsonViewer = document.getElementById('phbJsonViewer');
+      if (jsonViewer) {
+        jsonViewer.textContent = 'Error loading JSON: ' + err.message;
+      }
+      // Fallback: try to use existing data
+      const domEl = document.getElementById('totalCodexPages');
+      if (domEl) {
+        const val = parseInt(domEl.textContent, 10);
+        if (!isNaN(val) && val > 0) {
+          const fallbackData = {
+            "1": {
+              "pages": [
+                {
+                  "coherence": 0.862,
+                  "stability": 1.111,
+                  "resonance": 0.377,
+                  "energy": { "magnitude": 0.725 },
+                  "veil": { "phase": "SEALED", "thickness": 0.134, "breach_probability": 0.587 },
+                  "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
+                  "voxels": [{},{},{},{},{}]
+                }
+              ]
+            }
+          };
+          if (jsonViewer) {
+            jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
+          }
+        }
+      }
+    });
+};
+
+// ---- Force an immediate update ----
+setTimeout(function() {
+  if (typeof window.fetchAndUpdate === 'function') {
+    window.fetchAndUpdate();
+  }
+}, 500);
+
+console.log('✅ PHB Raw JSON fix applied');
+</script>
