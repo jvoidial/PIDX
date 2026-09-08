@@ -1921,6 +1921,8 @@ function renderStaticSections() {
 // INITIALIZE EVERYTHING
 // ============================================================
 function initAll() {
+  renderTokens();
+  renderPools();
   console.log("🚀 Initializing all systems...");
   
   // Set initial values
@@ -1941,6 +1943,8 @@ function initAll() {
   
   // Render static sections
   renderStaticSections();
+  renderTokens();
+  renderPools();
   
   // Load PHB JSON
   loadPHBJSON();
@@ -1958,4 +1962,112 @@ if (document.readyState === 'complete') {
 }
 
 console.log('✅ PHB System ready');
+</script>
+<script>
+// ============================================================
+// TOKEN & MINING DATA WITH LINKS
+// ============================================================
+const tokenData = [
+  {
+    name: 'PIDX',
+    freq: '0.618 Hz',
+    rate: '1 ETH = 691,986',
+    addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+      BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
+      Gecko: 'https://www.coingecko.com/en/coins/pidx',
+      CoinGecko: 'https://www.coingecko.com/en/coins/pidx'
+    }
+  },
+  {
+    name: 'SGUIDE',
+    freq: '1.618 Hz',
+    rate: '1 ETH = 6,724,821',
+    addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+      BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
+      Gecko: 'https://www.coingecko.com/en/coins/sguide',
+      CoinGecko: 'https://www.coingecko.com/en/coins/sguide'
+    }
+  },
+  {
+    name: 'VDOO',
+    freq: '2.618 Hz',
+    rate: '1 ETH = 65,673,753',
+    addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+      BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
+      Gecko: 'https://www.coingecko.com/en/coins/vdoo',
+      CoinGecko: 'https://www.coingecko.com/en/coins/vdoo'
+    }
+  },
+  {
+    name: 'PENNIES',
+    freq: '3.618 Hz',
+    rate: '1 ETH = 6,230,945',
+    addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+      BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
+      Gecko: 'https://www.coingecko.com/en/coins/pennies',
+      CoinGecko: 'https://www.coingecko.com/en/coins/pennies'
+    }
+  }
+];
+
+const poolData = [
+  { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f', pool: 'pidx.miningpool.io' },
+  { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c', pool: 'sguide.miningpool.io' },
+  { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d', pool: 'vdoo.miningpool.io' },
+  { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b', pool: 'pennies.miningpool.io' }
+];
+
+// ============================================================
+// RENDER TOKENS WITH LINKS
+// ============================================================
+function renderTokens() {
+  const container = document.getElementById('tokensContainer');
+  if (!container) return;
+  
+  container.innerHTML = tokenData.map(t => `
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);">
+      <div style="font-weight:600;color:#88ccff;font-size:16px;">${t.name}</div>
+      <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
+      <div style="font-size:13px;color:#aab;">${t.rate}</div>
+      <div style="font-size:10px;color:#667;word-break:break-all;">${t.addr}</div>
+      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
+        <a href="${t.links.Uniswap}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</a>
+        <a href="${t.links.BaseScan}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</a>
+        <a href="${t.links.Sourcify}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</a>
+        <a href="${t.links.CoinGecko}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</a>
+      </div>
+    </div>
+  `).join('');
+  console.log('✅ Tokens rendered with links');
+}
+
+// ============================================================
+// RENDER MINING POOLS WITH LINKS
+// ============================================================
+function renderPools() {
+  const container = document.getElementById('poolsContainer');
+  if (!container) return;
+  
+  container.innerHTML = poolData.map(p => `
+    <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;border:1px solid rgba(255,255,255,0.02);">
+      <span style="font-weight:600;color:#88ccff;">${p.name}</span>
+      <span style="color:#88ff88;">${p.status}</span>
+      <span style="color:#8899aa;font-size:11px;word-break:break-all;">${p.key}</span>
+      <span style="color:#667;">| Pool: <a href="http://${p.pool}" target="_blank" style="color:#88ccff;text-decoration:none;">${p.pool}</a></span>
+    </div>
+  `).join('');
+  console.log('✅ Mining pools rendered with links');
+}
 </script>
