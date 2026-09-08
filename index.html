@@ -2071,3 +2071,96 @@ function renderPools() {
   console.log('✅ Mining pools rendered with links');
 }
 </script>
+<script>
+// ============================================================
+// COMPLETE TOKEN DATA WITH ALL LINKS
+// ============================================================
+const tokenData = [
+  {
+    name: 'PIDX',
+    freq: '0.618 Hz',
+    rate: '1 ETH = 691,986',
+    addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+      BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
+      Gecko: 'https://www.coingecko.com/en/coins/pidx',
+      CoinGecko: 'https://www.coingecko.com/en/coins/pidx',
+      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+      DexScreener: 'https://dexscreener.com/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'
+    }
+  },
+  {
+    name: 'SGUIDE',
+    freq: '1.618 Hz',
+    rate: '1 ETH = 6,724,821',
+    addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+      BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
+      Gecko: 'https://www.coingecko.com/en/coins/sguide',
+      CoinGecko: 'https://www.coingecko.com/en/coins/sguide',
+      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+      DexScreener: 'https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a'
+    }
+  },
+  {
+    name: 'VDOO',
+    freq: '2.618 Hz',
+    rate: '1 ETH = 65,673,753',
+    addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+      BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
+      Gecko: 'https://www.coingecko.com/en/coins/vdoo',
+      CoinGecko: 'https://www.coingecko.com/en/coins/vdoo',
+      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+      DexScreener: 'https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b'
+    }
+  },
+  {
+    name: 'PENNIES',
+    freq: '3.618 Hz',
+    rate: '1 ETH = 6,230,945',
+    addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+    links: {
+      Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+      BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+      Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
+      Gecko: 'https://www.coingecko.com/en/coins/pennies',
+      CoinGecko: 'https://www.coingecko.com/en/coins/pennies',
+      GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+      DexScreener: 'https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
+    }
+  }
+];
+
+// ============================================================
+// RENDER TOKENS WITH ALL LINKS
+// ============================================================
+function renderTokens() {
+  const container = document.getElementById('tokensContainer');
+  if (!container) return;
+  
+  container.innerHTML = tokenData.map(t => `
+    <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);">
+      <div style="font-weight:600;color:#88ccff;font-size:16px;">${t.name}</div>
+      <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
+      <div style="font-size:13px;color:#aab;">${t.rate}</div>
+      <div style="font-size:10px;color:#667;word-break:break-all;">${t.addr}</div>
+      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
+        <a href="${t.links.Uniswap}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</a>
+        <a href="${t.links.BaseScan}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</a>
+        <a href="${t.links.Sourcify}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</a>
+        <a href="${t.links.CoinGecko}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</a>
+        <a href="${t.links.GeckoTerminal}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">GeckoTerminal</a>
+        <a href="${t.links.DexScreener}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">DexScreener</a>
+      </div>
+    </div>
+  `).join('');
+  console.log('✅ Tokens rendered with all links');
+}
+</script>
