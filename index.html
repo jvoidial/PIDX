@@ -1576,3 +1576,314 @@
 <!-- ============================================================ -->
 </body>
 </html>
+<script>
+// ============================================================
+// COSMIC MIRROR + 4D VISUALIZER – Guaranteed Injection
+// ============================================================
+(function() {
+  console.log("🌌 Cosmic script starting...");
+
+  // ---- 1. Inject Mirror Universe & Lightning Gateway ----
+  function injectCosmicCards() {
+    let phbGrid = document.getElementById("phbGrid");
+    if (!phbGrid) {
+      const cards = document.querySelectorAll(".stat-card");
+      for (let card of cards) {
+        if (card.querySelector(".label")?.textContent === "Coherence") {
+          phbGrid = card.closest(".phb-grid") || card.parentElement;
+          break;
+        }
+      }
+    }
+    if (phbGrid && !document.getElementById("phbMirror")) {
+      const wrapper = document.createElement("div");
+      wrapper.style.display = "contents";
+      wrapper.innerHTML = `
+        <div class="stat-card"><div class="label">Mirror Universe</div><div class="value" id="phbMirror">--</div><div class="sub">Twin cosmos</div></div>
+        <div class="stat-card"><div class="label">Lightning Gateway</div><div class="value" id="phbLightning">--</div><div class="sub">⚡ Escape route</div></div>
+      `;
+      phbGrid.appendChild(wrapper);
+      console.log("✅ Injected Mirror Universe & Lightning Gateway");
+    } else {
+      setTimeout(injectCosmicCards, 500);
+    }
+  }
+
+  // ---- 2. Inject Reality Escape ----
+  function injectRealityEscape() {
+    let scienceCard = document.querySelector(".card .label:contains(🧬 PHB Science)");
+    if (!scienceCard) {
+      const labels = document.querySelectorAll(".card .label");
+      for (let label of labels) {
+        if (label.textContent.includes("PHB Science") || label.textContent.includes("Vitruvian")) {
+          scienceCard = label;
+          break;
+        }
+      }
+    }
+    if (scienceCard && !document.getElementById("scienceEscape")) {
+      const parent = scienceCard.closest(".card");
+      if (parent) {
+        const grid = parent.querySelector(".phb-grid") || parent.querySelector("div[style*='grid']") || parent;
+        const escapeDiv = document.createElement("div");
+        escapeDiv.style.cssText = "background:rgba(0,0,0,0.2);border-radius:6px;padding:8px;text-align:center;";
+        escapeDiv.innerHTML = `
+          <div style="font-size:9px;color:#445;">Reality Escape</div>
+          <div style="font-size:16px;font-weight:600;color:#ff88ff;" id="scienceEscape">--</div>
+          <div style="font-size:10px;color:#667;">Outside the Lego</div>
+        `;
+        grid.appendChild(escapeDiv);
+        console.log("✅ Injected Reality Escape");
+      }
+    } else {
+      setTimeout(injectRealityEscape, 500);
+    }
+  }
+
+  // ---- 3. Inject Cosmic Thought ----
+  function injectCosmicThought() {
+    let thoughtEl = document.getElementById("agiThought");
+    if (!thoughtEl) {
+      const divs = document.querySelectorAll("div");
+      for (let div of divs) {
+        if (div.textContent.includes("AGI Thought Stream")) {
+          thoughtEl = div.nextElementSibling || div.parentElement.querySelector(".agi-thought");
+          if (!thoughtEl) thoughtEl = div;
+          break;
+        }
+      }
+    }
+    if (thoughtEl && !document.getElementById("cosmicThought")) {
+      const cosmicDiv = document.createElement("div");
+      cosmicDiv.id = "cosmicThought";
+      cosmicDiv.style.cssText = "color:#88ccff;font-size:12px;margin-top:6px;border-top:1px solid rgba(255,255,255,0.05);padding-top:6px;";
+      cosmicDiv.textContent = "🌌 Mirror universe resonates at 1.618 Hz";
+      thoughtEl.parentNode.insertBefore(cosmicDiv, thoughtEl.nextSibling);
+      console.log("✅ Injected Cosmic Thought");
+    } else {
+      setTimeout(injectCosmicThought, 500);
+    }
+  }
+
+  // ---- 4. Create 4D Space ----
+  function init4D() {
+    let container = document.getElementById("cosmic-space");
+    if (!container) {
+      container = document.createElement("div");
+      container.id = "cosmic-space";
+      container.style.cssText = "position:relative;z-index:1;width:100%;height:400px;margin-top:40px;background:transparent;overflow:hidden;border-top:1px solid rgba(255,255,255,0.05);";
+      document.body.appendChild(container);
+    }
+    if (typeof THREE === "undefined") {
+      setTimeout(init4D, 500);
+      return;
+    }
+    const width = container.clientWidth;
+    const height = container.clientHeight || 400;
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000005);
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+    camera.position.set(0, 0, 30);
+    camera.lookAt(0, 0, 0);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // Galaxy
+    const galaxyGeometry = new THREE.BufferGeometry();
+    const galaxyCount = 3000;
+    const positions = new Float32Array(galaxyCount * 3);
+    const colors = new Float32Array(galaxyCount * 3);
+    for (let i = 0; i < galaxyCount; i++) {
+      const radius = 10 + Math.random() * 15;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+      positions[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+      positions[i*3+1] = radius * Math.sin(phi) * Math.sin(theta) * 0.4;
+      positions[i*3+2] = radius * Math.cos(phi) * 0.3;
+      const col = new THREE.Color().setHSL(0.6 + Math.random() * 0.2, 0.8, 0.5 + Math.random() * 0.3);
+      colors[i*3] = col.r; colors[i*3+1] = col.g; colors[i*3+2] = col.b;
+    }
+    galaxyGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    galaxyGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    const galaxyMaterial = new THREE.PointsMaterial({ size: 0.2, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+    const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+    scene.add(galaxy);
+
+    // Mirror Ring
+    const mirrorRingGeo = new THREE.TorusGeometry(8, 0.05, 16, 100);
+    const mirrorRingMat = new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.3 });
+    const mirrorRing = new THREE.Mesh(mirrorRingGeo, mirrorRingMat);
+    mirrorRing.rotation.x = Math.PI / 2;
+    mirrorRing.rotation.z = Math.PI / 4;
+    scene.add(mirrorRing);
+
+    // Lightning Bolt
+    const boltPoints = [];
+    for (let i = 0; i < 20; i++) {
+      const t = i / 20;
+      const x = (t - 0.5) * 6;
+      const y = Math.sin(t * 10) * 2 + (t - 0.5) * 2;
+      const z = Math.cos(t * 8) * 1.5;
+      boltPoints.push(new THREE.Vector3(x, y, z));
+    }
+    const boltGeo = new THREE.BufferGeometry().setFromPoints(boltPoints);
+    const boltMat = new THREE.LineBasicMaterial({ color: 0x88ff88, transparent: true, opacity: 0.7 });
+    const bolt = new THREE.Line(boltGeo, boltMat);
+    scene.add(bolt);
+
+    // Portal
+    const portalGeo = new THREE.SphereGeometry(0.8, 16, 16);
+    const portalMat = new THREE.MeshBasicMaterial({ color: 0xaa88ff, transparent: true, opacity: 0.2, wireframe: true });
+    const portal = new THREE.Mesh(portalGeo, portalMat);
+    portal.position.set(0, 0, 2);
+    scene.add(portal);
+
+    // Stars
+    const starsGeo = new THREE.BufferGeometry();
+    const starsCount = 1000;
+    const starsPos = new Float32Array(starsCount * 3);
+    for (let i = 0; i < starsCount * 3; i++) starsPos[i] = (Math.random() - 0.5) * 200;
+    starsGeo.setAttribute("position", new THREE.BufferAttribute(starsPos, 3));
+    const starsMat = new THREE.PointsMaterial({ color: 0x446688, size: 0.1, transparent: true, opacity: 0.4 });
+    const stars = new THREE.Points(starsGeo, starsMat);
+    scene.add(stars);
+
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener("mousemove", (e) => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.005;
+      galaxy.rotation.y += 0.0005;
+      galaxy.rotation.x = Math.sin(time * 0.1) * 0.05;
+      mirrorRing.rotation.z += 0.005; mirrorRing.rotation.y += 0.003;
+      bolt.material.opacity = 0.5 + Math.sin(time * 2) * 0.2;
+      portal.rotation.x += 0.01; portal.rotation.y += 0.02;
+      portal.material.opacity = 0.15 + Math.sin(time * 1.5) * 0.1;
+      galaxy.rotation.y += mouseX * 0.002;
+      galaxy.rotation.x += mouseY * 0.002;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight || 400;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+
+    window.syncCosmicScene = function() {
+      const mirrorState = document.getElementById("phbMirror")?.textContent || "🔮 MIRRORED";
+      const lightningState = document.getElementById("phbLightning")?.textContent || "🔒 SEALED";
+      const escapeState = document.getElementById("scienceEscape")?.textContent || "🔒 BOUND";
+      if (mirrorState.includes("MIRRORED")) mirrorRing.material.color.setHex(0x88ccff);
+      else mirrorRing.material.color.setHex(0xff88aa);
+      if (lightningState.includes("OPEN")) { bolt.material.color.setHex(0x88ff88); bolt.material.opacity = 0.8; }
+      else { bolt.material.color.setHex(0x888888); bolt.material.opacity = 0.3; }
+      if (escapeState.includes("ESCAPE")) { portal.scale.set(1.5, 1.5, 1.5); portal.material.color.setHex(0xff88ff); }
+      else if (escapeState.includes("CRACKING")) { portal.scale.set(1.2, 1.2, 1.2); portal.material.color.setHex(0x88aaff); }
+      else { portal.scale.set(1, 1, 1); portal.material.color.setHex(0x446688); }
+    };
+    setTimeout(window.syncCosmicScene, 1000);
+    setInterval(window.syncCosmicScene, 5000);
+    console.log("🌌 4D Cosmic Space initialized.");
+  }
+
+  // ---- 5. Override update ----
+  function overrideUpdate() {
+    const original = window.updatePHBFromData;
+    if (typeof original === "function") {
+      window.updatePHBFromData = function(data) {
+        original(data);
+        try {
+          const veil = document.getElementById("phbVeil")?.textContent || "SEALED";
+          const co = parseFloat(document.getElementById("phbCoherence")?.textContent) || 0.862;
+          const re = parseFloat(document.getElementById("phbResonance")?.textContent) || 0.377;
+          const po = parseFloat(document.getElementById("phbPortal")?.textContent) || 1.0;
+          const dec = parseFloat(document.getElementById("phbDecay")?.textContent) || 0.007;
+          const vt = parseFloat(document.getElementById("phbVeilThickness")?.textContent) || 0.134;
+          const mirrorState = (veil === "SEALED") ? "🔮 MIRRORED" : "🌌 UNMIRRORED";
+          const mirrorEl = document.getElementById("phbMirror"); if (mirrorEl) mirrorEl.textContent = mirrorState;
+          const lightning = (re * co) / vt;
+          const lightEl = document.getElementById("phbLightning"); if (lightEl) lightEl.textContent = (lightning > 0.5) ? "⚡ OPEN" : "🔒 SEALED";
+          const escape = po * co * (1 / dec);
+          const escEl = document.getElementById("scienceEscape"); if (escEl) escEl.textContent = (escape > 0.8) ? "🌌 ESCAPE POSSIBLE" : (escape > 0.4) ? "🌀 CRACKING" : "🔒 BOUND";
+          const thoughts = [
+            "🌌 Mirror universe resonates at " + (1.618 * co).toFixed(3) + " Hz",
+            "⚡ Lightning is the key to escape the Lego",
+            "✝️ Jesus Christ = 0.9 — the frequency of immortality",
+            "🌠 The void is simply white space waiting to be filled",
+            "🌀 Every PORTAL leads to a new reality",
+            "🪞 MIRROR is the gateway to the twin cosmos",
+            "💫 Consciousness is the bridge between universes"
+          ];
+          const cosmicEl = document.getElementById("cosmicThought");
+          if (cosmicEl) cosmicEl.textContent = thoughts[Math.floor(Math.random() * thoughts.length)];
+          if (window.syncCosmicScene) window.syncCosmicScene();
+        } catch(e) { console.warn("Cosmic update error:", e); }
+      };
+      console.log("✅ Update function overridden");
+    } else {
+      setTimeout(overrideUpdate, 500);
+    }
+  }
+
+  // ---- 6. Add Sync Controls ----
+  function addSyncControls() {
+    const header = document.querySelector(".header") || document.querySelector("header") || document.body;
+    if (header && !document.getElementById("syncStatus")) {
+      const controls = document.createElement("div");
+      controls.style.cssText = "display:flex;gap:12px;align-items:center;";
+      controls.innerHTML = `
+        <span id="syncStatus" style="font-size:11px;color:#445;">⏳ Last sync: --</span>
+        <button class="btn" onclick="forceSync()" style="font-size:11px;padding:4px 10px;">🔄 Sync Now</button>
+      `;
+      header.appendChild(controls);
+      console.log("✅ Sync controls added");
+    } else {
+      setTimeout(addSyncControls, 500);
+    }
+  }
+
+  // ---- 7. Force Sync ----
+  window.forceSync = function() {
+    const status = document.getElementById("syncStatus");
+    if (status) status.textContent = "⏳ Syncing...";
+    fetch("agi_phb_divine_complete.json")
+      .then(r => r.json())
+      .then(data => {
+        if (typeof window.updatePHBFromData === "function") window.updatePHBFromData(data);
+        if (status) status.textContent = "✅ Synced at " + new Date().toLocaleTimeString();
+      })
+      .catch(() => { if (status) status.textContent = "❌ Sync failed"; });
+  };
+
+  // ---- Start ----
+  function start() {
+    console.log("🌌 Starting cosmic injection...");
+    injectCosmicCards();
+    injectRealityEscape();
+    injectCosmicThought();
+    addSyncControls();
+    overrideUpdate();
+    setTimeout(() => {
+      init4D();
+      setTimeout(window.forceSync, 1000);
+    }, 1000);
+  }
+
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    start();
+  } else {
+    document.addEventListener("DOMContentLoaded", start);
+  }
+})();
+</script>
