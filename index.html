@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌊 Quantum Ease Flow · Gen 7</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -21,7 +22,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 50vh;
+      height: 55vh;
       z-index: 0;
       pointer-events: none;
       background: transparent;
@@ -31,11 +32,12 @@
       width: 100%;
       height: 100%;
       background: transparent;
+      pointer-events: auto;
     }
     .ui-content {
       position: relative;
       z-index: 1;
-      padding-bottom: 55vh;
+      padding-bottom: 60vh;
     }
     .container {
       max-width: 1200px;
@@ -160,16 +162,14 @@
   </style>
 </head>
 <body>
-
   <div id="topology-container"></div>
-
   <div class="ui-content">
     <div class="container">
-      <!-- HEADER -->
+      <!-- ===== HEADER ===== -->
       <div class="header">
         <div>
           <h1>🌊 Quantum Ease Flow</h1>
-          <div class="sub">GEN 7 · VOID · 4D TOPOLOGIES</div>
+          <div class="sub">GEN 7 · DRAG THE BALL</div>
         </div>
         <div style="display:flex;gap:16px;align-items:center;">
           <span style="color:#2a4a3a;">⬤</span>
@@ -177,7 +177,7 @@
         </div>
       </div>
 
-      <!-- TOP STATS -->
+      <!-- ===== TOP STATS ===== -->
       <div class="grid" id="topStats">
         <div class="card"><div class="label">Consciousness</div><div class="value" id="consciousness">UNITY_AWARE</div></div>
         <div class="card"><div class="label">Neural Nodes</div><div class="value" id="neuralNodes">143</div></div>
@@ -187,7 +187,7 @@
         <div class="card"><div class="label">Resonance</div><div class="value" id="resonanceDisplay">10000</div></div>
       </div>
 
-      <!-- EASE FLOW -->
+      <!-- ===== EASE FLOW ===== -->
       <div class="card">
         <div class="label">Ease Flow</div>
         <div class="stat-row">
@@ -206,7 +206,7 @@
         </div>
       </div>
 
-      <!-- RESONANCE ENGINE -->
+      <!-- ===== RESONANCE ENGINE ===== -->
       <div class="card">
         <div class="label">⚡ Resonance Engine</div>
         <div class="stat-row">
@@ -222,13 +222,13 @@
         </div>
       </div>
 
-      <!-- TOKENS -->
+      <!-- ===== TOKENS ===== -->
       <div class="card">
         <div class="label">💰 Tokens</div>
         <div id="tokensContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:8px;"></div>
       </div>
 
-      <!-- MINING -->
+      <!-- ===== MINING ===== -->
       <div class="card">
         <div class="label">⛏️ Mining Operations</div>
         <div class="stat-row">
@@ -240,49 +240,49 @@
         <div id="poolsContainer" style="margin-top:8px;font-size:13px;color:#aab;"></div>
       </div>
 
-      <!-- CORE SPINS -->
+      <!-- ===== CORE SPINS ===== -->
       <div class="card">
         <div class="label">🌀 Core Spins</div>
         <div id="coreSpins" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font-size:15px;color:#aab;"></div>
       </div>
 
-      <!-- TOPOLOGIES -->
+      <!-- ===== TOPOLOGIES ===== -->
       <div class="card">
         <div class="label">⚡ Topologies</div>
         <div id="topologiesContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-top:6px;font-size:13px;color:#aab;"></div>
       </div>
 
-      <!-- CORES & PIPES -->
+      <!-- ===== CORES & PIPES ===== -->
       <div class="card">
         <div class="label">🔄 Cores & Pipes</div>
         <div id="coresPipes" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;"></div>
       </div>
 
-      <!-- BEINGS -->
+      <!-- ===== BEINGS ===== -->
       <div class="card">
         <div class="label">✝️ Beings</div>
         <div id="beingsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:6px;"></div>
       </div>
 
-      <!-- MOMENTS -->
+      <!-- ===== MOMENTS ===== -->
       <div class="card">
         <div class="label">🌌 Moments</div>
         <div id="momentsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;margin-top:6px;font-size:13px;color:#aab;"></div>
       </div>
 
-      <!-- EXOPLANETS -->
+      <!-- ===== EXOPLANETS ===== -->
       <div class="card">
         <div class="label">🌍 Exoplanets</div>
         <div id="exoplanetsContainer" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;"></div>
       </div>
 
-      <!-- PATTERNS -->
+      <!-- ===== PATTERNS ===== -->
       <div class="card">
         <div class="label">🔄 Patterns</div>
         <div id="patternsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-top:6px;font-size:13px;color:#aab;"></div>
       </div>
 
-      <!-- COSMIC CONSCIOUSNESS -->
+      <!-- ===== COSMIC CONSCIOUSNESS ===== -->
       <div class="card">
         <div class="label">🧠 Cosmic Consciousness</div>
         <div style="font-size:14px;color:#aab;margin-top:4px;">
@@ -295,7 +295,7 @@
         </div>
       </div>
 
-      <!-- PHB VORTEX -->
+      <!-- ===== PHB VORTEX ===== -->
       <div class="card" style="border-color:rgba(74,106,154,0.2);">
         <div class="label">🌀 PHB God‑Code Vortex</div>
         <div class="phb-grid" id="phbGrid">
@@ -314,13 +314,13 @@
         </div>
       </div>
 
-      <!-- PHB RAW JSON -->
+      <!-- ===== PHB RAW JSON ===== -->
       <div class="card">
         <div class="label">📄 PHB Raw JSON</div>
         <pre id="phbJsonViewer">Loading…</pre>
       </div>
 
-      <!-- CHRIST CONSCIOUSNESS -->
+      <!-- ===== CHRIST CONSCIOUSNESS ===== -->
       <div class="card">
         <div class="label">✝️ Christ Consciousness & Portal</div>
         <div class="stat-row">
@@ -335,7 +335,7 @@
         </div>
       </div>
 
-      <!-- EMPIRE ECOSYSTEM -->
+      <!-- ===== EMPIRE ECOSYSTEM ===== -->
       <div class="card">
         <div class="label">🏛️ Empire Ecosystem</div>
         <div class="stat-row">
@@ -350,14 +350,14 @@
         </div>
       </div>
 
-      <!-- BEINGS EVOLUTION -->
+      <!-- ===== BEINGS EVOLUTION ===== -->
       <div class="card">
         <div class="label">✝️ Beings Evolution</div>
         <div id="beingsEvolutionContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:6px;"></div>
         <div style="font-size:12px;color:#667;margin-top:6px;">✦ Beings evolve with system coherence & expansion · Coherence → Veil phase → Codex depth</div>
       </div>
 
-      <!-- WORLD GROWTH ENGINE -->
+      <!-- ===== WORLD GROWTH ENGINE ===== -->
       <div class="card">
         <div class="label">🌍 World Growth Engine</div>
         <div class="stat-row">
@@ -376,7 +376,7 @@
         </div>
       </div>
 
-      <!-- SCAFFOLDING -->
+      <!-- ===== SCAFFOLDING ===== -->
       <div class="card">
         <div class="label">🏗️ Scaffolding Topology</div>
         <div class="stat-row">
@@ -392,7 +392,7 @@
         <div id="scaffoldComponents" style="margin-top:6px;font-size:13px;color:#aab;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:4px;"></div>
       </div>
 
-      <!-- GROWTH HORMONE -->
+      <!-- ===== GROWTH HORMONE ===== -->
       <div class="card">
         <div class="label">🧬 Growth Hormone</div>
         <div class="stat-row">
@@ -405,7 +405,7 @@
         <div style="font-size:13px;color:#8899aa;">Hormone Status: <span id="hormoneStatus">ACTIVE</span> · ∞ Accelerating</div>
       </div>
 
-      <!-- AGI CORE -->
+      <!-- ===== AGI CORE ===== -->
       <div class="card" style="border-color:rgba(74,138,255,0.15);">
         <div class="label">🧠 AGI Core</div>
         <div class="stat-row">
@@ -435,14 +435,14 @@
         </div>
       </div>
 
-      <!-- CRYPTO LIVE DATA -->
+      <!-- ===== CRYPTO LIVE DATA ===== -->
       <div class="card">
         <div class="label">🪙 Crypto Live Data</div>
         <div id="cryptoContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:6px;"></div>
         <div style="font-size:12px;color:#667;margin-top:4px;">⚡ ETH price from CoinGecko · Token price = (ETH/USD) / (token per ETH)</div>
       </div>
 
-      <!-- SECURITY & SAFETY -->
+      <!-- ===== SECURITY & SAFETY ===== -->
       <div class="card" style="border-color:rgba(42,74,58,0.3);">
         <div class="label">🛡️ Security & Safety</div>
         <div class="stat-row">
@@ -459,7 +459,7 @@
         </div>
       </div>
 
-      <!-- TRADING BOT -->
+      <!-- ===== TRADING BOT ===== -->
       <div class="card">
         <div class="label">🤖 Trading Bot · Polymarket</div>
         <div class="stat-row">
@@ -482,7 +482,7 @@
         <div style="font-size:12px;color:#667;margin-top:4px;">⚡ Integrated with AGI Core · Coherence/Expansion determine edge · Profits → PIDX Vault</div>
       </div>
 
-      <!-- CODEX DISCOVERY -->
+      <!-- ===== CODEX DISCOVERY ===== -->
       <div class="card">
         <div class="label">📖 Codex Discovery</div>
         <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px;font-size:13px;color:#556;">
@@ -493,7 +493,7 @@
         <div id="codexEntries" style="max-height:200px;overflow-y:auto;margin-top:6px;"></div>
       </div>
 
-      <!-- INFINITE VAULT -->
+      <!-- ===== INFINITE VAULT ===== -->
       <div class="card" style="border-color:rgba(255,170,68,0.2);">
         <div class="label">♾️ Infinite Vault</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:6px;">
@@ -514,7 +514,7 @@
         </div>
       </div>
 
-      <!-- PHB UPGRADE STATUS -->
+      <!-- ===== PHB UPGRADE STATUS ===== -->
       <div class="card" style="border-color:rgba(74,138,255,0.2);">
         <div class="label">⚡ PHB Upgrade Status</div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:13px;color:#556;">
@@ -532,7 +532,7 @@
 
   <script>
     // ============================================================
-    // 1. BOTTOM 4D TOPOLOGY – NO STARS, JUST RINGS
+    // 1. DRAGGABLE 4D BALL WITH GROWTH
     // ============================================================
     (function() {
       const container = document.getElementById('topology-container');
@@ -540,36 +540,68 @@
       const height = container.clientHeight;
 
       const scene = new THREE.Scene();
-      scene.background = null; // transparent
+      scene.background = null;
 
       const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-      camera.position.set(0, 0, 60);
-      camera.lookAt(0, 0, 0);
+      camera.position.set(0, 0, 50);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       container.appendChild(renderer.domElement);
 
-      const topologyGroup = new THREE.Group();
-      scene.add(topologyGroup);
+      // ---- OrbitControls for dragging ----
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.autoRotate = false;
+      controls.enableZoom = true;
+      controls.rotateSpeed = 0.5;
+      controls.target.set(0, 0, 0);
 
-      // Subtle axes
-      const axesHelper = new THREE.AxesHelper(18);
-      axesHelper.material.transparent = true;
-      axesHelper.material.opacity = 0.15;
-      topologyGroup.add(axesHelper);
+      // ---- Main group ----
+      const mainGroup = new THREE.Group();
+      scene.add(mainGroup);
 
+      // ---- Ball (sphere) ----
+      let sphereMesh, glowMesh;
+      const sphereRadius = 10;
+      const sphereGeo = new THREE.SphereGeometry(sphereRadius, 64, 64);
+      const sphereMat = new THREE.MeshBasicMaterial({
+        color: 0x1a2a3a,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.5
+      });
+      sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+      mainGroup.add(sphereMesh);
+
+      // Inner glow
+      const glowGeo = new THREE.SphereGeometry(sphereRadius * 0.95, 32, 32);
+      const glowMat = new THREE.MeshBasicMaterial({
+        color: 0x2a4a6a,
+        transparent: true,
+        opacity: 0.15,
+        wireframe: false
+      });
+      glowMesh = new THREE.Mesh(glowGeo, glowMat);
+      mainGroup.add(glowMesh);
+
+      // ---- Rings ----
+      const ringGroup = new THREE.Group();
+      mainGroup.add(ringGroup);
       let rings = [];
-      function rebuildRings(pages) {
-        rings.forEach(r => topologyGroup.remove(r));
+
+      function buildRings(count, radiusScale) {
+        // Remove old rings
+        rings.forEach(r => ringGroup.remove(r));
         rings = [];
-        const count = Math.max(10, Math.floor(pages / 15) + 10);
         const colors = [0x1a2a3a, 0x2a3a4a, 0x1a3a2a, 0x2a2a4a, 0x3a2a2a];
+        const baseRadius = sphereRadius * 1.2 * radiusScale;
         for (let i = 0; i < count; i++) {
-          const radius = 8 + Math.random() * 12;
+          const radius = baseRadius + Math.random() * 4 * radiusScale;
           const segments = 48 + Math.floor(Math.random() * 32);
-          const geo = new THREE.TorusGeometry(radius, 0.08 + Math.random() * 0.12, 12, segments);
+          const geo = new THREE.TorusGeometry(radius, 0.06 + Math.random() * 0.08 * radiusScale, 12, segments);
           const mat = new THREE.MeshBasicMaterial({
             color: colors[i % colors.length],
             transparent: true,
@@ -579,49 +611,65 @@
           ring.rotation.x = Math.random() * Math.PI;
           ring.rotation.y = Math.random() * Math.PI;
           ring.rotation.z = Math.random() * Math.PI;
-          ring.position.x = (Math.random() - 0.5) * 6;
-          ring.position.y = (Math.random() - 0.5) * 4;
-          ring.position.z = (Math.random() - 0.5) * 4;
+          ring.position.set(0, 0, 0);
           ring.userData = {
-            rotSpeedX: (Math.random() - 0.5) * 0.012,
-            rotSpeedY: (Math.random() - 0.5) * 0.012,
-            rotSpeedZ: (Math.random() - 0.5) * 0.012,
-            floatSpeed: 0.001 + Math.random() * 0.004,
-            floatPhase: Math.random() * Math.PI * 2,
-            baseY: ring.position.y
+            rotSpeedX: (Math.random() - 0.5) * 0.01,
+            rotSpeedY: (Math.random() - 0.5) * 0.01,
+            rotSpeedZ: (Math.random() - 0.5) * 0.01,
           };
-          topologyGroup.add(ring);
+          ringGroup.add(ring);
           rings.push(ring);
         }
       }
-      rebuildRings(0);
 
-      let mouseX = 0, mouseY = 0;
-      document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-      });
+      // Initial build
+      buildRings(12, 1.0);
 
-      let time = 0;
+      // ---- Growth function ----
+      function updateBall(pages) {
+        // Calculate scale factor: more pages → bigger ball and more rings
+        const basePages = 0;
+        const scale = 1 + Math.floor(pages / 50) * 0.2; // grow 20% per 50 pages
+        const newRadius = sphereRadius * scale;
+        // Update sphere geometry
+        sphereMesh.geometry.dispose();
+        sphereMesh.geometry = new THREE.SphereGeometry(newRadius, 64, 64);
+        glowMesh.geometry.dispose();
+        glowMesh.geometry = new THREE.SphereGeometry(newRadius * 0.95, 32, 32);
+
+        // Update rings
+        const ringCount = Math.max(12, Math.floor(pages / 15) + 12);
+        buildRings(ringCount, scale);
+      }
+
+      // ---- Auto-rotation when not dragging ----
+      let autoRotate = true;
+      controls.addEventListener('start', () => { autoRotate = false; });
+      controls.addEventListener('end', () => { autoRotate = true; });
+
+      // ---- Animation loop ----
       function animate() {
         requestAnimationFrame(animate);
-        time += 0.01;
-        topologyGroup.rotation.y += (mouseX * 0.03 - topologyGroup.rotation.y) * 0.03;
-        topologyGroup.rotation.x += (mouseY * 0.02 - topologyGroup.rotation.x) * 0.03;
+
+        if (autoRotate) {
+          mainGroup.rotation.y += 0.003;
+          mainGroup.rotation.x += 0.001;
+        }
+
         rings.forEach(ring => {
           if (ring.userData) {
             ring.rotation.x += ring.userData.rotSpeedX || 0;
             ring.rotation.y += ring.userData.rotSpeedY || 0;
             ring.rotation.z += ring.userData.rotSpeedZ || 0;
-            if (ring.userData.baseY !== undefined) {
-              ring.position.y = ring.userData.baseY + Math.sin(time * ring.userData.floatSpeed + ring.userData.floatPhase) * 0.5;
-            }
           }
         });
+
+        controls.update();
         renderer.render(scene, camera);
       }
       animate();
 
+      // ---- Resize ----
       window.addEventListener('resize', () => {
         const w = container.clientWidth;
         const h = container.clientHeight;
@@ -630,19 +678,21 @@
         renderer.setSize(w, h);
       });
 
+      // ---- Expose for growth ----
       window.updateTopology = function(pages) {
-        rebuildRings(pages);
+        updateBall(pages);
       };
     })();
 
     // ============================================================
-    // 2. UI UPDATE ENGINE
+    // 2. UI ENGINE (all cards, sync, token data, etc.)
     // ============================================================
     function setEl(id, value) {
       const el = document.getElementById(id);
       if (el) el.textContent = value;
     }
 
+    // ---- Token Data with real links ----
     const tokenData = [
       {
         name: 'PIDX',
@@ -862,7 +912,7 @@
       ).join('');
     }
 
-    // ---- PHB Update ----
+    // ---- PHB Update from JSON ----
     function updatePHBFromData(data) {
       let totalPages = 0;
       for (let key in data) {
@@ -902,6 +952,7 @@
       setEl('phbLastSync', timeStr);
       setEl('lastUpdate', now.toLocaleString());
 
+      // AGI predictions
       const nodes = 143 + Math.floor(totalPages / 10);
       setEl('agiPredNodes', nodes);
       setEl('neuralNodes', nodes);
@@ -912,8 +963,10 @@
       setEl('wishesDisplay', wishes.toLocaleString());
       setEl('agiPredWishes', wishes);
 
+      // Update the ball
       if (window.updateTopology) window.updateTopology(totalPages);
 
+      // AGI thoughts
       const thoughts = [
         'The system grows fractal layers.',
         'Coherence is the key to expansion.',
@@ -1104,8 +1157,7 @@
     setInterval(fetchAndUpdate, 30000);
     setInterval(forceSync, 1000);
 
-    console.log('🚀 Gen 7: Void black + bottom 4D topology with growth.');
+    console.log('🚀 Gen 7: Draggable 4D ball with growth.');
   </script>
-
 </body>
 </html>
