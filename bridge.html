@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🌉 Superchain Bridge</title>
+  <style>
+    body { background: #0b0b0f; color: #e0e8f0; font-family: 'Inter', sans-serif; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .card { background: rgba(255,255,255,0.02); border-radius: 16px; padding: 20px; margin: 10px 0; }
+    .btn { background: #1a2a4a; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌉 Superchain Bridge</h1>
+    <div class="card">
+      <h3>Bridge Tokens</h3>
+      <select id="tokenSelect">
+        <option value="PIDX">PIDX</option>
+        <option value="SGUIDE">SGUIDE</option>
+        <option value="VDOO">VDOO</option>
+        <option value="PENNIES">PENNIES</option>
+      </select>
+      <input type="number" id="amount" placeholder="Amount" />
+      <select id="targetChain">
+        <option value="op">OP Mainnet</option>
+        <option value="arb">Arbitrum</option>
+      </select>
+      <button class="btn" onclick="bridgeTokens()">🌉 Bridge</button>
+    </div>
+  </div>
+  <script>
+    function bridgeTokens() {
+      const token = document.getElementById('tokenSelect').value;
+      const amount = document.getElementById('amount').value;
+      const chain = document.getElementById('targetChain').value;
+      alert(`🌉 Bridging ${amount} ${token} to ${chain}`);
+    }
+  </script>
+</body>
+</html>
