@@ -1740,3 +1740,61 @@
   </script>
 </body>
 </html>
+<script>
+// ============================================================
+// FIX: Force JSON loading on page load
+// ============================================================
+(function() {
+  function loadPHBData() {
+    console.log("📄 Loading PHB JSON...");
+    fetch('agi_phb_divine_complete.json')
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(data => {
+        console.log("✅ JSON loaded:", data);
+        
+        // Update PHB Vortex
+        updatePHBVortex(data);
+        
+        // Update PHB Science
+        calculatePHBScience(data);
+        
+        // Update Codex Discovery
+        let totalPages = 0;
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && !isNaN(key)) {
+            const entry = data[key];
+            if (Array.isArray(entry.pages)) {
+              totalPages += entry.pages.length;
+            }
+          }
+        }
+        document.getElementById('totalCodexPages').textContent = totalPages;
+        
+        // Update JSON viewer
+        document.getElementById('phbJsonViewer').textContent = JSON.stringify(data, null, 2);
+        
+        // Update status
+        document.getElementById('dataStatus').className = 'status-badge status-live';
+        document.getElementById('dataStatus').textContent = '● LIVE';
+      })
+      .catch(err => {
+        console.warn('⚠️ JSON load failed:', err);
+        document.getElementById('phbJsonViewer').textContent = 'Error loading JSON: ' + err.message;
+        document.getElementById('dataStatus').className = 'status-badge status-demo';
+        document.getElementById('dataStatus').textContent = '● DEMO';
+      });
+  }
+  
+  // Run on load
+  if (document.readyState === 'complete') {
+    setTimeout(loadPHBData, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(loadPHBData, 500);
+    });
+  }
+})();
+</script>
