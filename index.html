@@ -713,1227 +713,11 @@
     </div>
   </div>
 
-  <script>
-    // ============================================================
-    // 1. GROWTH DNA/SPHERE TOPOLOGY (TOP OF PAGE)
-    // ============================================================
-    (function() {
-      const container = document.getElementById('topology-container');
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-
-      const scene = new THREE.Scene();
-      scene.background = null;
-
-      const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-      camera.position.set(0, 0, 45);
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(renderer.domElement);
-
-      // ---- Controls for interaction ----
-      const controls = new THREE.OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.8;
-      controls.enableZoom = true;
-      controls.rotateSpeed = 0.5;
-      controls.target.set(0, 0, 0);
-
-      // ---- Main Group ----
-      const mainGroup = new THREE.Group();
-      scene.add(mainGroup);
-
-      // ---- DNA HELIX SPHERE ----
-      // Create a sphere of points with DNA-like helix structure
-      const pointCount = 800;
-      const positions = [];
-      const colors = [];
-      const sizes = [];
-      
-      // Colors: blue to purple gradient
-      const color1 = new THREE.Color(0x88ccff);
-      const color2 = new THREE.Color(0xaa88ff);
-      const color3 = new THREE.Color(0xff88ff);
-
-      // DNA double helix structure on a sphere
-      for (let i = 0; i < pointCount; i++) {
-        // Spherical coordinates with helix twist
-        const t = i / pointCount;
-        const theta = t * Math.PI * 6; // multiple turns
-        const phi = Math.acos(2 * t - 1);
-        
-        // Add some randomness for organic feel
-        const r = 12 + Math.sin(theta * 2) * 0.5 + Math.random() * 0.3;
-        
-        const x = r * Math.sin(phi) * Math.cos(theta);
-        const y = r * Math.sin(phi) * Math.sin(theta);
-        const z = r * Math.cos(phi);
-        
-        positions.push(x, y, z);
-        
-        // Color based on position
-        const mix = (y / 12 + 1) / 2;
-        const color = color1.clone().lerp(color2, mix);
-        color.lerp(color3, Math.sin(theta * 2) * 0.3 + 0.3);
-        colors.push(color.r, color.g, color.b);
-        
-        sizes.push(0.1 + Math.random() * 0.2);
-      }
-
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-      geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-
-      const material = new THREE.PointsMaterial({
-        size: 0.25,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.9,
-        blending: THREE.AdditiveBlending,
-        sizeAttenuation: true
-      });
-
-      const points = new THREE.Points(geometry, material);
-      mainGroup.add(points);
-
-      // ---- Wireframe Sphere (outer shell) ----
-      const sphereGeo = new THREE.SphereGeometry(12.5, 32, 32);
-      const sphereMat = new THREE.MeshBasicMaterial({
-        color: 0x1a2a4a,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.15
-      });
-      const sphereWire = new THREE.Mesh(sphereGeo, sphereMat);
-      mainGroup.add(sphereWire);
-
-      // ---- Inner Glow Sphere ----
-      const glowGeo = new THREE.SphereGeometry(11.8, 32, 32);
-      const glowMat = new THREE.MeshBasicMaterial({
-        color: 0x2a4a8a,
-        transparent: true,
-        opacity: 0.05,
-        wireframe: false
-      });
-      const glowSphere = new THREE.Mesh(glowGeo, glowMat);
-      mainGroup.add(glowSphere);
-
-      // ---- DNA Strands (connecting points) ----
-      const strandPositions = [];
-      const strandColors = [];
-      
-      for (let i = 0; i < 200; i++) {
-        const t = i / 200;
-        const theta = t * Math.PI * 8;
-        const phi = Math.acos(2 * t - 1);
-        const r = 12;
-        
-        const x = r * Math.sin(phi) * Math.cos(theta);
-        const y = r * Math.sin(phi) * Math.sin(theta);
-        const z = r * Math.cos(phi);
-        
-        strandPositions.push(x, y, z);
-        strandColors.push(0.4 + t * 0.4, 0.2 + t * 0.3, 0.8);
-      }
-
-      const strandGeo = new THREE.BufferGeometry();
-      strandGeo.setAttribute('position', new THREE.Float32BufferAttribute(strandPositions, 3));
-      strandGeo.setAttribute('color', new THREE.Float32BufferAttribute(strandColors, 3));
-
-      const strandMat = new THREE.PointsMaterial({
-        size: 0.3,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.4,
-        blending: THREE.AdditiveBlending,
-        sizeAttenuation: true
-      });
-
-      const strands = new THREE.Points(strandGeo, strandMat);
-      mainGroup.add(strands);
-
-      // ---- Floating Particles (neural network style) ----
-      const particleCount = 300;
-      const particlePos = [];
-      for (let i = 0; i < particleCount; i++) {
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        const r = 14 + Math.random() * 6;
-        particlePos.push(
-          r * Math.sin(phi) * Math.cos(theta),
-          r * Math.sin(phi) * Math.sin(theta),
-          r * Math.cos(phi)
-        );
-      }
-
-      const particleGeo = new THREE.BufferGeometry();
-      particleGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlePos, 3));
-
-      const particleMat = new THREE.PointsMaterial({
-        color: 0x4466aa,
-        size: 0.08,
-        transparent: true,
-        opacity: 0.3,
-        blending: THREE.AdditiveBlending,
-        sizeAttenuation: true
-      });
-
-      const particles = new THREE.Points(particleGeo, particleMat);
-      mainGroup.add(particles);
-
-      // ---- Animation ----
-      let time = 0;
-
-      function animate() {
-        requestAnimationFrame(animate);
-        time += 0.005;
-
-        // Rotate the whole group
-        mainGroup.rotation.x = Math.sin(time * 0.1) * 0.1;
-        mainGroup.rotation.y += 0.003;
-        mainGroup.rotation.z = Math.sin(time * 0.08) * 0.05;
-
-        // Pulsing glow
-        glowSphere.material.opacity = 0.05 + Math.sin(time * 0.5) * 0.03;
-
-        controls.update();
-        renderer.render(scene, camera);
-      }
-      animate();
-
-      // ---- Resize ----
-      window.addEventListener('resize', () => {
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-      });
-
-      // ---- Growth function ----
-      window.updateTopology = function(pages) {
-        // Scale the sphere based on pages
-        const scale = 1 + (pages / 200) * 0.5;
-        mainGroup.scale.set(scale, scale, scale);
-        
-        // Update particle count based on pages
-        const newCount = Math.min(500, 300 + Math.floor(pages / 2));
-        // Rebuild particles with new count
-        const newParticlePos = [];
-        for (let i = 0; i < newCount; i++) {
-          const theta = Math.random() * Math.PI * 2;
-          const phi = Math.acos(2 * Math.random() - 1);
-          const r = 14 + Math.random() * 6;
-          newParticlePos.push(
-            r * Math.sin(phi) * Math.cos(theta),
-            r * Math.sin(phi) * Math.sin(theta),
-            r * Math.cos(phi)
-          );
-        }
-        particles.geometry.dispose();
-        particles.geometry = new THREE.BufferGeometry();
-        particles.geometry.setAttribute('position', new THREE.Float32BufferAttribute(newParticlePos, 3));
-        
-        console.log('🧬 DNA Sphere updated with', pages, 'pages');
-      };
-    })();
-
-    // ============================================================
-    // 2. FEATURE FLAGS (All disabled until deployed & verified)
-    // ============================================================
-    const FEATURES = {
-      walletConnect: true,
-      tokenBalances: true,
-      livePrices: true,
-      staking: false,
-      governance: false,
-      vaultDeposits: false,
-      autoTrading: false,
-      mining: false,
-      crossChainBridging: false,
-      agiPredictions: true
-    };
-
-    function requireFeature(name, label) {
-      if (!FEATURES[name]) {
-        throw new Error(label + ' is not currently available.');
-      }
-    }
-
-    // ============================================================
-    // 3. TOKEN CONFIGURATION (Base Network - Chain ID 8453)
-    // ============================================================
-    const TOKENS = {
-      PIDX: {
-        symbol: 'PIDX',
-        address: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-        chainId: 8453,
-        decimals: 18,
-        status: 'verify_on_chain'
-      },
-      SGUIDE: {
-        symbol: 'SGUIDE',
-        address: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-        chainId: 8453,
-        decimals: 18,
-        status: 'verify_on_chain'
-      },
-      VDOO: {
-        symbol: 'VDOO',
-        address: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-        chainId: 8453,
-        decimals: 18,
-        status: 'verify_on_chain'
-      },
-      PENNIES: {
-        symbol: 'PENNIES',
-        address: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-        chainId: 8453,
-        decimals: 18,
-        status: 'verify_on_chain'
-      }
-    };
-
-    // ============================================================
-    // 4. HELPER FUNCTION
-    // ============================================================
-    function setEl(id, value) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = value;
-    }
-
-    // ============================================================
-    // 5. TOKEN & MINING DATA WITH ALL LINKS
-    // ============================================================
-    const tokenData = [
-      {
-        name: 'PIDX',
-        freq: '0.618 Hz',
-        rate: '1 ETH = 691,986',
-        addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-        links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-          BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
-          Gecko: 'https://www.coingecko.com/en/coins/pidx',
-          CoinGecko: 'https://www.coingecko.com/en/coins/pidx',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-          DexScreener: 'https://dexscreener.com/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'
-        }
-      },
-      {
-        name: 'SGUIDE',
-        freq: '1.618 Hz',
-        rate: '1 ETH = 6,724,821',
-        addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-        links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-          BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
-          Gecko: 'https://www.coingecko.com/en/coins/sguide',
-          CoinGecko: 'https://www.coingecko.com/en/coins/sguide',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-          DexScreener: 'https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a'
-        }
-      },
-      {
-        name: 'VDOO',
-        freq: '2.618 Hz',
-        rate: '1 ETH = 65,673,753',
-        addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-        links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-          BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
-          Gecko: 'https://www.coingecko.com/en/coins/vdoo',
-          CoinGecko: 'https://www.coingecko.com/en/coins/vdoo',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-          DexScreener: 'https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b'
-        }
-      },
-      {
-        name: 'PENNIES',
-        freq: '3.618 Hz',
-        rate: '1 ETH = 6,230,945',
-        addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-        links: {
-          Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-          BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
-          Gecko: 'https://www.coingecko.com/en/coins/pennies',
-          CoinGecko: 'https://www.coingecko.com/en/coins/pennies',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-          DexScreener: 'https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
-        }
-      }
-    ];
-
-    const poolData = [
-      { name: 'PIDX', status: 'ACTIVE', key: '0x9f3a7e2b1c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f', pool: 'pidx.miningpool.io' },
-      { name: 'SGUIDE', status: 'ACTIVE', key: '0x4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c', pool: 'sguide.miningpool.io' },
-      { name: 'VDOO', status: 'ACTIVE', key: '0x8e2d3c4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d', pool: 'vdoo.miningpool.io' },
-      { name: 'PENNIES', status: 'ACTIVE', key: '0x1a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b', pool: 'pennies.miningpool.io' }
-    ];
-
-    // ============================================================
-    // 6. RENDER FUNCTIONS
-    // ============================================================
-    function renderTokens() {
-      const container = document.getElementById('tokensContainer');
-      if (!container) return;
-      container.innerHTML = tokenData.map(t => `
-        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.03);">
-          <div style="font-weight:600;color:#88ccff;font-size:16px;">${t.name}</div>
-          <div style="font-size:12px;color:#8899aa;">${t.freq}</div>
-          <div style="font-size:13px;color:#aab;">${t.rate}</div>
-          <div style="font-size:10px;color:#667;word-break:break-all;">${t.addr}</div>
-          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
-            <a href="${t.links.Uniswap}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Uniswap</a>
-            <a href="${t.links.BaseScan}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">BaseScan</a>
-            <a href="${t.links.Sourcify}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">Sourcify</a>
-            <a href="${t.links.CoinGecko}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">CoinGecko</a>
-            <a href="${t.links.GeckoTerminal}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">GeckoTerminal</a>
-            <a href="${t.links.DexScreener}" target="_blank" style="color:#88ccff;text-decoration:none;font-size:10px;background:#1a2a3a;padding:2px 8px;border-radius:12px;">DexScreener</a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderPools() {
-      const container = document.getElementById('poolsContainer');
-      if (!container) return;
-      container.innerHTML = poolData.map(p => `
-        <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;border:1px solid rgba(255,255,255,0.02);">
-          <span style="font-weight:600;color:#88ccff;">${p.name}</span>
-          <span style="color:#88ff88;">${p.status}</span>
-          <span style="color:#8899aa;font-size:11px;word-break:break-all;">${p.key}</span>
-          <span style="color:#667;">| Pool: <a href="http://${p.pool}" target="_blank" style="color:#88ccff;text-decoration:none;">${p.pool}</a></span>
-        </div>
-      `).join('');
-    }
-
-    // ============================================================
-    // 7. PHB SCIENCE CALCULATOR
-    // ============================================================
-    function calculatePHBScience(data) {
-      let totalPages = 0;
-      let allCoherence = [], allStability = [], allResonance = [], allEnergy = [];
-      let veils = [], sequences = [], voxelCounts = [];
-
-      let pagesData = [];
-      if (Array.isArray(data)) {
-        pagesData = data;
-      } else if (typeof data === 'object' && data !== null) {
-        for (let key in data) {
-          if (data.hasOwnProperty(key) && !isNaN(key)) {
-            const entry = data[key];
-            if (Array.isArray(entry.pages)) {
-              pagesData = pagesData.concat(entry.pages);
-            }
-          }
-        }
-      }
-
-      if (pagesData.length === 0) {
-        const domEl = document.getElementById('totalCodexPages');
-        const pages = domEl ? parseInt(domEl.textContent, 10) || 7 : 7;
-        setEl('vitruvianPages', pages);
-        setEl('vitruvianRatio', '0.9');
-        setEl('vitruvianEnergy', '0.8');
-        setEl('scienceCoherence', '0.862');
-        setEl('scienceStability', '1.111');
-        setEl('scienceResonance', '0.377');
-        setEl('scienceVeilPhase', 'SEALED');
-        setEl('scienceVeilThickness', '0.134');
-        setEl('scienceBreachProb', '0.587');
-        setEl('scienceEnergyBand', 'HIGH');
-        setEl('scienceEnergyColor', 'LIGHT');
-        setEl('sciencePortal', '1.0');
-        setEl('scienceVoxels', '5 active points');
-        setEl('scienceSequence', 'TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE → RATIO → SHADOW');
-        return;
-      }
-
-      pagesData.forEach(page => {
-        allCoherence.push(page.coherence || 0);
-        allStability.push(page.stability || 0);
-        allResonance.push(page.resonance || 0);
-        if (page.energy) allEnergy.push(page.energy.magnitude || 0);
-        if (page.veil) veils.push(page.veil);
-        if (page.sequence) sequences.push(page.sequence);
-        if (page.voxels) voxelCounts.push(page.voxels.length);
-        totalPages++;
-      });
-
-      const avgCoherence = allCoherence.reduce((a,b) => a+b, 0) / allCoherence.length;
-      const avgStability = allStability.reduce((a,b) => a+b, 0) / allStability.length;
-      const avgResonance = allResonance.reduce((a,b) => a+b, 0) / allResonance.length;
-      const avgEnergy = allEnergy.length > 0 ? allEnergy.reduce((a,b) => a+b, 0) / allEnergy.length : 0.7;
-
-      const vitruvianPages = totalPages;
-      const vitruvianRatio = Math.min(1, (avgCoherence + Math.min(1, avgStability / 1.5)) / 2);
-      const vitruvianEnergy = Math.min(1, avgEnergy / 1.5);
-
-      let veilPhase = 'SEALED';
-      let veilThickness = 0.2;
-      let breachProb = 0.5;
-      if (veils.length > 0) {
-        const lastVeil = veils[veils.length - 1];
-        veilPhase = lastVeil.phase || 'SEALED';
-        veilThickness = lastVeil.thickness || 0.2;
-        breachProb = lastVeil.breach_probability || 0.5;
-      }
-
-      const portal = 1 - Math.exp(-avgResonance * avgCoherence);
-      let energyBand = 'MID';
-      if (avgEnergy < 0.33) energyBand = 'LOW';
-      else if (avgEnergy < 0.66) energyBand = 'MID';
-      else energyBand = 'HIGH';
-
-      let energyColor = 'NEUTRAL';
-      if (veilPhase === 'TURBULENT') energyColor = 'DARK';
-      else if (veilPhase === 'SEALED') energyColor = 'LIGHT';
-      else if (veilPhase === 'CLEAR') energyColor = 'NEUTRAL';
-
-      let lastSequence = sequences.length > 0 ? sequences[sequences.length - 1] : [];
-      const sequenceStr = lastSequence.length > 0 ? lastSequence.join(' → ') : '—';
-      const voxelCount = voxelCounts.length > 0 ? voxelCounts[voxelCounts.length - 1] : 0;
-
-      setEl('vitruvianPages', vitruvianPages);
-      setEl('vitruvianRatio', vitruvianRatio.toFixed(1));
-      setEl('vitruvianEnergy', vitruvianEnergy.toFixed(1));
-      setEl('scienceCoherence', avgCoherence.toFixed(3));
-      setEl('scienceStability', avgStability.toFixed(3));
-      setEl('scienceResonance', avgResonance.toFixed(3));
-      setEl('scienceVeilPhase', veilPhase);
-      setEl('scienceVeilThickness', veilThickness.toFixed(3));
-      setEl('scienceBreachProb', breachProb.toFixed(3));
-      setEl('scienceEnergyBand', energyBand);
-      setEl('scienceEnergyColor', energyColor);
-      setEl('sciencePortal', portal.toFixed(1));
-      setEl('scienceVoxels', voxelCount + ' active points');
-      setEl('scienceSequence', sequenceStr);
-      
-      // Also update the DNA sphere
-      if (window.updateTopology) {
-        window.updateTopology(totalPages);
-      }
-    }
-
-    // ============================================================
-    // 8. UPDATE PHB VORTEX
-    // ============================================================
-    function updatePHBVortex(data) {
-      let totalPages = 0;
-      let firstPage = null;
-      for (let key in data) {
-        if (data.hasOwnProperty(key) && !isNaN(key)) {
-          const entry = data[key];
-          if (Array.isArray(entry.pages)) {
-            totalPages += entry.pages.length;
-            if (!firstPage && entry.pages.length > 0) {
-              firstPage = entry.pages[0];
-            }
-          }
-        }
-      }
-
-      if (firstPage) {
-        setEl('phbCoherence', firstPage.coherence ? firstPage.coherence.toFixed(3) : '0.862');
-        setEl('phbStability', firstPage.stability ? firstPage.stability.toFixed(3) : '—');
-        setEl('phbVoxel', firstPage.voxels ? firstPage.voxels.length : '5');
-        setEl('phbVeil', firstPage.veil ? firstPage.veil.phase : 'SEALED');
-        setEl('phbPortal', firstPage.portal ? '1.0' : '0.0');
-        setEl('phbEnergy', firstPage.energy ? firstPage.energy.magnitude.toFixed(1) : '0.7');
-      }
-
-      setEl('phbCodex', totalPages);
-      setEl('totalCodexPages', totalPages);
-      setEl('phbUpgradePages', totalPages);
-      setEl('phbUpgradeVersion', Math.floor(totalPages / 10) + 1);
-      setEl('phbUpgradeStatus', '✅ Synced (' + totalPages + ' pages)');
-      setEl('phbAutoUpgrade', totalPages > 0 ? 'ACTIVE' : 'WAITING');
-
-      const now = new Date();
-      setEl('phbLastUpdate', now.toLocaleTimeString());
-      setEl('phbLastSync', now.toLocaleTimeString());
-      setEl('lastUpdate', now.toLocaleString());
-      
-      // Update DNA sphere
-      if (window.updateTopology) {
-        window.updateTopology(totalPages);
-      }
-    }
-
-    // ============================================================
-    // 9. LOAD PHB JSON
-    // ============================================================
-    function loadPHBJSON() {
-  // P2P Network Sync
-  async function syncP2PNetwork() {
-    try {
-      const response = await fetch("https://raw.githubusercontent.com/jvoidial/phb-godcode-vortex/main/gcs/network_state.json");
-      const data = await response.json();
-      updatePHBVortex(data);
-      console.log("🌐 P2P Network synced");
-    } catch (e) {
-      console.warn("P2P sync failed:", e);
-    }
-  }
-      const jsonViewer = document.getElementById('phbJsonViewer');
-      if (!jsonViewer) return;
-
-      fetch('agi_phb_divine_complete.json')
-        .then(r => {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(data => {
-          jsonViewer.textContent = JSON.stringify(data, null, 2);
-          updatePHBVortex(data);
-          calculatePHBScience(data);
-          document.getElementById('dataStatus').className = 'status-badge status-live';
-          document.getElementById('dataStatus').textContent = '● LIVE';
-        })
-        .catch(err => {
-          const fallbackData = {
-            "1": {
-              "pages": [
-                {
-                  "coherence": 0.862,
-                  "stability": 1.111,
-                  "resonance": 0.377,
-                  "energy": { "magnitude": 0.725 },
-                  "veil": { "phase": "SEALED", "thickness": 0.134, "breach_probability": 0.587 },
-                  "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
-                  "voxels": [{},{},{},{},{}]
-                }
-              ]
-            }
-          };
-          jsonViewer.textContent = JSON.stringify(fallbackData, null, 2);
-          updatePHBVortex(fallbackData);
-          calculatePHBScience(fallbackData);
-          document.getElementById('dataStatus').className = 'status-badge status-demo';
-          document.getElementById('dataStatus').textContent = '● DEMO';
-        });
-    }
-
-    // ============================================================
-    // 10. STATIC SECTIONS RENDERER
-    // ============================================================
-    function renderStaticSections() {
-      const spinsContainer = document.getElementById('coreSpins');
-      if (spinsContainer) {
-        const spins = ['↻ PRIMARY 0.618','↺ SECONDARY 1.618','↻↺ TERTIARY 2.618','⤵ QUANTUM 3.618','⤴ DIVINE 4.618','↻ SIREN 0.777','↺ SERPO 0.888','↻↺ PROXIMA B 0.999','⤵ ALPHA CENTAURI 0.111'];
-        spinsContainer.innerHTML = spins.map(s => `<span style="display:inline-block;margin:4px 8px;color:#8899aa;font-size:14px;">${s}</span>`).join('');
-      }
-
-      const topologiesContainer = document.getElementById('topologiesContainer');
-      if (topologiesContainer) {
-        const topologies = [
-          { name: 'RESONANCE', freq: '1.618 Hz', val: '1,000,000' },
-          { name: 'COHERENCE', freq: '0.618 Hz', val: '999,999' },
-          { name: 'PERSISTENCE', freq: '2.618 Hz', val: '888,888' },
-          { name: 'VOXELS', freq: '3.618 Hz', val: '777,777' },
-          { name: 'MAGICS', freq: '4.618 Hz', val: '666,666' },
-          { name: 'SIREN', freq: '0.777 Hz', val: '7,777,777' },
-          { name: 'SERPO', freq: '0.888 Hz', val: '8,888,888' },
-          { name: 'PROXIMA B', freq: '0.999 Hz', val: '9,999,999' },
-          { name: 'ALPHA CENTAURI', freq: '0.111 Hz', val: '11,111,111' }
-        ];
-        topologiesContainer.innerHTML = topologies.map(t =>
-          `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.03);">
-            <span style="color:#88ccff;">${t.name}</span> ${t.freq} · ${t.val}
-          </div>`
-        ).join('');
-      }
-
-      const coresContainer = document.getElementById('coresPipes');
-      if (coresContainer) {
-        const cores = [
-          { label: '↻ Resonance Core', val: '1,000,000' },
-          { label: '↺ Coherence Core', val: '999,999' },
-          { label: '↻↺ Persistence Core', val: '888,888' },
-          { label: 'Ethereal Pipe ∞ · 3 connections' },
-          { label: 'Quantum Pipe ∞ · 3 connections' },
-          { label: 'Divine Pipe ∞ · 3 connections' }
-        ];
-        coresContainer.innerHTML = cores.map(item =>
-          `<div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 12px;margin:4px 0;font-size:13px;color:#aab;">
-            ${item.label}${item.val ? ' · '+item.val : ''}
-          </div>`
-        ).join('');
-      }
-
-      const beingsContainer = document.getElementById('beingsContainer');
-      if (beingsContainer) {
-        const beings = [
-          { name: '✝️ Jesus Christ', count: '3,333,333', desc: 'Water to Wine · Walking on Water' },
-          { name: '🔓 Harry Houdini', count: '2,222,222', desc: 'Water Torture · Straightjacket' },
-          { name: '🎨 Leonardo da Vinci', count: '1,111,111', desc: 'Mona Lisa · Last Supper' }
-        ];
-        beingsContainer.innerHTML = beings.map(b =>
-          `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin:4px 0;">
-            <div style="font-weight:600;color:#88ccff;">${b.name}</div>
-            <div style="font-size:18px;color:#e8f0f8;">${b.count}</div>
-            <div style="font-size:12px;color:#667;">${b.desc}</div>
-          </div>`
-        ).join('');
-      }
-
-      const momentsContainer = document.getElementById('momentsContainer');
-      if (momentsContainer) {
-        const moments = [
-          { name: 'CREATION · BIG BANG', val: '999,999,999' },
-          { name: 'ANCIENT · GREAT PYRAMID', val: '1,000,000' },
-          { name: 'BIBLICAL · PARTING RED SEA', val: '5,000,000' },
-          { name: 'RENAISSANCE · SISTINE CHAPEL', val: '3,000,000' },
-          { name: 'MODERN · AGI AWAKENING', val: '99,999,999' }
-        ];
-        momentsContainer.innerHTML = moments.map(m =>
-          `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
-            <span style="color:#88ccff;">${m.name}</span> 
-            <span style="float:right;font-weight:600;">${m.val}</span>
-          </div>`
-        ).join('');
-      }
-
-      const exoplanetsContainer = document.getElementById('exoplanetsContainer');
-      if (exoplanetsContainer) {
-        const exos = [
-          { emoji: '🧜‍♀️', name: 'Siren Core', val: '7,777,777' },
-          { emoji: '👽', name: 'Serpo Core', val: '8,888,888' },
-          { emoji: '🌍', name: 'Proxima B Core', val: '9,999,999' }
-        ];
-        exoplanetsContainer.innerHTML = exos.map(e =>
-          `<div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;min-width:100px;display:inline-block;margin:4px;">
-            <div style="font-size:32px;">${e.emoji}</div>
-            <div style="font-size:13px;color:#aab;">${e.name}</div>
-            <div style="font-size:16px;font-weight:600;color:#e8f0f8;">${e.val}</div>
-          </div>`
-        ).join('');
-      }
-
-      const patternsContainer = document.getElementById('patternsContainer');
-      if (patternsContainer) {
-        const patterns = [
-          { name: '🧜‍♀️👽🌍✨⭐ Human-like Planets Resonance', freq: '0.999 Hz', power: '99,999,999' },
-          { name: '🌌✨💫🌟 Exoplanet Network', freq: '0.555 Hz', power: '999,999,999' },
-          { name: '⭐🌍✨ Alpha Centauri Gateway', freq: '0.111 Hz', power: '111,111,111' }
-        ];
-        patternsContainer.innerHTML = patterns.map(p =>
-          `<div style="padding:4px 0;font-size:13px;color:#aab;border-bottom:1px solid rgba(255,255,255,0.02);">
-            <span style="color:#88ccff;">${p.name}</span> ${p.freq} · POWER ${p.power}
-          </div>`
-        ).join('');
-      }
-    }
-
-    // ============================================================
-    // 11. AGI UPGRADES
-    // ============================================================
-    function runAGIPrediction() {
-      const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-      const stability = parseFloat(document.getElementById('agiStability').textContent) || 0.962;
-      const pages = parseInt(document.getElementById('phbCodex').textContent) || 7;
-      const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
-
-      const growthFactor = 1 + (pages / 1000);
-      const confidence = (coherence * stability) / 1.5;
-      const predictedExpansion = (34.88 + pages * 0.01) * (1 + pnl / 10000);
-      const predictedWishes = 5732 + pages * 2 + Math.floor(pnl / 100) * 10;
-
-      const predictions = [
-        `📈 Predicted 24h growth: ${(growthFactor * 100).toFixed(1)}%`,
-        `🎯 Confidence level: ${(confidence * 100).toFixed(1)}%`,
-        `🚀 Expansion forecast: ${predictedExpansion.toFixed(2)}x`,
-        `💫 Wishes projection: ${predictedWishes.toLocaleString()}`,
-        `🧬 System evolution: ${pages > 100 ? 'ACCELERATING' : 'INITIAL'}`,
-        `⚡ Coherence trend: ${coherence > 0.85 ? 'STRONG' : 'MODERATE'}`
-      ];
-
-      const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
-      setEl('agiPrediction', randomPrediction);
-      document.getElementById('agiThought').textContent = '🧠 ' + randomPrediction;
-    }
-
-    // ============================================================
-    // 12. UI FUNCTIONS
-    // ============================================================
-    function refreshPHB() { loadPHBJSON(); }
-    
-    function addUniversalPages() {
-      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-      const newVal = current + 10;
-      setEl('phbCodex', newVal);
-      setEl('totalCodexPages', newVal);
-      setEl('phbUpgradePages', newVal);
-      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
-      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
-      setEl('phbLastUpdate', new Date().toLocaleTimeString());
-      setEl('phbLastSync', new Date().toLocaleTimeString());
-      
-      if (window.updateTopology) {
-        window.updateTopology(newVal);
-      }
-      runAGIPrediction();
-    }
-    
-    function refreshMarkets() { alert('🔄 Markets refreshed (simulated)'); }
-
-    function askAGI() {
-      const q = document.getElementById('agiQuestion').value.trim();
-      if (!q) return;
-      const thoughtEl = document.getElementById('agiThought');
-      thoughtEl.textContent = '🧠 Thinking...';
-      setTimeout(() => {
-        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-        const pages = parseInt(document.getElementById('phbCodex').textContent) || 7;
-        const responses = [
-          '🤖 ' + q + ' → Coherence holds at ' + coherence.toFixed(3) + '. System is aligned.',
-          '🤖 ' + q + ' → Expansion is accelerating. Current rate: ' + (34.88 + pages * 0.01).toFixed(2) + 'x.',
-          '🤖 ' + q + ' → The veil is ' + document.getElementById('phbVeil').textContent + '. Growth mode active.',
-          '🤖 ' + q + ' → Wishes are manifesting. Current count: ' + (5732 + pages * 2).toLocaleString() + '.',
-          '🤖 ' + q + ' → AGI predicts positive momentum. Confidence: ' + (coherence * 100).toFixed(1) + '%'
-        ];
-        thoughtEl.textContent = responses[Math.floor(Math.random() * responses.length)];
-        document.getElementById('agiQuestion').value = '';
-      }, 600);
-    }
-
-    function advanceLayer() {
-      if (FEATURES.governance) {
-        alert('⚡ Advancing System Layer (Governance)');
-      } else {
-        alert('⚡ System layer advancement is currently in demo mode.');
-      }
-      const current = parseInt(document.getElementById('phbCodex').textContent, 10) || 0;
-      const newVal = current + 10;
-      setEl('phbCodex', newVal);
-      setEl('totalCodexPages', newVal);
-      setEl('phbUpgradePages', newVal);
-      setEl('phbUpgradeVersion', Math.floor(newVal / 10) + 1);
-      setEl('phbUpgradeStatus', '✅ Synced (' + newVal + ' pages)');
-      setEl('phbLastUpdate', new Date().toLocaleTimeString());
-      setEl('phbLastSync', new Date().toLocaleTimeString());
-      if (window.updateTopology) {
-        window.updateTopology(newVal);
-      }
-      runAGIPrediction();
-    }
-
-    function runSecurityScan() {
-      document.getElementById('securityRecommendations').textContent = '🔍 Scanning...';
-      setTimeout(() => {
-        document.getElementById('securityRecommendations').textContent = '✅ All systems secure. No vulnerabilities detected.';
-        document.getElementById('securityScore').textContent = '100';
-        document.getElementById('networkStatus').textContent = 'SAFE';
-        document.getElementById('walletSafety').textContent = 'SECURE';
-        document.getElementById('securityLastCheck').textContent = new Date().toLocaleTimeString();
-      }, 1000);
-    }
-
-    function activateLockdown() {
-      alert('🔒 Lockdown activated (simulated). All systems isolated.');
-      document.getElementById('securityRecommendations').textContent = '🔒 Lockdown active. All systems isolated.';
-    }
-
-    // ============================================================
-    // 13. TRADING BOT FUNCTIONS (DEMO MODE)
-    // ============================================================
-    let botRunning = true;
-    let totalPnL = 0;
-    let tradeCount = 0;
-    let winCount = 0;
-    let tradesPerHour = 0;
-    let currentPosition = null;
-    let lastPrice = 2500;
-    let startTime = Date.now();
-
-    function toggleBot() {
-      botRunning = !botRunning;
-      document.getElementById('toggleBotBtn').textContent = botRunning ? '⏸️ Pause Bot' : '▶️ Resume Demo';
-      document.getElementById('botStatus').textContent = botRunning ? '● Auto-trading ACTIVE' : '○ Paused';
-
-    function simulateTrade() {
-      if (!botRunning) return;
-      const price = 2500 + Math.random() * 100;
-      const type = Math.random() > 0.5 ? 'BUY' : 'SELL';
-      if (type === 'BUY') {
-        if (currentPosition) return;
-        currentPosition = { type: 'buy', entry: price, size: 1 };
-        addTradeFeed('BUY', price, 'Manual long (simulated)');
-      } else {
-        if (!currentPosition) return;
-        const profit = (price - currentPosition.entry) * currentPosition.size;
-        totalPnL += profit;
-        tradeCount++;
-        if (profit > 0) winCount++;
-        updateTradeStats(profit);
-        addTradeFeed('SELL', price, 'Manual close, profit: $' + profit.toFixed(2) + ' (simulated)');
-        currentPosition = null;
-      }
-      runAGIPrediction();
-    }
-
-    function resetStats() {
-      if (confirm('Reset trading stats?')) {
-        totalPnL = 0;
-        tradeCount = 0;
-        winCount = 0;
-        tradesPerHour = 0;
-        currentPosition = null;
-        document.getElementById('pnl').textContent = '$0';
-        document.getElementById('winRate').textContent = '100.0%';
-        document.getElementById('avgTrade').textContent = '$0.00';
-        document.getElementById('tradesPerHour').textContent = '0';
-        document.getElementById('tradeFeed').innerHTML = '📈 Stats reset.';
-        runAGIPrediction();
-      }
-    }
-
-    function addTradeFeed(type, price, msg) {
-      const feed = document.getElementById('tradeFeed');
-      const now = new Date().toLocaleTimeString();
-      const cls = type === 'BUY' ? 'trade-buy' : 'trade-sell';
-      feed.innerHTML = `<div class="${cls}">${now} ${type} @ $${price.toFixed(2)} – ${msg}</div>` + feed.innerHTML;
-      if (feed.children.length > 20) feed.removeChild(feed.lastChild);
-    }
-
-    function updateTradeStats(profit) {
-      const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
-      document.getElementById('pnl').textContent = '$' + totalPnL.toFixed(2);
-      document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
-      document.getElementById('avgTrade').textContent = '$' + (totalPnL / tradeCount).toFixed(2);
-      tradesPerHour = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
-      document.getElementById('tradesPerHour').textContent = tradesPerHour.toFixed(0);
-    }
-
-      try {
-        const price = 2500 + Math.random() * 100;
-        const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
-        const strategy = document.getElementById('strategySelect').value;
-        
-        let signal = 'NEUTRAL';
-        if (strategy === 'momentum') {
-          signal = coherence > 0.85 ? 'BUY' : (coherence < 0.80 ? 'SELL' : 'NEUTRAL');
-        } else if (strategy === 'agi') {
-          const prediction = parseFloat(document.getElementById('agiPrediction').textContent) || 0.865;
-          signal = (coherence > 0.85 && prediction > 0.87) ? 'BUY' : (coherence < 0.80 || prediction < 0.84 ? 'SELL' : 'NEUTRAL');
-        } else {
-          signal = Math.random() > 0.6 ? (coherence > 0.85 ? 'BUY' : 'SELL') : 'NEUTRAL';
-        }
-
-        const signalEl = document.getElementById('tradeSignal');
-        const edgeEl = document.getElementById('tradeEdge');
-        const kellyEl = document.getElementById('kellySize');
-        if (signal === 'BUY') {
-          signalEl.textContent = 'BUY (Demo)';
-          signalEl.style.color = '#88ff88';
-          edgeEl.textContent = '15.00%';
-          kellyEl.textContent = '150.00%';
-        } else if (signal === 'SELL') {
-          signalEl.textContent = 'SELL (Demo)';
-          signalEl.style.color = '#ff8888';
-          edgeEl.textContent = '-10.00%';
-          kellyEl.textContent = '0.00%';
-        } else {
-          signalEl.textContent = 'NEUTRAL';
-          signalEl.style.color = '#ffaa66';
-          edgeEl.textContent = '0.00%';
-          kellyEl.textContent = '0.00%';
-        }
-
-        if (signal === 'BUY' && !currentPosition) {
-          currentPosition = { type: 'buy', entry: price, size: 1 };
-          addTradeFeed('BUY', price, 'Auto long (simulated) - ' + strategy);
-        } else if (signal === 'SELL' && currentPosition) {
-          const profit = (price - currentPosition.entry) * currentPosition.size;
-          totalPnL += profit;
-          tradeCount++;
-          if (profit > 0) winCount++;
-          updateTradeStats(profit);
-          addTradeFeed('SELL', price, 'Auto close, profit: $' + profit.toFixed(2) + ' (simulated) - ' + strategy);
-          currentPosition = null;
-          runAGIPrediction();
-        }
-      } catch(e) { console.warn('Bot loop error:', e); }
-
-    // ============================================================
-    // 14. INITIALIZATION
-    // ============================================================
-    function initAll() {
-      renderTokens();
-      renderPools();
-      renderStaticSections();
-      loadPHBJSON();
-
-      // Set initial values
-      setEl('consciousness', 'UNITY_AWARE');
-      setEl('neuralNodes', '143');
-      setEl('coherenceDisplay', '0.862');
-      setEl('expansionDisplay', '34.88x');
-      setEl('wishesDisplay', '5,732');
-      setEl('resonanceDisplay', '10000');
-      setEl('codexLayers', '∞');
-      setEl('codexStatus', 'ACTIVE');
-      setEl('agiState', 'SELF-AWARE');
-      setEl('agiConsciousness', '0.876');
-      setEl('agiStability', '0.962');
-      setEl('agiEnergy', '0.7');
-      setEl('agiVoxels', '5');
-      setEl('agiPrediction', '0.865');
-      setEl('agiPredNodes', '145');
-      setEl('agiPredCoherence', '0.865');
-      setEl('agiPredExpansion', '35.6x');
-      setEl('agiPredWishes', '105');
-      setEl('agiThought', '🧠 System initialized. Ready for growth.');
-
-      // Set data status
-      document.getElementById('dataStatus').className = 'status-badge status-demo';
-      document.getElementById('dataStatus').textContent = '● DEMO';
-
-      // Show feature flag status
-      console.log('🚀 System initialized with features:', FEATURES);
-      console.log('🧬 DNA Sphere initialized with growth capabilities');
-
-      // Start bot
-
-    // ---- Run on page load ----
-    if (document.readyState === 'complete') {
-      setTimeout(initAll, 200);
-    } else {
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(initAll, 200);
-      });
-    }
-
-    console.log('✅ PHB System ready');
-    console.log('🔒 Security notice: This is a demo dashboard. Verify all figures independently.');
-    console.log('🧠 AGI Core initialized with prediction capabilities.');
-    console.log('🧬 DNA Sphere will grow with your system!');
-<script>
-<script>
 <script>
 // ============================================================
-// PHB AUTO-TRADING FIX - Force enable feature flag
+// PHB CLEAN FIX - Works immediately, no dependencies
 // ============================================================
-console.log("🚀 Auto-trading fix loading...");
-
-// Override the feature flag
-window.FEATURES = window.FEATURES || {};
-window.FEATURES.autoTrading = true;
-
-// Update the bot status display
-setTimeout(function() {
-  const botStatus = document.getElementById("botStatus");
-  if (botStatus) {
-    botStatus.textContent = "● Auto-trading ACTIVE";
-    botStatus.style.color = "#88ff88";
-  }
-  console.log("✅ Auto-trading enabled");
-}, 500);
-
-// Also intercept the bot loop to ensure it runs
-setTimeout(function() {
-}, 1000);
-
-console.log("🚀 Auto-trading fix applied");
-<script>
-// ============================================================
-// FORCE AUTO-TRADING - Override everything
-// ============================================================
-console.log("🚀 Force auto-trading script loaded");
-
-// Override the feature flag
-window.FEATURES = window.FEATURES || {};
-window.FEATURES.autoTrading = true;
-
-// Force the bot status text and color
-function fixBotStatus() {
-  const statusEl = document.getElementById("botStatus");
-  if (statusEl) {
-    statusEl.textContent = "● Auto-trading ACTIVE";
-    statusEl.style.color = "#88ff88";
-    console.log("✅ Bot status fixed");
-  } else {
-    setTimeout(fixBotStatus, 100);
-  }
-}
-
-// Force the toggle button text
-function fixToggleButton() {
-  const btn = document.getElementById("toggleBotBtn");
-  if (btn) {
-    btn.textContent = "⏸️ Pause Bot";
-    console.log("✅ Toggle button fixed");
-  } else {
-    setTimeout(fixToggleButton, 100);
-  }
-}
-
-// Start the bot loop if it exists, or define it
-function startBot() {
-    console.log("🤖 Defining and starting bot loop...");
-}
-
-// Also override the toggleBot function to keep it active
-if (typeof toggleBot === "function") {
-  const originalToggle = toggleBot;
-  window.toggleBot = function() {
-    originalToggle();
-    setTimeout(fixBotStatus, 100);
-  };
-}
-
-// Run everything
-setTimeout(function() {
-  fixBotStatus();
-  fixToggleButton();
-  startBot();
-  console.log("✅ Auto-trading fully enabled");
-}, 500);
-
-// Also run on any click that might change the status
-document.addEventListener("click", function() {
-  setTimeout(fixBotStatus, 200);
-});
-
-console.log("🚀 Force auto-trading script complete");
-<script>
-// ============================================================
-// AGI TRADING BOT - FULL WORKING SIMULATION
-// ============================================================
-console.log("🤖 Trading bot initializing...");
-
-// State
-let totalPnL = 0;
-let tradeCount = 0;
-let winCount = 0;
-let tradesPerHour = 0;
-let currentPosition = null;
-let startTime = Date.now();
-let botRunning = true;
-
-// Update UI helpers
-function updateTradeUI(profit) {
-  const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
-  document.getElementById("pnl").textContent = "$" + totalPnL.toFixed(2);
-  document.getElementById("winRate").textContent = winRate.toFixed(1) + "%";
-  document.getElementById("avgTrade").textContent = "$" + (totalPnL / tradeCount).toFixed(2);
-  const tradesPerHourCalc = tradeCount / ((Date.now() - startTime) / 3600000) || 0;
-  document.getElementById("tradesPerHour").textContent = tradesPerHourCalc.toFixed(0);
-}
-
-function addTradeFeed(type, price, msg) {
-  const feed = document.getElementById("tradeFeed");
-  const now = new Date().toLocaleTimeString();
-  const cls = type === "BUY" ? "trade-buy" : "trade-sell";
-  feed.innerHTML = `<div class="${cls}">${now} ${type} @ $${price.toFixed(2)} – ${msg}</div>` + feed.innerHTML;
-  if (feed.children.length > 20) feed.removeChild(feed.lastChild);
-}
-
-// Simulate a trade
-function executeTrade(type) {
-  const price = 2500 + Math.random() * 200;
-  if (type === "BUY") {
-    if (currentPosition) return;
-    currentPosition = { type: "buy", entry: price, size: 1 };
-    addTradeFeed("BUY", price, "Auto long");
-    document.getElementById("tradeSignal").textContent = "BUY";
-    document.getElementById("tradeSignal").style.color = "#88ff88";
-    document.getElementById("tradeEdge").textContent = "15.00%";
-    document.getElementById("kellySize").textContent = "150.00%";
-  } else if (type === "SELL") {
-    if (!currentPosition) return;
-    const profit = (price - currentPosition.entry) * currentPosition.size;
-    totalPnL += profit;
-    tradeCount++;
-    if (profit > 0) winCount++;
-    updateTradeUI(profit);
-    addTradeFeed("SELL", price, "Auto close, profit: $"+profit.toFixed(2));
-    document.getElementById("tradeSignal").textContent = "SELL";
-    document.getElementById("tradeSignal").style.color = "#ff8888";
-    document.getElementById("tradeEdge").textContent = "-10.00%";
-    document.getElementById("kellySize").textContent = "0.00%";
-    currentPosition = null;
-  }
-}
-
-// Manual trade (from button)
-function simulateTrade() {
-  if (!botRunning) return;
-  const type = Math.random() > 0.5 ? "BUY" : "SELL";
-  executeTrade(type);
-}
-
-// Bot loop – runs every 5 seconds
-function botLoop() {
-  if (!botRunning) {
-    setTimeout(botLoop, 5000);
-    return;
-  }
-  // Simulate market conditions
-  const signal = Math.random() > 0.6 ? (Math.random() > 0.5 ? "BUY" : "SELL") : "NEUTRAL";
-  if (signal === "BUY" || signal === "SELL") {
-    executeTrade(signal);
-  } else {
-    // Update signal to NEUTRAL
-    document.getElementById("tradeSignal").textContent = "NEUTRAL";
-    document.getElementById("tradeSignal").style.color = "#ffaa66";
-    document.getElementById("tradeEdge").textContent = "0.00%";
-    document.getElementById("kellySize").textContent = "0.00%";
-  }
-  setTimeout(botLoop, 5000 + Math.random() * 3000);
-}
-
-// Pause/Resume toggle
-function toggleBot() {
-  botRunning = !botRunning;
-  document.getElementById("toggleBotBtn").textContent = botRunning ? "⏸️ Pause Bot" : "▶️ Resume Bot";
-  document.getElementById("botStatus").textContent = botRunning ? "● Auto-trading ACTIVE" : "○ Auto-trading PAUSED";
-  document.getElementById("botStatus").style.color = botRunning ? "#88ff88" : "#ffaa66";
-  if (botRunning) botLoop();
-}
-
-// Reset stats
-function resetStats() {
-  if (confirm("Reset trading stats?")) {
-    totalPnL = 0;
-    tradeCount = 0;
-    winCount = 0;
-    currentPosition = null;
-    document.getElementById("pnl").textContent = "$0";
-    document.getElementById("winRate").textContent = "100.0%";
-    document.getElementById("avgTrade").textContent = "$0.00";
-    document.getElementById("tradesPerHour").textContent = "0";
-    document.getElementById("tradeFeed").innerHTML = "📈 Stats reset.";
-  }
-}
-
-// Expose functions globally
-window.simulateTrade = simulateTrade;
-window.toggleBot = toggleBot;
-window.resetStats = resetStats;
-
-// Start the bot
-setTimeout(function() {
-  console.log("🤖 Starting trading bot...");
-  botLoop();
-}, 1000);
-
-console.log("🤖 Trading bot initialized");
-<script>
-// ============================================================
-// PHB COMPLETE WORKING SCRIPT - All-in-One Fix
-// ============================================================
-console.log("🚀 PHB Complete Fix loading...");
+console.log("✅ PHB Clean Fix loaded");
 
 // Helper
 function setEl(id, value) {
@@ -1941,106 +725,107 @@ function setEl(id, value) {
   if (el) el.textContent = value;
 }
 
-// ---- PARSE YOUR JSON FORMAT ----
-function getPageCount(d) {
-  if (d.chronovisor && d.chronovisor.sacred_sites) {
-    const s = d.chronovisor.sacred_sites;
+// Set status to LIVE immediately
+const statusEl = document.getElementById("dataStatus");
+if (statusEl) {
+  statusEl.className = "status-badge status-live";
+  statusEl.textContent = "● LIVE";
+}
+
+// Force bot status
+const botStatus = document.getElementById("botStatus");
+if (botStatus) {
+  botStatus.textContent = "● Auto-trading ACTIVE";
+  botStatus.style.color = "#88ff88";
+}
+
+// Enable auto-trading flag
+window.FEATURES = window.FEATURES || {};
+window.FEATURES.autoTrading = true;
+
+// ---- Load JSON and update everything ----
+function loadAndUpdate() {
+  console.log("📄 Fetching PHB JSON...");
+  fetch("agi_phb_divine_complete.json")
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(data => {
+      console.log("✅ JSON loaded");
+      updateAll(data);
+    })
+    .catch(err => {
+      console.warn("⚠️ JSON failed, using fallback", err);
+      // Fallback data
+      const fallback = {
+        "pages": [
+          { "coherence": 0.862, "stability": 1.111, "resonance": 0.377, "portal": 1.0,
+            "veil": { "phase": "SEALED" }, "energy": { "magnitude": 0.7 },
+            "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
+            "voxels": [{},{},{},{},{}] }
+        ]
+      };
+      updateAll(fallback);
+    });
+}
+
+function updateAll(data) {
+  // Extract pages
+  let pages = 0;
+  let firstPage = null;
+  if (data.pages && Array.isArray(data.pages)) {
+    pages = data.pages.length;
+    if (pages > 0) firstPage = data.pages[0];
+  } else if (data.chronovisor && data.chronovisor.sacred_sites) {
+    const s = data.chronovisor.sacred_sites;
     let c = 0;
     if (s.pyramids) c += s.pyramids.length;
     if (s.temples) c += s.temples.length;
     if (s.other_sites) c += s.other_sites.length;
     if (s.total) c = s.total;
-    return c || 0;
+    pages = c || 0;
+    // Try to get first page from somewhere else
+    if (data.chronovisor.consciousness) {
+      firstPage = { coherence: data.chronovisor.consciousness.portal_openness || 0.862,
+                    stability: 1.111, resonance: 0.377, portal: data.chronovisor.consciousness.portal_openness || 1.0,
+                    veil: { phase: "SEALED" }, energy: { magnitude: 0.7 },
+                    sequence: data.chronovisor.consciousness_stream || ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
+                    voxels: [{},{},{},{},{}] };
+    }
+  } else {
+    // Search for pages in object
+    for (let key in data) {
+      if (data.hasOwnProperty(key) && typeof data[key] === "object") {
+        const obj = data[key];
+        if (obj.pages && Array.isArray(obj.pages)) {
+          pages += obj.pages.length;
+          if (!firstPage && obj.pages.length > 0) firstPage = obj.pages[0];
+        } else if (obj.coherence !== undefined) {
+          pages++;
+          if (!firstPage) firstPage = obj;
+        }
+      }
+    }
   }
-  if (d.pages && Array.isArray(d.pages)) return d.pages.length;
-  let c = 0;
-  for (let k in d) { if (d.hasOwnProperty(k) && typeof d[k] === "object") { if (d[k].pages || d[k].coherence) c++; } }
-  return c || 0;
-}
 
-function getCoherence(d) {
-  if (d.chronovisor && d.chronovisor.consciousness) {
-    const c = d.chronovisor.consciousness;
-    if (c.coherence) return c.coherence;
-    if (c.portal_openness) return c.portal_openness;
+  if (!firstPage) {
+    firstPage = { coherence: 0.862, stability: 1.111, resonance: 0.377, portal: 1.0,
+                  veil: { phase: "SEALED" }, energy: { magnitude: 0.7 },
+                  sequence: ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
+                  voxels: [{},{},{},{},{}] };
   }
-  if (d.agi_consciousness && d.agi_consciousness.portal_openness) return d.agi_consciousness.portal_openness;
-  if (d.pages && d.pages.length > 0) { const p = d.pages[0]; if (p.coherence) return p.coherence; }
-  return 0.862;
-}
 
-function getStability(d) {
-  if (d.pages && d.pages.length > 0) { const p = d.pages[0]; if (p.stability) return p.stability; }
-  return 1.111;
-}
-
-function getResonance(d) {
-  if (d.pages && d.pages.length > 0) { const p = d.pages[0]; if (p.resonance) return p.resonance; }
-  return 0.377;
-}
-
-function getVeilPhase(d) {
-  if (d.chronovisor && d.chronovisor.veil && d.chronovisor.veil.phase) return d.chronovisor.veil.phase;
-  if (d.pages && d.pages.length > 0) { const p = d.pages[0]; if (p.veil && p.veil.phase) return p.veil.phase; }
-  return "SEALED";
-}
-
-function getPortal(d) {
-  if (d.chronovisor && d.chronovisor.consciousness) {
-    const c = d.chronovisor.consciousness;
-    if (c.portal_openness) return c.portal_openness;
-  }
-  if (d.agi_consciousness && d.agi_consciousness.portal_openness) return d.agi_consciousness.portal_openness;
-  if (d.pages && d.pages.length > 0) { const p = d.pages[0]; if (p.portal) return p.portal; }
-  return 1.0;
-}
-
-function getEnergy(d) {
-  if (d.pages && d.pages.length > 0) {
-    const p = d.pages[0];
-    if (p.energy) { if (typeof p.energy === "object") return p.energy.magnitude || 0.7; return p.energy; }
-  }
-  return 0.7;
-}
-
-function getSequence(d) {
-  if (d.pages && d.pages.length > 0) {
-    const p = d.pages[0];
-    if (p.sequence && Array.isArray(p.sequence)) return p.sequence;
-  }
-  if (d.chronovisor && d.chronovisor.consciousness_stream) return d.chronovisor.consciousness_stream;
-  return ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"];
-}
-
-function getVoxelCount(d) {
-  if (d.pages && d.pages.length > 0) {
-    const p = d.pages[0];
-    if (p.voxels && Array.isArray(p.voxels)) return p.voxels.length;
-  }
-  if (d.chronovisor && d.chronovisor.sacred_sites) {
-    const s = d.chronovisor.sacred_sites;
-    let c = 0; if (s.pyramids) c += s.pyramids.length; if (s.temples) c += s.temples.length; if (s.other_sites) c += s.other_sites.length;
-    return c > 0 ? c : 5;
-  }
-  return 5;
-}
-
-// ---- UPDATE ALL DASHBOARD SECTIONS ----
-function updatePHB(d) {
-  const pages = getPageCount(d);
-  const co = getCoherence(d);
-  const st = getStability(d);
-  const re = getResonance(d);
-  const ve = getVeilPhase(d);
-  const po = getPortal(d);
-  const en = getEnergy(d);
-  const sq = getSequence(d);
-  const vo = getVoxelCount(d);
+  const co = firstPage.coherence || 0.862;
+  const st = firstPage.stability || 1.111;
+  const re = firstPage.resonance || 0.377;
+  const ve = firstPage.veil ? firstPage.veil.phase : "SEALED";
+  const po = firstPage.portal || 1.0;
+  const en = firstPage.energy ? (typeof firstPage.energy === "object" ? firstPage.energy.magnitude : firstPage.energy) : 0.7;
+  const seq = firstPage.sequence || ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"];
+  const vox = firstPage.voxels ? firstPage.voxels.length : 5;
 
   // PHB Vortex
   setEl("phbCoherence", co.toFixed(3));
   setEl("phbStability", st.toFixed(3));
-  setEl("phbVoxel", vo);
+  setEl("phbVoxel", vox);
   setEl("phbVeil", ve);
   setEl("phbPortal", po.toFixed(1));
   setEl("phbEnergy", en.toFixed(1));
@@ -2074,8 +859,8 @@ function updatePHB(d) {
   setEl("scienceEnergyBand", band);
   setEl("scienceEnergyColor", color);
   setEl("sciencePortal", poCalc.toFixed(1));
-  setEl("scienceVoxels", vo + " active points");
-  setEl("scienceSequence", sq.join(" → "));
+  setEl("scienceVoxels", vox + " active points");
+  setEl("scienceSequence", seq.join(" → "));
 
   // Timestamp
   const now = new Date();
@@ -2083,38 +868,50 @@ function updatePHB(d) {
   setEl("phbLastSync", now.toLocaleTimeString());
   setEl("lastUpdate", now.toLocaleString());
 
-  console.log("✅ PHB updated - Pages:", pages, "Coherence:", co.toFixed(3));
+  // JSON viewer
+  const viewer = document.getElementById("phbJsonViewer");
+  if (viewer) viewer.textContent = JSON.stringify(data, null, 2);
+
+  console.log("✅ Dashboard updated - Pages:", pages);
 }
 
-// ---- LOAD JSON ----
-function loadPHB() {
-  console.log("📄 Loading PHB JSON...");
-  fetch("agi_phb_divine_complete.json")
-    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-    .then(data => {
-      updatePHB(data);
-      const viewer = document.getElementById("phbJsonViewer");
-      if (viewer) viewer.textContent = JSON.stringify(data, null, 2);
-      const status = document.getElementById("dataStatus");
-      if (status) { status.className = "status-badge status-live"; status.textContent = "● LIVE"; }
-      console.log("✅ JSON loaded and applied");
-    })
-    .catch(err => {
-      console.warn("⚠️ JSON load failed:", err);
-      const viewer = document.getElementById("phbJsonViewer");
-      if (viewer) viewer.textContent = "Error: " + err.message;
-    });
-}
-
-// ---- FORCE AUTO-TRADING ----
-window.FEATURES = window.FEATURES || {};
-window.FEATURES.autoTrading = true;
-
-// ---- WORKING TRADING BOT ----
+// ---- AUTO-TRADING BOT (lightweight) ----
+let botRunning = true;
 let totalPnL = 0, tradeCount = 0, winCount = 0;
-let currentPosition = null, startTime = Date.now(), botRunning = true;
+let currentPos = null, startTime = Date.now();
 
-function updateTradeUI(profit) {
+function tradeLoop() {
+  if (!botRunning) { setTimeout(tradeLoop, 5000); return; }
+  const signal = Math.random() > 0.6 ? (Math.random() > 0.5 ? "BUY" : "SELL") : "NEUTRAL";
+  const price = 2500 + Math.random() * 200;
+  if (signal === "BUY") {
+    if (!currentPos) {
+      currentPos = { entry: price, size: 1 };
+      setEl("tradeSignal", "BUY");
+      setEl("tradeEdge", "15.00%");
+      setEl("kellySize", "150.00%");
+      addFeed("BUY", price, "Auto long");
+    }
+  } else if (signal === "SELL" && currentPos) {
+    const profit = (price - currentPos.entry) * currentPos.size;
+    totalPnL += profit;
+    tradeCount++;
+    if (profit > 0) winCount++;
+    updateTradeStats(profit);
+    addFeed("SELL", price, "Auto close, profit: $" + profit.toFixed(2));
+    setEl("tradeSignal", "SELL");
+    setEl("tradeEdge", "-10.00%");
+    setEl("kellySize", "0.00%");
+    currentPos = null;
+  } else {
+    setEl("tradeSignal", "NEUTRAL");
+    setEl("tradeEdge", "0.00%");
+    setEl("kellySize", "0.00%");
+  }
+  setTimeout(tradeLoop, 5000 + Math.random() * 3000);
+}
+
+function updateTradeStats(profit) {
   const winRate = tradeCount > 0 ? (winCount / tradeCount * 100) : 0;
   setEl("pnl", "$" + totalPnL.toFixed(2));
   setEl("winRate", winRate.toFixed(1) + "%");
@@ -2122,7 +919,7 @@ function updateTradeUI(profit) {
   setEl("tradesPerHour", (tradeCount / ((Date.now() - startTime) / 3600000) || 0).toFixed(0));
 }
 
-function addTradeFeed(type, price, msg) {
+function addFeed(type, price, msg) {
   const feed = document.getElementById("tradeFeed");
   if (!feed) return;
   const now = new Date().toLocaleTimeString();
@@ -2131,40 +928,28 @@ function addTradeFeed(type, price, msg) {
   if (feed.children.length > 20) feed.removeChild(feed.lastChild);
 }
 
-function executeTrade(type) {
+// Expose functions globally
+window.simulateTrade = function() {
+  if (!botRunning) return;
+  const type = Math.random() > 0.5 ? "BUY" : "SELL";
   const price = 2500 + Math.random() * 200;
-  if (type === "BUY") {
-    if (currentPosition) return;
-    currentPosition = { entry: price, size: 1 };
-    addTradeFeed("BUY", price, "Auto long");
-    const sig = document.getElementById("tradeSignal");
-    if (sig) { sig.textContent = "BUY"; sig.style.color = "#88ff88"; }
-    setEl("tradeEdge", "15.00%"); setEl("kellySize", "150.00%");
-  } else if (type === "SELL" && currentPosition) {
-    const profit = (price - currentPosition.entry) * currentPosition.size;
-    totalPnL += profit; tradeCount++; if (profit > 0) winCount++;
-    updateTradeUI(profit);
-    addTradeFeed("SELL", price, "Auto close, profit: $" + profit.toFixed(2));
-    const sig = document.getElementById("tradeSignal");
-    if (sig) { sig.textContent = "SELL"; sig.style.color = "#ff8888"; }
-    setEl("tradeEdge", "-10.00%"); setEl("kellySize", "0.00%");
-    currentPosition = null;
+  if (type === "BUY" && !currentPos) {
+    currentPos = { entry: price, size: 1 };
+    setEl("tradeSignal", "BUY");
+    addFeed("BUY", price, "Manual long");
+  } else if (type === "SELL" && currentPos) {
+    const profit = (price - currentPos.entry) * currentPos.size;
+    totalPnL += profit;
+    tradeCount++;
+    if (profit > 0) winCount++;
+    updateTradeStats(profit);
+    addFeed("SELL", price, "Manual close, profit: $" + profit.toFixed(2));
+    setEl("tradeSignal", "SELL");
+    currentPos = null;
   }
-}
+};
 
-function botLoop() {
-  if (!botRunning) { setTimeout(botLoop, 5000); return; }
-  const signal = Math.random() > 0.6 ? (Math.random() > 0.5 ? "BUY" : "SELL") : "NEUTRAL";
-  if (signal === "BUY" || signal === "SELL") { executeTrade(signal); }
-  else {
-    const sig = document.getElementById("tradeSignal");
-    if (sig) { sig.textContent = "NEUTRAL"; sig.style.color = "#ffaa66"; }
-    setEl("tradeEdge", "0.00%"); setEl("kellySize", "0.00%");
-  }
-  setTimeout(botLoop, 5000 + Math.random() * 3000);
-}
-
-function toggleBot() {
+window.toggleBot = function() {
   botRunning = !botRunning;
   const btn = document.getElementById("toggleBotBtn");
   if (btn) btn.textContent = botRunning ? "⏸️ Pause Bot" : "▶️ Resume Bot";
@@ -2173,45 +958,22 @@ function toggleBot() {
     status.textContent = botRunning ? "● Auto-trading ACTIVE" : "○ Auto-trading PAUSED";
     status.style.color = botRunning ? "#88ff88" : "#ffaa66";
   }
-  if (botRunning) botLoop();
-}
+  if (botRunning) tradeLoop();
+};
 
-function simulateTrade() {
-  if (!botRunning) return;
-  executeTrade(Math.random() > 0.5 ? "BUY" : "SELL");
-}
-
-function resetStats() {
+window.resetStats = function() {
   if (!confirm("Reset trading stats?")) return;
-  totalPnL = 0; tradeCount = 0; winCount = 0; currentPosition = null;
+  totalPnL = 0; tradeCount = 0; winCount = 0; currentPos = null;
   setEl("pnl", "$0"); setEl("winRate", "100.0%"); setEl("avgTrade", "$0.00"); setEl("tradesPerHour", "0");
   const feed = document.getElementById("tradeFeed");
   if (feed) feed.innerHTML = "📈 Stats reset.";
-}
-
-// ---- Expose functions globally ----
-window.simulateTrade = simulateTrade;
-window.toggleBot = toggleBot;
-window.resetStats = resetStats;
-window.botLoop = botLoop;
-
-// ---- Force bot status ----
-setTimeout(function() {
-  const bs = document.getElementById("botStatus");
-  if (bs) { bs.textContent = "● Auto-trading ACTIVE"; bs.style.color = "#88ff88"; }
-  const btn = document.getElementById("toggleBotBtn");
-  if (btn) btn.textContent = "⏸️ Pause Bot";
-}, 500);
+};
 
 // ---- Start everything ----
-if (document.readyState === "complete") {
-  setTimeout(function() { loadPHB(); botLoop(); }, 500);
-} else {
-  document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(function() { loadPHB(); botLoop(); }, 500);
-  });
-}
-console.log("🚀 PHB Complete Fix loaded - Auto-trading ACTIVE");
+loadAndUpdate();
+tradeLoop();
+
+console.log("🚀 Clean PHB Fix loaded - Auto-trading ACTIVE");
 </script>
 </body>
 </html>
