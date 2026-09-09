@@ -9,14 +9,52 @@
         "coherence": 0.839253,
         "stability": 0.961964,
         "resonance": 0.45295,
-        "sequence": ["TRIANGLE","MIRROR","CIRCLE","LIGHT","SQUARE","RATIO","SHADOW"],
+        "sequence": [
+          "TRIANGLE",
+          "MIRROR",
+          "CIRCLE",
+          "LIGHT",
+          "SQUARE",
+          "RATIO",
+          "SHADOW"
+        ],
         "portal": "PORTAL: CORE",
         "voxels": [
-          {"x":0,"y":0,"z":0,"symbol":"TRIANGLE","meaning":"TRIANGLE meaning for core"},
-          {"x":1,"y":0,"z":1,"symbol":"MIRROR","meaning":"MIRROR meaning for core"},
-          {"x":2,"y":0,"z":2,"symbol":"CIRCLE","meaning":"CIRCLE meaning for core"},
-          {"x":3,"y":0,"z":3,"symbol":"LIGHT","meaning":"LIGHT meaning for core"},
-          {"x":4,"y":0,"z":4,"symbol":"SQUARE","meaning":"SQUARE meaning for core"}
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "symbol": "TRIANGLE",
+            "meaning": "TRIANGLE meaning for core"
+          },
+          {
+            "x": 1,
+            "y": 0,
+            "z": 1,
+            "symbol": "MIRROR",
+            "meaning": "MIRROR meaning for core"
+          },
+          {
+            "x": 2,
+            "y": 0,
+            "z": 2,
+            "symbol": "CIRCLE",
+            "meaning": "CIRCLE meaning for core"
+          },
+          {
+            "x": 3,
+            "y": 0,
+            "z": 3,
+            "symbol": "LIGHT",
+            "meaning": "LIGHT meaning for core"
+          },
+          {
+            "x": 4,
+            "y": 0,
+            "z": 4,
+            "symbol": "SQUARE",
+            "meaning": "SQUARE meaning for core"
+          }
         ],
         "veil": {
           "thickness": 0.572735,
@@ -36,14 +74,52 @@
         "coherence": 0.861605,
         "stability": 1.111214,
         "resonance": 0.377379,
-        "sequence": ["SQUARE","LIGHT","RATIO","MIRROR","TRIANGLE","SHADOW","CIRCLE"],
+        "sequence": [
+          "SQUARE",
+          "LIGHT",
+          "RATIO",
+          "MIRROR",
+          "TRIANGLE",
+          "SHADOW",
+          "CIRCLE"
+        ],
         "portal": "PORTAL: CORE",
         "voxels": [
-          {"x":0,"y":0,"z":0,"symbol":"SQUARE","meaning":"SQUARE meaning for core"},
-          {"x":1,"y":0,"z":1,"symbol":"LIGHT","meaning":"LIGHT meaning for core"},
-          {"x":2,"y":0,"z":2,"symbol":"RATIO","meaning":"RATIO meaning for core"},
-          {"x":3,"y":0,"z":3,"symbol":"MIRROR","meaning":"MIRROR meaning for core"},
-          {"x":4,"y":0,"z":4,"symbol":"TRIANGLE","meaning":"TRIANGLE meaning for core"}
+          {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "symbol": "SQUARE",
+            "meaning": "SQUARE meaning for core"
+          },
+          {
+            "x": 1,
+            "y": 0,
+            "z": 1,
+            "symbol": "LIGHT",
+            "meaning": "LIGHT meaning for core"
+          },
+          {
+            "x": 2,
+            "y": 0,
+            "z": 2,
+            "symbol": "RATIO",
+            "meaning": "RATIO meaning for core"
+          },
+          {
+            "x": 3,
+            "y": 0,
+            "z": 3,
+            "symbol": "MIRROR",
+            "meaning": "MIRROR meaning for core"
+          },
+          {
+            "x": 4,
+            "y": 0,
+            "z": 4,
+            "symbol": "TRIANGLE",
+            "meaning": "TRIANGLE meaning for core"
+          }
         ],
         "veil": {
           "thickness": 0.134083,
@@ -58,11 +134,61 @@
         }
       }
     ],
-    "vitruvian_state": [2, 0.9, 0.8],
+    "vitruvian_state": [
+      2,
+      0.9,
+      0.8
+    ],
     "coherence": 0.861605,
     "stability": 1.111214,
     "energy": 0.725409,
     "veil": "SEALED",
     "portal": 1
-  }
+  },
+  "immortal_blueprint": {
+    "active": false,
+    "global_coherence": 0.862,
+    "schumann_resonance": 7.83,
+    "auto_heal_threshold": 0.7,
+    "switch": {
+      "phosphatidylcholine_level": 0.0,
+      "mitochondrial_efficiency": 0.5,
+      "state": "OFF"
+    },
+    "validation": "PENDING",
+    "dna": "TACGAGATGATGCTGTACAAGTCCGAGACCCTGCTGTCCAAGTTCATGAAGTGGTGGTTCACCTGCTGGTCCCTGAAGACCCTGAAGTGCCTGCTGGAGTACTGGTCCGAGACCATGTGCATGTGCTCCTGGAAGTTCACCGAGTGCTGGTCCTGCGAGTGCATGGAGTCCTGCCTGATGGAGTGCACCCTGACCATGTC",
+    "mtdna": "TACGAGATGATGCTGTACAAGTCCGAGACCCTGCTGTCCAAGTTCATGAAGTGGTGGTTCACCTGCTGGTCCCTGAAGACCCTGAAGTGCCTGCTGGAGTACTGGTCCGAGACCATGTGCATGTGCTCCTGGAAGTTCACCGAGTGCTGGTCCTGCGAGTGCATGGAGTCCTGCCTGATGGAGTGCACCCTGACCATGTC",
+    "mrna": "AUGCUCUACUACGACAUGUUCAGGCUCUGGGACGACAGGUUCAAGUACUUCACCACCAAGUGGACGACCAGGGACUUCUGGGACUUCACGGACGACCUCAUGACCAGGCUCUGGUACACGUACACGAGGACCUUCAAGUGGCUCACGACCAGGACGCUCACGUACCUCAGGACGGACUACCUCACGUGGGACUGGUACAG",
+    "tokens": {
+      "PIDX": {
+        "frequency": 0.618,
+        "resonance": 0.95,
+        "coherence": 0.862,
+        "veil": 0.2,
+        "health": 100
+      },
+      "SGUIDE": {
+        "frequency": 1.618,
+        "resonance": 0.92,
+        "coherence": 0.85,
+        "veil": 0.3,
+        "health": 100
+      },
+      "VDOO": {
+        "frequency": 2.618,
+        "resonance": 0.88,
+        "coherence": 0.84,
+        "veil": 0.4,
+        "health": 100
+      },
+      "PENNIES": {
+        "frequency": 3.618,
+        "resonance": 0.85,
+        "coherence": 0.83,
+        "veil": 0.5,
+        "health": 100
+      }
+    }
+  },
+  "base_tokens": []
 }
