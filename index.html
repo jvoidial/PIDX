@@ -2851,3 +2851,27 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 </body>
+
+<!-- FORCED PHB JSON LOADER (override) -->
+<script>
+(function() {
+  const viewer = document.querySelector('#phb-raw-json-viewer, #phbRawJson, [id*="raw"]');
+  if (!viewer) return;
+  const url = 'agi_phb_divine_complete.json?t=' + Date.now();
+
+  function loadJSON() {
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        viewer.textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        viewer.textContent = '⚠️ Could not load JSON. Check console.';
+        console.error('JSON fetch error:', err);
+      });
+  }
+
+  loadJSON();
+  setInterval(loadJSON, 30000); // refresh every 30s
+})();
+</script>
