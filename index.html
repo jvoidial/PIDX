@@ -1575,6 +1575,16 @@
 <script>
 // ============================================================
 <script>
+<script>
+// Force unregister old service workers on load
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+}
+</script>
 </body>
 </html>
 <script>
@@ -2829,5 +2839,15 @@
 
   console.log('🧠 4D Agent Swarm fully initialized.');
 })();
+</script>
+<script>
+// Force unregister old service workers on load
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+}
 </script>
 </body>
