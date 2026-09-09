@@ -1615,6 +1615,34 @@
   setInterval(load, 30000);
 })();
 </script>
+<!-- FORCE JSON VIEWER -->
+<script>
+(function() {
+  function findViewer() {
+    var el = document.getElementById("phbJsonViewer");
+    if (el) return el;
+    var pres = document.querySelectorAll("pre");
+    for (var i = 0; i < pres.length; i++) {
+      var parent = pres[i].parentNode;
+      if (parent && parent.querySelector && parent.querySelector(".label") && parent.querySelector(".label").textContent.includes("PHB Raw JSON")) {
+        return pres[i];
+      }
+    }
+    return null;
+  }
+  var viewer = findViewer();
+  if (!viewer) return;
+  var url = "agi_phb_divine_complete.json?t=" + Date.now();
+  function loadJSON() {
+    fetch(url)
+      .then(function(r) { return r.ok ? r.json() : Promise.reject(r.statusText); })
+      .then(function(data) { viewer.textContent = JSON.stringify(data, null, 2); })
+      .catch(function(err) { viewer.textContent = "⚠️ " + err; console.warn("JSON fetch:", err); });
+  }
+  loadJSON();
+  setInterval(loadJSON, 30000);
+})();
+</script>
 </body>
 </html>
 <script>
@@ -2908,6 +2936,34 @@
   }
   load();
   setInterval(load, 30000);
+})();
+</script>
+<!-- FORCE JSON VIEWER -->
+<script>
+(function() {
+  function findViewer() {
+    var el = document.getElementById("phbJsonViewer");
+    if (el) return el;
+    var pres = document.querySelectorAll("pre");
+    for (var i = 0; i < pres.length; i++) {
+      var parent = pres[i].parentNode;
+      if (parent && parent.querySelector && parent.querySelector(".label") && parent.querySelector(".label").textContent.includes("PHB Raw JSON")) {
+        return pres[i];
+      }
+    }
+    return null;
+  }
+  var viewer = findViewer();
+  if (!viewer) return;
+  var url = "agi_phb_divine_complete.json?t=" + Date.now();
+  function loadJSON() {
+    fetch(url)
+      .then(function(r) { return r.ok ? r.json() : Promise.reject(r.statusText); })
+      .then(function(data) { viewer.textContent = JSON.stringify(data, null, 2); })
+      .catch(function(err) { viewer.textContent = "⚠️ " + err; console.warn("JSON fetch:", err); });
+  }
+  loadJSON();
+  setInterval(loadJSON, 30000);
 })();
 </script>
 </body>
