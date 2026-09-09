@@ -1305,7 +1305,7 @@
 
     function loadPHBData() {
       console.log('📄 Fetching PHB JSON...');
-      fetch('agi_phb_divine_complete.json')
+      fetch('agi_phb_divine_complete.json?t=' + Date.now())
         .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(data => { updatePHBFromData(data); })
         .catch(err => {
@@ -1858,7 +1858,7 @@
   window.forceSync = function() {
     const status = document.getElementById("syncStatus");
     if (status) status.textContent = "⏳ Syncing...";
-    fetch("agi_phb_divine_complete.json")
+    fetch("agi_phb_divine_complete.json?t=" + Date.now())
       .then(r => r.json())
       .then(data => {
         if (typeof window.updatePHBFromData === "function") window.updatePHBFromData(data);
