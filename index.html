@@ -361,10 +361,24 @@
       </div>
 
       <!-- PHB RAW JSON -->
-      <div class="card">
-        <div class="label">📄 PHB Raw JSON</div>
-        <pre id="phbJsonViewer">Loading…</pre>
-      </div>
+      <div class="card" style="margin-top:10px;">
+  <div class="label">📄 PHB Raw JSON</div>
+  <pre id="phbJsonViewer" style="background:#0a0a1a;border-radius:6px;padding:8px;font-size:10px;max-height:150px;overflow:auto;color:#88ccff;border:1px solid rgba(100,200,255,0.1);">Loading…</pre>
+  <script>
+    (function() {
+      var viewer = document.getElementById("phbJsonViewer");
+      if (!viewer) return;
+      function load() {
+        fetch("agi_phb_divine_complete.json?t=" + Date.now())
+          .then(function(r) { return r.ok ? r.json() : Promise.reject(r.statusText); })
+          .then(function(data) { viewer.textContent = JSON.stringify(data, null, 2); })
+          .catch(function(err) { viewer.textContent = "Error: " + err; });
+      }
+      load();
+      setInterval(load, 30000);
+    })();
+  <\/script>
+</div>
 
       <!-- AGI CORE -->
       <div class="card" style="border-color:rgba(74,138,255,0.25);">
