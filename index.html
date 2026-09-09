@@ -2875,3 +2875,26 @@ if ("serviceWorker" in navigator) {
   setInterval(loadJSON, 30000); // refresh every 30s
 })();
 </script>
+
+<!-- Fix for PHB JSON Viewer -->
+<script>
+(function() {
+  const viewer = document.getElementById('phbJsonViewer');
+  if (!viewer) return;
+  const url = 'agi_phb_divine_complete.json?t=' + Date.now();
+
+  function load() {
+    fetch(url)
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        viewer.textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        viewer.textContent = 'Error loading JSON: ' + err;
+      });
+  }
+
+  load();
+  setInterval(load, 30000);
+})();
+</script>
