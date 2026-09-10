@@ -1,24 +1,34 @@
 {
-  "timestamp": 1789010273,
-  "eth_usd": 2474.26,
-  "base_tvl_usd": 5623552559.6495075,
+  "timestamp": 1789011466,
+  "eth_usd": 2474.4,
+  "base_tvl_usd": 5629747711.519307,
   "tokens": {
     "PIDX": {
       "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c",
       "gates": {
         "geckoterminal": {
-          "gate": "geckoterminal",
           "status": "open",
           "data": {
+            "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c",
+            "name": "Pennies Index",
+            "symbol": "PIDX",
+            "decimals": 18,
+            "image_url": "https://assets.geckoterminal.com/9et6y2r1bblzh3ah7hqsmy9ybilv",
+            "banner_image_url": null,
+            "coingecko_coin_id": null,
+            "total_supply": "1000000000000000000000000000.0",
+            "normalized_total_supply": "1000000000.0",
             "price_usd": "0.02025500462",
             "fdv_usd": "20255004.6186086",
-            "total_supply": "1000000000000000000000000000.0",
-            "volume_24h": "3.9337735755",
-            "holders": null
-          }
+            "total_reserve_in_usd": "0.10969581701666931675756521267",
+            "volume_usd": {
+              "h24": "3.9337735755"
+            },
+            "market_cap_usd": null
+          },
+          "error": null
         },
         "gt_pools": {
-          "gate": "gt_pools",
           "status": "open",
           "data": {
             "count": 1,
@@ -26,39 +36,79 @@
               {
                 "name": "PIDX / WETH",
                 "address": "0x0b780b8a72ee2510e62608aac4f130a29dbd5df7",
-                "reserve_usd": "0.2473",
+                "reserve_usd": "0.2477",
                 "vol_24h": "3.9337735755",
-                "price": "0.02025500462",
-                "fdv": "20255004.62"
+                "price_usd": "0.02025500462",
+                "fdv_usd": "20255004.62",
+                "created": "2026-08-30T02:51:49Z"
               }
             ]
-          }
+          },
+          "error": null
         },
         "dexscreener": {
-          "gate": "dexscreener",
           "status": "open",
           "data": {
             "count": 1,
-            "price_usd": "0.02064",
-            "liquidity_usd": 0.21,
-            "volume_24h": 3.93,
-            "txns_24h": 3,
-            "fdv": 20647951,
-            "pair": "0x0b780B8a72EE2510e62608AAC4F130a29DBD5DF7"
-          }
-        },
-        "basescan": {
-          "gate": "basescan",
-          "status": "open",
-          "data": {
-            "txs": [],
-            "count": 0
-          }
-        },
-        "0x_routing": {
-          "gate": "0x_routing",
-          "status": "closed",
-          "error": "HTTP Error 404: Not Found"
+            "top": {
+              "chainId": "base",
+              "dexId": "uniswap",
+              "url": "https://dexscreener.com/base/0x0b780b8a72ee2510e62608aac4f130a29dbd5df7",
+              "pairAddress": "0x0b780B8a72EE2510e62608AAC4F130a29DBD5DF7",
+              "labels": [
+                "v2"
+              ],
+              "baseToken": {
+                "address": "0x95c7E2d53F4B615A50d4468Dfd5aFF850dc17F0C",
+                "name": "Pennies Index",
+                "symbol": "PIDX"
+              },
+              "quoteToken": {
+                "address": "0x4200000000000000000000000000000000000006",
+                "name": "Wrapped Ether",
+                "symbol": "WETH"
+              },
+              "priceNative": "0.000008375",
+              "priceUsd": "0.02064",
+              "txns": {
+                "m5": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h1": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h6": {
+                  "buys": 2,
+                  "sells": 1
+                },
+                "h24": {
+                  "buys": 2,
+                  "sells": 1
+                }
+              },
+              "volume": {
+                "h24": 3.93,
+                "h6": 3.93,
+                "h1": 0,
+                "m5": 0
+              },
+              "priceChange": {
+                "h6": -99.72,
+                "h24": -99.72
+              },
+              "liquidity": {
+                "usd": 0.21,
+                "base": 5.3098,
+                "quote": 4.447e-05
+              },
+              "fdv": 20647951,
+              "marketCap": 20647951,
+              "pairCreatedAt": 1788058309000
+            }
+          },
+          "error": null
         }
       }
     },
@@ -66,18 +116,28 @@
       "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
       "gates": {
         "geckoterminal": {
-          "gate": "geckoterminal",
           "status": "open",
           "data": {
+            "address": "0xb50dceb0570557b9b7fe43d8cbdc9b3457d3dc5a",
+            "name": "SPIRIT GUIDE",
+            "symbol": "SGUIDE",
+            "decimals": 18,
+            "image_url": "https://assets.geckoterminal.com/5dwwa9lopsteszzdizy3kgbhgunh",
+            "banner_image_url": null,
+            "coingecko_coin_id": null,
+            "total_supply": "10000000000000000000000000000000.0",
+            "normalized_total_supply": "10000000000000.0",
             "price_usd": "0.003559347629",
             "fdv_usd": "35593476289.0953",
-            "total_supply": "10000000000000000000000000000000.0",
-            "volume_24h": "1.0381073966",
-            "holders": null
-          }
+            "total_reserve_in_usd": "0.462943549647075922852395855516",
+            "volume_usd": {
+              "h24": "1.0381073966"
+            },
+            "market_cap_usd": null
+          },
+          "error": null
         },
         "gt_pools": {
-          "gate": "gt_pools",
           "status": "open",
           "data": {
             "count": 2,
@@ -85,47 +145,88 @@
               {
                 "name": "SGUIDE / ETH 0.25%",
                 "address": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2",
-                "reserve_usd": "0.9894",
+                "reserve_usd": "0.9909",
                 "vol_24h": "0.7998230379",
-                "price": "0.000641624759",
-                "fdv": "6416247590.0"
+                "price_usd": "0.000641624759",
+                "fdv_usd": "6416247590.0",
+                "created": "2026-08-20T03:49:27Z"
               },
               {
                 "name": "SGUIDE / WETH",
                 "address": "0xc08892f34edd6c4c24c3b5bd577f0337385f17af",
-                "reserve_usd": "0.4947",
+                "reserve_usd": "0.4955",
                 "vol_24h": "0.2382843587",
-                "price": "0.002937526067",
-                "fdv": "29375260670.0"
+                "price_usd": "0.002937526067",
+                "fdv_usd": "29375260670.0",
+                "created": "2026-09-01T05:26:05Z"
               }
             ]
-          }
+          },
+          "error": null
         },
         "dexscreener": {
-          "gate": "dexscreener",
           "status": "open",
           "data": {
             "count": 2,
-            "price_usd": "0.003399",
-            "liquidity_usd": 1.83,
-            "volume_24h": 0.84,
-            "txns_24h": 2,
-            "fdv": 33990760715,
-            "pair": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2"
-          }
-        },
-        "basescan": {
-          "gate": "basescan",
-          "status": "open",
-          "data": {
-            "txs": [],
-            "count": 0
-          }
-        },
-        "0x_routing": {
-          "gate": "0x_routing",
-          "status": "closed",
-          "error": "HTTP Error 404: Not Found"
+            "top": {
+              "chainId": "base",
+              "dexId": "uniswap",
+              "url": "https://dexscreener.com/base/0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2",
+              "pairAddress": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2",
+              "labels": [
+                "v4"
+              ],
+              "baseToken": {
+                "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
+                "name": "SPIRIT GUIDE ",
+                "symbol": "SGUIDE"
+              },
+              "quoteToken": {
+                "address": "0x0000000000000000000000000000000000000000",
+                "name": "Ether",
+                "symbol": "ETH"
+              },
+              "priceNative": "0.000001378",
+              "priceUsd": "0.003399",
+              "txns": {
+                "m5": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h1": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h6": {
+                  "buys": 1,
+                  "sells": 1
+                },
+                "h24": {
+                  "buys": 1,
+                  "sells": 1
+                }
+              },
+              "volume": {
+                "h24": 0.84,
+                "h6": 0.84,
+                "h1": 0,
+                "m5": 0
+              },
+              "priceChange": {
+                "h6": -9.4,
+                "h24": -9.4
+              },
+              "liquidity": {
+                "usd": 1.83,
+                "base": 269.3607,
+                "quote": 0.0003712
+              },
+              "fdv": 33990760715,
+              "marketCap": 33990760715,
+              "pairCreatedAt": 1787197767000
+            }
+          },
+          "error": null
         }
       }
     },
@@ -133,18 +234,28 @@
       "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
       "gates": {
         "geckoterminal": {
-          "gate": "geckoterminal",
           "status": "open",
           "data": {
+            "address": "0x38e4f08d08b4d772a7b75669c356b4749dd2d30b",
+            "name": "VOUDOO Infinity",
+            "symbol": "VDOO",
+            "decimals": 18,
+            "image_url": "https://assets.geckoterminal.com/ma9isvxs9sl3dk8rrfqlfeyzovmq",
+            "banner_image_url": null,
+            "coingecko_coin_id": null,
+            "total_supply": "100000000000000000000000000000000.0",
+            "normalized_total_supply": "100000000000000.0",
             "price_usd": "0.000114699417",
             "fdv_usd": "11469941702.7728",
-            "total_supply": "100000000000000000000000000000000.0",
-            "volume_24h": "0.99968294452",
-            "holders": null
-          }
+            "total_reserve_in_usd": "1.268527355886124668663001434502",
+            "volume_usd": {
+              "h24": "0.99968294452"
+            },
+            "market_cap_usd": null
+          },
+          "error": null
         },
         "gt_pools": {
-          "gate": "gt_pools",
           "status": "open",
           "data": {
             "count": 2,
@@ -152,47 +263,85 @@
               {
                 "name": "VDOO / ETH 0.25%",
                 "address": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59",
-                "reserve_usd": "2.2262",
+                "reserve_usd": "2.2296",
                 "vol_24h": "0.8997223134",
-                "price": "0.000114699417",
-                "fdv": "11469941700.0"
+                "price_usd": "0.000114699417",
+                "fdv_usd": "11469941700.0",
+                "created": "2026-08-20T03:52:27Z"
               },
               {
                 "name": "VDOO / WETH",
                 "address": "0x68a38e83e5a15dde3daa44e9bb7243fc8c96fb0f",
-                "reserve_usd": "0.2473",
+                "reserve_usd": "0.2477",
                 "vol_24h": "0.09996063112",
-                "price": "0.0001261807364",
-                "fdv": "12618073640.0"
+                "price_usd": "0.0001261807364",
+                "fdv_usd": "12618073640.0",
+                "created": "2026-09-01T05:26:15Z"
               }
             ]
-          }
+          },
+          "error": null
         },
         "dexscreener": {
-          "gate": "dexscreener",
           "status": "open",
           "data": {
             "count": 1,
-            "price_usd": "0.0005306",
-            "liquidity_usd": 2.28,
-            "volume_24h": 0.89,
-            "txns_24h": 1,
-            "fdv": 53065154264,
-            "pair": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59"
-          }
-        },
-        "basescan": {
-          "gate": "basescan",
-          "status": "open",
-          "data": {
-            "txs": [],
-            "count": 0
-          }
-        },
-        "0x_routing": {
-          "gate": "0x_routing",
-          "status": "closed",
-          "error": "HTTP Error 404: Not Found"
+            "top": {
+              "chainId": "base",
+              "dexId": "uniswap",
+              "url": "https://dexscreener.com/base/0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59",
+              "pairAddress": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59",
+              "labels": [
+                "v4"
+              ],
+              "baseToken": {
+                "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
+                "name": "VOUDOO Infinity",
+                "symbol": "VDOO"
+              },
+              "quoteToken": {
+                "address": "0x0000000000000000000000000000000000000000",
+                "name": "Ether",
+                "symbol": "ETH"
+              },
+              "priceNative": "0.0000002151",
+              "priceUsd": "0.0005306",
+              "txns": {
+                "m5": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h1": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h6": {
+                  "buys": 1,
+                  "sells": 0
+                },
+                "h24": {
+                  "buys": 1,
+                  "sells": 0
+                }
+              },
+              "volume": {
+                "h24": 0.89,
+                "h6": 0.89,
+                "h1": 0,
+                "m5": 0
+              },
+              "priceChange": {},
+              "liquidity": {
+                "usd": 2.28,
+                "base": 2155.8072,
+                "quote": 0.0004638
+              },
+              "fdv": 53065154264,
+              "marketCap": 53065154264,
+              "pairCreatedAt": 1787197947000
+            }
+          },
+          "error": null
         }
       }
     },
@@ -200,49 +349,108 @@
       "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
       "gates": {
         "geckoterminal": {
-          "gate": "geckoterminal",
           "status": "open",
           "data": {
-            "price_usd": null,
-            "fdv_usd": null,
-            "total_supply": null,
-            "volume_24h": null,
-            "holders": null
-          }
+            "address": "0x2a92caa3b01e64634e2e95aa533a5570a76c19a7",
+            "name": "PENNIES CHEQ",
+            "symbol": "\u2713",
+            "decimals": 18,
+            "image_url": "https://assets.geckoterminal.com/plud0s5hcz7dnj3hlutkw01ur3tx",
+            "banner_image_url": null,
+            "coingecko_coin_id": null,
+            "total_supply": "988029919899989990100000000000000.0",
+            "normalized_total_supply": "988029919899990.0",
+            "price_usd": "0.000000000000003733525866",
+            "fdv_usd": "3.6888352628",
+            "total_reserve_in_usd": "0.057573402480504534770247415188",
+            "volume_usd": {
+              "h24": "5.4273478495"
+            },
+            "market_cap_usd": null
+          },
+          "error": null
         },
         "gt_pools": {
-          "gate": "gt_pools",
-          "status": "open",
-          "data": {
-            "count": 0,
-            "pools": []
-          }
-        },
-        "dexscreener": {
-          "gate": "dexscreener",
           "status": "open",
           "data": {
             "count": 1,
-            "price_usd": "0.000000000000003891",
-            "liquidity_usd": 0.11,
-            "volume_24h": 5.43,
-            "txns_24h": 3,
-            "fdv": 4,
-            "pair": "0x29a0Ae1F10629f8855c87C911531fFb2c98d68c6"
-          }
+            "pools": [
+              {
+                "name": "\u2713 / WETH",
+                "address": "0x29a0ae1f10629f8855c87c911531ffb2c98d68c6",
+                "reserve_usd": "0.115146804961009",
+                "vol_24h": "5.4273478495",
+                "price_usd": "0.000000000000003733525866",
+                "fdv_usd": "3.6888352623",
+                "created": "2026-08-20T03:43:57Z"
+              }
+            ]
+          },
+          "error": null
         },
-        "basescan": {
-          "gate": "basescan",
+        "dexscreener": {
           "status": "open",
           "data": {
-            "txs": [],
-            "count": 0
-          }
-        },
-        "0x_routing": {
-          "gate": "0x_routing",
-          "status": "closed",
-          "error": "HTTP Error 404: Not Found"
+            "count": 1,
+            "top": {
+              "chainId": "base",
+              "dexId": "uniswap",
+              "url": "https://dexscreener.com/base/0x29a0ae1f10629f8855c87c911531ffb2c98d68c6",
+              "pairAddress": "0x29a0Ae1F10629f8855c87C911531fFb2c98d68c6",
+              "labels": [
+                "v2"
+              ],
+              "baseToken": {
+                "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
+                "name": "PENNIES CHEQ",
+                "symbol": "\u2713"
+              },
+              "quoteToken": {
+                "address": "0x4200000000000000000000000000000000000006",
+                "name": "Wrapped Ether",
+                "symbol": "WETH"
+              },
+              "priceNative": "0.000000000000000001577",
+              "priceUsd": "0.000000000000003891",
+              "txns": {
+                "m5": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h1": {
+                  "buys": 0,
+                  "sells": 0
+                },
+                "h6": {
+                  "buys": 2,
+                  "sells": 1
+                },
+                "h24": {
+                  "buys": 2,
+                  "sells": 1
+                }
+              },
+              "volume": {
+                "h24": 5.43,
+                "h6": 5.43,
+                "h1": 0,
+                "m5": 0
+              },
+              "priceChange": {
+                "h6": -99.98,
+                "h24": -99.98
+              },
+              "liquidity": {
+                "usd": 0.11,
+                "base": 14804956097003,
+                "quote": 2.336e-05
+              },
+              "fdv": 4,
+              "marketCap": 4,
+              "pairCreatedAt": 1787197437000
+            }
+          },
+          "error": null
         }
       }
     }
