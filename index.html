@@ -2986,4 +2986,35 @@
   </div>
 </div>
 <script src="brain4d.js?v=1"></script>
+<!-- PHB PAPER TRADER -->
+<div class="card" style="margin-top:10px;border-color:rgba(136,204,255,0.3);">
+  <div class="label">🤖 AGI Trading Bot
+    <span style="font-size:9px;color:#8899aa;font-weight:400;">· PAPER SIM · real ETH price · no real orders</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;font-size:12px;color:#c8d0e0;">
+    <div><span style="color:#667;">Total PnL:</span> <span id="simTotalPnl">$0.00</span></div>
+    <div><span style="color:#667;">Win Rate:</span> <span id="simWinRate">0.0%</span></div>
+    <div><span style="color:#667;">Avg Trade:</span> <span id="simAvgTrade">$0.00</span></div>
+    <div><span style="color:#667;">Trades/hr:</span> <span id="simTradesPerHour">0</span></div>
+    <div><span style="color:#667;">ETH:</span> <span id="simEthPrice">—</span></div>
+    <div><span style="color:#667;">Signal:</span> <span id="simSignal">NEUTRAL</span></div>
+    <div><span style="color:#667;">Edge:</span> <span id="simEdge">0.00%</span></div>
+    <div><span style="color:#667;">Strategy:</span> Momentum × Coherence</div>
+  </div>
+  <div style="margin-top:8px;font-size:10px;color:#8899aa;">
+    <div style="color:#667;margin-bottom:3px;">📈 Trade feed (last 3)</div>
+    <div id="simTradeFeed" style="background:rgba(0,0,0,0.4);padding:6px;border-radius:4px;min-height:40px;">
+      <div style="color:#667;">Loading…</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;margin-top:8px;">
+    <button onclick="window.phbPauseTrader()" style="padding:3px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(136,204,255,0.3);border-radius:4px;color:#c0c8d0;font-size:10px;cursor:pointer;">⏸️ Pause</button>
+    <button onclick="window.phbResetTrader()" style="padding:3px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(136,204,255,0.3);border-radius:4px;color:#c0c8d0;font-size:10px;cursor:pointer;">↻ Reset</button>
+  </div>
+  <div style="margin-top:6px;font-size:9px;color:#556;font-style:italic;">
+    Paper trading on live ETH/USD · Signal = momentum × coherence × resonance ÷ stability
+  </div>
+</div>
+<script src="papertrader.js?v=1"></script>
+<!-- END PHB PAPER TRADER -->
 </body>
