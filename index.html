@@ -1743,6 +1743,36 @@
   autoHeal();
 })();
 </script>
+<!-- BOT PUBLIC STATS -->
+<div class="card" style="margin-top:10px;">
+  <div class="label">🤖 Bot · Public Wallet Stats</div>
+  <div id="botStats" style="font-size:12px;line-height:1.6;">Loading…</div>
+</div>
+<script>
+(function() {
+  function load() {
+    fetch("bot_public.json?t=" + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        var html = "";
+        html += "<div>🔐 Wallet: " + d.safe_wallet.slice(0,6) + "…" + d.safe_wallet.slice(-4) + "</div>";
+        html += "<div>🔑 Session: " + d.session_key_address.slice(0,6) + "…" + d.session_key_address.slice(-4) + "</div>";
+        html += "<div>💰 ETH: " + d.eth_balance.toFixed(6) + "</div>";
+        for (var sym in d.holdings) {
+          var v = typeof d.holdings[sym] === "number" ? d.holdings[sym].toFixed(4) : d.holdings[sym];
+          html += "<div>🪙 " + sym + ": " + v + "</div>";
+        }
+        html += "<div style=\"color:#667;font-size:10px;margin-top:4px;\">Updated: " + new Date(d.timestamp * 1000).toLocaleTimeString() + "</div>";
+        document.getElementById("botStats").innerHTML = html;
+      })
+      .catch(e => {
+        document.getElementById("botStats").textContent = "No bot data yet.";
+      });
+  }
+  load();
+  setInterval(load, 60000);
+})();
+</script>
 </body>
 </html>
 <script>
@@ -3164,6 +3194,36 @@
   }
   setInterval(autoHeal, 30000);
   autoHeal();
+})();
+</script>
+<!-- BOT PUBLIC STATS -->
+<div class="card" style="margin-top:10px;">
+  <div class="label">🤖 Bot · Public Wallet Stats</div>
+  <div id="botStats" style="font-size:12px;line-height:1.6;">Loading…</div>
+</div>
+<script>
+(function() {
+  function load() {
+    fetch("bot_public.json?t=" + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        var html = "";
+        html += "<div>🔐 Wallet: " + d.safe_wallet.slice(0,6) + "…" + d.safe_wallet.slice(-4) + "</div>";
+        html += "<div>🔑 Session: " + d.session_key_address.slice(0,6) + "…" + d.session_key_address.slice(-4) + "</div>";
+        html += "<div>💰 ETH: " + d.eth_balance.toFixed(6) + "</div>";
+        for (var sym in d.holdings) {
+          var v = typeof d.holdings[sym] === "number" ? d.holdings[sym].toFixed(4) : d.holdings[sym];
+          html += "<div>🪙 " + sym + ": " + v + "</div>";
+        }
+        html += "<div style=\"color:#667;font-size:10px;margin-top:4px;\">Updated: " + new Date(d.timestamp * 1000).toLocaleTimeString() + "</div>";
+        document.getElementById("botStats").innerHTML = html;
+      })
+      .catch(e => {
+        document.getElementById("botStats").textContent = "No bot data yet.";
+      });
+  }
+  load();
+  setInterval(load, 60000);
 })();
 </script>
 </body>
