@@ -401,7 +401,7 @@
 
       <!-- TRADING BOT -->
       <div class="card" style="border-color:rgba(255,170,68,0.3);">
-        <div class="label">🤖 AGI Trading Bot</div>
+        <div class="label">🤖 AGI Trading Bot <span style="font-size:9px;color:#8899aa;font-weight:400;">· PAPER SIM · not real trades</span></div>
         <div class="stat-row">
           <div class="stat"><span>Total PnL</span> <span id="pnl">$0</span></div>
           <div class="stat"><span>Win Rate</span> <span id="winRate">100.0%</span></div>
@@ -3011,4 +3011,26 @@
 </div>
 <script src="portal.js?v=1"></script>
 <!-- END PORTAL -->
+
+<script>
+// One-time sim reset (runs once per browser session)
+(function() {
+  try {
+    var key = 'phb_trade_sim_reset_v1';
+    if (!localStorage.getItem(key)) {
+      // Clear any cached sim state keys this dashboard may use
+      ['trades','pnl','tradeHistory','simTrades','botStats'].forEach(function(k){
+        localStorage.removeItem(k);
+      });
+      localStorage.setItem(key, '1');
+      // Force a reload once so the bot starts fresh
+      if (sessionStorage.getItem('phb_reloaded') !== '1') {
+        sessionStorage.setItem('phb_reloaded', '1');
+        location.reload();
+      }
+    }
+  } catch (e) {}
+})();
+</script>
+
 </body>
