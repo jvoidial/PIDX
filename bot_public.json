@@ -1,0 +1,14 @@
+{
+  "safe_wallet": "0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C",
+  "session_key_address": "0x61AE378019293e2bD6Bb021377DfD03A98B22Ed9",
+  "eth_balance": 2.4736162245804e-05,
+  "holdings": {
+    "PIDX": 999994372.9698226,
+    "SGUIDE": 9999999985617.246,
+    "VDOO": 99999999984250.03,
+    "PENNIES": 658430127531197.6
+  },
+  "timestamp": 1789002649,
+  "chain": "base",
+  "status": "running"
+}
