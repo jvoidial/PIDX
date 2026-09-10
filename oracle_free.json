@@ -1,0 +1,167 @@
+{
+  "timestamp": 1789062632,
+  "forex": {
+    "error": "forex unreachable",
+    "rates": {}
+  },
+  "mining": {
+    "mempool": {
+      "hashrate": 933666376934844900000,
+      "difficulty": 127450789715843.1,
+      "block_height": 966388
+    },
+    "solofury": {
+      "totalHashRate": 313760278645128.56,
+      "totalHashRate1m": 315700278645128.56,
+      "totalHashRate1hr": 289691623949255.5,
+      "totalHashRate1d": 326508159206090.4,
+      "totalHashRate7d": 391432389131763.2,
+      "blockHeight": 966389,
+      "networkDifficulty": 127450789715843.1,
+      "networkHashRate": 878801294624060000000,
+      "totalMiners": 29,
+      "totalWorkers": 47,
+      "activeMiners7d": 61,
+      "activeWorkers7d": 85,
+      "idleWorkers": 41,
+      "disconnected": 27,
+      "blocksFound": [],
+      "fee": 1,
+      "bestDifficulty": 717616196765,
+      "luck": 0.01,
+      "roundShares": 7674250146,
+      "sharesPerSecond": 9.421,
+      "accepted": 1365673046967,
+      "rejected": 10220248649,
+      "stale": 0,
+      "invalid": 0,
+      "duplicate": 0,
+      "efficiency": "99.26",
+      "uptime": 209415,
+      "expectedShares": 19294738297,
+      "roundStartTs": 0,
+      "roundStartHeight": 0,
+      "luckSuspect": true,
+      "sources": [
+        {
+          "name": "Atlanta",
+          "region": "us-east",
+          "label": "🇺🇸 US East",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "Frankfurt",
+          "region": "eu",
+          "label": "🇪🇺 Europe",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "Tokyo",
+          "region": "asia-east",
+          "label": "🇯🇵 Asia East",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "Frankfurt SV2",
+          "region": "eu",
+          "label": "🇪🇺 Europe",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "Tokyo SV2",
+          "region": "asia-east",
+          "label": "🇯🇵 Asia East",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "Atlanta SV2",
+          "region": "us-east",
+          "label": "🇺🇸 US East",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "SaoPaulo",
+          "region": "sa-east",
+          "label": "🇧🇷 South America",
+          "ok": true,
+          "stale": false
+        },
+        {
+          "name": "SaoPaulo SV2",
+          "region": "sa-east",
+          "label": "🇧🇷 South America",
+          "ok": true,
+          "stale": false
+        }
+      ]
+    }
+  },
+  "tokens": [
+    {
+      "id": "btc-bitcoin",
+      "symbol": "BTC",
+      "price_usd": 77390.46365718692,
+      "vol_24h": 25298387938.726883
+    },
+    {
+      "id": "eth-ethereum",
+      "symbol": "ETH",
+      "price_usd": 2469.2471414102456,
+      "vol_24h": 12539684184.246552
+    },
+    {
+      "id": "usdt-tether",
+      "symbol": "USDT",
+      "price_usd": 1.0000646595651503,
+      "vol_24h": 54569725993.36028
+    },
+    {
+      "id": "bnb-binance-coin",
+      "symbol": "BNB",
+      "price_usd": 713.1044767461781,
+      "vol_24h": 959898266.1030042
+    },
+    {
+      "id": "xrp-xrp",
+      "symbol": "XRP",
+      "price_usd": 1.3621052032913397,
+      "vol_24h": 2010248018.9679112
+    },
+    {
+      "id": "usdc-usd-coin",
+      "symbol": "USDC",
+      "price_usd": 1.0004066535648946,
+      "vol_24h": 15451591354.163982
+    },
+    {
+      "id": "sol-solana",
+      "symbol": "SOL",
+      "price_usd": 100.17290718538781,
+      "vol_24h": 2351651104.4962397
+    },
+    {
+      "id": "trx-tron",
+      "symbol": "TRX",
+      "price_usd": 0.33989864070669673,
+      "vol_24h": 356117363.16961247
+    },
+    {
+      "id": "steth-lido-staked-ether",
+      "symbol": "STETH",
+      "price_usd": 2469.4517500838374,
+      "vol_24h": 4248508.25551578
+    },
+    {
+      "id": "zec-zcash",
+      "symbol": "ZEC",
+      "price_usd": 1157.8248722166393,
+      "vol_24h": 1437934316.7145178
+    }
+  ]
+}
