@@ -49,3 +49,6 @@ secrets*
 *_secret*
 *_private*
 session.key
+_archive/
+reached_ends.json
+physics.json
