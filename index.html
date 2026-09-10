@@ -1643,106 +1643,7 @@
   setInterval(loadJSON, 30000);
 })();
 </script>
-<!-- IMMORTAL BLUEPRINT MODULE with Genome Viewer -->
-<div class="card" style="margin-top:10px;">
-  <div class="label">🧬 Immortal Blueprint · Self‑Protection</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
-    <div><span>Status:</span> <span id="ib_status">INACTIVE</span></div>
-    <div><span>Global Coherence:</span> <span id="ib_gc">0.862</span></div>
-    <div><span>Schumann:</span> <span id="ib_schumann">7.83 Hz</span></div>
-    <div><span>Auto‑Heal:</span> <span id="ib_auto">ON</span></div>
-  </div>
-  <div style="margin-top:6px;font-size:10px;color:#88ff88;">🔬 Hidden Switch (Phosphatidylcholine)</div>
-  <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
-    <span>Level: <span id="pc_level">0%</span></span>
-    <span>Mitochondrial Efficiency: <span id="mito_eff">50%</span></span>
-    <button id="toggleSwitch" style="padding:2px 8px;background:rgba(255,255,255,0.05);border:1px solid rgba(100,200,255,0.3);border-radius:4px;color:#c0c8d0;cursor:pointer;">🔘 Toggle Switch</button>
-  </div>
-  <div style="margin-top:6px;font-size:10px;color:#88ff88;">🧬 Genome (DNA / mtDNA / mRNA)</div>
-  <div style="max-height:60px;overflow-y:auto;font-size:8px;font-family:monospace;background:#0a0a1a;padding:4px;border-radius:4px;border:1px solid rgba(100,200,255,0.1);color:#88ccff;line-height:1.4;">
-    <div><span style="color:#88ff88;">nDNA:</span> <span id="ib_dna">--</span></div>
-    <div><span style="color:#88ff88;">mtDNA:</span> <span id="ib_mtdna">--</span></div>
-    <div><span style="color:#88ff88;">mRNA:</span> <span id="ib_mrna">--</span></div>
-  </div>
-  <div style="margin-top:6px;font-size:10px;color:#88ccff;">Token Frequencies & Health</div>
-  <div id="tokenFreqs" style="display:flex;flex-wrap:wrap;gap:8px;font-size:10px;">
-    <span>PIDX: <span id="freq_pidx">0.618</span> Hz · <span id="health_pidx">100</span>%</span>
-    <span>SGUIDE: <span id="freq_sguide">1.618</span> Hz · <span id="health_sguide">100</span>%</span>
-    <span>VDOO: <span id="freq_vdoo">2.618</span> Hz · <span id="health_vdoo">100</span>%</span>
-    <span>PENNIES: <span id="freq_pennies">3.618</span> Hz · <span id="health_pennies">100</span>%</span>
-  </div>
-  <button id="toggleBlueprint" style="margin-top:6px;padding:4px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(100,200,255,0.3);border-radius:4px;color:#c0c8d0;cursor:pointer;">Activate Blueprint</button>
-</div>
-<script>
-(function() {
-  var bp = { active: false, coherence: 0.862 };
-  var switchState = { pc: 0.0, efficiency: 0.5, on: false };
-  function updateUI() {
-    document.getElementById("ib_status").textContent = bp.active ? "ACTIVE" : "INACTIVE";
-    document.getElementById("ib_gc").textContent = bp.coherence.toFixed(4);
-    document.getElementById("pc_level").textContent = Math.round(switchState.pc * 100) + "%";
-    document.getElementById("mito_eff").textContent = Math.round(switchState.efficiency * 100) + "%";
-  }
-  function updateGenome(data) {
-    var ib = data.immortal_blueprint || {};
-    document.getElementById("ib_dna").textContent = ib.dna ? ib.dna.slice(0, 80) + "…" : "--";
-    document.getElementById("ib_mtdna").textContent = ib.mtdna ? ib.mtdna.slice(0, 80) + "…" : "--";
-    document.getElementById("ib_mrna").textContent = ib.mrna ? ib.mrna.slice(0, 80) + "…" : "--";
-  }
-  document.getElementById("toggleSwitch").addEventListener("click", function() {
-    switchState.on = !switchState.on;
-    if (switchState.on) {
-      switchState.pc = 1.0;
-      switchState.efficiency = 1.0;
-      bp.coherence = Math.min(1.0, bp.coherence + 0.1);
-    } else {
-      switchState.pc = 0.0;
-      switchState.efficiency = 0.5;
-    }
-    updateUI();
-  });
-  document.getElementById("toggleBlueprint").addEventListener("click", function() {
-    bp.active = !bp.active;
-    if (bp.active) {
-      bp.coherence = 0.9999;
-      switchState.on = true;
-      switchState.pc = 1.0;
-      switchState.efficiency = 1.0;
-    } else {
-      bp.coherence = 0.862;
-      switchState.on = false;
-      switchState.pc = 0.0;
-      switchState.efficiency = 0.5;
-    }
-    updateUI();
-  });
-  function autoHeal() {
-    fetch("agi_phb_divine_complete.json?t=" + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        var tokens = data.immortal_blueprint.tokens || {};
-        var threshold = data.immortal_blueprint.auto_heal_threshold || 0.7;
-        var anyLow = false;
-        for (var sym in tokens) {
-          if (tokens[sym].coherence < threshold) {
-            tokens[sym].coherence = Math.min(1.0, tokens[sym].coherence + 0.05);
-            tokens[sym].resonance = Math.min(1.0, tokens[sym].resonance + 0.02);
-            anyLow = true;
-          }
-        }
-        if (anyLow && !bp.active) {
-          bp.active = true;
-          bp.coherence = 0.9999;
-        }
-        updateUI();
-        updateGenome(data);
-      })
-      .catch(e => console.warn("Auto‑heal fetch failed", e));
-  }
-  setInterval(autoHeal, 30000);
-  autoHeal();
-})();
-</script>
+
 
 
 
@@ -1762,6 +1663,31 @@
 <script src="bot-stats.js?v=2"></script>
 <!-- END BOT PUBLIC STATS -->
 
+<!-- IMMORTAL BLUEPRINT · SOLVED -->
+<div class="card" style="margin-top:10px;">
+  <div class="label">🧬 Immortal Blueprint · Self-Protection</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+    <div><span>Status:</span> <span id="ib_status">ACTIVE</span></div>
+    <div><span>Global Coherence:</span> <span id="ib_gc">0.9999</span></div>
+    <div><span>Schumann:</span> <span id="ib_schumann">7.83 Hz</span></div>
+    <div><span>Auto-Heal:</span> <span id="ib_auto">ON</span></div>
+  </div>
+  <div style="margin-top:6px;font-size:10px;color:#88ff88;">🔬 Hidden Switch (Phosphatidylcholine)</div>
+  <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
+    <span>Level: <span id="pc_level">100%</span></span>
+    <span>Mitochondrial Efficiency: <span id="mito_eff">100%</span></span>
+    <button id="toggleSwitch" style="padding:2px 8px;background:rgba(255,255,255,0.05);border:1px solid rgba(100,200,255,0.3);border-radius:4px;color:#c0c8d0;cursor:pointer;">🔘 Toggle</button>
+  </div>
+  <div style="margin-top:6px;font-size:10px;color:#88ccff;">Token Frequencies</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:10px;">
+    <span>PIDX: 0.618 Hz · 100%</span>
+    <span>SGUIDE: 1.618 Hz · 100%</span>
+    <span>VDOO: 2.618 Hz · 100%</span>
+    <span>PENNIES: 3.618 Hz · 100%</span>
+  </div>
+</div>
+<script src="blueprint.js?v=1"></script>
+<!-- END IMMORTAL BLUEPRINT -->
 </body>
 </html>
 <script>
@@ -3085,106 +3011,7 @@
   setInterval(loadJSON, 30000);
 })();
 </script>
-<!-- IMMORTAL BLUEPRINT MODULE with Genome Viewer -->
-<div class="card" style="margin-top:10px;">
-  <div class="label">🧬 Immortal Blueprint · Self‑Protection</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
-    <div><span>Status:</span> <span id="ib_status">INACTIVE</span></div>
-    <div><span>Global Coherence:</span> <span id="ib_gc">0.862</span></div>
-    <div><span>Schumann:</span> <span id="ib_schumann">7.83 Hz</span></div>
-    <div><span>Auto‑Heal:</span> <span id="ib_auto">ON</span></div>
-  </div>
-  <div style="margin-top:6px;font-size:10px;color:#88ff88;">🔬 Hidden Switch (Phosphatidylcholine)</div>
-  <div style="display:flex;align-items:center;gap:10px;font-size:11px;">
-    <span>Level: <span id="pc_level">0%</span></span>
-    <span>Mitochondrial Efficiency: <span id="mito_eff">50%</span></span>
-    <button id="toggleSwitch" style="padding:2px 8px;background:rgba(255,255,255,0.05);border:1px solid rgba(100,200,255,0.3);border-radius:4px;color:#c0c8d0;cursor:pointer;">🔘 Toggle Switch</button>
-  </div>
-  <div style="margin-top:6px;font-size:10px;color:#88ff88;">🧬 Genome (DNA / mtDNA / mRNA)</div>
-  <div style="max-height:60px;overflow-y:auto;font-size:8px;font-family:monospace;background:#0a0a1a;padding:4px;border-radius:4px;border:1px solid rgba(100,200,255,0.1);color:#88ccff;line-height:1.4;">
-    <div><span style="color:#88ff88;">nDNA:</span> <span id="ib_dna">--</span></div>
-    <div><span style="color:#88ff88;">mtDNA:</span> <span id="ib_mtdna">--</span></div>
-    <div><span style="color:#88ff88;">mRNA:</span> <span id="ib_mrna">--</span></div>
-  </div>
-  <div style="margin-top:6px;font-size:10px;color:#88ccff;">Token Frequencies & Health</div>
-  <div id="tokenFreqs" style="display:flex;flex-wrap:wrap;gap:8px;font-size:10px;">
-    <span>PIDX: <span id="freq_pidx">0.618</span> Hz · <span id="health_pidx">100</span>%</span>
-    <span>SGUIDE: <span id="freq_sguide">1.618</span> Hz · <span id="health_sguide">100</span>%</span>
-    <span>VDOO: <span id="freq_vdoo">2.618</span> Hz · <span id="health_vdoo">100</span>%</span>
-    <span>PENNIES: <span id="freq_pennies">3.618</span> Hz · <span id="health_pennies">100</span>%</span>
-  </div>
-  <button id="toggleBlueprint" style="margin-top:6px;padding:4px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(100,200,255,0.3);border-radius:4px;color:#c0c8d0;cursor:pointer;">Activate Blueprint</button>
-</div>
-<script>
-(function() {
-  var bp = { active: false, coherence: 0.862 };
-  var switchState = { pc: 0.0, efficiency: 0.5, on: false };
-  function updateUI() {
-    document.getElementById("ib_status").textContent = bp.active ? "ACTIVE" : "INACTIVE";
-    document.getElementById("ib_gc").textContent = bp.coherence.toFixed(4);
-    document.getElementById("pc_level").textContent = Math.round(switchState.pc * 100) + "%";
-    document.getElementById("mito_eff").textContent = Math.round(switchState.efficiency * 100) + "%";
-  }
-  function updateGenome(data) {
-    var ib = data.immortal_blueprint || {};
-    document.getElementById("ib_dna").textContent = ib.dna ? ib.dna.slice(0, 80) + "…" : "--";
-    document.getElementById("ib_mtdna").textContent = ib.mtdna ? ib.mtdna.slice(0, 80) + "…" : "--";
-    document.getElementById("ib_mrna").textContent = ib.mrna ? ib.mrna.slice(0, 80) + "…" : "--";
-  }
-  document.getElementById("toggleSwitch").addEventListener("click", function() {
-    switchState.on = !switchState.on;
-    if (switchState.on) {
-      switchState.pc = 1.0;
-      switchState.efficiency = 1.0;
-      bp.coherence = Math.min(1.0, bp.coherence + 0.1);
-    } else {
-      switchState.pc = 0.0;
-      switchState.efficiency = 0.5;
-    }
-    updateUI();
-  });
-  document.getElementById("toggleBlueprint").addEventListener("click", function() {
-    bp.active = !bp.active;
-    if (bp.active) {
-      bp.coherence = 0.9999;
-      switchState.on = true;
-      switchState.pc = 1.0;
-      switchState.efficiency = 1.0;
-    } else {
-      bp.coherence = 0.862;
-      switchState.on = false;
-      switchState.pc = 0.0;
-      switchState.efficiency = 0.5;
-    }
-    updateUI();
-  });
-  function autoHeal() {
-    fetch("agi_phb_divine_complete.json?t=" + Date.now())
-      .then(r => r.json())
-      .then(data => {
-        var tokens = data.immortal_blueprint.tokens || {};
-        var threshold = data.immortal_blueprint.auto_heal_threshold || 0.7;
-        var anyLow = false;
-        for (var sym in tokens) {
-          if (tokens[sym].coherence < threshold) {
-            tokens[sym].coherence = Math.min(1.0, tokens[sym].coherence + 0.05);
-            tokens[sym].resonance = Math.min(1.0, tokens[sym].resonance + 0.02);
-            anyLow = true;
-          }
-        }
-        if (anyLow && !bp.active) {
-          bp.active = true;
-          bp.coherence = 0.9999;
-        }
-        updateUI();
-        updateGenome(data);
-      })
-      .catch(e => console.warn("Auto‑heal fetch failed", e));
-  }
-  setInterval(autoHeal, 30000);
-  autoHeal();
-})();
-</script>
+
 
 
 

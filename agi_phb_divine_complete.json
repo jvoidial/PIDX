@@ -139,56 +139,61 @@
       0.9,
       0.8
     ],
-    "coherence": 0.861605,
+    "coherence": 0.9999,
     "stability": 1.111214,
     "energy": 0.725409,
-    "veil": "SEALED",
+    "veil": "OPEN",
     "portal": 1
   },
   "immortal_blueprint": {
-    "active": false,
-    "global_coherence": 0.862,
+    "active": true,
+    "global_coherence": 0.9999,
     "schumann_resonance": 7.83,
     "auto_heal_threshold": 0.7,
     "switch": {
-      "phosphatidylcholine_level": 0.0,
-      "mitochondrial_efficiency": 0.5,
-      "state": "OFF"
+      "phosphatidylcholine_level": 1.0,
+      "mitochondrial_efficiency": 1.0,
+      "state": "ON"
     },
-    "validation": "PENDING",
+    "validation": "100%",
     "dna": "TACGAGATGATGCTGTACAAGTCCGAGACCCTGCTGTCCAAGTTCATGAAGTGGTGGTTCACCTGCTGGTCCCTGAAGACCCTGAAGTGCCTGCTGGAGTACTGGTCCGAGACCATGTGCATGTGCTCCTGGAAGTTCACCGAGTGCTGGTCCTGCGAGTGCATGGAGTCCTGCCTGATGGAGTGCACCCTGACCATGTC",
     "mtdna": "TACGAGATGATGCTGTACAAGTCCGAGACCCTGCTGTCCAAGTTCATGAAGTGGTGGTTCACCTGCTGGTCCCTGAAGACCCTGAAGTGCCTGCTGGAGTACTGGTCCGAGACCATGTGCATGTGCTCCTGGAAGTTCACCGAGTGCTGGTCCTGCGAGTGCATGGAGTCCTGCCTGATGGAGTGCACCCTGACCATGTC",
     "mrna": "AUGCUCUACUACGACAUGUUCAGGCUCUGGGACGACAGGUUCAAGUACUUCACCACCAAGUGGACGACCAGGGACUUCUGGGACUUCACGGACGACCUCAUGACCAGGCUCUGGUACACGUACACGAGGACCUUCAAGUGGCUCACGACCAGGACGCUCACGUACCUCAGGACGGACUACCUCACGUGGGACUGGUACAG",
     "tokens": {
       "PIDX": {
         "frequency": 0.618,
-        "resonance": 0.95,
-        "coherence": 0.862,
+        "resonance": 1.0,
+        "coherence": 0.9999,
         "veil": 0.2,
         "health": 100
       },
       "SGUIDE": {
         "frequency": 1.618,
-        "resonance": 0.92,
-        "coherence": 0.85,
+        "resonance": 1.0,
+        "coherence": 0.9999,
         "veil": 0.3,
         "health": 100
       },
       "VDOO": {
         "frequency": 2.618,
-        "resonance": 0.88,
-        "coherence": 0.84,
+        "resonance": 1.0,
+        "coherence": 0.9999,
         "veil": 0.4,
         "health": 100
       },
       "PENNIES": {
         "frequency": 3.618,
-        "resonance": 0.85,
-        "coherence": 0.83,
+        "resonance": 1.0,
+        "coherence": 0.9999,
         "veil": 0.5,
         "health": 100
       }
     }
   },
-  "base_tokens": []
+  "base_tokens": [],
+  "portal": 1.0,
+  "chainLink": 100.0,
+  "veil": "OPEN",
+  "coherence": 0.9999,
+  "stability": 1.111
 }
