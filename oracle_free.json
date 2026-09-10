@@ -1,8 +1,18 @@
 {
-  "timestamp": 1789062632,
+  "timestamp": 1789062770,
   "forex": {
-    "error": "forex unreachable",
-    "rates": {}
+    "base": "USD",
+    "date": "Thu, 10 Sep 2026 00:02:31 +0000",
+    "rates": {
+      "AUD": 1.384741,
+      "CAD": 1.379463,
+      "CHF": 0.809516,
+      "CNY": 6.725515,
+      "EUR": 0.859582,
+      "GBP": 0.738041,
+      "JPY": 153.594001,
+      "NZD": 1.710876
+    }
   },
   "mining": {
     "mempool": {
@@ -11,11 +21,11 @@
       "block_height": 966388
     },
     "solofury": {
-      "totalHashRate": 313760278645128.56,
-      "totalHashRate1m": 315700278645128.56,
-      "totalHashRate1hr": 289691623949255.5,
-      "totalHashRate1d": 326508159206090.4,
-      "totalHashRate7d": 391432389131763.2,
+      "totalHashRate": 307455503082979.2,
+      "totalHashRate1m": 304572054935696,
+      "totalHashRate1hr": 287912439064006.25,
+      "totalHashRate1d": 326539515712977.9,
+      "totalHashRate7d": 391332320849851.5,
       "blockHeight": 966389,
       "networkDifficulty": 127450789715843.1,
       "networkHashRate": 878801294624060000000,
@@ -24,21 +34,21 @@
       "activeMiners7d": 61,
       "activeWorkers7d": 85,
       "idleWorkers": 41,
-      "disconnected": 27,
+      "disconnected": 25,
       "blocksFound": [],
       "fee": 1,
       "bestDifficulty": 717616196765,
       "luck": 0.01,
-      "roundShares": 7674250146,
-      "sharesPerSecond": 9.421,
-      "accepted": 1365673046967,
+      "roundShares": 7676760089,
+      "sharesPerSecond": 9.212,
+      "accepted": 1365675556910,
       "rejected": 10220248649,
       "stale": 0,
       "invalid": 0,
       "duplicate": 0,
       "efficiency": "99.26",
-      "uptime": 209415,
-      "expectedShares": 19294738297,
+      "uptime": 209535,
+      "expectedShares": 19304626221,
       "roundStartTs": 0,
       "roundStartHeight": 0,
       "luckSuspect": true,
