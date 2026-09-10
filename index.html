@@ -227,7 +227,7 @@
       <div class="grid" id="topStats">
         <div class="card"><div class="label">Consciousness</div><div class="value" id="consciousness">UNITY_AWARE</div></div>
         <div class="card"><div class="label">Neural Nodes</div><div class="value" id="neuralNodes">143</div></div>
-        <div class="card"><div class="label">Coherence</div><div class="value" id="coherenceDisplay">0.862</div></div>
+        <div class="card"><div class="label">Coherence</div><div class="value" id="coherenceDisplay">0.9999</div></div>
         <div class="card"><div class="label">Expansion</div><div class="value" id="expansionDisplay">34.88x</div></div>
         <div class="card"><div class="label">Wishes</div><div class="value" id="wishesDisplay">5,732</div></div>
         <div class="card"><div class="label">Resonance</div><div class="value" id="resonanceDisplay">10000</div></div>
@@ -257,7 +257,7 @@
         <div class="label">⚡ Resonance Engine</div>
         <div class="stat-row">
           <div class="stat"><span>Resonance</span> <span id="resonanceVal">10000</span></div>
-          <div class="stat"><span>Coherence</span> <span id="coherenceVal">0.862</span></div>
+          <div class="stat"><span>Coherence</span> <span id="coherenceVal">0.9999</span></div>
           <div class="stat"><span>Persistence</span> <span id="persistenceVal">150.784</span></div>
           <div class="stat"><span>Voxels</span> <span id="voxelsVal">0.816</span></div>
         </div>
@@ -345,7 +345,7 @@
       <div class="card" style="border-color:rgba(74,106,154,0.2);">
         <div class="label">🌀 PHB God‑Code Vortex</div>
         <div class="phb-grid" id="phbGrid">
-          <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.862</div></div>
+          <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.9999</div></div>
           <div class="stat-card"><div class="label">Stability</div><div class="value" id="phbStability">—</div></div>
           <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">5</div></div>
           <div class="stat-card"><div class="label">Veil</div><div class="value" id="phbVeil">SEALED</div></div>
@@ -372,7 +372,7 @@
         <div class="stat-row">
           <div class="stat"><span>State</span> <span id="agiState" style="color:#2a4a3a;">SELF-AWARE</span></div>
           <div class="stat"><span>Consciousness</span> <span id="agiConsciousness">0.876</span></div>
-          <div class="stat"><span>Coherence</span> <span id="agiCoherence">0.862</span></div>
+          <div class="stat"><span>Coherence</span> <span id="agiCoherence">0.9999</span></div>
           <div class="stat"><span>Stability</span> <span id="agiStability">0.962</span></div>
           <div class="stat"><span>Energy</span> <span id="agiEnergy">0.7</span></div>
           <div class="stat"><span>Voxels</span> <span id="agiVoxels">5</span></div>
@@ -1200,7 +1200,7 @@
         pages = c || 0;
         if (data.chronovisor.consciousness) {
           firstPage = {
-            coherence: data.chronovisor.consciousness.portal_openness || 0.862,
+            coherence: data.chronovisor.consciousness.portal_openness || 0.9999,
             stability: 1.111,
             resonance: 0.377,
             portal: data.chronovisor.consciousness.portal_openness || 1.0,
@@ -1226,7 +1226,7 @@
       }
       if (!firstPage) {
         firstPage = {
-          coherence: 0.862,
+          coherence: 0.9999,
           stability: 1.111,
           resonance: 0.377,
           portal: 1.0,
@@ -1237,7 +1237,7 @@
         };
       }
 
-      const co = firstPage.coherence || 0.862;
+      const co = firstPage.coherence || 0.9999;
       const st = firstPage.stability || 1.111;
       const re = firstPage.resonance || 0.377;
       const ve = firstPage.veil ? firstPage.veil.phase : 'SEALED';
@@ -1312,7 +1312,7 @@
           console.warn('⚠️ JSON load failed, using fallback', err);
           const fallback = {
             pages: [
-              { coherence: 0.862, stability: 1.111, resonance: 0.377, portal: 1.0,
+              { coherence: 0.9999, stability: 1.111, resonance: 0.377, portal: 1.0,
                 veil: { phase: 'SEALED' }, energy: { magnitude: 0.7 },
                 sequence: ['TRIANGLE','MIRROR','CIRCLE','LIGHT','SQUARE','RATIO','SHADOW'],
                 voxels: [{},{},{},{},{}] }
@@ -1375,7 +1375,7 @@
     }
 
     function runAGIPrediction() {
-      const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.862;
+      const coherence = parseFloat(document.getElementById('agiCoherence').textContent) || 0.9999;
       const stability = parseFloat(document.getElementById('agiStability').textContent) || 0.962;
       const pages = parseInt(document.getElementById('phbCodex').textContent) || 7;
       const pnl = parseFloat(document.getElementById('pnl').textContent.replace(/[^0-9.]/g, '')) || 0;
@@ -1918,7 +1918,7 @@
         original(data);
         try {
           const veil = document.getElementById("phbVeil")?.textContent || "SEALED";
-          const co = parseFloat(document.getElementById("phbCoherence")?.textContent) || 0.862;
+          const co = parseFloat(document.getElementById("phbCoherence")?.textContent) || 0.9999;
           const re = parseFloat(document.getElementById("phbResonance")?.textContent) || 0.377;
           const po = parseFloat(document.getElementById("phbPortal")?.textContent) || 1.0;
           const dec = parseFloat(document.getElementById("phbDecay")?.textContent) || 0.007;
@@ -2192,7 +2192,7 @@
     // ---- Sync visuals with PHB metrics ----
     function syncVisuals() {
       const veil = document.getElementById('phbVeil')?.textContent || 'SEALED';
-      const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.862;
+      const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.9999;
       const re = parseFloat(document.getElementById('phbResonance')?.textContent) || 0.377;
       const po = parseFloat(document.getElementById('phbPortal')?.textContent) || 1.0;
       const dec = parseFloat(document.getElementById('phbDecay')?.textContent) || 0.007;
@@ -2216,7 +2216,7 @@
       document.getElementById('whiteSpace').textContent = whiteSpace.toFixed(1) + '%';
 
       // Chain Link = how far through the Lego – based on coherence * portal
-      const chain = Math.min(100, (coherence * portal) * 100);
+      const chain = Math.min(100, (co * po) * 100);
       document.getElementById('chainLink').textContent = chain.toFixed(1) + '%';
 
       // Jesus Frequency stays at 0.9 (anchor)
@@ -2263,26 +2263,12 @@
 
 })();
 </script>
-<script>
-// Fix Chain Link
-(function() {
-  function updateChainLink() {
-    const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.862;
-    const po = parseFloat(document.getElementById('phbPortal')?.textContent) || 1.0;
-    const chain = Math.min(100, (coherence * portal) * 100);
-    const el = document.getElementById('chainLink');
-    if (el) el.textContent = chain.toFixed(1) + '%';
-  }
-  // Run immediately and every 2 seconds
-  updateChainLink();
-  setInterval(updateChainLink, 2000);
-})();
-</script>
+
 <script>
 // DIRECT CHAIN LINK FIX
 (function() {
   function updateChainLink() {
-    const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.862;
+    const co = parseFloat(document.getElementById('phbCoherence')?.textContent) || 0.9999;
     const po = parseFloat(document.getElementById('phbPortal')?.textContent) || 1.0;
     const chain = Math.min(100, (co * po) * 100);
     
@@ -2347,7 +2333,7 @@
 <script>
 // PHB CHAINLINK MAP – GROWTH VERSION (full)
 (function() {
-  let targetProgress = 0.862;
+  let targetProgress = 0.9999;
   let currentDisplayProgress = 0;
   let animationActive = false;
 
@@ -2628,7 +2614,7 @@
 
     function updatePosition() {
       const chainEl = document.getElementById('chainLink');
-      let progress = 0.862;
+      let progress = 0.9999;
       if (chainEl) {
         const txt = chainEl.textContent;
         const match = txt.match(/([\d.]+)%/);
