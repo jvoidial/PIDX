@@ -1,7 +1,7 @@
 {
-  "timestamp": 1789030068,
-  "eth_usd": 2470.04,
-  "base_tvl_usd": 5640977316.832824,
+  "timestamp": 1789036474,
+  "eth_usd": 2465.18,
+  "base_tvl_usd": 5621296206.2913685,
   "tokens": {
     "PIDX": {
       "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c",
@@ -36,7 +36,7 @@
               {
                 "name": "PIDX / WETH",
                 "address": "0x0b780b8a72ee2510e62608aac4f130a29dbd5df7",
-                "reserve_usd": "0.2471",
+                "reserve_usd": "0.2467",
                 "vol_24h": "3.9337735755",
                 "price_usd": "0.02025500462",
                 "fdv_usd": "20255004.62",
@@ -144,7 +144,7 @@
               {
                 "name": "SGUIDE / ETH 0.25%",
                 "address": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2",
-                "reserve_usd": "0.9882",
+                "reserve_usd": "0.9869",
                 "vol_24h": "0.7998230379",
                 "price_usd": "0.000641624759",
                 "fdv_usd": "6416247590.0",
@@ -153,7 +153,7 @@
               {
                 "name": "SGUIDE / WETH",
                 "address": "0xc08892f34edd6c4c24c3b5bd577f0337385f17af",
-                "reserve_usd": "0.4941",
+                "reserve_usd": "0.4934",
                 "vol_24h": "0.2382843587",
                 "price_usd": "0.002937526067",
                 "fdv_usd": "29375260670.0",
@@ -261,7 +261,7 @@
               {
                 "name": "VDOO / ETH 0.25%",
                 "address": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59",
-                "reserve_usd": "2.2235",
+                "reserve_usd": "2.2205",
                 "vol_24h": "0.8997223134",
                 "price_usd": "0.000114699417",
                 "fdv_usd": "11469941700.0",
@@ -270,7 +270,7 @@
               {
                 "name": "VDOO / WETH",
                 "address": "0x68a38e83e5a15dde3daa44e9bb7243fc8c96fb0f",
-                "reserve_usd": "0.2471",
+                "reserve_usd": "0.2467",
                 "vol_24h": "0.09996063112",
                 "price_usd": "0.0001261807364",
                 "fdv_usd": "12618073640.0",
