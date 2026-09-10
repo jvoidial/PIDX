@@ -8,7 +8,8 @@ This project maintains the following protection documents:
 | `RISK_DISCLOSURE.md` | High-risk nature of cryptoassets |
 | `PRIVACY_POLICY.md` | No data collection statement |
 | `NO_INVESTMENT_ADVICE.md` | Informational purposes only |
-| `CLARITY_ACT_COMPLIANCE.md` | Posture under CLARITY Act |
+|  `CLARITY_ACT_COMPLIANCE.md` | Posture under CLARITY Act |
+| `DFTP_COMPLIANCE.md` | DFTP structural test (two prongs, three exclusions) |
 | `ANTI_FRAUD.md` | Scam warning and reporting |
 | `DECENTRALIZATION.md` | What is and is not controlled |
 | `VOIDBOT0_PROTECTIONS.md` | Personal asset register + security |
