@@ -1743,36 +1743,7 @@
   autoHeal();
 })();
 </script>
-<!-- BOT PUBLIC STATS -->
-<div class="card" style="margin-top:10px;">
-  <div class="label">🤖 Bot · Public Wallet Stats</div>
-  <div id="botStats" style="font-size:12px;line-height:1.6;">Loading…</div>
-</div>
-<script>
-(function() {
-  function load() {
-    fetch("bot_public.json?t=" + Date.now())
-      .then(r => r.json())
-      .then(d => {
-        var html = "";
-        html += "<div>🔐 Wallet: " + d.safe_wallet.slice(0,6) + "…" + d.safe_wallet.slice(-4) + "</div>";
-        html += "<div>🔑 Session: " + d.session_key_address.slice(0,6) + "…" + d.session_key_address.slice(-4) + "</div>";
-        html += "<div>💰 ETH: " + d.eth_balance.toFixed(6) + "</div>";
-        for (var sym in d.holdings) {
-          var v = typeof d.holdings[sym] === "number" ? d.holdings[sym].toFixed(4) : d.holdings[sym];
-          html += "<div>🪙 " + sym + ": " + v + "</div>";
-        }
-        html += "<div style=\"color:#667;font-size:10px;margin-top:4px;\">Updated: " + new Date(d.timestamp * 1000).toLocaleTimeString() + "</div>";
-        document.getElementById("botStats").innerHTML = html;
-      })
-      .catch(e => {
-        document.getElementById("botStats").textContent = "No bot data yet.";
-      });
-  }
-  load();
-  setInterval(load, 60000);
-})();
-</script>
+
 <!-- BOT PUBLIC STATS -->
 <div class="card" style="margin-top:10px;">
   <div class="label">🤖 Bot · Public Wallet Stats</div>
@@ -1788,33 +1759,32 @@
     if (typeof n !== 'number') return n;
     return n.toLocaleString(undefined, {maximumFractionDigits: d || 2});
   }
-
   function load() {
     fetch("bot_public.json?t=" + Date.now())
       .then(r => r.ok ? r.json() : Promise.reject("HTTP " + r.status))
       .then(d => {
         var html = "";
-        html += "<div>🔐 Wallet: <code>" + d.safe_wallet.slice(0,6) + "…" + d.safe_wallet.slice(-4) + "</code></div>";
-        html += "<div>🔑 Session: <code>" + d.session_key_address.slice(0,6) + "…" + d.session_key_address.slice(-4) + "</code></div>";
-        html += "<div>💰 ETH: " + (d.eth_balance < 0.0001 ? d.eth_balance.toExponential(2) : d.eth_balance.toFixed(6)) + "</div>";
+        html += "<div>🔐 Wallet: <code>" + (d.safe_wallet || "?").slice(0,6) + "…" + (d.safe_wallet || "?").slice(-4) + "</code></div>";
+        html += "<div>🔑 Session: <code>" + (d.session_key_address || "?").slice(0,6) + "…" + (d.session_key_address || "?").slice(-4) + "</code></div>";
+        var eth = d.eth_balance || 0;
+        html += "<div>💰 ETH: " + (eth < 0.0001 && eth > 0 ? eth.toExponential(2) : eth.toFixed(6)) + "</div>";
         for (var sym in d.holdings) {
           var v = typeof d.holdings[sym] === "number" ? fmt(d.holdings[sym], 4) : d.holdings[sym];
           html += "<div>🪙 " + sym + ": " + v + "</div>";
         }
-        html += "<div style='color:#667;font-size:10px;margin-top:4px;'>Updated: " + new Date(d.timestamp * 1000).toLocaleTimeString() + "</div>";
+        var ts = d.timestamp ? new Date(d.timestamp * 1000).toLocaleTimeString() : "—";
+        html += "<div style='color:#667;font-size:10px;margin-top:4px;'>Updated: " + ts + "</div>";
         document.getElementById("botStats").innerHTML = html;
 
-        // Liquidity health summary
-        var low = (d.eth_balance < 0.001);
         var status = document.getElementById("liqStatus");
-        if (low) {
+        if (eth < 0.001) {
           status.innerHTML = "<span style='color:#ff8866;'>⚠️ Low ETH — no liquidity ops possible</span>";
         } else {
           status.innerHTML = "<span style='color:#88ff88;'>✅ Ready</span>";
         }
       })
       .catch(e => {
-        document.getElementById("botStats").textContent = "No bot data yet (" + e + ")";
+        document.getElementById("botStats").textContent = "Waiting for bot_public.json… (" + e + ")";
       });
   }
   load();
@@ -3245,36 +3215,7 @@
   autoHeal();
 })();
 </script>
-<!-- BOT PUBLIC STATS -->
-<div class="card" style="margin-top:10px;">
-  <div class="label">🤖 Bot · Public Wallet Stats</div>
-  <div id="botStats" style="font-size:12px;line-height:1.6;">Loading…</div>
-</div>
-<script>
-(function() {
-  function load() {
-    fetch("bot_public.json?t=" + Date.now())
-      .then(r => r.json())
-      .then(d => {
-        var html = "";
-        html += "<div>🔐 Wallet: " + d.safe_wallet.slice(0,6) + "…" + d.safe_wallet.slice(-4) + "</div>";
-        html += "<div>🔑 Session: " + d.session_key_address.slice(0,6) + "…" + d.session_key_address.slice(-4) + "</div>";
-        html += "<div>💰 ETH: " + d.eth_balance.toFixed(6) + "</div>";
-        for (var sym in d.holdings) {
-          var v = typeof d.holdings[sym] === "number" ? d.holdings[sym].toFixed(4) : d.holdings[sym];
-          html += "<div>🪙 " + sym + ": " + v + "</div>";
-        }
-        html += "<div style=\"color:#667;font-size:10px;margin-top:4px;\">Updated: " + new Date(d.timestamp * 1000).toLocaleTimeString() + "</div>";
-        document.getElementById("botStats").innerHTML = html;
-      })
-      .catch(e => {
-        document.getElementById("botStats").textContent = "No bot data yet.";
-      });
-  }
-  load();
-  setInterval(load, 60000);
-})();
-</script>
+
 <!-- BOT PUBLIC STATS -->
 <div class="card" style="margin-top:10px;">
   <div class="label">🤖 Bot · Public Wallet Stats</div>
@@ -3290,33 +3231,32 @@
     if (typeof n !== 'number') return n;
     return n.toLocaleString(undefined, {maximumFractionDigits: d || 2});
   }
-
   function load() {
     fetch("bot_public.json?t=" + Date.now())
       .then(r => r.ok ? r.json() : Promise.reject("HTTP " + r.status))
       .then(d => {
         var html = "";
-        html += "<div>🔐 Wallet: <code>" + d.safe_wallet.slice(0,6) + "…" + d.safe_wallet.slice(-4) + "</code></div>";
-        html += "<div>🔑 Session: <code>" + d.session_key_address.slice(0,6) + "…" + d.session_key_address.slice(-4) + "</code></div>";
-        html += "<div>💰 ETH: " + (d.eth_balance < 0.0001 ? d.eth_balance.toExponential(2) : d.eth_balance.toFixed(6)) + "</div>";
+        html += "<div>🔐 Wallet: <code>" + (d.safe_wallet || "?").slice(0,6) + "…" + (d.safe_wallet || "?").slice(-4) + "</code></div>";
+        html += "<div>🔑 Session: <code>" + (d.session_key_address || "?").slice(0,6) + "…" + (d.session_key_address || "?").slice(-4) + "</code></div>";
+        var eth = d.eth_balance || 0;
+        html += "<div>💰 ETH: " + (eth < 0.0001 && eth > 0 ? eth.toExponential(2) : eth.toFixed(6)) + "</div>";
         for (var sym in d.holdings) {
           var v = typeof d.holdings[sym] === "number" ? fmt(d.holdings[sym], 4) : d.holdings[sym];
           html += "<div>🪙 " + sym + ": " + v + "</div>";
         }
-        html += "<div style='color:#667;font-size:10px;margin-top:4px;'>Updated: " + new Date(d.timestamp * 1000).toLocaleTimeString() + "</div>";
+        var ts = d.timestamp ? new Date(d.timestamp * 1000).toLocaleTimeString() : "—";
+        html += "<div style='color:#667;font-size:10px;margin-top:4px;'>Updated: " + ts + "</div>";
         document.getElementById("botStats").innerHTML = html;
 
-        // Liquidity health summary
-        var low = (d.eth_balance < 0.001);
         var status = document.getElementById("liqStatus");
-        if (low) {
+        if (eth < 0.001) {
           status.innerHTML = "<span style='color:#ff8866;'>⚠️ Low ETH — no liquidity ops possible</span>";
         } else {
           status.innerHTML = "<span style='color:#88ff88;'>✅ Ready</span>";
         }
       })
       .catch(e => {
-        document.getElementById("botStats").textContent = "No bot data yet (" + e + ")";
+        document.getElementById("botStats").textContent = "Waiting for bot_public.json… (" + e + ")";
       });
   }
   load();
