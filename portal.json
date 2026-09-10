@@ -1,0 +1,250 @@
+{
+  "timestamp": 1789010273,
+  "eth_usd": 2474.26,
+  "base_tvl_usd": 5623552559.6495075,
+  "tokens": {
+    "PIDX": {
+      "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c",
+      "gates": {
+        "geckoterminal": {
+          "gate": "geckoterminal",
+          "status": "open",
+          "data": {
+            "price_usd": "0.02025500462",
+            "fdv_usd": "20255004.6186086",
+            "total_supply": "1000000000000000000000000000.0",
+            "volume_24h": "3.9337735755",
+            "holders": null
+          }
+        },
+        "gt_pools": {
+          "gate": "gt_pools",
+          "status": "open",
+          "data": {
+            "count": 1,
+            "pools": [
+              {
+                "name": "PIDX / WETH",
+                "address": "0x0b780b8a72ee2510e62608aac4f130a29dbd5df7",
+                "reserve_usd": "0.2473",
+                "vol_24h": "3.9337735755",
+                "price": "0.02025500462",
+                "fdv": "20255004.62"
+              }
+            ]
+          }
+        },
+        "dexscreener": {
+          "gate": "dexscreener",
+          "status": "open",
+          "data": {
+            "count": 1,
+            "price_usd": "0.02064",
+            "liquidity_usd": 0.21,
+            "volume_24h": 3.93,
+            "txns_24h": 3,
+            "fdv": 20647951,
+            "pair": "0x0b780B8a72EE2510e62608AAC4F130a29DBD5DF7"
+          }
+        },
+        "basescan": {
+          "gate": "basescan",
+          "status": "open",
+          "data": {
+            "txs": [],
+            "count": 0
+          }
+        },
+        "0x_routing": {
+          "gate": "0x_routing",
+          "status": "closed",
+          "error": "HTTP Error 404: Not Found"
+        }
+      }
+    },
+    "SGUIDE": {
+      "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a",
+      "gates": {
+        "geckoterminal": {
+          "gate": "geckoterminal",
+          "status": "open",
+          "data": {
+            "price_usd": "0.003559347629",
+            "fdv_usd": "35593476289.0953",
+            "total_supply": "10000000000000000000000000000000.0",
+            "volume_24h": "1.0381073966",
+            "holders": null
+          }
+        },
+        "gt_pools": {
+          "gate": "gt_pools",
+          "status": "open",
+          "data": {
+            "count": 2,
+            "pools": [
+              {
+                "name": "SGUIDE / ETH 0.25%",
+                "address": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2",
+                "reserve_usd": "0.9894",
+                "vol_24h": "0.7998230379",
+                "price": "0.000641624759",
+                "fdv": "6416247590.0"
+              },
+              {
+                "name": "SGUIDE / WETH",
+                "address": "0xc08892f34edd6c4c24c3b5bd577f0337385f17af",
+                "reserve_usd": "0.4947",
+                "vol_24h": "0.2382843587",
+                "price": "0.002937526067",
+                "fdv": "29375260670.0"
+              }
+            ]
+          }
+        },
+        "dexscreener": {
+          "gate": "dexscreener",
+          "status": "open",
+          "data": {
+            "count": 2,
+            "price_usd": "0.003399",
+            "liquidity_usd": 1.83,
+            "volume_24h": 0.84,
+            "txns_24h": 2,
+            "fdv": 33990760715,
+            "pair": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2"
+          }
+        },
+        "basescan": {
+          "gate": "basescan",
+          "status": "open",
+          "data": {
+            "txs": [],
+            "count": 0
+          }
+        },
+        "0x_routing": {
+          "gate": "0x_routing",
+          "status": "closed",
+          "error": "HTTP Error 404: Not Found"
+        }
+      }
+    },
+    "VDOO": {
+      "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b",
+      "gates": {
+        "geckoterminal": {
+          "gate": "geckoterminal",
+          "status": "open",
+          "data": {
+            "price_usd": "0.000114699417",
+            "fdv_usd": "11469941702.7728",
+            "total_supply": "100000000000000000000000000000000.0",
+            "volume_24h": "0.99968294452",
+            "holders": null
+          }
+        },
+        "gt_pools": {
+          "gate": "gt_pools",
+          "status": "open",
+          "data": {
+            "count": 2,
+            "pools": [
+              {
+                "name": "VDOO / ETH 0.25%",
+                "address": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59",
+                "reserve_usd": "2.2262",
+                "vol_24h": "0.8997223134",
+                "price": "0.000114699417",
+                "fdv": "11469941700.0"
+              },
+              {
+                "name": "VDOO / WETH",
+                "address": "0x68a38e83e5a15dde3daa44e9bb7243fc8c96fb0f",
+                "reserve_usd": "0.2473",
+                "vol_24h": "0.09996063112",
+                "price": "0.0001261807364",
+                "fdv": "12618073640.0"
+              }
+            ]
+          }
+        },
+        "dexscreener": {
+          "gate": "dexscreener",
+          "status": "open",
+          "data": {
+            "count": 1,
+            "price_usd": "0.0005306",
+            "liquidity_usd": 2.28,
+            "volume_24h": 0.89,
+            "txns_24h": 1,
+            "fdv": 53065154264,
+            "pair": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59"
+          }
+        },
+        "basescan": {
+          "gate": "basescan",
+          "status": "open",
+          "data": {
+            "txs": [],
+            "count": 0
+          }
+        },
+        "0x_routing": {
+          "gate": "0x_routing",
+          "status": "closed",
+          "error": "HTTP Error 404: Not Found"
+        }
+      }
+    },
+    "PENNIES": {
+      "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7",
+      "gates": {
+        "geckoterminal": {
+          "gate": "geckoterminal",
+          "status": "open",
+          "data": {
+            "price_usd": null,
+            "fdv_usd": null,
+            "total_supply": null,
+            "volume_24h": null,
+            "holders": null
+          }
+        },
+        "gt_pools": {
+          "gate": "gt_pools",
+          "status": "open",
+          "data": {
+            "count": 0,
+            "pools": []
+          }
+        },
+        "dexscreener": {
+          "gate": "dexscreener",
+          "status": "open",
+          "data": {
+            "count": 1,
+            "price_usd": "0.000000000000003891",
+            "liquidity_usd": 0.11,
+            "volume_24h": 5.43,
+            "txns_24h": 3,
+            "fdv": 4,
+            "pair": "0x29a0Ae1F10629f8855c87C911531fFb2c98d68c6"
+          }
+        },
+        "basescan": {
+          "gate": "basescan",
+          "status": "open",
+          "data": {
+            "txs": [],
+            "count": 0
+          }
+        },
+        "0x_routing": {
+          "gate": "0x_routing",
+          "status": "closed",
+          "error": "HTTP Error 404: Not Found"
+        }
+      }
+    }
+  }
+}
