@@ -275,85 +275,7 @@
       </div>
 
       <!-- MINING -->
-      <div class="card">
-        <div class="label">⛏️ Mining Operations</div>
-        <div class="stat-row">
-          <div class="stat"><span>Active Miners</span> <span id="activeMiners">4</span></div>
-          <div class="stat"><span>Hash Rate</span> <span id="hashRate">500 TH/s</span></div>
-          <div class="stat"><span>Daily Earnings</span> <span id="dailyEarnings">0.0026 BTC</span></div>
-          <div class="stat"><span>Auto Bots</span> <span id="autoBots">20/20</span></div>
-        </div>
-        <div id="poolsContainer" style="margin-top:8px;font-size:13px;color:#aab;"></div>
-      </div>
-
-      <!-- CORE SPINS -->
-      <div class="card">
-        <div class="label">🌀 Core Spins</div>
-        <div id="coreSpins" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font-size:15px;color:#aab;"></div>
-      </div>
-
-      <!-- TOPOLOGIES -->
-      <div class="card">
-        <div class="label">⚡ Topologies</div>
-        <div id="topologiesContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-top:6px;font-size:13px;color:#aab;"></div>
-      </div>
-
-      <!-- CORES & PIPES -->
-      <div class="card">
-        <div class="label">🔄 Cores & Pipes</div>
-        <div id="coresPipes" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;"></div>
-      </div>
-
-      <!-- BEINGS -->
-      <div class="card">
-        <div class="label">✝️ Beings</div>
-        <div id="beingsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:6px;"></div>
-      </div>
-
-      <!-- MOMENTS -->
-      <div class="card">
-        <div class="label">🌌 Moments</div>
-        <div id="momentsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;margin-top:6px;font-size:13px;color:#aab;"></div>
-      </div>
-
-      <!-- EXOPLANETS -->
-      <div class="card">
-        <div class="label">🌍 Exoplanets</div>
-        <div id="exoplanetsContainer" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;"></div>
-      </div>
-
-      <!-- PATTERNS -->
-      <div class="card">
-        <div class="label">🔄 Patterns</div>
-        <div id="patternsContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-top:6px;font-size:13px;color:#aab;"></div>
-      </div>
-
-      <!-- COSMIC CONSCIOUSNESS -->
-      <div class="card">
-        <div class="label">🧠 Cosmic Consciousness</div>
-        <div style="font-size:14px;color:#aab;margin-top:4px;">
-          🌌 HUMAN-LIKE PLANETS AWARE<br>
-          ALL HUMAN-LIKE PLANETS CONNECTED<br>
-          “We are not alone in the cosmos.”<br>
-          <span style="color:#88ff88;">🌍 Cosmic Family: ✓ CONNECTED</span><br>
-          <span style="color:#88ccff;">🚀 Interstellar: ACTIVE</span><br>
-          <span style="color:#ffaa66;">⚡ Resonance: INFINITE</span>
-        </div>
-      </div>
-
-      <!-- PHB VORTEX -->
-      <div class="card" style="border-color:rgba(74,106,154,0.2);">
-        <div class="label">🌀 PHB God‑Code Vortex</div>
-        <div class="phb-grid" id="phbGrid">
-          <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.9999</div></div>
-          <div class="stat-card"><div class="label">Stability</div><div class="value" id="phbStability">—</div></div>
-          <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">5</div></div>
-          <div class="stat-card"><div class="label">Veil</div><div class="value" id="phbVeil">OPEN</div></div>
-          <div class="stat-card"><div class="label">Portal</div><div class="value" id="phbPortal">1.0</div></div>
-          <div class="stat-card"><div class="label">Energy</div><div class="value" id="phbEnergy">0.7</div></div>
-          <div class="stat-card"><div class="label">Codex Pages</div><div class="value" id="phbCodex">7</div></div>
-          <div class="stat-card"><div class="label">Last Update</div><div class="value" id="phbLastUpdate" style="font-size:13px;">--</div></div>
-        </div>
+      
         <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
           <button class="btn" onclick="refreshPHB()">🔄 Refresh</button>
           <span style="font-size:11px;color:#445;align-self:center;">Auto-sync 30s</span>
@@ -3041,4 +2963,31 @@
 </div>
 <script src="defiyield.js?v=1"></script>
 <!-- END DEFI YIELD SCANNER -->
+
+<div class="card" style="margin-top:10px;border-color:rgba(255,220,150,0.25);">
+  <div class="label" style="color:#ffddaa;">🧊 4D Topology · Tesseract</div>
+  <div style="font-size:10px;color:#8899aa;margin:4px 0 6px 0;font-style:italic;">Real 4D geometry · projected 4D→3D→2D. Not physics.</div>
+  <canvas id="topology4dCanvas" style="width:100%;height:300px;display:block;background:#050810;border-radius:8px;"></canvas>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px;font-size:10px;color:#c8c0e0;">
+    <div><span style="color:#667;">Vertices:</span> 16</div>
+    <div><span style="color:#667;">Edges:</span> 32</div>
+    <div><span style="color:#667;">Cells:</span> 8</div>
+  </div>
+</div>
+<script src="topology4d.js?v=1"></script>
+
+<div class="card" style="margin-top:10px;border-color:rgba(200,150,255,0.28);">
+  <div class="label" style="color:#ccbbff;">🧠 4D Topology Brain · State Lattice</div>
+  <div style="font-size:10px;color:#8899aa;margin:4px 0 6px 0;font-style:italic;">4D lattice of the sequence. Visualizer, not physics.</div>
+  <canvas id="brain4dCanvas" style="width:100%;height:320px;display:block;background:#04060f;border-radius:8px;"></canvas>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px;font-size:10px;color:#c8c0e0;">
+    <div><span style="color:#667;">Coherence:</span> <span id="brainCoherence">—</span></div>
+    <div><span style="color:#667;">Stability:</span> <span id="brainStability">—</span></div>
+    <div><span style="color:#667;">Resonance:</span> <span id="brainResonance">—</span></div>
+    <div><span style="color:#667;">Veil:</span> <span id="brainVeil">—</span></div>
+    <div><span style="color:#667;">Portal:</span> <span id="brainPortal">—</span></div>
+    <div><span style="color:#667;">Phase:</span> <span id="brainPhase">—</span></div>
+  </div>
+</div>
+<script src="brain4d.js?v=1"></script>
 </body>
