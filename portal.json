@@ -1,7 +1,7 @@
 {
-  "timestamp": 1789059834,
-  "eth_usd": 2446.76,
-  "base_tvl_usd": 5567614133.395334,
+  "timestamp": 1789061750,
+  "eth_usd": 2464.99,
+  "base_tvl_usd": 5541016239.942498,
   "tokens": {
     "PIDX": {
       "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c",
@@ -18,11 +18,11 @@
             "coingecko_coin_id": null,
             "total_supply": "1000000000000000000000000000.0",
             "normalized_total_supply": "1000000000.0",
-            "price_usd": "0.00007902709781",
-            "fdv_usd": "79027.097813339",
-            "total_reserve_in_usd": "0.0082266521044382284066306102666",
+            "price_usd": "0.0008076174871",
+            "fdv_usd": "807617.487116424",
+            "total_reserve_in_usd": "0.056714336410764069528810248848",
             "volume_usd": {
-              "h24": "4.0393595333"
+              "h24": "4.0878160733"
             },
             "market_cap_usd": null
           },
@@ -36,10 +36,10 @@
               {
                 "name": "PIDX / WETH",
                 "address": "0x0b780b8a72ee2510e62608aac4f130a29dbd5df7",
-                "reserve_usd": "0.01645330421",
-                "vol_24h": "4.0393595333",
-                "price_usd": "0.00007902709781",
-                "fdv_usd": "79027.09781",
+                "reserve_usd": "0.1134286728",
+                "vol_24h": "4.0878160733",
+                "price_usd": "0.0008076174871",
+                "fdv_usd": "807617.4871",
                 "created": "2026-08-30T02:51:49Z"
               }
             ]
@@ -68,43 +68,44 @@
                 "name": "Wrapped Ether",
                 "symbol": "WETH"
               },
-              "priceNative": "0.00000004802",
-              "priceUsd": "0.0001171",
+              "priceNative": "0.000002259",
+              "priceUsd": "0.005528",
               "txns": {
                 "m5": {
                   "buys": 0,
                   "sells": 0
                 },
                 "h1": {
-                  "buys": 0,
+                  "buys": 1,
                   "sells": 0
                 },
                 "h6": {
-                  "buys": 1,
+                  "buys": 2,
                   "sells": 1
                 },
                 "h24": {
-                  "buys": 3,
+                  "buys": 4,
                   "sells": 2
                 }
               },
               "volume": {
-                "h24": 4.03,
-                "h6": 0.1,
-                "h1": 0,
+                "h24": 4.08,
+                "h6": 0.15,
+                "h1": 0.04,
                 "m5": 0
               },
               "priceChange": {
-                "h6": -99.43,
-                "h24": -100
+                "h1": 4621,
+                "h6": -73.22,
+                "h24": -99.92
               },
               "liquidity": {
-                "usd": 0.01,
-                "base": 70.255,
-                "quote": 3.374e-06
+                "usd": 0.11,
+                "base": 10.2556,
+                "quote": 2.317e-05
               },
-              "fdv": 117110,
-              "marketCap": 117110,
+              "fdv": 5528791,
+              "marketCap": 5528791,
               "pairCreatedAt": 1788058309000
             }
           },
@@ -145,7 +146,7 @@
               {
                 "name": "SGUIDE / ETH 0.25%",
                 "address": "0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2",
-                "reserve_usd": "1.9551",
+                "reserve_usd": "1.9729",
                 "vol_24h": "1.0528009846",
                 "price_usd": "0.002583614775",
                 "fdv_usd": "25836147750.0",
@@ -154,7 +155,7 @@
               {
                 "name": "SGUIDE / WETH",
                 "address": "0xc08892f34edd6c4c24c3b5bd577f0337385f17af",
-                "reserve_usd": "0.4888",
+                "reserve_usd": "0.4932",
                 "vol_24h": "0.2922168144",
                 "price_usd": "0.002696622786",
                 "fdv_usd": "26966227860.0",
@@ -263,7 +264,7 @@
               {
                 "name": "VDOO / ETH 0.25%",
                 "address": "0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59",
-                "reserve_usd": "2.2021",
+                "reserve_usd": "2.2195",
                 "vol_24h": "0.8997223134",
                 "price_usd": "0.000114699417",
                 "fdv_usd": "11469941700.0",
@@ -272,7 +273,7 @@
               {
                 "name": "VDOO / WETH",
                 "address": "0x68a38e83e5a15dde3daa44e9bb7243fc8c96fb0f",
-                "reserve_usd": "0.2447",
+                "reserve_usd": "0.2466",
                 "vol_24h": "0.09996063112",
                 "price_usd": "0.0001261807364",
                 "fdv_usd": "12618073640.0",
