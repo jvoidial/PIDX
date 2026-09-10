@@ -38,3 +38,14 @@ package-lock.json
 # OS
 .DS_Store
 Thumbs.db
+# 🔒 ABSOLUTE BLOCK ON SECRETS
+*.key
+*.env
+.env*
+keystore.json
+private*
+secrets*
+.phb_bot/
+*_secret*
+*_private*
+session.key
