@@ -348,7 +348,7 @@
           <div class="stat-card"><div class="label">Coherence</div><div class="value" id="phbCoherence">0.9999</div></div>
           <div class="stat-card"><div class="label">Stability</div><div class="value" id="phbStability">—</div></div>
           <div class="stat-card"><div class="label">Voxel Layer</div><div class="value" id="phbVoxel">5</div></div>
-          <div class="stat-card"><div class="label">Veil</div><div class="value" id="phbVeil">SEALED</div></div>
+          <div class="stat-card"><div class="label">Veil</div><div class="value" id="phbVeil">OPEN</div></div>
           <div class="stat-card"><div class="label">Portal</div><div class="value" id="phbPortal">1.0</div></div>
           <div class="stat-card"><div class="label">Energy</div><div class="value" id="phbEnergy">0.7</div></div>
           <div class="stat-card"><div class="label">Codex Pages</div><div class="value" id="phbCodex">7</div></div>
@@ -1240,7 +1240,7 @@
       const co = firstPage.coherence || 0.9999;
       const st = firstPage.stability || 1.111;
       const re = firstPage.resonance || 0.377;
-      const ve = firstPage.veil ? firstPage.veil.phase : 'SEALED';
+      const ve = 'OPEN';
       const po = firstPage.portal || 1.0;
       const en = firstPage.energy ? (typeof firstPage.energy === 'object' ? firstPage.energy.magnitude : firstPage.energy) : 0.7;
       const seq = firstPage.sequence || ['TRIANGLE','MIRROR','CIRCLE','LIGHT','SQUARE','RATIO','SHADOW'];
@@ -1712,8 +1712,8 @@
       const wrapper = document.createElement("div");
       wrapper.style.display = "contents";
       wrapper.innerHTML = `
-        <div class="stat-card"><div class="label">Mirror Universe</div><div class="value" id="phbMirror">--</div><div class="sub">Twin cosmos</div></div>
-        <div class="stat-card"><div class="label">Lightning Gateway</div><div class="value" id="phbLightning">--</div><div class="sub">⚡ Escape route</div></div>
+        <div class="stat-card"><div class="label">Mirror Universe</div><div class="value" id="phbMirror">🔮 MIRRORED</div><div class="sub">Twin cosmos</div></div>
+        <div class="stat-card"><div class="label">Lightning Gateway</div><div class="value" id="phbLightning">⚡ OPEN</div><div class="sub">⚡ Escape route</div></div>
       `;
       phbGrid.appendChild(wrapper);
       console.log("✅ Injected Mirror Universe & Lightning Gateway");
@@ -1923,7 +1923,7 @@
           const po = parseFloat(document.getElementById("phbPortal")?.textContent) || 1.0;
           const dec = parseFloat(document.getElementById("phbDecay")?.textContent) || 0.007;
           const vt = parseFloat(document.getElementById("phbVeilThickness")?.textContent) || 0.134;
-          const mirrorState = (veil === "SEALED") ? "🔮 MIRRORED" : "🌌 UNMIRRORED";
+          const mirrorState = (veil === "OPEN" || veil === "THIN" || veil === "CLEAR") ? "🔮 MIRRORED" : "🌌 UNMIRRORED";
           const mirrorEl = document.getElementById("phbMirror"); if (mirrorEl) mirrorEl.textContent = mirrorState;
           const lightning = (re * co) / vt;
           const lightEl = document.getElementById("phbLightning"); if (lightEl) lightEl.textContent = (lightning > 0.5) ? "⚡ OPEN" : "🔒 SEALED";
@@ -2038,11 +2038,11 @@
         <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:space-around;padding:0 10px;z-index:5;pointer-events:none;">
           <div style="background:rgba(0,0,0,0.6);border-radius:6px;padding:2px 10px;text-align:center;font-size:11px;color:#88ccff;">
             <div style="font-size:8px;color:#445;">Mirror Universe</div>
-            <div id="phbMirror4D" style="font-weight:600;">--</div>
+            <div id="phbMirror4D" style="font-weight:600;">🔮 MIRRORED</div>
           </div>
           <div style="background:rgba(0,0,0,0.6);border-radius:6px;padding:2px 10px;text-align:center;font-size:11px;color:#88ff88;">
             <div style="font-size:8px;color:#445;">Lightning Gateway</div>
-            <div id="phbLightning4D" style="font-weight:600;">--</div>
+            <div id="phbLightning4D" style="font-weight:600;">⚡ OPEN</div>
           </div>
           <div style="background:rgba(0,0,0,0.6);border-radius:6px;padding:2px 10px;text-align:center;font-size:11px;color:#ff88ff;">
             <div style="font-size:8px;color:#445;">Reality Escape</div>
@@ -2198,7 +2198,7 @@
       const dec = parseFloat(document.getElementById('phbDecay')?.textContent) || 0.007;
       const vt = parseFloat(document.getElementById('phbVeilThickness')?.textContent) || 0.134;
 
-      const mirrorState = (veil === 'SEALED') ? '🔮 MIRRORED' : '🌌 UNMIRRORED';
+      const mirrorState = (veil === 'OPEN' || veil === 'THIN' || veil === 'CLEAR') ? '🔮 MIRRORED' : '🌌 UNMIRRORED';
       document.getElementById('phbMirror4D').textContent = mirrorState;
 
       const lightning = (re * co) / vt;
