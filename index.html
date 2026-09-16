@@ -848,9 +848,9 @@
         links: {
           Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
           BaseScan: 'https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c/',
-          CoinGecko: 'https://www.coingecko.com/en/coins/pidx',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+          Sourcify: 'https://repo.sourcify.dev/8453/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+          CoinGecko: 'https://www.coingecko.com/en/search?query=0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/tokens/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',
           DexScreener: 'https://dexscreener.com/base/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'
         }
       },
@@ -862,9 +862,9 @@
         links: {
           Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
           BaseScan: 'https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a/',
-          CoinGecko: 'https://www.coingecko.com/en/coins/sguide',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+          Sourcify: 'https://repo.sourcify.dev/8453/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+          CoinGecko: 'https://www.coingecko.com/en/search?query=0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/tokens/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',
           DexScreener: 'https://dexscreener.com/base/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a'
         }
       },
@@ -876,9 +876,9 @@
         links: {
           Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
           BaseScan: 'https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b/',
-          CoinGecko: 'https://www.coingecko.com/en/coins/vdoo',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+          Sourcify: 'https://repo.sourcify.dev/8453/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+          CoinGecko: 'https://www.coingecko.com/en/search?query=0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/tokens/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',
           DexScreener: 'https://dexscreener.com/base/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b'
         }
       },
@@ -890,17 +890,13 @@
         links: {
           Uniswap: 'https://app.uniswap.org/#/swap?chain=base&outputCurrency=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
           BaseScan: 'https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
-          Sourcify: 'https://repo.sourcify.dev/contracts/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7/',
-          CoinGecko: 'https://www.coingecko.com/en/coins/pennies',
-          GeckoTerminal: 'https://www.geckoterminal.com/base/pools/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+          Sourcify: 'https://repo.sourcify.dev/8453/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+          CoinGecko: 'https://www.coingecko.com/en/search?query=0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
+          GeckoTerminal: 'https://www.geckoterminal.com/base/tokens/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',
           DexScreener: 'https://dexscreener.com/base/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7'
         }
       }
     ];
-
-    const poolData = [
-    ];
-
     function renderTokens() {
       const container = document.getElementById('tokensContainer');
       if (!container) return;
@@ -922,18 +918,6 @@
       `).join('');
     }
 
-    function renderPools() {
-      const container = document.getElementById('poolsContainer');
-      if (!container) return;
-      container.innerHTML = poolData.map(p => `
-        <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:6px 10px;margin-bottom:4px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;border:1px solid rgba(255,255,255,0.02);">
-          <span style="font-weight:600;color:#88ccff;">${p.name}</span>
-          <span style="color:#88ff88;">${p.status}</span>
-          <span style="color:#8899aa;font-size:11px;word-break:break-all;">${p.key}</span>
-          <span style="color:#667;">| Pool: <a href="http://${p.pool}" target="_blank" style="color:#88ccff;text-decoration:none;">${p.pool}</a></span>
-        </div>
-      `).join('');
-    }
 
     function renderStaticSections() {
       // Core Spins
@@ -1446,8 +1430,7 @@
     // ============================================================
     function init() {
       renderTokens();
-      renderPools();
-      renderStaticSections();
+renderStaticSections();
       loadPHBData();
 
       // Set initial static values
