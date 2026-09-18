@@ -1,81 +1,77 @@
-// p2p-mesh.js — real peer-to-peer presence via public Nostr relays.
-// Any browser running this page becomes a mesh node. No backend, no server.
-// Relays are public WebSocket endpoints.
+// p2p-mesh.js — real peer-to-peer presence via Nostr relays.
+// Connects to ALL relays simultaneously for resilience. Broadcasts
+// heartbeats; counts unique peers heard within the last 45 seconds.
 (function(){
 'use strict';
 
 const RELAYS = [
   'wss://relay.damus.io',
   'wss://nos.lol',
-  'wss://relay.nostr.band'
+  'wss://relay.nostr.band',
+  'wss://nostr-pub.wellorder.net',
+  'wss://relay.snort.social'
 ];
 const CHANNEL = 'phb-vortex-v1';
-const HB_INTERVAL = 15000;   // broadcast presence every 15s
-const PEER_TTL    = 45000;   // forget peers silent for 45s
+const HB_INTERVAL = 12000;
+const PEER_TTL    = 45000;
 
-const peers = new Map();     // pubkey -> {lastSeen, relay, nick}
-let socket = null;
+const sockets = new Map();          // url → WebSocket
+const peers   = new Map();          // pubkey → { lastSeen, relay }
 let myKey = null;
 
-// ─── Generate ephemeral identity (or restore from storage) ──────────────
 function randomHex(n){
-  const arr = new Uint8Array(n);
-  crypto.getRandomValues(arr);
-  return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+  const a = new Uint8Array(n);
+  crypto.getRandomValues(a);
+  return Array.from(a).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 function loadIdentity(){
   try {
-    const saved = localStorage.getItem('phb.p2p.key');
-    if (saved && /^[0-9a-f]{64}$/.test(saved)) return saved;
+    const k = localStorage.getItem('phb.p2p.key');
+    if (k && /^[0-9a-f]{64}$/.test(k)) return k;
   } catch(_){}
   const k = randomHex(32);
   try { localStorage.setItem('phb.p2p.key', k); } catch(_){}
   return k;
 }
-
 myKey = loadIdentity();
 
-// ─── Update UI ──────────────────────────────────────────────────────────
-function updateCounts(){
+function statusEl(){
+  const el = document.querySelector('[data-net="p2p"]');
+  return el ? el.querySelector('.st2') : null;
+}
+function detailEl(){
+  const el = document.querySelector('[data-net="p2p"]');
+  if (!el) return null;
+  let d = el.querySelector('.net-detail');
+  if (!d){
+    d = document.createElement('div');
+    d.className = 'net-detail';
+    d.style.cssText = 'font:9px ui-monospace,monospace;color:#4a5a6a;margin-top:4px;width:100%;';
+    el.appendChild(d);
+  }
+  return d;
+}
+
+function updateUI(){
   const now = Date.now();
   for (const [k, v] of peers.entries()){
     if (now - v.lastSeen > PEER_TTL) peers.delete(k);
   }
-  const el = document.querySelector('[data-net="p2p"]');
-  if (!el) return;
-  const statusEl = el.querySelector('.st2');
-  if (statusEl){
-    statusEl.className = 'st2 active';
-    statusEl.textContent = 'ACTIVE · ' + (peers.size + 1) + ' NODES';
+  const s = statusEl();
+  const d = detailEl();
+  if (s){
+    s.className = 'st2 active';
+    s.textContent = 'ACTIVE · ' + (peers.size + 1) + ' NODE' + (peers.size ? 'S' : '');
   }
-  let detail = el.querySelector('.net-detail');
-  if (!detail){
-    detail = document.createElement('div');
-    detail.className = 'net-detail';
-    detail.style.cssText = 'font:9px ui-monospace,monospace;color:#4a5a6a;margin-top:4px;width:100%;';
-    el.appendChild(detail);
+  if (d){
+    const connected = [...sockets.values()].filter(ws => ws.readyState === 1).length;
+    const hosts = [...sockets.keys()].map(u => u.replace(/^wss:\/\//, '').split('/')[0]);
+    d.textContent = 'relays: ' + connected + '/' + RELAYS.length + ' connected · my node: ' + myKey.slice(0, 8) + '…';
   }
-  const relayHosts = RELAYS.map(r => r.replace(/^wss:\/\//, '')).join(' · ');
-  detail.textContent = 'relays: ' + relayHosts + ' | my node: ' + myKey.slice(0, 8) + '…';
 }
 
-// ─── Connect to a relay ─────────────────────────────────────────────────
-function connectRelay(url){
-  return new Promise((resolve) => {
-    try {
-      const ws = new WebSocket(url);
-      const timer = setTimeout(() => { try { ws.close(); } catch(_){} resolve(null); }, 6000);
-      ws.onopen = () => { clearTimeout(timer); resolve(ws); };
-      ws.onerror = () => { clearTimeout(timer); resolve(null); };
-      ws.onclose = () => { clearTimeout(timer); resolve(null); };
-    } catch(_) { resolve(null); }
-  });
-}
-
-// ─── Broadcast heartbeat ────────────────────────────────────────────────
 function broadcast(){
-  if (!socket || socket.readyState !== 1) return;
   const event = {
     kind: 20001,
     pubkey: myKey,
@@ -83,57 +79,107 @@ function broadcast(){
     tags: [['t', CHANNEL]],
     content: JSON.stringify({ nick: 'phb-node', t: Date.now() })
   };
-  try {
-    socket.send(JSON.stringify(['EVENT', event]));
-  } catch(_){}
-}
-
-// ─── Receive ────────────────────────────────────────────────────────────
-function handleMessage(ev){
-  let payload;
-  try { payload = JSON.parse(ev.data); } catch(_) { return; }
-  if (!Array.isArray(payload)) return;
-  const [type, sub, data] = payload;
-  if (type !== 'EVENT' || !data || data.pubkey === myKey) return;
-  if (!data.tags || !data.tags.some(t => t[0] === 't' && t[1] === CHANNEL)) return;
-  peers.set(data.pubkey, {
-    lastSeen: Date.now(),
-    relay: socket?.url || '?',
-    nick: 'node'
-  });
-  updateCounts();
-}
-
-// ─── Boot ───────────────────────────────────────────────────────────────
-async function boot(){
-  const el = document.querySelector('[data-net="p2p"]');
-  if (el){
-    const s = el.querySelector('.st2');
-    if (s){ s.className = 'st2 checking'; s.textContent = 'CONNECTING…'; }
-  }
-
-  // Try relays in order
-  for (const url of RELAYS){
-    const ws = await connectRelay(url);
-    if (ws){
-      socket = ws;
-      socket.onmessage = handleMessage;
-      socket.onclose = () => { socket = null; setTimeout(boot, 5000); };
-      // Subscribe to channel
-      try {
-        socket.send(JSON.stringify(['REQ', 'phb-mesh', { kinds: [20001], '#t': [CHANNEL], limit: 100 }]));
-      } catch(_){}
-      broadcast();
-      setInterval(broadcast, HB_INTERVAL);
-      setInterval(updateCounts, 5000);
-      updateCounts();
-      console.log('[p2p-mesh] connected to', url);
-      return;
+  for (const ws of sockets.values()){
+    if (ws.readyState === 1){
+      try { ws.send(JSON.stringify(['EVENT', event])); } catch(_){}
     }
   }
-  console.log('[p2p-mesh] all relays unreachable — retrying in 30s');
-  setTimeout(boot, 30000);
 }
 
-setTimeout(boot, 4000);
+function handleMessage(ev, relayUrl){
+  let msg;
+  try { msg = JSON.parse(ev.data); } catch(_) { return; }
+  if (!Array.isArray(msg)) return;
+  const type = msg[0];
+  if (type === 'EOSE' || type === 'NOTICE' || type === 'OK'){
+    return;
+  }
+  if (type === 'EVENT'){
+    const data = msg[2];
+    if (!data || data.pubkey === myKey) return;
+    if (!data.tags || !data.tags.some(t => t[0] === 't' && t[1] === CHANNEL)) return;
+    peers.set(data.pubkey, { lastSeen: Date.now(), relay: relayUrl });
+    updateUI();
+  }
+}
+
+function connect(url){
+  return new Promise((resolve) => {
+    let done = false;
+    let ws;
+    try {
+      ws = new WebSocket(url);
+    } catch(_) { return resolve(null); }
+    const timer = setTimeout(() => {
+      if (!done){ done = true; try { ws.close(); } catch(_){}; resolve(null); }
+    }, 7000);
+    ws.onopen = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(ws);
+    };
+    ws.onerror = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(null);
+    };
+    ws.onclose = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(null);
+    };
+  });
+}
+
+async function connectAll(){
+  const s = statusEl();
+  if (s && sockets.size === 0){
+    s.className = 'st2 checking';
+    s.textContent = 'CONNECTING…';
+  }
+  const results = await Promise.all(RELAYS.map(async url => {
+    if (sockets.has(url)) return;
+    const ws = await connect(url);
+    if (!ws) return;
+    sockets.set(url, ws);
+    ws.onmessage = (ev) => handleMessage(ev, url);
+    ws.onclose = () => {
+      sockets.delete(url);
+      updateUI();
+      setTimeout(connectAll, 5000);
+    };
+    ws.onerror = () => {};
+    // Subscribe to the channel
+    try {
+      ws.send(JSON.stringify(['REQ', 'phb-' + Date.now(), {
+        kinds: [20001], '#t': [CHANNEL], limit: 200
+      }]));
+    } catch(_){}
+    // Immediate heartbeat
+    const evt = {
+      kind: 20001, pubkey: myKey,
+      created_at: Math.floor(Date.now() / 1000),
+      tags: [['t', CHANNEL]],
+      content: JSON.stringify({ nick: 'phb-node', t: Date.now() })
+    };
+    try { ws.send(JSON.stringify(['EVENT', evt])); } catch(_){}
+    console.log('[p2p-mesh] connected', url);
+  }));
+  updateUI();
+}
+
+function boot(){
+  connectAll();
+  setInterval(broadcast, HB_INTERVAL);
+  setInterval(updateUI, 5000);
+  // Re-attempt any relay that isn't connected
+  setInterval(() => {
+    if (sockets.size < RELAYS.length) connectAll();
+  }, 30000);
+}
+
+setTimeout(boot, 3000);
 })();

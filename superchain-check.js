@@ -54,20 +54,48 @@ async function callRpc(rpcs, method, params){
 }
 
 function decodeString(hex){
-  if (!hex || hex === '0x' || hex.length < 66) return '';
-  try {
-    const b = hex.slice(2);
-    const len = parseInt(b.slice(64, 128), 16);
-    if (!len) return '';
-    const strHex = b.slice(128, 128 + len * 2);
-    return Buffer ? Buffer.from(strHex, 'hex').toString('utf8') : decodeURIComponent(strHex.replace(/../g, '%$&'));
-  } catch(_) {
-    try {
-      const b = hex.slice(2);
-      const strHex = b.slice(128);
-      return strHex.replace(/../g, '').replace(/\0/g, '');
-    } catch(_) { return ''; }
+  if (!hex || hex === '0x' || hex.length < 4) return '';
+  const b = hex.slice(2);
+  // Bytes32 form (older tokens): whole 64-byte value is the string, NUL-padded
+  if (b.length === 64){
+    let s = '';
+    for (let i = 0; i < 64; i += 2){
+      const c = parseInt(b.slice(i, i+2), 16);
+      if (c === 0) break;
+      if (c >= 32 && c < 127) s += String.fromCharCode(c);
+    }
+    return s;
   }
+  // ABI-encoded string form: offset + length + data
+  if (b.length >= 128){
+    try {
+      const off = parseInt(b.slice(0, 64), 16);
+      if (off === 32){
+        const len = parseInt(b.slice(64, 128), 16);
+        if (len > 0 && len < 256){
+          const strHex = b.slice(128, 128 + len * 2);
+          let s = '';
+          for (let i = 0; i < strHex.length; i += 2){
+            const c = parseInt(strHex.slice(i, i+2), 16);
+            if (c >= 32 && c < 127) s += String.fromCharCode(c);
+          }
+          return s;
+        }
+      }
+    } catch(_){}
+    // Fallback: try reading bytes32 at offset 0 anyway
+    try {
+      const strHex = b.slice(128, 192);
+      let s = '';
+      for (let i = 0; i < strHex.length; i += 2){
+        const c = parseInt(strHex.slice(i, i+2), 16);
+        if (c === 0) break;
+        if (c >= 32 && c < 127) s += String.fromCharCode(c);
+      }
+      return s;
+    } catch(_){}
+  }
+  return '';
 }
 
 async function inspectToken(rpcs, addr){
