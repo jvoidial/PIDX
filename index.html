@@ -485,13 +485,9 @@ function startHero(){
     ['hairA','hairEnd'], ['hairB','hairEnd']
   ];
 
-  // ─── Ladder ────────────────────────────────────────────────────────
+  // ─── Ladder (infinite — generated procedurally around the climber) ──
   const RUNG_SPACING = 0.28;
-  const LADDER_FROM = -3.0;
-  const LADDER_TO   =  9.0;
   const RAIL_X = 0.42;
-  const rungs = [];
-  for(let y = LADDER_FROM; y <= LADDER_TO; y += RUNG_SPACING) rungs.push(y);
 
   const startT = performance.now();
 
@@ -540,9 +536,10 @@ function startHero(){
       ctx.fill();
     }
 
-    // ─── Climb timing ────────────────────────────────────────────────
-    const CYCLE = 12;              // seconds to climb full ladder
-    const figY = ((t / CYCLE) * (LADDER_TO - LADDER_FROM + 1)) % (LADDER_TO - LADDER_FROM + 1) + LADDER_FROM;
+    // ─── Climb timing (infinite upward) ──────────────────────────────
+    // figY grows forever — no modulo, no reset. The ladder scrolls.
+    const CLIMB_SPEED = 0.9;       // ladder-units per second
+    const figY = t * CLIMB_SPEED;
 
     // Y rotation — slow sway to show 3D
     const yRot = Math.sin(t * 0.35) * 0.35 + 0.15;
@@ -577,36 +574,77 @@ function startHero(){
     }
 
     // ═══════════════════════════════════════════════════════════════════
-    // DRAW LADDER (behind figure)
+    // DRAW LADDER — infinite procedural rails + rungs
+    // The figure's joints are drawn at relY=0 (fixed on screen).
+    // The ladder uses relY=figY, so as figY grows the whole ladder
+    // scrolls downward — new rungs enter from the top forever.
     // ═══════════════════════════════════════════════════════════════════
-    // Rails
+
+    // Visible Y window in ladder-space: figure sits at y=0 in screen space.
+    // We need enough ladder above and below to cover the full canvas.
+    const viewSpanY = (H * 1.2) / scale;   // world-units of vertical view
+    const ladderMinY = figY - viewSpanY * 0.7;
+    const ladderMaxY = figY + viewSpanY * 0.7;
+
+    // Continuously-rendered rails — infinite, so just draw two long segments
     for(const rx of [-RAIL_X, RAIL_X]){
-      const top = project(rx, LADDER_TO, 0, cx, cy, scale, yRot, figY);
-      const bot = project(rx, LADDER_FROM, 0, cx, cy, scale, yRot, figY);
-      ctx.strokeStyle = 'rgba(140,180,220,0.35)';
-      ctx.lineWidth = 2.4;
+      const top = project(rx, ladderMaxY, 0, cx, cy, scale, yRot, figY);
+      const bot = project(rx, ladderMinY, 0, cx, cy, scale, yRot, figY);
+      // Outer glow
+      ctx.strokeStyle = 'rgba(140,180,220,0.10)';
+      ctx.lineWidth = 10;
       ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
-      ctx.strokeStyle = 'rgba(200,225,255,0.14)';
-      ctx.lineWidth = 8;
+      // Core rail
+      ctx.strokeStyle = 'rgba(160,200,240,0.55)';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
+      // Bright center line
+      ctx.strokeStyle = 'rgba(220,240,255,0.35)';
+      ctx.lineWidth = 0.9;
       ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
     }
-    // Rungs
-    for(const ry of rungs){
+
+    // Procedural rungs — every 0.28 units from ladderMinY to ladderMaxY
+    const startRung = Math.floor(ladderMinY / RUNG_SPACING) * RUNG_SPACING;
+    const endRung   = Math.ceil(ladderMaxY / RUNG_SPACING) * RUNG_SPACING;
+    for(let ry = startRung; ry <= endRung; ry += RUNG_SPACING){
       const a = project(-RAIL_X, ry, 0, cx, cy, scale, yRot, figY);
       const b = project( RAIL_X, ry, 0, cx, cy, scale, yRot, figY);
-      if((a.y < -60 && b.y < -60) || (a.y > H + 60 && b.y > H + 60)) continue;
-      ctx.strokeStyle = 'rgba(160,200,240,0.5)';
+      // Cull offscreen rungs (still keeps a tiny margin)
+      if((a.y < -80 && b.y < -80) || (a.y > H + 80 && b.y > H + 80)) continue;
+
+      // Distance from screen center → fade far rungs
+      const midY = (a.y + b.y) / 2;
+      const distNorm = Math.min(1, Math.abs(midY - H/2) / (H * 0.7));
+      const fade = 1 - distNorm * 0.65;
+
+      // Rung bar
+      ctx.strokeStyle = 'rgba(180,215,250,' + (0.5 * fade) + ')';
       ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      ctx.strokeStyle = 'rgba(220,240,255,0.2)';
-      ctx.lineWidth = 4;
+      // Rung glow
+      ctx.strokeStyle = 'rgba(220,240,255,' + (0.16 * fade) + ')';
+      ctx.lineWidth = 5;
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      // rung node dots
+      // Endpoint nodes
       for(const p of [a, b]){
         ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(180,220,255,0.5)'; ctx.fill();
+        ctx.fillStyle = 'rgba(190,225,255,' + (0.55 * fade) + ')'; ctx.fill();
       }
     }
+
+    // Fade the top and bottom edges into the void — infinite illusion
+    const edgeFadeTop = ctx.createLinearGradient(0, 0, 0, H * 0.20);
+    edgeFadeTop.addColorStop(0, 'rgba(5,6,10,0.95)');
+    edgeFadeTop.addColorStop(1, 'rgba(5,6,10,0)');
+    ctx.fillStyle = edgeFadeTop;
+    ctx.fillRect(0, 0, W, H * 0.20);
+
+    const edgeFadeBot = ctx.createLinearGradient(0, H * 0.80, 0, H);
+    edgeFadeBot.addColorStop(0, 'rgba(5,6,10,0)');
+    edgeFadeBot.addColorStop(1, 'rgba(5,6,10,0.95)');
+    ctx.fillStyle = edgeFadeBot;
+    ctx.fillRect(0, H * 0.80, W, H * 0.20);
 
     // ═══════════════════════════════════════════════════════════════════
     // DRAW FIGURE (wireframe female topology)
