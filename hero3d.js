@@ -150,6 +150,7 @@ function init(){
     }
 
     console.log('[hero3d]', name, 'loaded —', gltf.animations.length, 'animations');
+    window.dispatchEvent(new CustomEvent('hero3d-loaded', { detail: { name } }));
   }
 
   function addChromeFallback(g){
