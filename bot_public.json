@@ -3,12 +3,12 @@
   "session_key_address": "0x61AE378019293e2bD6Bb021377DfD03A98B22Ed9",
   "eth_balance": 2.4736162245804e-05,
   "holdings": {
-    "PIDX": 999994372.9698226,
+    "PIDX": "Error: 429 Client Error: Too Many Requests for url: https://mainnet.base.org/",
     "SGUIDE": 9999999985617.246,
     "VDOO": 99999999984250.03,
     "PENNIES": 658430127531197.6
   },
-  "timestamp": 1789003021,
+  "timestamp": 1789003961,
   "chain": "base",
   "status": "running"
 }

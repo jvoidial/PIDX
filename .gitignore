@@ -52,3 +52,25 @@ session.key
 _archive/
 reached_ends.json
 physics.json
+.oracle_tmp/
+oracle_free.pid
+oracle_free.log
+
+# PHB working files — do not commit
+index.html.backup*
+index.html.bak*
+*.bak.*
+*.bak
+phb-install.sh
+phb-aware.sh
+phb-autofix.sh
+phb-finalize.sh
+phb-check.sh
+phb-check.sh.bak*
+pool-check.py
+pool-curl.sh
+pools.py
+ds-check.py
+rpc-doctor.sh
+diag-test.js
+

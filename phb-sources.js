@@ -32,15 +32,37 @@
     PHB.register(`token.${sym}`, {
       ttl: TTL.token_price ?? 60000,
       fetch: async () => {
-        const j = await PHB.fetchJson(`https://api.geckoterminal.com/api/v2/networks/base/tokens/${meta.address}`);
-        const a = j?.data?.attributes;
-        if (!a) return null;
-        return {
-          price_usd: a.price_usd ? Number(a.price_usd) : null,
-          liquidity_usd: a.total_reserve_in_usd ? Number(a.total_reserve_in_usd) : null,
-          volume_24h: a.volume_usd?.h24 ? Number(a.volume_usd.h24) : null,
-          fdv_usd: a.fdv_usd ? Number(a.fdv_usd) : null,
-        };
+        // 1. GeckoTerminal
+        try {
+          const j = await PHB.fetchJson(`https://api.geckoterminal.com/api/v2/networks/base/tokens/${meta.address}`);
+          const a = j?.data?.attributes;
+          if (a && a.price_usd) {
+            return {
+              source: 'geckoterminal',
+              price_usd: Number(a.price_usd),
+              liquidity_usd: a.total_reserve_in_usd ? Number(a.total_reserve_in_usd) : null,
+              volume_24h: a.volume_usd?.h24 ? Number(a.volume_usd.h24) : null,
+              fdv_usd: a.fdv_usd ? Number(a.fdv_usd) : null,
+            };
+          }
+        } catch (_) {}
+        // 2. DexScreener fallback
+        try {
+          const d = await PHB.fetchJson(`https://api.dexscreener.com/latest/dex/tokens/${meta.address}`);
+          const pairs = (d.pairs || []).filter(p => p.chainId === 'base');
+          const pair = pairs.sort((a, b) => Number(b.liquidity?.usd ?? 0) - Number(a.liquidity?.usd ?? 0))[0];
+          if (pair) {
+            return {
+              source: 'dexscreener',
+              price_usd: pair.priceUsd ? Number(pair.priceUsd) : null,
+              liquidity_usd: Number(pair.liquidity?.usd ?? 0),
+              volume_24h: Number(pair.volume?.h24 ?? 0),
+              fdv_usd: pair.fdv ? Number(pair.fdv) : null,
+              pairAddress: pair.pairAddress,
+            };
+          }
+        } catch (_) {}
+        return null;
       },
     });
   }
