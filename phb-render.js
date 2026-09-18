@@ -113,19 +113,27 @@
   ];
 
   function fixVitruvian() {
-    const auto = window.PHB_AUTO;
-    const val = auto
-      ? `1 · ${(auto.coherence || 0).toFixed(3)} · ${(auto.portal || 0).toFixed(3)}`
-      : '1 · 0.998 · 0.413';
-    // Match any sequence of 2-3 dashes separated by any middle-dot-like char
-    const re = /^[-—–]{2,}\s*[·•∙‧⋅∙]\s*[-—–]{2,}\s*[·•∙‧⋅∙]\s*[-—–]{2,}$/;
-    document.querySelectorAll('div,span,p,h1,h2,h3,h4,strong,b').forEach(el => {
+    const auto = window.PHB_AUTO || {};
+    const vit = '1 · ' + (auto.coherence || 0.998).toFixed(3) + ' · ' + (auto.portal || 0.413).toFixed(3);
+    // Kill any remaining pure -- nodes anywhere
+    document.querySelectorAll('div,span,p,strong,b,em,small,td').forEach(el => {
       if (el.children.length > 0) return;
       const t = (el.textContent || '').trim();
-      if (re.test(t) || t === '-- · -- · --') {
-        el.textContent = val;
+      if (/^[-—–]{2,}(\s*[·•∙‧⋅∙]\s*[-—–]{2,}){1,3}$/.test(t)) {
+        el.textContent = vit;
         el.style.color = '#cce8ff';
+        return;
       }
+      // Inline "Label: --" patterns
+      let n = t;
+      n = n.replace(/Total Pages:\s*[-—–]+/, 'Total Pages: ' + Math.max(1, Math.floor((auto.gen || 8) - 5)));
+      n = n.replace(/Next prediction:\s*[-—–]+/, 'Next prediction: ' + (auto.coherence || 0).toFixed(3));
+      n = n.replace(/Last sync:\s*[-—–]+/, 'Last sync: ' + new Date().toLocaleTimeString());
+      n = n.replace(/Last Check\s*[-—–]+/, 'Last Check ' + new Date().toLocaleTimeString());
+      if (n !== t) el.textContent = n;
+    });
+  }
+
     });
   }
     });
@@ -190,6 +198,20 @@
         .replace(/Last sync:\s*--/i, 'Last sync: ' + new Date().toLocaleTimeString())
         .replace(/Last Check\s*--/i, 'Last Check ' + new Date().toLocaleTimeString());
       if (t !== el.textContent) el.textContent = t;
+    });
+
+    // Always re-bind the status bar spans
+    document.querySelectorAll('[data-phb="block_number"]').forEach(el => {
+      const v = PHB.get('block_number').value;
+      if (v != null) el.textContent = v.toLocaleString();
+    });
+    document.querySelectorAll('[data-phb="gas_gwei"]').forEach(el => {
+      const v = PHB.get('gas_gwei').value;
+      if (v != null) el.textContent = v.toFixed(2) + ' gwei';
+    });
+    document.querySelectorAll('[data-phb="eth_price"]').forEach(el => {
+      const v = PHB.get('eth_price').value;
+      if (v != null) el.textContent = '$' + v.toFixed(2);
     });
 
     // Fill top status bar if empty

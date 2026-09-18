@@ -1,39 +1,53 @@
-// phb-tokens.js — renders token cards independent of the page's own tokenData.
-// Reads token addresses + decimals from phb-config.json (already loaded by PHB).
+// phb-tokens.js — token card grid with live pool TVL from on-chain reads.
 (function () {
   'use strict';
 
-  const LINKS = (addr) => [
-    { label: 'Uniswap',      url: `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${addr}`, color: '#ff66c4' },
-    { label: 'BaseScan',     url: `https://basescan.org/token/${addr}`,     color: '#88ccff' },
-    { label: 'Sourcify',     url: `https://repo.sourcify.dev/8453/${addr}`, color: '#aaffaa' },
-    { label: 'CoinGecko',    url: `https://www.coingecko.com/en/search?query=${addr}`, color: '#ffcc66' },
-    { label: 'GeckoTerm',    url: `https://www.geckoterminal.com/base/tokens/${addr}`, color: '#66ffcc' },
-    { label: 'DexScreener',  url: `https://dexscreener.com/base/${addr}`,   color: '#cc88ff' },
+  const DISPLAY = {
+    PIDX:    { name: 'Pennies Index',   freq: '0.618 Hz', color: '#88ccff' },
+    SGUIDE:  { name: 'SPIRIT GUIDE',    freq: '1.618 Hz', color: '#aaffaa' },
+    VDOO:    { name: 'VOUDOO Infinity', freq: '2.618 Hz', color: '#ffaa66' },
+    PENNIES: { name: 'PENNIES CHEQ',    freq: '3.618 Hz', color: '#ff88ff' },
+  };
+
+  const LINKS = addr => [
+    ['Uniswap',    `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${addr}`, '#ff66c4'],
+    ['BaseScan',   `https://basescan.org/token/${addr}`,                                '#88ccff'],
+    ['Sourcify',   `https://repo.sourcify.dev/8453/${addr}`,                            '#aaffaa'],
+    ['CoinGecko',  `https://www.coingecko.com/en/search?query=${addr}`,                 '#ffcc66'],
+    ['GeckoTerm',  `https://www.geckoterminal.com/base/tokens/${addr}`,                 '#66ffcc'],
+    ['DexScreener',`https://dexscreener.com/base/${addr}`,                              '#cc88ff'],
   ];
 
-  const DISPLAY = {
-    PIDX:    { name: 'Pennies Index',   freq: '0.618 Hz' },
-    SGUIDE:  { name: 'SPIRIT GUIDE',    freq: '1.618 Hz' },
-    VDOO:    { name: 'VOUDOO Infinity', freq: '2.618 Hz' },
-    PENNIES: { name: 'PENNIES CHEQ',    freq: '3.618 Hz' },
-  };
+  const cache = {};   // sym → poolData
 
   function buildCard(sym, meta) {
     const addr = meta.address;
-    const disp = DISPLAY[sym] || { name: sym, freq: '—' };
-    const pool = PHB.get('pool.' + sym).value;
-    const tvl = pool && typeof pool.tvl_usd === 'number' ? pool.tvl_usd : null;
-    const tvlStr = tvl == null ? '—' : tvl < 1 ? '< $1' : '$' + tvl.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    const poolTag = tvl == null ? 'NOPOOL' : tvl < 500 ? 'EMPTY' : 'LIVE';
-    const poolColor = poolTag === 'LIVE' ? '#6f6' : poolTag === 'EMPTY' ? '#fa6' : '#888';
+    const d = DISPLAY[sym] || { name: sym, freq: '—', color: '#88ccff' };
+    const p = cache[sym] || { status: 'pending', tvl_usd: null, pool: null };
 
-    const links = LINKS(addr).map(L =>
-      `<a href="${L.url}" target="_blank" rel="noopener"
+    let tvlStr = '—', tag = 'LOADING', tagColor = '#888', tagBg = '#2a2a2a';
+    if (p.status === 'no_pool') {
+      tvlStr = 'no pool'; tag = 'NO POOL'; tagColor = '#888'; tagBg = '#2a2a2a';
+    } else if (p.status === 'pending') {
+      tvlStr = '…'; tag = 'LOADING'; tagColor = '#888'; tagBg = '#2a2a2a';
+    } else {
+      const t = p.tvl_usd;
+      tvlStr = t < 0.01 ? '< $0.01' : t < 1 ? '$' + t.toFixed(4) : '$' + t.toLocaleString('en-US', { maximumFractionDigits: 2 });
+      if (p.status === 'empty') { tag = 'EMPTY'; tagColor = '#fa6'; tagBg = '#3a2a1a'; }
+      else if (p.status === 'tiny') { tag = 'TINY'; tagColor = '#fc6'; tagBg = '#3a301a'; }
+      else { tag = 'LIVE'; tagColor = '#6f6'; tagBg = '#1a4a1a'; }
+    }
+
+    const poolLine = p.pool
+      ? `<div style="font:9px ui-monospace,monospace;color:#3a4a5a;word-break:break-all;margin-bottom:6px;">pool ${p.pool} <span style="color:#5a7a99;">· ${p.factory || ''}</span></div>`
+      : '';
+
+    const linkTags = LINKS(addr).map(([label, url, color]) =>
+      `<a href="${url}" target="_blank" rel="noopener"
           style="display:inline-block;margin:3px 4px 0 0;padding:3px 9px;
-                 font:600 10px ui-monospace,monospace;color:${L.color};
-                 background:#12121c;border:1px solid ${L.color}33;border-radius:12px;
-                 text-decoration:none;letter-spacing:0.3px;">${L.label}</a>`
+                 font:600 10px ui-monospace,monospace;color:${color};
+                 background:#12121c;border:1px solid ${color}33;border-radius:12px;
+                 text-decoration:none;letter-spacing:0.3px;">${label}</a>`
     ).join('');
 
     return `
@@ -42,30 +56,29 @@
                   border:1px solid #1a1a2a;border-radius:12px;padding:14px 16px;
                   margin:10px 0;font-family:ui-monospace,monospace;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
-          <span style="font:600 15px ui-monospace,monospace;color:#cce8ff;letter-spacing:1px;">${sym}</span>
-          <span style="font:10px ui-monospace,monospace;color:#5a7a99;letter-spacing:1px;">${disp.freq}</span>
+          <span style="font:600 15px ui-monospace,monospace;color:${d.color};letter-spacing:1px;">${sym}</span>
+          <span style="font:10px ui-monospace,monospace;color:#5a7a99;letter-spacing:1px;">${d.freq}</span>
         </div>
-        <div style="font:11px ui-monospace,monospace;color:#8899aa;margin-bottom:2px;">${disp.name}</div>
+        <div style="font:11px ui-monospace,monospace;color:#8899aa;margin-bottom:2px;">${d.name}</div>
         <div style="font:10px ui-monospace,monospace;color:#4a5a6a;word-break:break-all;margin-bottom:8px;">${addr}</div>
         <div style="font:11px ui-monospace,monospace;color:#889;margin-bottom:6px;">
           Pool TVL:
-          <span style="color:${poolColor};font-weight:600;">${tvlStr}</span>
+          <span style="color:${tagColor};font-weight:600;">${tvlStr}</span>
           <span style="margin-left:6px;padding:1px 6px;font-size:9px;border-radius:8px;
-                       background:${poolTag === 'LIVE' ? '#1a4a1a' : poolTag === 'EMPTY' ? '#3a2a1a' : '#2a2a2a'};
-                       color:${poolColor};">${poolTag}</span>
+                       background:${tagBg};color:${tagColor};">${tag}</span>
         </div>
-        <div>${links}</div>
+        ${poolLine}
+        <div>${linkTags}</div>
       </div>
     `;
   }
 
   function findTokensSection() {
-    // Walk every element, find the one whose text is exactly "💰 Tokens"
     const all = document.querySelectorAll('div,h1,h2,h3,h4,span,p,strong');
     for (const el of all) {
       if (el.children.length > 0) continue;
       const t = (el.textContent || '').trim();
-      if (t === '💰 Tokens' || t === 'Tokens' && el.id === 'tokensHeading') return el;
+      if (t === '💰 Tokens') return el;
     }
     return null;
   }
@@ -73,14 +86,11 @@
   function ensureContainer() {
     let c = document.getElementById('phb-token-grid');
     if (c) return c;
-
     c = document.createElement('div');
     c.id = 'phb-token-grid';
     c.style.cssText = 'margin:12px 0 20px 0;';
-
     const heading = findTokensSection();
     if (heading && heading.parentNode) {
-      // Insert after the heading's containing section
       let anchor = heading;
       for (let i = 0; i < 3; i++) {
         if (anchor.parentElement && anchor.parentElement.tagName !== 'BODY') anchor = anchor.parentElement;
@@ -88,10 +98,8 @@
       }
       anchor.parentNode.insertBefore(c, anchor.nextSibling);
     } else {
-      // Fallback: prepend before first big black area
-      const body = document.body;
-      const firstChild = body.querySelector('div,section,main') || body;
-      firstChild.parentNode.insertBefore(c, firstChild.nextSibling || firstChild);
+      const first = document.body.querySelector('div,section,main') || document.body;
+      first.parentNode.insertBefore(c, first.nextSibling || first);
     }
     return c;
   }
@@ -100,30 +108,44 @@
     const cfg = PHB.config;
     if (!cfg || !cfg.tokens) return false;
     const c = ensureContainer();
-    // Replace contents fully on each render — idempotent
     c.innerHTML = Object.entries(cfg.tokens)
       .map(([sym, meta]) => buildCard(sym, meta))
       .join('');
     return true;
   }
 
-  // Re-render when pool data updates (keeps TVL fresh)
-  PHB.subscribe((key) => {
-    if (key.startsWith('pool.') || key === 'auto.state') {
-      // Debounce
-      clearTimeout(render._t);
-      render._t = setTimeout(render, 250);
+  async function refreshPools() {
+    const cfg = PHB.config;
+    if (!cfg || !cfg.tokens) return;
+    for (const [sym, meta] of Object.entries(cfg.tokens)) {
+      // First use PHB source if available
+      const fromPHB = PHB.get('pool.' + sym);
+      if (fromPHB && fromPHB.value) {
+        cache[sym] = fromPHB.value;
+      } else if (window.PHBFindPool) {
+        try { cache[sym] = await window.PHBFindPool(sym, meta.address); }
+        catch (e) { cache[sym] = { status: 'no_pool', pool: null, tvl_usd: 0, price_usd: null }; }
+      }
+      render();
     }
-  });
+  }
 
   function boot() {
     if (typeof PHB === 'undefined') { setTimeout(boot, 200); return; }
     PHB.init().then(() => {
       render();
-      // Re-run once more after pool data comes in
-      setTimeout(render, 1500);
-      setTimeout(render, 4000);
-      console.log('[tokens] card grid rendered');
+      refreshPools();
+      // Refresh every 30s
+      setInterval(refreshPools, 30000);
+      // Re-render on PHB pool updates
+      PHB.subscribe(key => {
+        if (key.startsWith('pool.')) {
+          const sym = key.split('.')[1];
+          const v = PHB.get(key).value;
+          if (v) { cache[sym] = v; render(); }
+        }
+      });
+      console.log('[tokens] grid rendered');
     });
   }
 
