@@ -53,7 +53,22 @@ async function refresh(){
   if (!el) return;
 
   if (!addr){
-    el.innerHTML = '<div style="color:#fa6;font:10px ui-monospace,monospace;padding:8px">No reward contract deployed yet — run <code>mining/deploy-mining.sh</code></div>';
+    el.innerHTML = `
+      <div class="mp-warn" style="background:#2a1a08;border-color:#4a3010">
+        <strong style="color:#fa6">Status: NOT DEPLOYED</strong><br>
+        To enable on-chain mining rewards, deploy the MineableReward contract on Base:
+        <div style="background:#060810;border:1px solid #1a2030;border-radius:6px;padding:8px 10px;margin:8px 0;font:10px ui-monospace,monospace;color:#8ab;word-break:break-all;cursor:pointer" onclick="mpCopy(this,'bash mining/deploy-mining.sh')">
+          1. Install Foundry:<br>
+          &nbsp;&nbsp;<span style="color:#cc9">curl -L https://foundry.paradigm.xyz | bash && ~/.foundry/bin/foundryup</span><br><br>
+          2. Base-anvil (recommended):<br>
+          &nbsp;&nbsp;<span style="color:#cc9">curl -L https://raw.githubusercontent.com/base/base-anvil/HEAD/foundryup/install | bash</span><br><br>
+          3. Add DEPLOYER_PK to .env (needs ~$2 ETH on Base)<br>
+          4. Run: <span style="color:#6f6">bash mining/deploy-mining.sh</span>
+          <span class="cp" style="color:#4a5a6a;font-size:9px">TAP</span>
+        </div>
+        Once deployed, this panel reads difficulty, epoch, reward rate, and share count live from chain.
+      </div>
+    `;
     return;
   }
 

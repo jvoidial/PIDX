@@ -277,6 +277,81 @@ footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace
 </section>
 
 
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">EthereumPoW (ETHW) · F2Pool</span><span class="mp-fee">Fee 2.5% FPPS</span></div>
+    <div class="mp-type">ETHW · Ethash · GPU-mineable Ethereum fork</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ethw.f2pool.com:6688')">stratum+tcp://ethw.f2pool.com<span class="port">:6688</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ethw.f2pool.com:6689')">stratum+tcp://ethw.f2pool.com<span class="port">:6689</span> <span style="color:var(--dimmer);font-size:9px;">(failover)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+ssl://ethwssl.f2pool.com:6698')">stratum+ssl://ethwssl.f2pool.com<span class="port">:6698</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> wallet.worker<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Miners:</strong> Innosilicon A11, GPU (Ethash)
+    </div>
+    <a class="mp-link" href="https://www.f2pool.com/ethw" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">EthereumPoW (ETHW) · 2Miners</span><span class="mp-fee">Fee 1% PPLNS · 1.5% SOLO</span></div>
+    <div class="mp-type">ETHW · Ethash · Solo or pooled · Nicehash compatible</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ethw.2miners.com:2020')">stratum+tcp://ethw.2miners.com<span class="port">:2020</span> <span style="color:var(--dimmer);font-size:9px;">(pool)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-ethw.2miners.com:6060')">stratum+tcp://solo-ethw.2miners.com<span class="port">:6060</span> <span style="color:var(--dimmer);font-size:9px;">(solo GPU)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-ethw.2miners.com:6161')">stratum+tcp://solo-ethw.2miners.com<span class="port">:6161</span> <span style="color:var(--dimmer);font-size:9px;">(Nicehash)</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your ETHW wallet address<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Note:</strong> 2Miners is Nicehash-recommended. Solo: full block reward.
+    </div>
+    <a class="mp-link" href="https://ethw.2miners.com" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">Ethereum Classic (ETC) · F2Pool</span><span class="mp-fee">Fee 2.5% FPPS</span></div>
+    <div class="mp-type">ETC · ETCHash · The original Ethereum PoW chain</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://etc.f2pool.com:8118')">stratum+tcp://etc.f2pool.com<span class="port">:8118</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://etc-asia.f2pool.com:8008')">stratum+tcp://etc-asia.f2pool.com<span class="port">:8008</span> <span style="color:var(--dimmer);font-size:9px;">(Asia)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+ssl://etcssl.f2pool.com:8118')">stratum+ssl://etcssl.f2pool.com<span class="port">:8118</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> wallet.worker<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Note:</strong> ETC has been PoW since 2016, unbroken chain.
+    </div>
+    <a class="mp-link" href="https://www.f2pool.com/etc" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">Ethereum Classic (ETC) · 2Miners</span><span class="mp-fee">Fee 1% PPLNS · 1.5% SOLO</span></div>
+    <div class="mp-type">ETC · ETCHash · Low-latency EU endpoints</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://etc.2miners.com:1010')">stratum+tcp://etc.2miners.com<span class="port">:1010</span> <span style="color:var(--dimmer);font-size:9px;">(pool)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-etc.2miners.com:5050')">stratum+tcp://solo-etc.2miners.com<span class="port">:5050</span> <span style="color:var(--dimmer);font-size:9px;">(solo)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-etc.2miners.com:5151')">stratum+tcp://solo-etc.2miners.com<span class="port">:5151</span> <span style="color:var(--dimmer);font-size:9px;">(Nicehash)</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your ETC wallet address (0x…)<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Note:</strong> 2-hour payout cycle.
+    </div>
+    <a class="mp-link" href="https://etc.2miners.com" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">🌐 BASED Mining · On-Chain Bitcoin</span><span class="mp-fee">0% fee · On-chain</span></div>
+    <div class="mp-type">BTC solo mining via EVM wallet on Base · Real Bitcoin node · No ASIC required</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://pool.basedmining.xyz:3333')">stratum+tcp://pool.basedmining.xyz<span class="port">:3333</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'https://basedmining.xyz')">https://basedmining.xyz<span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your BTC address (or EVM wallet, minted on Base)<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>How:</strong> Mint a hashpower NFT on Base, get real rented hashpower pointed at the pool, share of any BTC block found goes to your wallet.<br>
+      <strong>x402:</strong> autonomous agents can buy hashpower with USDC on Base
+    </div>
+    <a class="mp-link" href="https://basedmining.xyz" target="_blank" rel="noopener">Mint hashpower →</a>
+  </div>
+
+  <div class="mp-warn" style="background:#0a1a2a;border-color:#1a3a5a;color:#6af">
+    ⓘ Ethereum mainnet (ETH) stopped proof-of-work mining on 15 September 2022 — the Merge moved ETH to proof-of-stake. ETHW and ETC above are the continuing PoW chains. Base is an L2 rollup (not directly mineable); BASED gives you on-chain BTC solo mining through Base.
+  </div>
+
 <section id="mining-live-panel">
   <h2>⛏️ <span class="a">Mining Live</span> · Reward Contract</h2>
   <div class="lede">REAL PROOF-OF-WORK · ON-CHAIN SUBMISSIONS · PIDX REWARDS</div>
@@ -997,7 +1072,7 @@ else boot();
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="mining-dashboard.js?v=1"></script>
+<script src="mining-dashboard.js?v=2"></script>
 <script src="superchain-check.js?v=2"></script>
 <script src="p2p-mesh.js?v=2"></script>
 </body>
