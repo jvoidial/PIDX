@@ -13,6 +13,10 @@
     [data-phb].phb-err   .phb-badge { background:#4a1a1a; color:#f66; }
     [data-phb].phb-demo  { opacity:.55; }
     [data-phb].phb-demo  .phb-badge { background:#2a2a2a; color:#888; }
+    [data-phb].phb-pool  .phb-badge { background:#1a2a4a; color:#6af; }
+    [data-phb].phb-empty { opacity:.75; }
+    [data-phb].phb-empty .phb-badge { background:#3a2a1a; color:#fa6; }
+    [data-phb].phb-nopool .phb-badge { background:#2a2a2a; color:#888; }
   `;
   const style = document.createElement('style');
   style.textContent = CSS;
@@ -39,6 +43,17 @@
     return `${Math.floor(s/86400)}d ago`;
   }
 
+
+  function pickValue(entry) {
+    let v = entry.value;
+    if (v && typeof v === 'object') {
+      if ('price_usd' in v && v.price_usd != null) return v.price_usd;
+      if ('tvl_usd' in v) return v.tvl_usd;
+      if ('value' in v) return v.value;
+    }
+    return v;
+  }
+
   function renderElement(el) {
     const key = el.dataset.phb;
     if (!key) return;
@@ -46,15 +61,15 @@
     const entry = PHB.get(key);
     const cls = 'phb-' + entry.status.toLowerCase();
 
-    el.classList.remove('phb-live', 'phb-stale', 'phb-err', 'phb-demo');
+    el.classList.remove('phb-live','phb-pool','phb-empty','phb-nopool','phb-stale','phb-err','phb-demo');
     el.classList.add(cls);
 
     let valEl = el.querySelector('[data-phb-value]');
     if (valEl) {
-      valEl.textContent = fmt(kind, entry.value);
+      valEl.textContent = fmt(kind, pickValue(entry));
     } else {
       let badge = el.querySelector('.phb-badge');
-      el.textContent = fmt(kind, entry.value);
+      el.textContent = fmt(kind, pickValue(entry));
       if (badge) el.appendChild(badge);
     }
 

@@ -6,7 +6,7 @@ const PHB = (function () {
     tick_ms: 5000, max_concurrent: 3, max_retries: 3, timeout_ms: 12000,
     ttl: {}, tokens: {},
   };
-  const STATUS = Object.freeze({ LIVE: 'LIVE', STALE: 'STALE', ERR: 'ERR', DEMO: 'DEMO' });
+  const STATUS = Object.freeze({ LIVE: 'LIVE', POOL: 'POOL', EMPTY: 'EMPTY', NOPOOL: 'NOPOOL', STALE: 'STALE', ERR: 'ERR', DEMO: 'DEMO' });
   const memory = new Map();
   const sources = new Map();
   const subscribers = new Set();
@@ -170,7 +170,54 @@ const PHB = (function () {
     return CONFIG;
   }
 
+
+  function diagnose(key) {
+    const parts = String(key).split('.');
+    const baseKey = parts.slice(0, 2).join('.');
+    const out = { key, baseKey, sources: {}, conclusion: null, hint: null };
+
+    // token.<SYM> source: what does the aggregator pipeline say
+    const tokenEntry = memory.get(baseKey);
+    out.sources[baseKey] = {
+      status: tokenEntry ? (tokenEntry.error ? 'err' : 'ok') : 'pending',
+      value: tokenEntry?.value ?? null,
+      error: tokenEntry?.error ?? null,
+    };
+
+    // pool.<SYM> source: what does the on-chain pool say
+    const poolKey = 'pool.' + parts[1];
+    const poolEntry = memory.get(poolKey);
+    out.sources[poolKey] = {
+      status: poolEntry ? (poolEntry.error ? 'err' : 'ok') : 'pending',
+      value: poolEntry?.value ?? null,
+      error: poolEntry?.error ?? null,
+    };
+
+    // Derive conclusion
+    const tok = tokenEntry?.value;
+    const pool = poolEntry?.value;
+
+    if (tok && tok.source) {
+      out.conclusion = 'INDEXED';
+      out.hint = `Price from ${tok.source}: $${tok.price_usd}`;
+    } else if (pool && pool.status === 'ok') {
+      out.conclusion = 'POOL_ONLY';
+      out.hint = `Pool ${pool.pool} has $${pool.tvl_usd.toFixed(4)} TVL — below aggregator threshold`;
+    } else if (pool && pool.status === 'empty') {
+      out.conclusion = 'EMPTY_POOL';
+      out.hint = `Pool ${pool.pool} exists but holds $${pool.tvl_usd.toFixed(4)} — effectively zero`;
+    } else if (pool && pool.status === 'no_pool') {
+      out.conclusion = 'NO_POOL';
+      out.hint = 'No V2 pool found against WETH on Uniswap/Sushi/Aerodrome/BaseSwap';
+    } else {
+      out.conclusion = 'PENDING';
+      out.hint = 'Sources still loading — retry in a few seconds';
+    }
+    return out;
+  }
+
   return {
+    diagnose,
     STATUS, register, get, refresh, subscribe, health, rpc, fetchJson, init,
     get config() { return CONFIG; },
     _memory: memory,
