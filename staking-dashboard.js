@@ -48,10 +48,10 @@ async function getStakeAddr(){
     if (saved && /^0x[0-9a-fA-F]{40}$/.test(saved)) return saved;
   } catch(_){}
   try {
-    const r = await fetch('staking/.stake-address');
+    const r = await fetch('contracts.json');
     if (r.ok){
       const txt = await r.text();
-      const m = txt.match(/STAKE_ADDR=(0x[0-9a-fA-F]{40})/);
+      const j = JSON.parse(txt); const m = [null, j.contracts.InfinityStake.address];
       if (m){
         try { localStorage.setItem('phb.stake.address', m[1]); } catch(_){}
         return m[1];

@@ -74,3 +74,24 @@ ds-check.py
 rpc-doctor.sh
 diag-test.js
 
+
+# ─── SECRETS — DO NOT COMMIT ─────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+.deployer-key
+miner-key
+staking/.stake-address
+mining/.reward-address
+foundry.toml.local
+
+# ─── Local build artifacts ──────────────────────────────────
+cache/
+out/
+broadcast/
+node_modules/
+*.log
+

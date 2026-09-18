@@ -12,10 +12,10 @@ try { rewardAddr = localStorage.getItem(REWARD_ADDR_KEY); } catch(_) {}
 async function loadConfig(){
   if (rewardAddr) return rewardAddr;
   try {
-    const r = await fetch('mining/.reward-address');
+    const r = await fetch('contracts.json');
     if (r.ok) {
       const txt = await r.text();
-      const m = txt.match(/ADDR=(0x[0-9a-fA-F]{40})/);
+      const j = JSON.parse(txt); const m = [null, j.contracts.MineableReward.address];
       if (m) { rewardAddr = m[1]; return rewardAddr; }
     }
   } catch(_) {}
