@@ -99,6 +99,12 @@ footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace
 .mp-warn{font:10px ui-monospace,monospace;color:#fa6;background:#2a1a08;border:1px solid #4a3010;border-radius:6px;padding:8px 10px;margin:10px 0}
 .copy-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a3a1a;color:#6f6;padding:8px 16px;border-radius:20px;font:600 11px ui-monospace,monospace;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999}
 .copy-toast.on{opacity:1}
+
+.st2.partial{color:#fc6}
+.st2.missing{color:#f88}
+.st2.err{color:#f66}
+.st2.checking{color:#8ab;animation:pulse 1.5s ease-in-out infinite}
+.row .net-detail{font-size:9px}
 </style>
 </head>
 <body>
@@ -174,11 +180,11 @@ footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace
 
 <section id="superchain">
   <h2>🌐 <span class="a">Superchain</span> Ecosystem</h2>
-  <div class="lede">NETWORK PRESENCE</div>
-  <div class="row"><span>● <strong>Base</strong></span><span style="color:var(--dim)">PIDX · SGUIDE · VDOO · PENNIES</span><span class="st2 live">LIVE</span></div>
-  <div class="row"><span>◌ <strong>OP Mainnet</strong></span><span style="color:var(--dim)">wPIDX · wSGUIDE</span><span class="st2 planned">PLANNED</span></div>
-  <div class="row"><span>◌ <strong>Arbitrum</strong></span><span style="color:var(--dim)">aPIDX · aSGUIDE</span><span class="st2 planned">PLANNED</span></div>
-  <div class="row"><span>◉ <strong>P2P Mesh</strong></span><span style="color:var(--dim)">PHB God-Code Vortex</span><span class="st2 active">ACTIVE</span></div>
+  <div class="lede">LIVE ON-CHAIN VERIFICATION · RPC READS PER NETWORK</div>
+  <div class="row" data-net="base"><span>● <strong>Base</strong></span><span style="color:var(--dim)">PIDX · SGUIDE · VDOO · PENNIES</span><span class="st2 checking">CHECKING…</span></div>
+  <div class="row" data-net="optimism"><span>◌ <strong>OP Mainnet</strong></span><span style="color:var(--dim)">wPIDX · wSGUIDE</span><span class="st2 checking">CHECKING…</span></div>
+  <div class="row" data-net="arbitrum"><span>◌ <strong>Arbitrum</strong></span><span style="color:var(--dim)">aPIDX · aSGUIDE</span><span class="st2 checking">CHECKING…</span></div>
+  <div class="row" data-net="p2p"><span>◉ <strong>P2P Mesh</strong></span><span style="color:var(--dim)">PHB God-Code Vortex</span><span class="st2 checking">CONNECTING…</span></div>
 </section>
 
 <section id="topology">
@@ -992,5 +998,7 @@ else boot();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="mining-dashboard.js?v=1"></script>
+<script src="superchain-check.js?v=1"></script>
+<script src="p2p-mesh.js?v=1"></script>
 </body>
 </html>
