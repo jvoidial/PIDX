@@ -80,6 +80,25 @@ footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace
 
 @keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
 .pulse{animation:pulse 2s ease-in-out infinite}
+
+.mp{background:linear-gradient(135deg,#0b0d15 0%,#080810 100%);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:10px 0;transition:border-color .3s}
+.mp:hover{border-color:var(--gold)}
+.mp-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex-wrap:wrap;gap:6px}
+.mp-n{font:600 15px ui-monospace,monospace;color:var(--gold);letter-spacing:1.5px}
+.mp-fee{font:10px ui-monospace,monospace;color:var(--dim)}
+.mp-type{font:10px ui-monospace,monospace;color:var(--dimmer);margin-bottom:8px}
+.mp-u{background:#060810;border:1px solid #1a2030;border-radius:6px;padding:8px 10px;margin:5px 0;font:11px ui-monospace,monospace;color:#88ccff;word-break:break-all;position:relative;cursor:pointer;transition:background .2s}
+.mp-u:hover{background:#0a0e1a}
+.mp-u:active{background:#0e1424}
+.mp-u .port{color:var(--gold)}
+.mp-u .cp{position:absolute;top:6px;right:8px;font-size:9px;color:var(--dimmer);letter-spacing:1px}
+.mp-meta{font:10px ui-monospace,monospace;color:var(--dimmer);margin-top:8px;line-height:1.7}
+.mp-meta strong{color:#8899aa;font-weight:600}
+.mp-link{display:inline-block;margin-top:8px;padding:4px 12px;font:600 10px ui-monospace,monospace;color:var(--gold);background:#1a1408;border:1px solid #332a10;border-radius:12px;text-decoration:none;letter-spacing:.5px;transition:filter .2s}
+.mp-link:hover{filter:brightness(1.5)}
+.mp-warn{font:10px ui-monospace,monospace;color:#fa6;background:#2a1a08;border:1px solid #4a3010;border-radius:6px;padding:8px 10px;margin:10px 0}
+.copy-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a3a1a;color:#6f6;padding:8px 16px;border-radius:20px;font:600 11px ui-monospace,monospace;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999}
+.copy-toast.on{opacity:1}
 </style>
 </head>
 <body>
@@ -168,6 +187,86 @@ footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace
   <div id="pent-wrap">
     <canvas id="pent-cv"></canvas>
     <div class="simbadge">SIM</div>
+  </div>
+</section>
+
+
+<section id="mining">
+  <h2>⛏️ <span class="a">Mining Pools</span> · Stratum</h2>
+  <div class="lede">TAP ANY URL TO COPY · PUBLIC POOLS · NO KYC</div>
+  <div class="mp-warn">
+    ⚠️ Pool data is provided as reference. Verify hashrate and fee terms on each pool's official site before pointing hardware at them.
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">SoloFury</span><span class="mp-fee">Fee 1%</span></div>
+    <div class="mp-type">Multi-coin SHA-256 · Solo · BTC / BCH / BC2 / XEC</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.solofury.com:7070')">stratum+tcp://btc.solofury.com<span class="port">:7070</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://bch.solofury.com:7070')">stratum+tcp://bch.solofury.com<span class="port">:7070</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tls://eu-btc.solofury.com:3333')">stratum+tls://eu-btc.solofury.com<span class="port">:3333</span> <span style="color:var(--dimmer);font-size:9px;">(TLS / Stratum V2)</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your BTC wallet address<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Regions:</strong> Atlanta, Frankfurt, Europe
+    </div>
+    <a class="mp-link" href="https://solofury.com" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">Ocean</span><span class="mp-fee">Fee 2% · 1% with DATUM</span></div>
+    <div class="mp-type">BTC · TIDES (non-custodial) · Backed by Jack Dorsey</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ocean.xyz:3334')">stratum+tcp://ocean.xyz<span class="port">:3334</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+ssl://ocean.xyz:3335')">stratum+ssl://ocean.xyz<span class="port">:3335</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your BTC wallet address<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Note:</strong> No signup, no KYC, non-custodial payouts
+    </div>
+    <a class="mp-link" href="https://ocean.xyz" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">Braiins Pool</span><span class="mp-fee">Fee 0% with Braiins OS / 2% FPPS</span></div>
+    <div class="mp-type">BTC · FPPS · World's first mining pool</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://stratum.braiins.com:3333')">stratum+tcp://stratum.braiins.com<span class="port">:3333</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://stratum.braiins.com:443')">stratum+tcp://stratum.braiins.com<span class="port">:443</span> <span style="color:var(--dimmer);font-size:9px;">(backup)</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> userName.workerName<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Stratum V2:</strong> stratum2+tcp://stratum.braiins.com:3333
+    </div>
+    <a class="mp-link" href="https://braiins.com/pool" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">F2Pool</span><span class="mp-fee">Fee 2.5% FPPS / 2% PPLNS</span></div>
+    <div class="mp-type">BTC, LTC, ETHW · Global servers · Since 2013</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.f2pool.com:1314')">stratum+tcp://btc.f2pool.com<span class="port">:1314</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.f2pool.com:3333')">stratum+tcp://btc.f2pool.com<span class="port">:3333</span> <span style="color:var(--dimmer);font-size:9px;">(backup)</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc-asia.f2pool.com:1314')">stratum+tcp://btc-asia.f2pool.com<span class="port">:1314</span> <span style="color:var(--dimmer);font-size:9px;">(Asia)</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your username<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Failover ports:</strong> 25, 1315, 3333
+    </div>
+    <a class="mp-link" href="https://www.f2pool.com" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp">
+    <div class="mp-h"><span class="mp-n">ViaBTC</span><span class="mp-fee">Fee 4% PPS+ / 2% PPLNS</span></div>
+    <div class="mp-type">BTC, LTC, ZEC, KAS · Merged mining</div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.viabtc.io:3333')">stratum+tcp://btc.viabtc.io<span class="port">:3333</span><span class="cp">TAP</span></div>
+    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.viabtc.io:443')">stratum+tcp://btc.viabtc.io<span class="port">:443</span> <span style="color:var(--dimmer);font-size:9px;">(backup)</span><span class="cp">TAP</span></div>
+    <div class="mp-meta">
+      <strong>Login:</strong> your username<br>
+      <strong>Password:</strong> x (any value)<br>
+      <strong>Alt domain:</strong> btc.viabtc.cc
+    </div>
+    <a class="mp-link" href="https://www.viabtc.com" target="_blank" rel="noopener">Open pool →</a>
+  </div>
+
+  <div class="mp-meta" style="text-align:center;margin-top:14px;">
+    To start mining: get an ASIC or rent hashrate, enter the stratum URL + your wallet address + worker name.
   </div>
 </section>
 
@@ -852,6 +951,32 @@ function boot(){
   if(window.Hero3D) window.Hero3D.init();
   console.log('[spirit-guide-gen9] online');
 }
+
+
+  // ─── Mining pool copy-to-clipboard ────────────────────────────────────
+  window.mpCopy = function(el, url){
+    const done = () => {
+      let toast = document.querySelector('.copy-toast');
+      if(!toast){ toast = document.createElement('div'); toast.className = 'copy-toast'; document.body.appendChild(toast); }
+      toast.textContent = '✔ copied: ' + url;
+      toast.classList.add('on');
+      clearTimeout(window._mpToast);
+      window._mpToast = setTimeout(() => toast.classList.remove('on'), 1600);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = url; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); done(); }catch(_){}
+        document.body.removeChild(ta);
+      });
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = url; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(_){}
+      document.body.removeChild(ta);
+    }
+  };
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
 else boot();
