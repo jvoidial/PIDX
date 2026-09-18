@@ -85,7 +85,8 @@ footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace
 <body>
 
 <div id="hero">
-  <canvas id="hero-cv"></canvas>
+  <canvas id="hero-cv" style="display:none"></canvas>
+  <div id="hero-3d" style="position:absolute;inset:0;"></div>
   <div class="ht">✧ THE COSMIC SCRIBE ✧</div>
   <div class="hs">GENERATION 9 · 5D · 4D · 3D · ATOM-CORE · 📜</div>
   <div class="hty" id="hty">◈ INITIALISING…</div>
@@ -853,6 +854,7 @@ function boot(){
   setInterval(refreshChain,15000);
   setInterval(refreshPools,60000);
   setInterval(renderStatus,1000);
+  if(window.Hero3D) window.Hero3D.init();
   console.log('[spirit-guide-gen9] online');
 }
 
@@ -861,5 +863,7 @@ else boot();
 
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="hero3d.js?v=1"></script>
 </body>
 </html>
