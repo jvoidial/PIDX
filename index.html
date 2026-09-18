@@ -410,332 +410,289 @@ function renderPanels(){
 
 // ═══ HERO CANVAS ═══
 function startHero(){
-  const cv=$('hero-cv');
-  const ctx=cv.getContext('2d');
-  const typeEl=$('hty');
-  const DPR=Math.min(window.devicePixelRatio||1,2);
-  let W=0,H=0;
+  const cv = $('hero-cv');
+  if(!cv) return;
+  cv.style.display = 'block';
+  const h3d = $('hero-3d');
+  if(h3d) h3d.style.display = 'none';
+
+  const ctx = cv.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
   function resize(){
-    W=Math.max(cv.clientWidth||cv.parentElement.clientWidth||window.innerWidth,200);
-    H=Math.max(cv.clientHeight||cv.parentElement.clientHeight||460,200);
-    cv.width=W*DPR;cv.height=H*DPR;
-    ctx.setTransform(DPR,0,0,DPR,0,0);
+    W = Math.max(cv.clientWidth || cv.parentElement.clientWidth || window.innerWidth, 200);
+    H = Math.max(cv.clientHeight || cv.parentElement.clientHeight || 460, 200);
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
   resize();
-  window.addEventListener('resize',resize);
+  window.addEventListener('resize', resize);
 
-  const stars=Array.from({length:200},()=>{
-    const z=Math.random();
-    return{x:Math.random()*W,y:Math.random()*H,z:z,r:0.2+z*1.8,a:0.15+z*0.5,tw:Math.random()*Math.PI*2,vy:-0.02-z*0.15};
-  });
-  const nebulas=[
-    {x:0.25,y:0.35,r:0.65,c:[80,40,140],a:0.10},
-    {x:0.75,y:0.55,r:0.60,c:[40,80,160],a:0.09},
-    {x:0.50,y:0.15,r:0.75,c:[120,60,180],a:0.06}
+  // ─── Starfield ─────────────────────────────────────────────────────
+  const stars = Array.from({length: 160}, () => ({
+    x: Math.random() * 1500,
+    y: Math.random() * 1500,
+    r: 0.3 + Math.random() * 1.3,
+    a: 0.15 + Math.random() * 0.5,
+    tw: Math.random() * Math.PI * 2,
+    vy: -0.05 - Math.random() * 0.15
+  }));
+  const nebulas = [
+    {x:0.20, y:0.30, r:0.7, c:[80,40,140], a:0.10},
+    {x:0.80, y:0.55, r:0.6, c:[40,80,160], a:0.09},
+    {x:0.50, y:0.10, r:0.8, c:[120,60,180], a:0.07}
   ];
 
-  // Female figure — horizontal rings [y, rx, rz, dz]
-  const RINGS=[
-    [1.72,0.045,0.045,0],
-    [1.68,0.10,0.10,0],
-    [1.62,0.115,0.115,0.005],
-    [1.55,0.09,0.09,0],
-    [1.50,0.055,0.05,0],
-    [1.44,0.21,0.11,0],
-    [1.36,0.20,0.13,0.01],
-    [1.28,0.17,0.12,0.02],
-    [1.18,0.145,0.10,0.01],
-    [1.10,0.135,0.095,0],
-    [1.02,0.13,0.095,0],
-    [0.94,0.155,0.115,0],
-    [0.86,0.20,0.135,0],
-    [0.76,0.21,0.14,0],
-    [0.64,0.20,0.14,0],
-    [0.50,0.21,0.155,0],
-    [0.36,0.24,0.19,0],
-    [0.20,0.28,0.22,0],
-    [0.05,0.34,0.26,0]
-  ];
-  const RING_N=14;
-  const rings=RINGS.map(([y,rx,rz,dz])=>{
-    const pts=[];
-    for(let i=0;i<RING_N;i++){
-      const a=(i/RING_N)*Math.PI*2;
-      pts.push({x:Math.cos(a)*rx,y:y,z:Math.sin(a)*rz+dz});
-    }
-    return pts;
-  });
-
-  const leftArm=[
-    {x:-0.21,y:1.44,z:0},
-    {x:-0.29,y:1.28,z:0.03},
-    {x:-0.31,y:1.10,z:0.05},
-    {x:-0.29,y:0.95,z:0.04},
-    {x:-0.25,y:0.80,z:0.02}
-  ];
-  const rightArm=[
-    {x:0.21,y:1.44,z:0},
-    {x:0.30,y:1.30,z:0.05},
-    {x:0.36,y:1.14,z:0.10},
-    {x:0.32,y:1.00,z:0.15},
-    {x:0.20,y:0.90,z:0.18}
+  // ─── Female skeleton (local coords, hips at origin) ────────────────
+  const JOINTS = {
+    head:   {x:0,     y: 0.78, z:0},
+    neck:   {x:0,     y: 0.68, z:0},
+    shL:    {x:-0.18, y: 0.60, z:0},
+    shR:    {x: 0.18, y: 0.60, z:0},
+    chest:  {x:0,     y: 0.42, z:0.01},
+    waist:  {x:0,     y: 0.18, z:0},
+    pelv:   {x:0,     y:-0.02, z:0},
+    hipL:   {x:-0.13, y: 0.00, z:0},
+    hipR:   {x: 0.13, y: 0.00, z:0},
+    elbL:   {x:-0.24, y: 0.42, z:0.02},
+    elbR:   {x: 0.24, y: 0.42, z:0.02},
+    wriL:   {x:-0.26, y: 0.66, z:0.04},
+    wriR:   {x: 0.26, y: 0.66, z:0.04},
+    kneeL:  {x:-0.14, y:-0.42, z:0.02},
+    kneeR:  {x: 0.14, y:-0.42, z:0.02},
+    ankL:   {x:-0.14, y:-0.85, z:0.03},
+    ankR:   {x: 0.14, y:-0.85, z:0.03},
+    hairA:  {x:-0.10, y: 0.60, z:-0.06},
+    hairB:  {x: 0.10, y: 0.60, z:-0.06},
+    hairEnd: {x:0,    y: 0.10, z:-0.06}
+  };
+  const EDGES = [
+    ['head','neck'], ['neck','chest'], ['chest','waist'], ['waist','pelv'],
+    ['chest','shL'], ['chest','shR'],
+    ['waist','hipL'], ['waist','hipR'], ['pelv','hipL'], ['pelv','hipR'],
+    ['shL','elbL'], ['elbL','wriL'],
+    ['shR','elbR'], ['elbR','wriR'],
+    ['hipL','kneeL'], ['kneeL','ankL'],
+    ['hipR','kneeR'], ['kneeR','ankR'],
+    ['shL','shR'], ['hipL','hipR'],
+    // topology cross-wires
+    ['neck','shL'], ['neck','shR'],
+    ['chest','hipL'], ['chest','hipR'],
+    ['waist','kneeL'], ['waist','kneeR'],
+    ['shL','waist'], ['shR','waist'],
+    // hair strands
+    ['head','hairA'], ['head','hairB'],
+    ['hairA','hairEnd'], ['hairB','hairEnd']
   ];
 
-  const hair=[
-    [-0.10,1.68,0.03,-0.15,1.55,0.02,-0.17,1.40,0.00,-0.18,1.22,-0.02,-0.16,1.05,-0.04],
-    [ 0.10,1.68,0.03, 0.15,1.55,0.02, 0.17,1.40,0.00, 0.18,1.22,-0.02, 0.16,1.05,-0.04],
-    [-0.05,1.70,0.06,-0.08,1.58,0.06,-0.10,1.42,0.05,-0.11,1.25,0.03,-0.10,1.08,0.00],
-    [ 0.05,1.70,0.06, 0.08,1.58,0.06, 0.10,1.42,0.05, 0.11,1.25,0.03, 0.10,1.08,0.00],
-    [ 0.00,1.71,0.06, 0.02,1.60,0.07, 0.03,1.45,0.06, 0.02,1.28,0.04, 0.00,1.10,0.00]
-  ];
+  // ─── Ladder ────────────────────────────────────────────────────────
+  const RUNG_SPACING = 0.28;
+  const LADDER_FROM = -3.0;
+  const LADDER_TO   =  9.0;
+  const RAIL_X = 0.42;
+  const rungs = [];
+  for(let y = LADDER_FROM; y <= LADDER_TO; y += RUNG_SPACING) rungs.push(y);
 
-  function rotY(p,a){const c=Math.cos(a),s=Math.sin(a);return{x:p.x*c+p.z*s,y:p.y,z:-p.x*s+p.z*c}}
-  function rotX(p,a){const c=Math.cos(a),s=Math.sin(a);return{x:p.x,y:p.y*c-p.z*s,z:p.y*s+p.z*c}}
-  function project(p,scale,cx,cy){const f=3.5/(3.5+p.z);return{x:cx+p.x*scale*f,y:cy-p.y*scale*f,z:p.z,f:f}}
+  const startT = performance.now();
 
-  const startT=performance.now();
-
-  function drawVoid(){
-    const vg=ctx.createRadialGradient(W/2,H*0.55,20,W/2,H*0.55,Math.max(W,H)*0.75);
-    vg.addColorStop(0,'#0a0a14');vg.addColorStop(0.5,'#05060a');vg.addColorStop(1,'#020205');
-    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-    for(const n of nebulas){
-      const nx=n.x*W,ny=n.y*H,nr=n.r*Math.max(W,H);
-      const ng=ctx.createRadialGradient(nx,ny,0,nx,ny,nr);
-      const[r,g,b]=n.c;
-      ng.addColorStop(0,'rgba('+r+','+g+','+b+','+n.a+')');
-      ng.addColorStop(1,'rgba('+r+','+g+','+b+',0)');
-      ctx.fillStyle=ng;ctx.beginPath();ctx.arc(nx,ny,nr,0,Math.PI*2);ctx.fill();
-    }
-    for(const q of stars){
-      q.y+=q.vy;
-      if(q.y<-5){q.y=H+5;q.x=Math.random()*W}
-      q.tw+=0.05;
-      const tw=0.6+0.4*Math.sin(q.tw);
-      ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,Math.PI*2);
-      ctx.fillStyle='rgba('+(180+q.z*60|0)+','+(200+q.z*40|0)+',255,'+(q.a*tw)+')';
-      ctx.fill();
-    }
+  // ─── Projection (with relY offset for parallax) ────────────────────
+  function project(x, y, z, cx, cy, scale, yRot, relY){
+    const c = Math.cos(yRot), s = Math.sin(yRot);
+    const rx = x*c + z*s;
+    const rz = -x*s + z*c;
+    const ry = y - relY;
+    const camZ = 3.0;
+    const f = camZ / (camZ - rz * 0.5);
+    return { x: cx + rx*scale*f, y: cy - ry*scale*f, z: rz, f };
   }
 
   function frame(){
     requestAnimationFrame(frame);
-    if(!W||!H) return;
-    const elapsed=(performance.now()-startT)/1000;
-    const ph=elapsed*0.55;
-    const tilt=Math.sin(elapsed*0.35)*0.15;
-    const breathe=1+Math.sin(elapsed*1.2)*0.012;
+    if(!W || !H) return;
+    const t = (performance.now() - startT) / 1000;
 
-    drawVoid();
+    // ─── Background ──────────────────────────────────────────────────
+    const vg = ctx.createRadialGradient(W/2, H*0.5, 20, W/2, H*0.5, Math.max(W,H)*0.75);
+    vg.addColorStop(0, '#0a0a14');
+    vg.addColorStop(0.5, '#05060a');
+    vg.addColorStop(1, '#020205');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, W, H);
 
-    const cx=W/2,cy=H*0.60;
-    const scale=Math.min(W*0.55,H*0.55)*breathe;
-
-    const tx=p=>rotX(rotY(p,ph),tilt);
-
-    const projRings=rings.map(ring=>ring.map(p=>project(tx(p),scale,cx,cy)));
-    const projLeftArm=leftArm.map((p,i)=>{
-      const sway=Math.sin(elapsed*1.1)*0.005;
-      return project(tx({x:p.x+sway,y:p.y,z:p.z}),scale,cx,cy);
-    });
-    const projRightArm=rightArm.map(p=>{
-      const sway=Math.sin(elapsed*1.1+0.5)*0.005;
-      return project(tx({x:p.x-sway,y:p.y,z:p.z}),scale,cx,cy);
-    });
-    const projHair=hair.map(strand=>{
-      const pts=[];
-      for(let i=0;i<strand.length;i+=3){
-        const hx=strand[i],hy=strand[i+1],hz=strand[i+2];
-        const t=i/(strand.length-3);
-        const sway=Math.sin(elapsed*1.4+hx*5)*0.02*t;
-        pts.push(project(tx({x:hx+sway,y:hy,z:hz}),scale,cx,cy));
-      }
-      return pts;
-    });
-
-    // Body aura
-    const bodyGlow=ctx.createRadialGradient(cx,cy-scale*0.3,20,cx,cy-scale*0.3,scale*1.0);
-    bodyGlow.addColorStop(0,'rgba(180,210,255,0.15)');
-    bodyGlow.addColorStop(0.6,'rgba(80,140,220,0.05)');
-    bodyGlow.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=bodyGlow;
-    ctx.beginPath();ctx.arc(cx,cy-scale*0.3,scale*1.0,0,Math.PI*2);ctx.fill();
-
-    // Filled silhouette
-    ctx.beginPath();
-    for(let r=0;r<projRings.length;r++){
-      let maxP=projRings[r][0];
-      for(const p of projRings[r]) if(p.x>maxP.x) maxP=p;
-      if(r===0) ctx.moveTo(maxP.x,maxP.y); else ctx.lineTo(maxP.x,maxP.y);
-    }
-    for(let r=projRings.length-1;r>=0;r--){
-      let minP=projRings[r][0];
-      for(const p of projRings[r]) if(p.x<minP.x) minP=p;
-      ctx.lineTo(minP.x,minP.y);
-    }
-    ctx.closePath();
-    const bodyGrad=ctx.createRadialGradient(cx,cy-scale*0.2,10,cx,cy,scale*1.1);
-    bodyGrad.addColorStop(0,'rgba(18,22,38,0.88)');
-    bodyGrad.addColorStop(0.6,'rgba(8,10,20,0.92)');
-    bodyGrad.addColorStop(1,'rgba(3,4,8,0.96)');
-    ctx.fillStyle=bodyGrad;ctx.fill();
-    ctx.strokeStyle='rgba(200,225,255,0.45)';ctx.lineWidth=1.2;ctx.stroke();
-
-    // Wireframe edges sorted by depth
-    const edges=[];
-    for(let r=0;r<projRings.length;r++){
-      for(let i=0;i<RING_N;i++){
-        const a=projRings[r][i],b=projRings[r][(i+1)%RING_N];
-        edges.push({a,b,z:(a.z+b.z)/2});
-      }
-      if(r<projRings.length-1){
-        for(let i=0;i<RING_N;i++){
-          const a=projRings[r][i],b=projRings[r+1][i];
-          edges.push({a,b,z:(a.z+b.z)/2});
-        }
-      }
-    }
-    edges.sort((x,y)=>x.z-y.z);
-
-    for(const e of edges){
-      const d=(e.z+1.5)/3;
-      const alpha=0.10+d*0.5;
-      const width=0.4+d*1.4;
-      const silver=185+d*70;
-      ctx.strokeStyle='rgba('+silver+','+(silver+10)+','+(silver+30)+','+alpha+')';
-      ctx.lineWidth=width;ctx.lineCap='round';
-      ctx.beginPath();ctx.moveTo(e.a.x,e.a.y);ctx.lineTo(e.b.x,e.b.y);ctx.stroke();
+    for(const n of nebulas){
+      const nx = n.x*W, ny = n.y*H, nr = n.r*Math.max(W, H);
+      const ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, nr);
+      const [r, g, b] = n.c;
+      ng.addColorStop(0, 'rgba('+r+','+g+','+b+','+n.a+')');
+      ng.addColorStop(1, 'rgba('+r+','+g+','+b+',0)');
+      ctx.fillStyle = ng;
+      ctx.beginPath(); ctx.arc(nx, ny, nr, 0, Math.PI*2); ctx.fill();
     }
 
-    // Vertices
-    for(let r=0;r<projRings.length;r++){
-      for(let i=0;i<RING_N;i++){
-        const p=projRings[r][i];
-        const d=(p.z+1.5)/3;
-        const size=0.7+d*1.7;
-        ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);
-        ctx.fillStyle='rgba(225,240,255,'+(0.2+d*0.6)+')';ctx.fill();
-      }
+    for(const q of stars){
+      q.y += q.vy;
+      if(q.y < -5){ q.y = H + 5; q.x = Math.random()*W; }
+      q.tw += 0.05;
+      const tw = 0.6 + 0.4*Math.sin(q.tw);
+      ctx.beginPath();
+      ctx.arc(q.x % W, q.y, q.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(180,210,255,' + (q.a*tw) + ')';
+      ctx.fill();
     }
 
-    // Arms
-    function drawArm(pts){
-      ctx.lineCap='round';ctx.lineJoin='round';
-      ctx.strokeStyle='rgba(0,0,0,0.6)';ctx.lineWidth=10;
-      ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
-      for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x,pts[i].y);
-      ctx.stroke();
-      for(let i=0;i<pts.length-1;i++){
-        const a=pts[i],b=pts[i+1];
-        const d=((a.z+b.z)/2+1.5)/3;
-        const silver=180+d*70;
-        ctx.strokeStyle='rgba('+silver+','+(silver+15)+','+(silver+40)+','+(0.4+d*0.5)+')';
-        ctx.lineWidth=5+d*3;
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-        ctx.strokeStyle='rgba(255,255,255,'+(0.55+d*0.4)+')';
-        ctx.lineWidth=1.2;
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-      }
-      const hand=pts[pts.length-1];
-      const hg=ctx.createRadialGradient(hand.x,hand.y,0,hand.x,hand.y,15);
-      hg.addColorStop(0,'rgba(255,255,255,0.9)');
-      hg.addColorStop(0.4,'rgba(200,230,255,0.6)');
-      hg.addColorStop(1,'rgba(180,220,255,0)');
-      ctx.fillStyle=hg;ctx.beginPath();ctx.arc(hand.x,hand.y,15,0,Math.PI*2);ctx.fill();
-    }
-    const lz=projLeftArm[2].z,rz=projRightArm[2].z;
-    if(lz>rz){drawArm(projRightArm);drawArm(projLeftArm)}else{drawArm(projLeftArm);drawArm(projRightArm)}
+    // ─── Climb timing ────────────────────────────────────────────────
+    const CYCLE = 12;              // seconds to climb full ladder
+    const figY = ((t / CYCLE) * (LADDER_TO - LADDER_FROM + 1)) % (LADDER_TO - LADDER_FROM + 1) + LADDER_FROM;
 
-    // Hair
-    for(const strand of projHair){
-      ctx.strokeStyle='rgba(0,0,0,0.5)';ctx.lineWidth=6;
-      ctx.beginPath();ctx.moveTo(strand[0].x,strand[0].y);
-      for(let i=1;i<strand.length;i++) ctx.lineTo(strand[i].x,strand[i].y);
-      ctx.stroke();
-      for(let i=0;i<strand.length-1;i++){
-        const a=strand[i],b=strand[i+1];
-        const d=((a.z+b.z)/2+1.5)/3;
-        const silver=160+d*80;
-        ctx.strokeStyle='rgba('+silver+','+(silver+10)+','+(silver+30)+','+(0.35+d*0.5)+')';
-        ctx.lineWidth=1.2+d*0.9;
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+    // Y rotation — slow sway to show 3D
+    const yRot = Math.sin(t * 0.35) * 0.35 + 0.15;
+
+    const cx = W / 2;
+    const cy = H * 0.55;
+    const scale = Math.min(W * 0.42, H * 0.6);
+
+    // ─── Limb animation ──────────────────────────────────────────────
+    const climbPhase = t * 3.2;
+    const armLift = Math.sin(climbPhase) * 0.18;
+    const legLift = Math.sin(climbPhase + Math.PI) * 0.14;
+    const bodyBob = Math.abs(Math.sin(climbPhase)) * 0.02;
+
+    // Build joint positions with animation
+    const jPos = {};
+    for(const k in JOINTS){
+      const j = JOINTS[k];
+      let y = j.y + bodyBob;
+      if(k === 'wriL' || k === 'elbL') y += armLift;
+      if(k === 'wriR' || k === 'elbR') y -= armLift;
+      if(k === 'kneeL' || k === 'ankL') y += legLift;
+      if(k === 'kneeR' || k === 'ankR') y -= legLift;
+      jPos[k] = { x: j.x, y, z: j.z };
+    }
+
+    // Project figure — joints use relY = 0 (fixed screen position)
+    const pj = {};
+    for(const k in jPos){
+      const j = jPos[k];
+      pj[k] = project(j.x, j.y, j.z, cx, cy, scale, yRot, 0);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // DRAW LADDER (behind figure)
+    // ═══════════════════════════════════════════════════════════════════
+    // Rails
+    for(const rx of [-RAIL_X, RAIL_X]){
+      const top = project(rx, LADDER_TO, 0, cx, cy, scale, yRot, figY);
+      const bot = project(rx, LADDER_FROM, 0, cx, cy, scale, yRot, figY);
+      ctx.strokeStyle = 'rgba(140,180,220,0.35)';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
+      ctx.strokeStyle = 'rgba(200,225,255,0.14)';
+      ctx.lineWidth = 8;
+      ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
+    }
+    // Rungs
+    for(const ry of rungs){
+      const a = project(-RAIL_X, ry, 0, cx, cy, scale, yRot, figY);
+      const b = project( RAIL_X, ry, 0, cx, cy, scale, yRot, figY);
+      if((a.y < -60 && b.y < -60) || (a.y > H + 60 && b.y > H + 60)) continue;
+      ctx.strokeStyle = 'rgba(160,200,240,0.5)';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      ctx.strokeStyle = 'rgba(220,240,255,0.2)';
+      ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      // rung node dots
+      for(const p of [a, b]){
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(180,220,255,0.5)'; ctx.fill();
       }
     }
 
-    // Chrome head orb
-    const hc=projRings[2];
-    let hx=0,hy=0,hz=0;
-    for(const p of hc){hx+=p.x;hy+=p.y;hz+=p.z}
-    hx/=RING_N;hy/=RING_N;hz/=RING_N;
-    const headR=scale*0.135*(3.5/(3.5+hz));
-    const orbG=ctx.createRadialGradient(hx-headR*0.4,hy-headR*0.35,headR*0.1,hx,hy,headR*1.3);
-    orbG.addColorStop(0,'rgba(255,255,255,1)');
-    orbG.addColorStop(0.3,'rgba(200,220,245,1)');
-    orbG.addColorStop(0.55,'rgba(90,110,140,1)');
-    orbG.addColorStop(0.8,'rgba(30,40,60,1)');
-    orbG.addColorStop(1,'rgba(5,8,15,1)');
-    ctx.fillStyle=orbG;
-    ctx.beginPath();ctx.arc(hx,hy,headR,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.ellipse(hx-headR*0.35,hy-headR*0.4,headR*0.22,headR*0.32,-0.4,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,255,255,0.85)';ctx.fill();
-    ctx.beginPath();ctx.arc(hx+headR*0.15,hy+headR*0.1,headR*0.06,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fill();
+    // ═══════════════════════════════════════════════════════════════════
+    // DRAW FIGURE (wireframe female topology)
+    // ═══════════════════════════════════════════════════════════════════
+    // Sort edges by depth so closer ones render on top
+    const sortedEdges = EDGES.map(e => ({
+      a: e[0], b: e[1],
+      z: (pj[e[0]].z + pj[e[1]].z) / 2
+    })).sort((p, q) => p.z - q.z);
 
-    // Chest core
-    const chest=projRings[5];
-    let chx=0,chy=0,chz=0;
-    for(const p of chest){chx+=p.x;chy+=p.y;chz+=p.z}
-    chx/=RING_N;chy=chy/RING_N+scale*0.05;chz/=RING_N;
-    const pulse=0.5+0.5*Math.sin(elapsed*2);
-    const cg=ctx.createRadialGradient(chx,chy,0,chx,chy,scale*0.20);
-    cg.addColorStop(0,'rgba(255,255,255,'+(0.85*pulse)+')');
-    cg.addColorStop(0.3,'rgba(160,210,255,'+(0.6*pulse)+')');
-    cg.addColorStop(1,'rgba(120,180,255,0)');
-    ctx.fillStyle=cg;
-    ctx.beginPath();ctx.arc(chx,chy,scale*0.20,0,Math.PI*2);ctx.fill();
-
-    // Scroll in right hand
-    const sh=projRightArm[projRightArm.length-1];
-    const sw=scale*0.045,shh=scale*0.035;
-    const wave=Math.sin(elapsed*2)*0.8;
-    const sg=ctx.createRadialGradient(sh.x,sh.y,0,sh.x,sh.y,sw*2.5);
-    sg.addColorStop(0,'rgba(255,255,255,0.55)');
-    sg.addColorStop(0.5,'rgba(200,220,245,0.15)');
-    sg.addColorStop(1,'rgba(200,220,245,0)');
-    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sh.x,sh.y,sw*2.5,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(sh.x-sw,sh.y-shh+wave);
-    ctx.lineTo(sh.x+sw,sh.y-shh-wave);
-    ctx.lineTo(sh.x+sw,sh.y+shh-wave);
-    ctx.lineTo(sh.x-sw,sh.y+shh+wave);
-    ctx.closePath();
-    const pg=ctx.createLinearGradient(sh.x-sw,0,sh.x+sw,0);
-    pg.addColorStop(0,'rgba(220,230,245,0.98)');
-    pg.addColorStop(0.5,'#ffffff');
-    pg.addColorStop(1,'rgba(220,230,245,0.98)');
-    ctx.fillStyle=pg;ctx.fill();
-    ctx.strokeStyle='rgba(40,55,75,0.55)';ctx.lineWidth=0.7;
-    for(let i=0;i<4;i++){
-      const y=sh.y-shh*0.5+i*(shh/4);
-      ctx.beginPath();ctx.moveTo(sh.x-sw*0.7,y);ctx.lineTo(sh.x+sw*(i%2===0?0.3:0.7),y);ctx.stroke();
+    for(const e of sortedEdges){
+      const a = pj[e.a], b = pj[e.b];
+      const d = Math.max(0, Math.min(1, (e.z + 1.5) / 3));
+      const silver = 180 + d * 75;
+      const alpha = 0.35 + d * 0.55;
+      const width = 0.6 + d * 1.8;
+      ctx.strokeStyle = 'rgba('+silver+','+(silver+10)+','+(silver+30)+','+alpha+')';
+      ctx.lineWidth = width;
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     }
+
+    // Glowing joint nodes
+    for(const k in pj){
+      const p = pj[k];
+      const d = Math.max(0, Math.min(1, (p.z + 1.5) / 3));
+      const size = 1.6 + d * 1.8;
+      const glowSize = size * 5;
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowSize);
+      g.addColorStop(0, 'rgba(230,245,255,'+(0.45 + d*0.4)+')');
+      g.addColorStop(0.5, 'rgba(180,220,255,0.15)');
+      g.addColorStop(1, 'rgba(180,220,255,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(p.x, p.y, glowSize, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, size, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(240,250,255,'+(0.6 + d*0.4)+')'; ctx.fill();
+    }
+
+    // Chest core pulse
+    const chest = pj.chest;
+    const pulse = 0.5 + 0.5*Math.sin(t*2.5);
+    const coreR = scale * 0.15;
+    const coreG = ctx.createRadialGradient(chest.x, chest.y, 0, chest.x, chest.y, coreR);
+    coreG.addColorStop(0, 'rgba(220,240,255,'+(0.55*pulse)+')');
+    coreG.addColorStop(0.4, 'rgba(150,200,255,'+(0.28*pulse)+')');
+    coreG.addColorStop(1, 'rgba(120,180,255,0)');
+    ctx.fillStyle = coreG;
+    ctx.beginPath(); ctx.arc(chest.x, chest.y, coreR, 0, Math.PI*2); ctx.fill();
+
+    // Head halo
+    const head = pj.head;
+    const headR = scale * 0.18;
+    const headG = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, headR);
+    headG.addColorStop(0, 'rgba(200,230,255,'+(0.35 + pulse*0.25)+')');
+    headG.addColorStop(0.5, 'rgba(140,190,240,0.10)');
+    headG.addColorStop(1, 'rgba(140,190,240,0)');
+    ctx.fillStyle = headG;
+    ctx.beginPath(); ctx.arc(head.x, head.y, headR, 0, Math.PI*2); ctx.fill();
+
+    // Subtle vignette
+    const vig = ctx.createRadialGradient(W/2, H/2, Math.min(W,H)*0.35, W/2, H/2, Math.max(W,H)*0.75);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.55)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
   }
   requestAnimationFrame(frame);
 
-  const lines=[
-    '◈ THE SCRIBE WRITES THE 5D SYSTEM',
-    '◇ PIDX · SGUIDE · VDOO · PENNIES · BOUND',
-    '◆ 5D → 4D → 3D · PROJECTION ACTIVE',
-    '◈ COHERENCE HOLDS · VEIL OPEN · PORTAL LIVE',
-    '◇ DETERMINISTIC · BLOCK-DRIVEN · ETERNAL'
-  ];
-  let li=0,ch=0,dir=1;
-  setInterval(()=>{
-    const t=lines[li];
-    if(dir>0){ch++;if(ch>t.length){ch=t.length;setTimeout(()=>{dir=-1},1400)}}
-    else{ch--;if(ch<0){ch=0;dir=1;li=(li+1)%lines.length}}
-    typeEl.textContent=t.slice(0,ch)+'▌';
-  },55);
+  // ─── Typewriter subtitle ────────────────────────────────────────────
+  const typeEl = $('hty');
+  if(typeEl){
+    const lines = [
+      '◈ THE SCRIBE WRITES THE 5D SYSTEM',
+      '◇ PIDX · SGUIDE · VDOO · PENNIES · BOUND',
+      '◆ 5D → 4D → 3D · PROJECTION ACTIVE',
+      '◈ COHERENCE HOLDS · VEIL OPEN · PORTAL LIVE',
+      '◇ DETERMINISTIC · BLOCK-DRIVEN · ETERNAL'
+    ];
+    let li = 0, ch = 0, dir = 1;
+    setInterval(() => {
+      const s = lines[li];
+      if(dir > 0){ ch++; if(ch > s.length){ ch = s.length; setTimeout(() => { dir = -1; }, 1400); } }
+      else { ch--; if(ch < 0){ ch = 0; dir = 1; li = (li + 1) % lines.length; } }
+      typeEl.textContent = s.slice(0, ch) + '▌';
+    }, 55);
+  }
 }
 
 // ═══ PENTERACT CANVAS ═══
@@ -864,7 +821,5 @@ else boot();
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-<script src="hero3d.js?v=2"></script>
 </body>
 </html>
