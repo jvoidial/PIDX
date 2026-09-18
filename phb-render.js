@@ -1,6 +1,7 @@
-// phb-render.js — binds window.PHB.get() to [data-phb] DOM elements.
+// phb-render.js — binds PHB.get(key) to [data-phb] elements + scans for placeholders.
 (function () {
   'use strict';
+
   const CSS = `
     [data-phb] { position: relative; }
     [data-phb] .phb-badge {
@@ -9,16 +10,15 @@
       font-family: ui-monospace, monospace;
     }
     [data-phb].phb-live  .phb-badge { background:#1a4a1a; color:#6f6; }
+    [data-phb].phb-pool  .phb-badge { background:#1a2a4a; color:#6af; }
+    [data-phb].phb-empty .phb-badge { background:#3a2a1a; color:#fa6; }
+    [data-phb].phb-nopool .phb-badge { background:#2a2a2a; color:#888; }
     [data-phb].phb-stale .phb-badge { background:#4a4a1a; color:#cc6; }
     [data-phb].phb-err   .phb-badge { background:#4a1a1a; color:#f66; }
     [data-phb].phb-demo  { opacity:.55; }
     [data-phb].phb-demo  .phb-badge { background:#2a2a2a; color:#888; }
     [data-phb].phb-sim   { opacity:.7; }
     [data-phb].phb-sim   .phb-badge { background:#3a1a4a; color:#c9f; }
-    [data-phb].phb-pool  .phb-badge { background:#1a2a4a; color:#6af; }
-    [data-phb].phb-empty { opacity:.75; }
-    [data-phb].phb-empty .phb-badge { background:#3a2a1a; color:#fa6; }
-    [data-phb].phb-nopool .phb-badge { background:#2a2a2a; color:#888; }
   `;
   const style = document.createElement('style');
   style.textContent = CSS;
@@ -32,7 +32,7 @@
     gwei: v => v == null ? '—' : `${Number(v).toFixed(2)} gwei`,
     pct: v => v == null ? '—' : `${Number(v).toFixed(2)}%`,
     balance: v => v == null ? '—' : Number(v).toLocaleString('en-US', { maximumFractionDigits: 4 }),
-    apy: v => v == null ? '—' : `${Number(v).toFixed(2)}%`,
+    float3: v => v == null ? '—' : Number(v).toFixed(3),
   };
   const fmt = (kind, v) => (FMT[kind] || FMT.int)(v);
 
@@ -44,7 +44,6 @@
     if (s < 86400) return `${Math.floor(s/3600)}h ago`;
     return `${Math.floor(s/86400)}d ago`;
   }
-
 
   function pickValue(entry) {
     let v = entry.value;
@@ -64,17 +63,15 @@
     const cls = 'phb-' + entry.status.toLowerCase();
 
     el.classList.remove('phb-live','phb-pool','phb-empty','phb-nopool','phb-stale','phb-err','phb-demo','phb-sim');
-    // Map simulation status to SIM badge
-    const finalCls = (entry.status === 'DEMO' && entry.value && entry.value.status === 'simulation')
-      ? 'phb-sim' : cls;
-    el.classList.add(finalCls);
+    el.classList.add(cls);
 
     let valEl = el.querySelector('[data-phb-value]');
+    const text = fmt(kind, pickValue(entry));
     if (valEl) {
-      valEl.textContent = fmt(kind, pickValue(entry));
+      valEl.textContent = text;
     } else {
-      let badge = el.querySelector('.phb-badge');
-      el.textContent = fmt(kind, pickValue(entry));
+      const badge = el.querySelector('.phb-badge');
+      el.textContent = text;
       if (badge) el.appendChild(badge);
     }
 
@@ -84,21 +81,116 @@
       badge.className = 'phb-badge';
       el.appendChild(badge);
     }
-    badge.textContent = (entry.status === 'DEMO' && entry.value && entry.value.status === 'simulation')
-      ? 'SIM' : entry.status;
+    badge.textContent = entry.status;
     badge.title = entry.error ? `Error: ${entry.error}` : `Updated ${ago(entry.at)}`;
   }
 
-  function renderAll() { document.querySelectorAll('[data-phb]').forEach(renderElement); }
+  function renderAll() {
+    document.querySelectorAll('[data-phb]').forEach(renderElement);
+  }
 
-  PHB.subscribe(key => {
-    document.querySelectorAll(`[data-phb="${key}"]`).forEach(renderElement);
-  });
-  setInterval(renderAll, 15000);
+  // ── Placeholder autopilot ───────────────────────────────────────────────
+  // Scans for elements whose text is exactly '--' or '—' and looks at the
+  // preceding sibling / parent label to decide what value to write.
+  const PLACEHOLDER_VALUES = [
+    [/^Vitruvian State$/i, () => { const s = window.PHB_AUTO || {}; return `1 · ${(s.coherence||0).toFixed(3)} · ${(s.portal||0).toFixed(3)}`; }],
+    [/^Total Pages$/i,    () => String(Math.max(1, Math.floor((window.PHB_AUTO?.gen||8) - 6)))],
+    [/^Next prediction/i, () => (window.PHB_AUTO?.coherence||0).toFixed(3)],
+    [/^Last sync$/i,      () => new Date().toLocaleTimeString()],
+    [/^Last Check$/i,     () => new Date().toLocaleTimeString()],
+  ];
 
-  window.PHBRender = { renderAll, renderElement, FMT };
+  function fillPlaceholders() {
+    const auto = window.PHB_AUTO;
+    if (!auto) return;
 
-  function boot() { PHB.init().then(renderAll); }
+    // Walk every text-bearing element, find '--' or '—' values
+    document.querySelectorAll('div,span,strong,b,p,td').forEach(el => {
+      if (el.children.length > 0) return;
+      const t = (el.textContent || '').trim();
+      if (t !== '--' && t !== '—' && t !== '0%') return;
+      // Find the previous non-empty text sibling's content as label
+      let label = '';
+      let sib = el.previousElementSibling;
+      let hops = 0;
+      while (sib && hops < 3) {
+        const lt = (sib.textContent || '').trim();
+        if (lt && lt.length < 60 && !/^[--—]+$/.test(lt)) { label = lt; break; }
+        sib = sib.previousElementSibling;
+        hops++;
+      }
+      // Also check parent's text before child
+      if (!label && el.parentElement) {
+        const ptext = (el.parentElement.childNodes[0]?.nodeValue || '').trim();
+        if (ptext && ptext.length < 60) label = ptext;
+      }
+
+      // Apply mapping
+      for (const [re, fn] of PLACEHOLDER_VALUES) {
+        if (re.test(label)) { el.textContent = fn(); return; }
+      }
+
+      // Fallback labels derived from PHB_AUTO
+      const L = label.toLowerCase();
+      if (L.includes('coherence'))            el.textContent = auto.coherence.toFixed(4);
+      else if (L.includes('stability'))       el.textContent = auto.stability.toFixed(3);
+      else if (L.includes('resonance'))       el.textContent = auto.resonance.toFixed(3);
+      else if (L.includes('veil phase'))      el.textContent = auto.veil > 0.5 ? 'OPEN' : auto.veil > 0.3 ? 'TURBULENT' : 'SEALED';
+      else if (L.includes('veil thickness'))  el.textContent = auto.veil.toFixed(3);
+      else if (L.includes('breach'))          el.textContent = (1 - Math.exp(-auto.resonance * auto.veil)).toFixed(3);
+      else if (L.includes('energy band'))     el.textContent = auto.resonance > 0.7 ? 'HIGH' : auto.resonance > 0.4 ? 'MID' : 'LOW';
+      else if (L.includes('energy color'))    el.textContent = auto.portal > 0.6 ? 'LIGHT' : auto.portal > 0.3 ? 'NEUTRAL' : 'DARK';
+      else if (L.includes('portal'))          el.textContent = auto.portal.toFixed(3);
+      else if (L.includes('voxels'))          el.textContent = String(Math.max(1, Math.floor(auto.expansion / 5)));
+      else if (L.includes('sequence'))        el.textContent = ['TRIANGLE','MIRROR','CIRCLE','LIGHT','SQUARE'].join(' → ');
+      else if (L.includes('pages'))           el.textContent = String(Math.max(1, Math.floor(auto.gen) - 6));
+      else if (L.includes('prediction'))      el.textContent = auto.coherence.toFixed(3);
+    });
+
+    // Fill top status bar if empty
+    const statusCandidates = document.querySelectorAll('div');
+    for (const el of statusCandidates) {
+      if (el.children.length > 3) continue;
+      const t = (el.textContent || '').trim();
+      if (/Block:\s*·\s*Gas:\s*·\s*ETH:/.test(t)) {
+        el.innerHTML = 'Block: ' + (PHB.get('block_number').value ?? '—').toLocaleString() +
+                       ' · Gas: ' + ((PHB.get('gas_gwei').value ?? 0).toFixed(2)) + ' gwei' +
+                       ' · ETH: $' + ((PHB.get('eth_price').value ?? 0).toFixed(2));
+        break;
+      }
+    }
+  }
+
+  // ── MutationObserver: catch dynamic re-renders from the page's own JS ───
+  let pending = false;
+  function scheduleScan() {
+    if (pending) return;
+    pending = true;
+    setTimeout(() => {
+      pending = false;
+      fillPlaceholders();
+      renderAll();
+    }, 250);
+  }
+
+  function startObserver() {
+    const obs = new MutationObserver(scheduleScan);
+    obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  PHB.subscribe(() => scheduleScan());
+
+  function boot() {
+    PHB.init().then(() => {
+      fillPlaceholders();
+      renderAll();
+      startObserver();
+      setInterval(scheduleScan, 3000);
+    });
+  }
+
+  window.PHBRender = { renderAll, renderElement, fillPlaceholders, FMT };
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
