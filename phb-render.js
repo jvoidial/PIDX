@@ -13,6 +13,8 @@
     [data-phb].phb-err   .phb-badge { background:#4a1a1a; color:#f66; }
     [data-phb].phb-demo  { opacity:.55; }
     [data-phb].phb-demo  .phb-badge { background:#2a2a2a; color:#888; }
+    [data-phb].phb-sim   { opacity:.7; }
+    [data-phb].phb-sim   .phb-badge { background:#3a1a4a; color:#c9f; }
     [data-phb].phb-pool  .phb-badge { background:#1a2a4a; color:#6af; }
     [data-phb].phb-empty { opacity:.75; }
     [data-phb].phb-empty .phb-badge { background:#3a2a1a; color:#fa6; }
@@ -61,8 +63,11 @@
     const entry = PHB.get(key);
     const cls = 'phb-' + entry.status.toLowerCase();
 
-    el.classList.remove('phb-live','phb-pool','phb-empty','phb-nopool','phb-stale','phb-err','phb-demo');
-    el.classList.add(cls);
+    el.classList.remove('phb-live','phb-pool','phb-empty','phb-nopool','phb-stale','phb-err','phb-demo','phb-sim');
+    // Map simulation status to SIM badge
+    const finalCls = (entry.status === 'DEMO' && entry.value && entry.value.status === 'simulation')
+      ? 'phb-sim' : cls;
+    el.classList.add(finalCls);
 
     let valEl = el.querySelector('[data-phb-value]');
     if (valEl) {
@@ -79,7 +84,8 @@
       badge.className = 'phb-badge';
       el.appendChild(badge);
     }
-    badge.textContent = entry.status;
+    badge.textContent = (entry.status === 'DEMO' && entry.value && entry.value.status === 'simulation')
+      ? 'SIM' : entry.status;
     badge.title = entry.error ? `Error: ${entry.error}` : `Updated ${ago(entry.at)}`;
   }
 
