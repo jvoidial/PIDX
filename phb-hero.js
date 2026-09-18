@@ -15,7 +15,7 @@
 
   // ── Hooded man ──────────────────────────────────────────────────────────
   function drawMan(ctx, cx, cy, s, pulse) {
-    const H = 200 * s, W = 110 * s;
+    const H = 150 * s, W = 80 * s;
 
     // Aura behind
     const aura = ctx.createRadialGradient(cx, cy - 20 * s, 10, cx, cy - 20 * s, 130 * s);
@@ -194,7 +194,7 @@
     hero.id = 'phb-hero';
     hero.style.cssText = [
       'position:relative', 'display:block', 'width:100vw',
-      'max-width:100%', 'height:400px', 'min-height:400px',
+      'max-width:100%', 'height:260px', 'min-height:260px',
       'overflow:hidden',
       'background:radial-gradient(ellipse at 50% 55%, #0c1220 0%, #05050a 70%)',
       'border-bottom:1px solid #1a1a2a',
@@ -225,9 +225,7 @@
     typ.id = 'phb-hero-type';
     hero.appendChild(typ);
 
-    const bar = document.getElementById('phb-status-bar');
-    if (bar && bar.parentNode) bar.parentNode.insertBefore(hero, bar.nextSibling);
-    else if (document.body.firstChild) document.body.insertBefore(hero, document.body.firstChild);
+    if (document.body.firstChild) document.body.insertBefore(hero, document.body.firstChild);
     else document.body.appendChild(hero);
 
     return { hero, cv, typ };
@@ -271,18 +269,18 @@
       drawParts(ctx, W, H);
 
       const cx = W / 2;
-      const cy = H * 0.52;
-      const scale = Math.min(1.0, H / 420);
+      const cy = H * 0.48;
+      const scale = Math.min(0.75, H / 340);
 
       // Orbiting shells behind figure
-      drawShells(ctx, cx, cy + 10 * scale, 60 * scale, ph);
+      drawShells(ctx, cx, cy + 6 * scale, 45 * scale, ph);
 
       // The hooded man
       const pulse = 0.5 + 0.5 * Math.sin(ph * 2);
       drawMan(ctx, cx, cy, scale, pulse);
 
       // Core cube in front (held in hands)
-      drawCore(ctx, cx, cy + 60 * scale, 20 * scale, ph);
+      drawCore(ctx, cx, cy + 42 * scale, 16 * scale, ph);
     }
     requestAnimationFrame(frame);
     console.log('[hero] online — phase sync active');

@@ -24,6 +24,18 @@
   style.textContent = CSS;
   document.head.appendChild(style);
 
+
+  // Live clock in status bar
+  function tickClock() {
+    const el = document.getElementById('phb-clock');
+    if (el) {
+      const d = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      el.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()) + ' UTC' + (d.getTimezoneOffset() > 0 ? '-' : '+') + Math.abs(d.getTimezoneOffset()/60);
+    }
+  }
+  setInterval(tickClock, 1000);
+
   const FMT = {
     eth: v => v == null ? '—' : `${Number(v).toFixed(6)} ETH`,
     usd: v => v == null ? '—' : `$${Number(v).toLocaleString('en-US', { maximumFractionDigits: 8 })}`,

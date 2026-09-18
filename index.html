@@ -201,10 +201,7 @@
   </style>
 </head>
 <body>
-<!-- PHB live status -->
-<div style="font-family:ui-monospace,monospace;font-size:11px;color:#667;padding:4px 8px;">Block: <span data-phb="block_number" data-phb-fmt="int"></span> · Gas: <span data-phb="gas_gwei" data-phb-fmt="gwei"></span> · ETH: <span data-phb="eth_price" data-phb-fmt="usd"></span></div>
-
-  <div id="topology-container"></div>
+<div id="topology-container"></div>
   <div class="ui-content">
     <div class="container">
       <!-- HEADER -->
@@ -3042,9 +3039,17 @@ renderStaticSections();
 <script src="phb-connector.js?v=6"></script>
 <script src="phb-sources.js?v=6"></script>
 <script src="phb-pools.js?v=6"></script>
-<script src="phb-render.js?v=7"></script>
+<script src="phb-render.js?v=8"></script>
 <script src="phb-sim.js?v=6"></script>
 <script src="phb-5d.js?v=6"></script>
 <script src="phb-autonomy.js?v=2"></script>
-<script src="phb-hero.js?v=2"></script>
+<script src="phb-hero.js?v=3"></script>
+<!-- PHB live status -->
+<div id="phb-status-bar" style="font:11px ui-monospace,monospace;color:#8ab;background:#08080f;padding:8px 12px;border-bottom:1px solid #1a1a2a;text-align:center;letter-spacing:1.5px;">
+✦ Block <span data-phb="block_number" data-phb-fmt="int" style="color:#cce8ff;"></span>
+· Gas <span data-phb="gas_gwei" data-phb-fmt="gwei" style="color:#cce8ff;"></span>
+· ETH <span data-phb="eth_price" data-phb-fmt="usd" style="color:#cce8ff;"></span>
+· <span id="phb-clock" style="color:#556;"></span> ✦
+</div>
+
 </body>
