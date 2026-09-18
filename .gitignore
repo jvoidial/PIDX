@@ -95,3 +95,7 @@ broadcast/
 node_modules/
 *.log
 
+inspect-hits.sh
+oracle_free.py
+oracle_free.sh
+phb-sync-all.sh
