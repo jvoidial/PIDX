@@ -2,7 +2,7 @@
 const PHB = (function () {
   'use strict';
   let CONFIG = {
-    rpc_endpoints: ['https://base-rpc.publicnode.com','https://base.gateway.tenderly.co','https://base.meowrpc.com','https://base.drpc.org','https://1rpc.io/base','https://mainnet.base.org'],,
+    rpc_endpoints: ['https://base-rpc.publicnode.com','https://base.gateway.tenderly.co','https://base.meowrpc.com','https://base.drpc.org','https://1rpc.io/base','https://mainnet.base.org'],
     tick_ms: 5000, max_concurrent: 3, max_retries: 3, timeout_ms: 12000,
     ttl: {}, tokens: {},
   };
