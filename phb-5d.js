@@ -143,7 +143,25 @@
     }
   }
 
+
+  // ── Remove legacy floating element from older versions ─────────────────
+  function removeLegacyFloating() {
+    // Old version created a div with id 'phb-5d' pinned bottom-right
+    const old = document.getElementById('phb-5d');
+    if (old && old.id === 'phb-5d') {
+      old.remove();
+    }
+    // Also remove any element with SIM badge that is position:fixed
+    document.querySelectorAll('div').forEach(el => {
+      const s = el.getAttribute('style') || '';
+      if (s.includes('position:fixed') && s.includes('bottom:12px') && s.includes('right:12px')) {
+        el.remove();
+      }
+    });
+  }
+
   function boot() {
+    removeLegacyFloating();
     if (typeof THREE === 'undefined') {
       setTimeout(boot, 200);
       return;
