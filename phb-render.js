@@ -100,7 +100,21 @@
     [/^Last Check$/i,     () => new Date().toLocaleTimeString()],
   ];
 
+  function fixVitruvian() {
+    const auto = window.PHB_AUTO;
+    if (!auto) return;
+    // Find any text node containing exactly "-- · -- · --" or similar
+    document.querySelectorAll('div,span,p').forEach(el => {
+      if (el.children.length > 0) return;
+      const t = (el.textContent || '').trim();
+      if (/^--\s*·\s*--\s*·\s*--$/.test(t) || /^—\s*·\s*—\s*·\s*—$/.test(t)) {
+        el.textContent = `1 · ${(auto.coherence||0).toFixed(3)} · ${(auto.portal||0).toFixed(3)}`;
+      }
+    });
+  }
+
   function fillPlaceholders() {
+    fixVitruvian();
     const auto = window.PHB_AUTO;
     if (!auto) return;
 
@@ -145,6 +159,19 @@
       else if (L.includes('sequence'))        el.textContent = ['TRIANGLE','MIRROR','CIRCLE','LIGHT','SQUARE'].join(' → ');
       else if (L.includes('pages'))           el.textContent = String(Math.max(1, Math.floor(auto.gen) - 6));
       else if (L.includes('prediction'))      el.textContent = auto.coherence.toFixed(3);
+    });
+
+    // Inline ": --" patterns inside combined text nodes
+    document.querySelectorAll('div,span,p').forEach(el => {
+      if (el.children.length > 0) return;
+      let t = el.textContent || '';
+      if (!/--/.test(t)) return;
+      t = t
+        .replace(/Total Pages:\s*--/i, 'Total Pages: ' + Math.max(1, Math.floor((auto.gen||8) - 6)))
+        .replace(/Next prediction:\s*--/i, 'Next prediction: ' + (auto.coherence||0).toFixed(3))
+        .replace(/Last sync:\s*--/i, 'Last sync: ' + new Date().toLocaleTimeString())
+        .replace(/Last Check\s*--/i, 'Last Check ' + new Date().toLocaleTimeString());
+      if (t !== el.textContent) el.textContent = t;
     });
 
     // Fill top status bar if empty
