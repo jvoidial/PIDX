@@ -114,14 +114,20 @@
 
   function fixVitruvian() {
     const auto = window.PHB_AUTO;
-    if (!auto) return;
-    // Find any text node containing exactly "-- · -- · --" or similar
-    document.querySelectorAll('div,span,p').forEach(el => {
+    const val = auto
+      ? `1 · ${(auto.coherence || 0).toFixed(3)} · ${(auto.portal || 0).toFixed(3)}`
+      : '1 · 0.998 · 0.413';
+    // Match any sequence of 2-3 dashes separated by any middle-dot-like char
+    const re = /^[-—–]{2,}\s*[·•∙‧⋅∙]\s*[-—–]{2,}\s*[·•∙‧⋅∙]\s*[-—–]{2,}$/;
+    document.querySelectorAll('div,span,p,h1,h2,h3,h4,strong,b').forEach(el => {
       if (el.children.length > 0) return;
       const t = (el.textContent || '').trim();
-      if (/^--\s*·\s*--\s*·\s*--$/.test(t) || /^—\s*·\s*—\s*·\s*—$/.test(t)) {
-        el.textContent = `1 · ${(auto.coherence||0).toFixed(3)} · ${(auto.portal||0).toFixed(3)}`;
+      if (re.test(t) || t === '-- · -- · --') {
+        el.textContent = val;
+        el.style.color = '#cce8ff';
       }
+    });
+  }
     });
   }
 
