@@ -87,11 +87,25 @@ const PHB = (function () {
   }
 
   function get(key) {
-    const src = sources.get(key);
-    if (!src) return { value: null, status: STATUS.DEMO, at: null, error: null };
-    const e = memory.get(key);
+    // Support dotted paths: token.PIDX.price_usd → source "token.PIDX", then .price_usd
+    const parts = String(key).split('.');
+    // Try longest matching source key first
+    let srcKey = null;
+    for (let n = Math.min(parts.length, 3); n >= 1; n--) {
+      const candidate = parts.slice(0, n).join('.');
+      if (sources.has(candidate)) { srcKey = candidate; break; }
+    }
+    if (!srcKey) return { value: null, status: STATUS.DEMO, at: null, error: null };
+    const src = sources.get(srcKey);
+    const e = memory.get(srcKey);
+    let value = e?.value ?? null;
+    const rest = parts.slice(srcKey.split('.').length);
+    for (const p of rest) {
+      if (value && typeof value === 'object' && p in value) value = value[p];
+      else { value = null; break; }
+    }
     return {
-      value: e?.value ?? null,
+      value,
       status: statusOf(e, src.ttl),
       at: e?.at ?? null,
       error: e?.error ?? null,
