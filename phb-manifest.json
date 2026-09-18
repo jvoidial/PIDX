@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-09-18T04:18:45.137012Z",
+  "files": {
+    "index.html": {
+      "bytes": 137888,
+      "sha256": "c3ed6b8581c2355d"
+    },
+    "phb-config.json": {
+      "bytes": 930,
+      "sha256": "d9b9d3854e014ac8"
+    },
+    "phb-connector.js": {
+      "bytes": 5082,
+      "sha256": "f56e9f9971c7e09a"
+    },
+    "phb-sources.js": {
+      "bytes": 4335,
+      "sha256": "12727425ea9614ca"
+    },
+    "phb-render.js": {
+      "bytes": 3178,
+      "sha256": "38c7be6e19d530e6"
+    }
+  }
+}

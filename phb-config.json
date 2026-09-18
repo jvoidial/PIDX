@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "chain": { "name": "base", "id": 8453 },
+  "wallet": "",
+  "rpc_endpoints": [
+    "https://mainnet.base.org",
+    "https://base.llamarpc.com",
+    "https://base-rpc.publicnode.com",
+    "https://base.drpc.org"
+  ],
+  "tokens": {
+    "PIDX":    { "address": "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c", "decimals": 18 },
+    "SGUIDE":  { "address": "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a", "decimals": 18 },
+    "VDOO":    { "address": "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", "decimals": 18 },
+    "PENNIES": { "address": "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", "decimals": 18 }
+  },
+  "ttl": {
+    "eth_price": 60000,
+    "token_price": 60000,
+    "block_number": 15000,
+    "gas_gwei": 15000,
+    "wallet_eth": 30000,
+    "wallet_token": 30000,
+    "yields_base": 300000,
+    "verify": 3600000
+  },
+  "tick_ms": 5000,
+  "max_concurrent": 3,
+  "max_retries": 3,
+  "timeout_ms": 12000
+}
