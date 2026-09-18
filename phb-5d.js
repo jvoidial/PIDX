@@ -49,6 +49,13 @@
     return project(v4, 3, 2.2);
   }
 
+
+  // ── Shared phase sync with autonomy loop ────────────────────────────────
+  let sharedPhase = null;
+  window.addEventListener('phb-phase', (ev) => {
+    sharedPhase = ev.detail.phase;   // [0,1)
+  });
+
   const SIM = { started: null, n_frames: 0, n_vertices: 0, n_edges: 0, fps: 0, last_t: 0 };
 
   if (typeof PHB !== 'undefined') {
@@ -208,7 +215,10 @@
 
     function frame(now) {
       requestAnimationFrame(frame);
-      const t = (now - SIM.started) / 1000;
+      const elapsed = (now - SIM.started) / 1000;
+      const t = sharedPhase !== null
+        ? elapsed + sharedPhase * Math.PI * 2
+        : elapsed;
 
       for (let i = 0; i < 32; i++) {
         const p3 = project5to3(verts[i], t);
