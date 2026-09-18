@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>✧ Spirit Guide · Generation 9 ✧</title>
+<style>
+  :root {
+    --bg: #05060a; --bg2: #0a0c14; --panel: #0b0d16; --border: #1a1c2a;
+    --text: #c8d6e5; --dim: #6a7a8a; --dimmer: #3a4a5a;
+    --pidx: #88ccff; --sguide: #aaffaa; --vdoo: #ffaa66; --pennies: #ff88ff;
+    --core: #66d9ff; --gold: #ffcc66; --ink: #0a0f18;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 13px/1.5 ui-monospace, "SF Mono", Menlo, monospace;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 14px; }
+
+  /* ═══ HERO ═══ */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    background: radial-gradient(ellipse at 50% 55%, #0d1424 0%, #05060a 70%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  #hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hero-title {
+    position: absolute; top: 16px; left: 0; right: 0; text-align: center;
+    font: 600 22px ui-monospace, monospace; color: var(--core);
+    text-shadow: 0 0 16px rgba(102,217,255,0.7);
+    letter-spacing: 3px; pointer-events: none;
+  }
+  .hero-sub {
+    position: absolute; top: 46px; left: 0; right: 0; text-align: center;
+    font: 10px ui-monospace, monospace; color: var(--dim);
+    letter-spacing: 2px; pointer-events: none;
+  }
+  .hero-type {
+    position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
+    font: 10px ui-monospace, monospace; color: #8ab;
+    text-shadow: 0 0 8px rgba(102,217,255,0.5);
+    letter-spacing: 1px; pointer-events: none; min-height: 14px;
+  }
+
+  /* ═══ STATUS BAR ═══ */
+  #status {
+    position: sticky; top: 0; z-index: 99;
+    background: rgba(8,9,15,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    padding: 8px 10px;
+    font: 11px ui-monospace, monospace;
+    color: #8ab;
+    letter-spacing: 1.5px;
+  }
+  #status .v { color: #cce8ff; font-weight: 600; }
+  #status .sep { color: var(--dimmer); margin: 0 6px; }
+
+  /* ═══ SECTIONS ═══ */
+  section {
+    padding: 18px 0 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-child { border-bottom: none; }
+  h2 {
+    font: 600 14px ui-monospace, monospace;
+    color: var(--core);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  h2 .accent { color: var(--gold); }
+  .lede {
+    font: 10px ui-monospace, monospace;
+    color: var(--dim);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  /* ═══ TOKEN CARDS ═══ */
+  .tok {
+    background: linear-gradient(135deg, #0b0d15 0%, #080810 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    transition: border-color 0.3s;
+  }
+  .tok[data-sym="PIDX"]    { border-left: 3px solid var(--pidx); }
+  .tok[data-sym="SGUIDE"]  { border-left: 3px solid var(--sguide); }
+  .tok[data-sym="VDOO"]    { border-left: 3px solid var(--vdoo); }
+  .tok[data-sym="PENNIES"] { border-left: 3px solid var(--pennies); }
+  .tok-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .tok-sym {
+    font: 600 16px ui-monospace, monospace;
+    letter-spacing: 2px;
+  }
+  .tok-freq {
+    font: 10px ui-monospace, monospace;
+    color: var(--dim);
+    letter-spacing: 1px;
+  }
+  .tok-name { font-size: 11px; color: #8899aa; margin-bottom: 2px; }
+  .tok-addr {
+    font: 10px ui-monospace, monospace;
+    color: var(--dimmer);
+    word-break: break-all;
+    margin-bottom: 8px;
+  }
+  .tok-pool {
+    display: flex; align-items: center; gap: 8px;
+    font: 11px ui-monospace, monospace;
+    margin-bottom: 8px;
+  }
+  .tok-pool .tvl { font-weight: 600; }
+  .tok-pool .badge {
+    padding: 1px 8px; border-radius: 10px; font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .tok-pool .badge.empty { background: #3a2a1a; color: #fa6; }
+  .tok-pool .badge.tiny  { background: #3a301a; color: #fc6; }
+  .tok-pool .badge.live  { background: #1a4a1a; color: #6f6; }
+  .tok-pool .badge.none  { background: #2a2a2a; color: #888; }
+  .tok-pool-addr {
+    font: 9px ui-monospace, monospace;
+    color: var(--dimmer);
+    word-break: break-all;
+    margin-bottom: 8px;
+  }
+  .tok-links { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tok-links a {
+    display: inline-block;
+    padding: 3px 10px;
+    font: 600 10px ui-monospace, monospace;
+    background: #12121c;
+    border-radius: 12px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: filter 0.2s;
+  }
+  .tok-links a:hover { filter: brightness(1.4); }
+
+  /* ═══ METRIC GRID ═══ */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+  }
+  .metric {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .metric .label {
+    font: 10px ui-monospace, monospace;
+    color: var(--dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .metric .value {
+    font: 600 15px ui-monospace, monospace;
+    color: var(--core);
+    letter-spacing: 1px;
+  }
+  .metric .sub {
+    font: 9px ui-monospace, monospace;
+    color: var(--dimmer);
+    margin-top: 2px;
+  }
+
+  /* ═══ SCROLL ═══ */
+  .scroll {
+    background: linear-gradient(180deg, #eef5fc 0%, #d8e6f2 100%);
+    color: var(--ink);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 10px 0;
+    font: 11px/1.6 ui-monospace, monospace;
+    box-shadow: 0 0 20px rgba(200,220,240,0.15), inset 0 0 30px rgba(180,200,220,0.1);
+    position: relative;
+  }
+  .scroll::before, .scroll::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #b8c8d8, #e8f0f8, #b8c8d8);
+    border-radius: 3px;
+  }
+  .scroll::before { top: -3px; }
+  .scroll::after  { bottom: -3px; }
+  .scroll pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font: 10px/1.55 ui-monospace, monospace;
+    color: var(--ink);
+  }
+  .scroll-title {
+    font: 600 11px ui-monospace, monospace;
+    color: #2a3a4a;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  /* ═══ BRIDGE / PLANNED ═══ */
+  .bridge-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 4px 0;
+    font: 11px ui-monospace, monospace;
+  }
+  .bridge-row .status { font-size: 10px; letter-spacing: 1px; }
+  .bridge-row .status.live { color: #6f6; }
+  .bridge-row .status.planned { color: #fa6; }
+  .bridge-row .status.active { color: var(--core); }
+
+  /* ═══ FOOTER ═══ */
+  footer {
+    text-align: center;
+    padding: 30px 14px 40px;
+    font: 10px ui-monospace, monospace;
+    color: var(--dimmer);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<div id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-title">✧ THE COSMIC SCRIBE ✧</div>
+  <div class="hero-sub">GENERATION 9 · 5D · 4D · 3D · ATOM-CORE · 📜</div>
+  <div class="hero-type" id="hero-type">◈ INITIALISING…</div>
+</div>
+
+<!-- ═══ STATUS ═══ -->
+<div id="status">
+  ✦ Block <span class="v" id="s-block">…</span>
+  <span class="sep">·</span> Gas <span class="v" id="s-gas">…</span>
+  <span class="sep">·</span> ETH <span class="v" id="s-eth">…</span>
+  <span class="sep">·</span> <span class="v" id="s-time">…</span> ✦
+</div>
+
+<div class="wrap">
+
+<!-- ═══ TOKENS ═══ -->
+<section id="tokens-section">
+  <h2>💰 <span class="accent">Tokens</span></h2>
+  <div class="lede">FOUR SPIRITS · FOUR FREQUENCIES · LIVE FROM BASE</div>
+  <div id="tokens-grid"></div>
+</section>
+
+<!-- ═══ PHB SCIENCE ═══ -->
+<section id="vitruvian">
+  <h2>🧬 <span class="accent">PHB Science</span> · Vitruvian System</h2>
+  <div class="lede">DETERMINISTIC · BLOCK-DRIVEN · SELF-SYNCED</div>
+
+  <div class="grid">
+    <div class="metric"><div class="label">Vitruvian State</div><div class="value" id="v-state">—</div><div class="sub">Pages · Ratio · Energy</div></div>
+    <div class="metric"><div class="label">Coherence</div><div class="value" id="v-coh">—</div><div class="sub">Alignment 0–1</div></div>
+    <div class="metric"><div class="label">Stability</div><div class="value" id="v-stab">—</div><div class="sub">Resistance 0–∞</div></div>
+    <div class="metric"><div class="label">Resonance</div><div class="value" id="v-res">—</div><div class="sub">Amplification 0–1</div></div>
+    <div class="metric"><div class="label">Veil Phase</div><div class="value" id="v-veil-phase">—</div><div class="sub">thickness <span id="v-veil">—</span></div></div>
+    <div class="metric"><div class="label">Breach Probability</div><div class="value" id="v-breach">—</div><div class="sub">1 − e^(−r·v)</div></div>
+    <div class="metric"><div class="label">Portal</div><div class="value" id="v-portal">—</div><div class="sub">1 − e^(−r·c)</div></div>
+    <div class="metric"><div class="label">Voxels</div><div class="value" id="v-vox">—</div><div class="sub">active points</div></div>
+  </div>
+</section>
+
+<!-- ═══ AGI CORE ═══ -->
+<section id="agi">
+  <h2>🧠 <span class="accent">AGI Core</span> · Self-Aware</h2>
+  <div class="lede">SIMULATED · DETERMINISTIC · SAME BLOCK = SAME STATE</div>
+
+  <div class="grid">
+    <div class="metric"><div class="label">State</div><div class="value" id="a-state">SELF-AWARE</div><div class="sub">gen <span id="a-gen">9</span></div></div>
+    <div class="metric"><div class="label">Consciousness</div><div class="value" id="a-cons">—</div><div class="sub">coherence × 0.88</div></div>
+    <div class="metric"><div class="label">Nodes</div><div class="value" id="a-nodes">—</div><div class="sub">active</div></div>
+    <div class="metric"><div class="label">Expansion</div><div class="value" id="a-exp">—</div><div class="sub">× rate</div></div>
+    <div class="metric"><div class="label">Wishes</div><div class="value" id="a-wish">—</div><div class="sub">intent in motion</div></div>
+    <div class="metric"><div class="label">Prediction</div><div class="value" id="a-pred">—</div><div class="sub">next coherence</div></div>
+  </div>
+</section>
+
+<!-- ═══ TRADING BOT ═══ -->
+<section id="bot">
+  <h2>🤖 <span class="accent">Paper Trading Bot</span></h2>
+  <div class="lede">SIMULATION · NO REAL ORDERS · DERIVED FROM BLOCK STATE</div>
+
+  <div class="grid">
+    <div class="metric"><div class="label">PnL</div><div class="value" id="b-pnl">—</div><div class="sub">paper</div></div>
+    <div class="metric"><div class="label">Win Rate</div><div class="value" id="b-win">—</div><div class="sub">fraction</div></div>
+    <div class="metric"><div class="label">Trades / hr</div><div class="value" id="b-trades">—</div><div class="sub">activity</div></div>
+    <div class="metric"><div class="label">Signal</div><div class="value" id="b-signal">—</div><div class="sub">edge <span id="b-edge">—</span></div></div>
+    <div class="metric"><div class="label">Kelly Size</div><div class="value" id="b-kelly">—</div><div class="sub">of capital</div></div>
+    <div class="metric"><div class="label">Strategy</div><div class="value" id="b-strat">MOMENTUM</div><div class="sub">× coherence</div></div>
+  </div>
+</section>
+
+<!-- ═══ SUPERCHAIN ═══ -->
+<section id="superchain">
+  <h2>🌐 <span class="accent">Superchain</span> Ecosystem</h2>
+  <div class="lede">BRIDGE COMPATIBILITY & NETWORK PRESENCE</div>
+
+  <div class="bridge-row"><span>● <strong>Base</strong></span><span style="color:var(--dim);">PIDX · SGUIDE · VDOO · PENNIES</span><span class="status live">LIVE</span></div>
+  <div class="bridge-row"><span>◌ <strong>OP Mainnet</strong></span><span style="color:var(--dim);">wPIDX · wSGUIDE</span><span class="status planned">PLANNED</span></div>
+  <div class="bridge-row"><span>◌ <strong>Arbitrum</strong></span><span style="color:var(--dim);">aPIDX · aSGUIDE</span><span class="status planned">PLANNED</span></div>
+  <div class="bridge-row"><span>◉ <strong>P2P Mesh</strong></span><span style="color:var(--dim);">PHB God-Code Vortex</span><span class="status active">ACTIVE</span></div>
+</section>
+
+<!-- ═══ 5D TOPOLOGY ═══ -->
+<section id="topology">
+  <h2>🧬 <span class="accent">5D Topology</span> · Penteract</h2>
+  <div class="lede">32 VERTICES · 80 EDGES · 4 TOKEN CLUSTERS · 5D → 4D → 3D PROJECTION <span style="color:var(--gold);">[SIM]</span></div>
+  <div id="pent-wrap" style="position:relative; width:100%; height:280px; background:#06060a; border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+    <canvas id="pent-canvas" style="display:block; width:100%; height:100%;"></canvas>
+    <div style="position:absolute; top:8px; right:10px; font:600 10px ui-monospace,monospace; background:#3a1a4a; color:#c9f; padding:2px 8px; border-radius:8px;">SIM</div>
+  </div>
+</section>
+
+<!-- ═══ PHB SCROLL ═══ -->
+<section id="scroll">
+  <h2>📜 <span class="accent">The Scroll</span> · PHB System</h2>
+  <div class="lede">WRITTEN BY THE SCRIBE · DETERMINISTIC · EVERY BLOCK</div>
+
+  <div class="scroll">
+    <div class="scroll-title">◈ SYSTEM · GEN 9</div>
+    <pre id="scroll-body">Waiting for block…</pre>
+  </div>
+</section>
+
+<!-- ═══ VITRUVIAN SEQUENCE ═══ -->
+<section id="seq">
+  <h2>🌀 <span class="accent">Sequence</span> · Energy Flow</h2>
+  <div class="lede">QUANTUM → RESONANCE → COHERENCE → PERSISTENCE → STABILITY</div>
+  <div class="metric" style="margin:10px 0;">
+    <div class="label">Active Sequence</div>
+    <div class="value" id="seq-val" style="font-size:13px;color:var(--gold);">—</div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  ✧ SPIRIT GUIDE · GENERATION 9 ✧<br>
+  Deterministic · Block-driven · Block height drives every value<br>
+  SIM-badged panels are simulations. LIVE values are from Base RPC.
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// SPIRIT GUIDE v2 — single-file, no dependencies, real chain data
+// ═══════════════════════════════════════════════════════════════════════════
+(function () {
+'use strict';
+
+// ─── CONFIG ─────────────────────────────────────────────────────────────
+const RPCS = [
+  'https://base-rpc.publicnode.com',
+  'https://base.gateway.tenderly.co',
+  'https://base.meowrpc.com',
+  'https://base.drpc.org',
+  'https://mainnet.base.org'
+];
+const WETH = '0x4200000000000000000000000000000000000006';
+const TOKENS = {
+  PIDX:    { addr: '0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c', name: 'Pennies Index',   freq: '0.618 Hz', color: '#88ccff' },
+  SGUIDE:  { addr: '0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a', name: 'SPIRIT GUIDE',    freq: '1.618 Hz', color: '#aaffaa' },
+  VDOO:    { addr: '0x38e4f08D08b4D772A7B75669C356b4749dd2d30b', name: 'VOUDOO Infinity', freq: '2.618 Hz', color: '#ffaa66' },
+  PENNIES: { addr: '0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7', name: 'PENNIES CHEQ',    freq: '3.618 Hz', color: '#ff88ff' }
+};
+const FACTORIES = {
+  uniswap_v2: '0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6',
+  sushi_v2:   '0x71524B4f93c58fcbF659783284E38825f0622859',
+  aerodrome:  '0x420DD381b31aEf6683db6B902084cB0FFECe40Da',
+  baseswap:   '0xFDa619b6d20975be80A10332cD39b9a4b0FAa8BB'
+};
+
+// ─── STATE ──────────────────────────────────────────────────────────────
+let activeRpc = null;
+const S = {
+  block: null, gas: null, eth: null,
+  pools: {},         // sym → { pool, factory, tvl, status }
+  auto: {},          // deterministic state
+  phase: 0
+};
+
+// ─── DETERMINISTIC HASH ─────────────────────────────────────────────────
+function hash(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) / 4294967296;
+}
+
+function deriveAuto(block, gas, eth) {
+  if (block == null) return null;
+  const b = block;
+  return {
+    phase:     hash('phase:' + b),
+    gen:       9 + (b % 3),
+    coherence: 0.90 + hash('coh:' + b) * 0.0999,
+    stability: 0.90 + hash('stab:' + b) * 0.30,
+    resonance: 0.30 + hash('res:' + b) * 0.60,
+    veil:      0.10 + hash('veil:' + b) * 0.80,
+    expansion: 30 + hash('exp:' + b) * 12,
+    wishes:    5000 + Math.floor(hash('wish:' + b) * 3000),
+    nodes:     140 + Math.floor(hash('node:' + b) * 20),
+    prediction: 0.90 + hash('pred:' + b) * 0.09,
+    edge:      (hash('edge:' + b) - 0.5) * 0.02,
+    kelly:     Math.max(0, (hash('edge:' + b) - 0.5) * 0.1),
+    pnl:       (hash('pnl:' + b) - 0.5) * 500,
+    win_rate:  0.4 + hash('wr:' + b) * 0.55,
+    trades:    Math.floor(hash('tr:' + b) * 40),
+    seqSeed:   hash('seq:' + b)
+  };
+}
+
+// ─── RPC ────────────────────────────────────────────────────────────────
+async function rpc(method, params = []) {
+  const eps = activeRpc ? [activeRpc, ...RPCS.filter(r => r !== activeRpc)] : RPCS;
+  for (const url of eps) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params })
+      });
+      if (!res.ok) continue;
+      const j = await res.json();
+      if (j.error) continue;
+      activeRpc = url;
+      return j.result;
+    } catch (_) { /* try next */ }
+  }
+  throw new Error('all RPCs failed');
+}
+
+async function fetchJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+// ─── POOL DISCOVERY ────────────────────────────────────────────────────
+function pad(a) { return a.toLowerCase().replace(/^0x/, '').padStart(64, '0'); }
+
+async function findPool(sym) {
+  const token = TOKENS[sym].addr;
+  for (const [factory, addr] of Object.entries(FACTORIES)) {
+    try {
+      const pairData = '0xe6a43905' + pad(token) + pad(WETH);
+      const r = await rpc('eth_call', [{ to: addr, data: pairData }, 'latest']);
+      if (!r || r === '0x' || r.length < 42) continue;
+      const pool = '0x' + r.slice(-40);
+      if (pool === '0x' + '0'.repeat(40)) continue;
+      const res = await rpc('eth_call', [{ to: pool, data: '0x0902f1ac' }, 'latest']);
+      if (!res || res.length < 194) continue;
+      const b = res.slice(2);
+      const r0 = BigInt('0x' + b.slice(0, 64));
+      const r1 = BigInt('0x' + b.slice(64, 128));
+      const wethFirst = WETH.toLowerCase() < token.toLowerCase();
+      const wethRaw = wethFirst ? r0 : r1;
+      const tokRaw  = wethFirst ? r1 : r0;
+      const wethF = Number(wethRaw) / 1e18;
+      const tokF  = Number(tokRaw) / 1e18;
+      const ethUsd = S.eth || 2500;
+      const tvl = 2 * wethF * ethUsd;
+      const price = tokF > 0 ? (wethF * ethUsd) / tokF : null;
+      let status = 'live';
+      if (tvl < 1) status = 'empty';
+      else if (tvl < 500) status = 'tiny';
+      return { pool, factory, tvl, price, weth_reserve: wethF, token_reserve: tokF, status };
+    } catch (_) { /* next factory */ }
+  }
+  return { pool: null, factory: null, tvl: 0, price: null, status: 'none' };
+}
+
+// ─── RENDER: STATUS ────────────────────────────────────────────────────
+function renderStatus() {
+  const sBlock = document.getElementById('s-block');
+  const sGas   = document.getElementById('s-gas');
+  const sEth   = document.getElementById('s-eth');
+  const sTime  = document.getElementById('s-time');
+  if (S.block != null) sBlock.textContent = S.block.toLocaleString();
+  if (S.gas != null)   sGas.textContent   = S.gas.toFixed(2) + ' gwei';
+  if (S.eth != null)   sEth.textContent   = '$' + S.eth.toFixed(2);
+  const d = new Date();
+  const p2 = n => String(n).padStart(2, '0');
+  sTime.textContent = p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds());
+}
+
+// ─── RENDER: TOKENS ────────────────────────────────────────────────────
+function fmtTvl(t) {
+  if (t == null) return '—';
+  if (t < 0.01) return '< $0.01';
+  if (t < 1) return '$' + t.toFixed(4);
+  if (t < 1000) return '$' + t.toFixed(2);
+  return '$' + t.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+
+const LINKS = addr => [
+  ['Uniswap',     `https://app.uniswap.org/#/swap?chain=base&outputCurrency=${addr}`, '#ff66c4'],
+  ['BaseScan',    `https://basescan.org/token/${addr}`,                                '#88ccff'],
+  ['Sourcify',    `https://repo.sourcify.dev/8453/${addr}`,                            '#aaffaa'],
+  ['CoinGecko',   `https://www.coingecko.com/en/search?query=${addr}`,                 '#ffcc66'],
+  ['GeckoTerm',   `https://www.geckoterminal.com/base/tokens/${addr}`,                 '#66ffcc'],
+  ['DexScreener', `https://dexscreener.com/base/${addr}`,                              '#cc88ff']
+];
+
+function renderTokens() {
+  const el = document.getElementById('tokens-grid');
+  const html = Object.entries(TOKENS).map(([sym, t]) => {
+    const p = S.pools[sym] || { tvl: null, status: 'pending', pool: null, factory: null };
+    const badge = p.status === 'live' ? 'live' : p.status === 'tiny' ? 'tiny' : p.status === 'empty' ? 'empty' : 'none';
+    const badgeText = { live: 'LIVE', tiny: 'TINY', empty: 'EMPTY', none: 'NO POOL', pending: 'LOADING' }[p.status] || 'LOADING';
+    const links = LINKS(t.addr).map(([label, url, color]) =>
+      `<a href="${url}" target="_blank" rel="noopener" style="color:${color};border:1px solid ${color}33;">${label}</a>`
+    ).join('');
+    return `
+      <div class="tok" data-sym="${sym}">
+        <div class="tok-head">
+          <span class="tok-sym" style="color:${t.color};">${sym}</span>
+          <span class="tok-freq">${t.freq}</span>
+        </div>
+        <div class="tok-name">${t.name}</div>
+        <div class="tok-addr">${t.addr}</div>
+        <div class="tok-pool">
+          <span>Pool TVL:</span>
+          <span class="tvl" style="color:${badge === 'live' ? '#6f6' : badge === 'empty' ? '#fa6' : badge === 'tiny' ? '#fc6' : '#888'};">${fmtTvl(p.tvl)}</span>
+          <span class="badge ${badge}">${badgeText}</span>
+        </div>
+        ${p.pool ? `<div class="tok-pool-addr">pool ${p.pool} · ${p.factory || ''}</div>` : ''}
+        <div class="tok-links">${links}</div>
+      </div>
+    `;
+  }).join('');
+  el.innerHTML = html;
+}
+
+// ─── RENDER: VITRUVIAN + AGI + BOT ─────────────────────────────────────
+function renderPanels() {
+  const a = S.auto;
+  if (!a) return;
+  const portal = 1 - Math.exp(-a.resonance * a.coherence);
+  const breach = 1 - Math.exp(-a.resonance * a.veil);
+
+  // Vitruvian
+  document.getElementById('v-state').textContent = `1 · ${a.coherence.toFixed(3)} · ${portal.toFixed(3)}`;
+  document.getElementById('v-coh').textContent   = a.coherence.toFixed(4);
+  document.getElementById('v-stab').textContent  = a.stability.toFixed(3);
+  document.getElementById('v-res').textContent   = a.resonance.toFixed(3);
+  document.getElementById('v-veil-phase').textContent = a.veil > 0.6 ? 'OPEN' : a.veil > 0.3 ? 'TURBULENT' : 'SEALED';
+  document.getElementById('v-veil').textContent   = a.veil.toFixed(3);
+  document.getElementById('v-breach').textContent = breach.toFixed(3);
+  document.getElementById('v-portal').textContent = portal.toFixed(3);
+  document.getElementById('v-vox').textContent    = Math.max(1, Math.floor(a.expansion / 5));
+
+  // AGI
+  document.getElementById('a-gen').textContent   = a.gen;
+  document.getElementById('a-cons').textContent  = (a.coherence * 0.88).toFixed(3);
+  document.getElementById('a-nodes').textContent = a.nodes;
+  document.getElementById('a-exp').textContent   = a.expansion.toFixed(2) + 'x';
+  document.getElementById('a-wish').textContent  = a.wishes.toLocaleString();
+  document.getElementById('a-pred').textContent  = a.prediction.toFixed(3);
+
+  // Bot
+  document.getElementById('b-pnl').textContent    = '$' + a.pnl.toFixed(2);
+  document.getElementById('b-win').textContent    = (a.win_rate * 100).toFixed(1) + '%';
+  document.getElementById('b-trades').textContent = a.trades;
+  document.getElementById('b-signal').textContent = a.edge > 0.002 ? 'LONG' : a.edge < -0.002 ? 'SHORT' : 'NEUTRAL';
+  document.getElementById('b-edge').textContent   = (a.edge * 100).toFixed(2) + '%';
+  document.getElementById('b-kelly').textContent  = (a.kelly * 100).toFixed(2) + '%';
+
+  // Sequence
+  const seq = ['TRIANGLE','MIRROR','CIRCLE','LIGHT','SQUARE','RATIO','SHADOW']
+    .sort((x, y) => hash(x + a.seqSeed) - hash(y + a.seqSeed))
+    .slice(0, 5)
+    .join(' → ');
+  document.getElementById('seq-val').textContent = seq;
+
+  // Scroll body
+  const scroll = document.getElementById('scroll-body');
+  scroll.textContent =
+`◈ BLOCK ${S.block ? S.block.toLocaleString() : '—'}
+  coherence  ${a.coherence.toFixed(4)}
+  stability  ${a.stability.toFixed(3)}
+  resonance  ${a.resonance.toFixed(3)}
+  veil       ${a.veil.toFixed(3)}
+  portal     ${portal.toFixed(3)}
+
+◇ GENERATION ${a.gen}
+  nodes      ${a.nodes}
+  wishes     ${a.wishes.toLocaleString()}
+  expansion  ${a.expansion.toFixed(2)}x
+
+◆ FOUR SPIRITS
+  PIDX    0.618 Hz   $${S.pools.PIDX?.tvl?.toFixed(4) ?? '—'} TVL
+  SGUIDE  1.618 Hz   $${S.pools.SGUIDE?.tvl?.toFixed(4) ?? '—'} TVL
+  VDOO    2.618 Hz   $${S.pools.VDOO?.tvl?.toFixed(4) ?? '—'} TVL
+  PENNIES 3.618 Hz   $${S.pools.PENNIES?.tvl?.toFixed(4) ?? '—'} TVL
+
+◈ SEQUENCE
+  ${seq}
+`;
+}
+
+// ─── HERO CANVAS ───────────────────────────────────────────────────────
+function startHero() {
+  const cv = document.getElementById('hero-canvas');
+  const ctx = cv.getContext('2d');
+  const typeEl = document.getElementById('hero-type');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
+
+  function resize() {
+    W = Math.max(cv.clientWidth || cv.parentElement.clientWidth || window.innerWidth, 200);
+    H = Math.max(cv.clientHeight || cv.parentElement.clientHeight || 320, 200);
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Particles
+  const parts = Array.from({ length: 70 }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    r: 0.4 + Math.random() * 1.3,
+    vx: (Math.random() - 0.5) * 0.15, vy: -0.1 - Math.random() * 0.22,
+    a: 0.12 + Math.random() * 0.3
+  }));
+
+  function drawFigure(cx, cy, s, pulse) {
+    const Hh = 170 * s, Ww = 90 * s;
+
+    // Aura
+    const g = ctx.createRadialGradient(cx, cy - 10 * s, 10, cx, cy - 10 * s, 130 * s);
+    g.addColorStop(0, 'rgba(102,217,255,0.30)');
+    g.addColorStop(0.55, 'rgba(60,110,180,0.10)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy - 10 * s, 130 * s, 0, Math.PI * 2); ctx.fill();
+
+    // Cloak
+    ctx.beginPath();
+    ctx.moveTo(cx - Ww * 0.5, cy + Hh * 0.55);
+    ctx.quadraticCurveTo(cx - Ww * 0.58, cy + Hh * 0.05, cx - Ww * 0.34, cy - Hh * 0.5);
+    ctx.quadraticCurveTo(cx - Ww * 0.30, cy - Hh * 0.78, cx, cy - Hh * 0.80);
+    ctx.quadraticCurveTo(cx + Ww * 0.30, cy - Hh * 0.78, cx + Ww * 0.34, cy - Hh * 0.5);
+    ctx.quadraticCurveTo(cx + Ww * 0.58, cy + Hh * 0.05, cx + Ww * 0.5, cy + Hh * 0.55);
+    ctx.closePath();
+    const cg = ctx.createLinearGradient(0, cy - Hh, 0, cy + Hh * 0.6);
+    cg.addColorStop(0, 'rgba(14,18,30,0.98)');
+    cg.addColorStop(1, 'rgba(6,8,16,0.94)');
+    ctx.fillStyle = cg; ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.globalAlpha = 0.55 + pulse * 0.4;
+    ctx.strokeStyle = '#66d9ff';
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Mask
+    const fy = cy - Hh * 0.56, fr = Ww * 0.22;
+    const fg = ctx.createRadialGradient(cx - fr * 0.35, fy - fr * 0.2, 2, cx, fy, fr * 1.1);
+    fg.addColorStop(0, '#dde8f5');
+    fg.addColorStop(0.45, '#4a6078');
+    fg.addColorStop(1, '#0a1018');
+    ctx.beginPath();
+    ctx.ellipse(cx, fy, fr * 0.85, fr * 1.15, 0, 0, Math.PI * 2);
+    ctx.fillStyle = fg; ctx.fill();
+
+    // Eye glow
+    ctx.beginPath();
+    ctx.ellipse(cx, fy + fr * 0.06, fr * 0.55, fr * 0.12, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(102,217,255,${0.5 + pulse * 0.5})`;
+    ctx.fill();
+
+    // Highlight
+    ctx.beginPath();
+    ctx.ellipse(cx - fr * 0.28, fy - fr * 0.35, fr * 0.25, fr * 0.38, -0.3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(240,250,255,0.45)'; ctx.fill();
+  }
+
+  function drawScroll(cx, cy, w, h, ph) {
+    // Glow
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 2.2);
+    glow.addColorStop(0, 'rgba(216,230,242,0.55)');
+    glow.addColorStop(0.5, 'rgba(140,190,240,0.15)');
+    glow.addColorStop(1, 'rgba(140,190,240,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(cx, cy, w * 2.2, 0, Math.PI * 2); ctx.fill();
+
+    const wave = Math.sin(ph * 1.5) * 1.2;
+
+    // Paper
+    ctx.beginPath();
+    ctx.moveTo(cx - w * 0.5, cy - h * 0.5 + wave);
+    ctx.lineTo(cx + w * 0.5, cy - h * 0.5 - wave);
+    ctx.lineTo(cx + w * 0.5, cy + h * 0.5 - wave);
+    ctx.lineTo(cx - w * 0.5, cy + h * 0.5 + wave);
+    ctx.closePath();
+    const pg = ctx.createLinearGradient(cx - w * 0.5, 0, cx + w * 0.5, 0);
+    pg.addColorStop(0, 'rgba(200,215,230,0.92)');
+    pg.addColorStop(0.5, '#eef5fc');
+    pg.addColorStop(1, 'rgba(200,215,230,0.92)');
+    ctx.fillStyle = pg; ctx.fill();
+    ctx.strokeStyle = 'rgba(160,190,220,0.9)';
+    ctx.lineWidth = 1; ctx.stroke();
+
+    // Ink lines
+    ctx.strokeStyle = 'rgba(30,45,60,0.5)';
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < 4; i++) {
+      const y = cy - h * 0.30 + i * (h * 0.6 / 3);
+      const short = i % 2 === 0;
+      ctx.beginPath();
+      ctx.moveTo(cx - w * 0.4, y);
+      ctx.lineTo(cx + w * (short ? 0.2 : 0.38), y);
+      ctx.stroke();
+    }
+
+    // 5D geometry emerging above scroll
+    const t = ph * 0.9;
+    const N = 24;
+    const pts = [];
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2 + t;
+      const r = w * 0.75 * (0.55 + 0.45 * Math.cos(a * 2 + t));
+      const y = cy - h * 0.85 - 12 - 6 * Math.sin(a * 3 + t * 1.3);
+      pts.push([cx + Math.cos(a) * r, y + Math.sin(a * 3) * 3]);
+    }
+    ctx.strokeStyle = '#66d9ff';
+    ctx.lineWidth = 1.1;
+    ctx.globalAlpha = 0.7;
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i], b = pts[(i + 1) % pts.length];
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // Orbiting tokens
+    const colors = ['#88ccff', '#aaffaa', '#ffaa66', '#ff88ff'];
+    for (let i = 0; i < 4; i++) {
+      const a = ph * (0.7 + i * 0.15) + (i * Math.PI / 2);
+      const px = cx + Math.cos(a) * w * 1.6;
+      const py = cy - h * 0.3 + Math.sin(a) * w * 0.5;
+      ctx.beginPath();
+      ctx.arc(px, py, 2.3, 0, Math.PI * 2);
+      ctx.fillStyle = colors[i];
+      ctx.shadowBlur = 8; ctx.shadowColor = colors[i];
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!W || !H) return;
+    const ph = S.phase + performance.now() / 1000 * 0.05;
+
+    ctx.fillStyle = '#05060a';
+    ctx.fillRect(0, 0, W, H);
+
+    for (const q of parts) {
+      q.x += q.vx; q.y += q.vy;
+      if (q.y < -5) { q.y = H + 5; q.x = Math.random() * W; }
+      ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(102,217,255,${q.a})`; ctx.fill();
+    }
+
+    const cx = W / 2, cy = H * 0.55;
+    const scale = Math.min(0.72, H / 380);
+    const pulse = 0.5 + 0.5 * Math.sin(ph * 2);
+
+    drawFigure(cx, cy, scale, pulse);
+    drawScroll(cx, cy + 30 * scale, 42 * scale, 34 * scale, ph);
+  }
+  requestAnimationFrame(frame);
+
+  // Typewriter
+  const lines = [
+    '◈ THE SCRIBE WRITES THE 5D SYSTEM',
+    '◇ PIDX · SGUIDE · VDOO · PENNIES · BOUND',
+    '◆ 5D → 4D → 3D · PROJECTION ACTIVE',
+    '◈ COHERENCE HOLDS · VEIL OPEN · PORTAL LIVE',
+    '◇ DETERMINISTIC · BLOCK-DRIVEN · ETERNAL'
+  ];
+  let li = 0, ch = 0, dir = 1;
+  setInterval(() => {
+    const txt = lines[li];
+    if (dir > 0) {
+      ch++;
+      if (ch > txt.length) { ch = txt.length; setTimeout(() => { dir = -1; }, 1400); }
+    } else {
+      ch--;
+      if (ch < 0) { ch = 0; dir = 1; li = (li + 1) % lines.length; }
+    }
+    typeEl.textContent = txt.slice(0, ch) + '▌';
+  }, 55);
+}
+
+// ─── PENTERACT CANVAS ──────────────────────────────────────────────────
+function startPent() {
+  const cv = document.getElementById('pent-canvas');
+  const ctx = cv.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
+
+  function resize() {
+    W = Math.max(cv.clientWidth, 200);
+    H = Math.max(cv.clientHeight, 200);
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // 32 vertices of 5-cube
+  const verts = [];
+  for (let i = 0; i < 32; i++) {
+    verts.push([
+      (i & 1) ? 1 : -1,
+      (i & 2) ? 1 : -1,
+      (i & 4) ? 1 : -1,
+      (i & 8) ? 1 : -1,
+      (i & 16) ? 1 : -1
+    ]);
+  }
+  const edges = [];
+  for (let i = 0; i < 32; i++) {
+    for (let j = i + 1; j < 32; j++) {
+      let d = 0;
+      for (let k = 0; k < 5; k++) if (verts[i][k] !== verts[j][k]) d++;
+      if (d === 1) edges.push([i, j]);
+    }
+  }
+
+  function rotatePlane(v, i, j, a) {
+    const out = v.slice();
+    const c = Math.cos(a), s = Math.sin(a);
+    out[i] = v[i] * c - v[j] * s;
+    out[j] = v[i] * s + v[j] * c;
+    return out;
+  }
+  function project(v, drop, dist) {
+    const w = v[drop];
+    const k = dist / (dist - w);
+    const out = [];
+    for (let i = 0; i < v.length; i++) {
+      if (i === drop) continue;
+      out.push(v[i] * k);
+    }
+    return out;
+  }
+  function p5to3(v, t) {
+    let r = rotatePlane(v, 0, 4, t * 0.31);
+    r = rotatePlane(r, 1, 3, t * 0.47);
+    r = rotatePlane(r, 0, 2, t * 0.19);
+    r = rotatePlane(r, 1, 4, t * 0.23);
+    const r4 = project(r, 4, 3.0);
+    return project(r4, 3, 2.2);
+  }
+
+  const colors = ['#88ccff', '#aaffaa', '#ffaa66', '#ff88ff'];
+
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!W || !H) return;
+    const ph = S.phase * 6.28 + performance.now() / 1000 * 0.4;
+    const scale = Math.min(W, H) * 0.22;
+
+    ctx.fillStyle = '#06060a';
+    ctx.fillRect(0, 0, W, H);
+
+    const cx = W / 2, cy = H / 2;
+    const proj = verts.map(v => p5to3(v, ph).map(x => x * scale));
+
+    // Edges
+    ctx.strokeStyle = '#4488cc';
+    ctx.globalAlpha = 0.35;
+    ctx.lineWidth = 0.8;
+    for (const [a, b] of edges) {
+      ctx.beginPath();
+      ctx.moveTo(cx + proj[a][0], cy + proj[a][1]);
+      ctx.lineTo(cx + proj[b][0], cy + proj[b][1]);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // Vertices
+    for (let i = 0; i < 32; i++) {
+      const cluster = (verts[i][3] > 0 ? 1 : 0) + 2 * (verts[i][4] > 0 ? 1 : 0);
+      const color = colors[cluster];
+      const x = cx + proj[i][0];
+      const y = cy + proj[i][1];
+      ctx.beginPath();
+      ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.shadowBlur = 6; ctx.shadowColor = color;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// ─── DATA LOOP ─────────────────────────────────────────────────────────
+async function refreshChain() {
+  try {
+    const [blkHex, gasHex] = await Promise.all([
+      rpc('eth_blockNumber'),
+      rpc('eth_gasPrice')
+    ]);
+    S.block = parseInt(blkHex, 16);
+    S.gas = Number(BigInt(gasHex)) / 1e9;
+  } catch (e) { console.warn('[rpc] block/gas failed', e); }
+
+  try {
+    const j = await fetchJson('https://api.geckoterminal.com/api/v2/networks/base/tokens/' + WETH);
+    const p = j?.data?.attributes?.price_usd;
+    if (p) S.eth = Number(p);
+  } catch (e) { /* keep last */ }
+
+  renderStatus();
+  if (S.block != null) {
+    S.auto = deriveAuto(S.block, S.gas, S.eth);
+    S.phase = S.auto.phase;
+    renderPanels();
+  }
+}
+
+async function refreshPools() {
+  for (const sym of Object.keys(TOKENS)) {
+    try {
+      S.pools[sym] = await findPool(sym);
+    } catch (_) {
+      S.pools[sym] = { pool: null, factory: null, tvl: 0, price: null, status: 'none' };
+    }
+    renderTokens();
+  }
+}
+
+// ─── BOOT ──────────────────────────────────────────────────────────────
+function boot() {
+  startHero();
+  startPent();
+  refreshChain();
+  refreshPools();
+
+  // Refresh chain every 15s, pools every 60s
+  setInterval(refreshChain, 15000);
+  setInterval(refreshPools, 60000);
+  setInterval(renderStatus, 1000);
+
+  console.log('[spirit-guide-v2] online');
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+
+})();
+</script>
+</body>
+</html>
