@@ -111,10 +111,29 @@ async function inspectToken(rpcs, addr){
     callRpc(rpcs, 'eth_call', [{ to: addr, data: '0x95d89b41' }, 'latest']),
     callRpc(rpcs, 'eth_call', [{ to: addr, data: '0x313ce567' }, 'latest'])
   ]);
+  let symbol = decodeString(symbolHex);
+  let name = decodeString(nameHex);
+  // Fallback: if symbol is empty or non-ASCII, try alternative ABI shapes
+  if (!symbol || !/^[A-Za-z0-9_]+$/.test(symbol)) {
+    // Some tokens return bytes32; try extracting raw ASCII from the payload
+    if (symbolHex && symbolHex.length >= 66) {
+      const raw = symbolHex.slice(2);
+      let s = '';
+      for (let i = 0; i < raw.length; i += 2) {
+        const c = parseInt(raw.slice(i, i+2), 16);
+        if (c === 0) break;
+        if (c >= 32 && c < 127) s += String.fromCharCode(c);
+        else if (c >= 128) s += '?';
+      }
+      symbol = s.replace(/^\?+|\?+$/g, '') || symbol;
+    }
+    // PENNIES specifically: chain returns ✓ (U+2713). Report it cleanly.
+    if (!symbol && name) symbol = name.split(/\s+/)[0].slice(0, 12);
+  }
   return {
     deployed: true,
-    name: decodeString(nameHex),
-    symbol: decodeString(symbolHex),
+    name: name || '?',
+    symbol: symbol || '?',
     decimals: decHex && decHex !== '0x' ? parseInt(decHex, 16) : null,
     codeSize: (code.length - 2) / 2
   };
