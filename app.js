@@ -59,9 +59,9 @@ function renderCard(t) {
         <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
         <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
         <div class="superchain-tracker" id="sc-${t.id}" style="margin-top:10px; padding:10px; background:rgba(0,255,204,0.05); border:1px solid rgba(0,255,204,0.2); border-radius:8px;">
-            <p style="font-size:0.8rem; color:#00ffcc; font-weight:bold;">🔗 Superchain Tracker</p>
-            <p style="font-size:0.7rem; color:var(--dim);">View live TVL & activity on DefiLlama's Superchain dashboard.</p>
-            <a href="https://defillama.com/chains/Base" target="_blank" rel="noopener noreferrer" class="swap-btn" style="display:inline-block; margin-top:6px; font-size:0.7rem; padding:4px 10px;">Open Tracker →</a>
+            <p style="font-size:0.8rem; color:#00ffcc; font-weight:bold;">🔗 Base Chain TVL</p>
+            <p style="font-size:0.7rem; color:var(--dim);" id="base-tvl-${t.id}">Loading...</p>
+            <a href="https://defillama.com/chain/Base" target="_blank" rel="noopener noreferrer" class="swap-btn" style="display:inline-block; margin-top:6px; font-size:0.7rem; padding:4px 10px;">View on DefiLlama →</a>
         </div>
         <div class="links" style="margin-top:10px;">
             <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
@@ -250,6 +250,7 @@ async function boot() {
         tokens.forEach(t => grid.appendChild(renderCard(t)));
         await syncAll(tokens);
         await scanAllSecurity(tokens);
+        await fetchBaseTVL();
         await enrichWithSuperchainMetadata(tokens);
         setInterval(() => syncAll(tokens), 10000);
     } catch (e) { console.error("Token grid error:", e); }
@@ -350,5 +351,28 @@ async function enrichWithSuperchainMetadata(tokens) {
         });
     } catch (e) {
         console.warn("Superchain metadata enrichment failed:", e);
+    }
+}
+
+
+// --- FETCH BASE CHAIN TVL FROM DEFILLAMA ---
+async function fetchBaseTVL() {
+    try {
+        // DefiLlama free endpoint for all chains
+        const res = await fetch("https://api.llama.fi/v2/chains");
+        const chains = await res.json();
+        const base = chains.find(c => c.name === "Base");
+        if (base) {
+            const tvlBillions = (base.tvl / 1e9).toFixed(2);
+            // Update all cards with the Base TVL
+            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
+                el.textContent = `$${tvlBillions}B`;
+            });
+        }
+    } catch (e) {
+        console.warn("DefiLlama TVL fetch failed:", e);
+        document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
+            el.textContent = "Unavailable";
+        });
     }
 }
