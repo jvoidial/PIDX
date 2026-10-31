@@ -2,10 +2,8 @@
 const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
 const CACHE_TTL = 30000;
-
-// *** REPLACE WITH AN EXISTING VAULT ADDRESS FOR REAL DEPOSITS ***
-const VAULT_ADDRESS = "0x0000000000000000000000000000000000000000"; 
-const ASSET_ADDRESS = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c"; // PIDX
+const VAULT_ADDRESS = "0x0000000000000000000000000000000000000000";
+const ASSET_ADDRESS = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c";
 
 // --- CACHING & API ---
 function getCached(key) {
@@ -78,11 +76,57 @@ async function syncAll(tokens) {
     }
 }
 
-// --- VITRUVIAN MEMORY SYSTEM ---
+// ==================== MINING POOLS ====================
+async function loadMiningPools() {
+    console.log("Loading mining pools...");
+    try {
+        const res = await fetch("mining_pools.json");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const pools = await res.json();
+        const grid = document.getElementById("mining-grid");
+        if (!grid) { console.error("mining-grid not found"); return; }
+        grid.innerHTML = "";
+        pools.forEach(p => {
+            const el = document.createElement("div");
+            el.className = "card small mining-card";
+            el.innerHTML = `
+                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
+                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
+                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
+                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
+            `;
+            grid.appendChild(el);
+        });
+        console.log(`Loaded ${pools.length} mining pools`);
+    } catch (e) {
+        console.error("Failed to load mining pools:", e);
+        const grid = document.getElementById("mining-grid");
+        if (grid) grid.innerHTML = '<p class="loading" style="color:#ff4444;">FAILED TO LOAD mining_pools.json</p>';
+    }
+}
+
+async function testStratumConnection() {
+    const url = document.getElementById("stratum-test-url").value.trim();
+    const resultEl = document.getElementById("stratum-test-result");
+    if (!url.startsWith("stratum+tcp://")) {
+        resultEl.textContent = "❌ Please enter a valid stratum+tcp:// URL.";
+        resultEl.style.color = "#ff4444";
+        return;
+    }
+    resultEl.textContent = "🔄 Testing connection...";
+    resultEl.style.color = "var(--dim)";
+    setTimeout(() => {
+        resultEl.textContent = "⚠️ Browser-based TCP testing is limited. Use a desktop miner to test the connection.";
+        resultEl.style.color = "#ffaa00";
+    }, 2000);
+}
+// ======================================================
+
+// --- VITRUVIAN MEMORY ---
 function loadMemory() {
     const memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
     const logContainer = document.getElementById("memory-log");
-    logContainer.innerHTML = ""; // Clear
+    logContainer.innerHTML = "";
     memory.forEach(entry => {
         const div = document.createElement("div");
         div.style.color = entry.color || "var(--text)";
@@ -97,12 +141,12 @@ function logMemory(msg, color = "var(--text)") {
     let memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
     const time = new Date().toLocaleTimeString();
     memory.push({ msg: `[${time}] ${msg}`, color });
-    if (memory.length > 10) memory.shift(); // Keep last 10
+    if (memory.length > 10) memory.shift();
     localStorage.setItem("vitruvian_memory", JSON.stringify(memory));
     loadMemory();
 }
 
-// --- SIMULATION & DYNAMIC STATES ---
+// --- SIMULATION ---
 let ebankPrincipal = 1000.00;
 let ebankYield = 0.00000000;
 let currentAPY = 0.1842;
@@ -124,44 +168,32 @@ function startEbankEngine() {
         const coherence = parseFloat(document.getElementById("val-coherence").textContent) || 0.9356;
         currentAPY = 0.15 + (coherence * 0.05);
         document.getElementById("ebank-apy").textContent = `${(currentAPY * 100).toFixed(2)}%`;
-
         const perSecondRate = Math.pow(1 + currentAPY, 1 / SECONDS_IN_YEAR) - 1;
         const earnedThisSecond = ebankPrincipal * perSecondRate;
         ebankYield += earnedThisSecond;
         ebankPrincipal += earnedThisSecond;
-
         document.getElementById("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
         document.getElementById("ebank-yield").textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
-
         const immunity = (99.8 - (1 - coherence) * 10).toFixed(2);
         document.getElementById("immunity-score").textContent = `${immunity}%`;
-    }, 1000); 
+    }, 1000);
 }
 
 function startGrowthEngine() {
     let block = 53318083, time = 0;
-    
-    // Load initial memory
     loadMemory();
-    
-    // Automatically shift Vitruvian states every 15 seconds
     setInterval(() => {
         const phases = ["OPEN", "CLOSING", "VEILED"];
         const bands = ["LOW", "MID", "HIGH"];
         const newPhase = phases[Math.floor(Math.random() * phases.length)];
         const newBand = bands[Math.floor(Math.random() * bands.length)];
         const newStability = (1.1 + Math.random() * 0.1).toFixed(3);
-        
         document.getElementById("v-veil").textContent = newPhase;
         document.getElementById("v-veil").style.color = newPhase === "OPEN" ? "#00ffcc" : (newPhase === "VEILED" ? "#ff4444" : "#ffaa00");
         document.getElementById("v-stability").textContent = newStability;
-        
-        const eBandEl = document.getElementById("val-energy");
-        eBandEl.textContent = `${newBand} (${(40 + Math.random() * 10).toFixed(1)} GW)`;
-        
+        document.getElementById("val-energy").textContent = `${newBand} (${(40 + Math.random() * 10).toFixed(1)} GW)`;
         logMemory(`Veil shifted to ${newPhase}. Stability updated to ${newStability}.`, newPhase === "VEILED" ? "#ff4444" : "#00ffcc");
     }, 15000);
-
     setInterval(() => {
         time += 0.1; block++;
         document.getElementById("live-block").textContent = block.toLocaleString();
@@ -169,7 +201,6 @@ function startGrowthEngine() {
         document.getElementById("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
         document.getElementById("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
         document.getElementById("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
-        
         if (Math.floor(time) % 10 === 0) {
             const statusEl = document.getElementById("val-engine");
             statusEl.textContent = "CALIBRATING..."; statusEl.style.color = "#ffaa00";
@@ -178,36 +209,29 @@ function startGrowthEngine() {
     }, 1000);
 }
 
-// --- REAL WEB3 CONNECTION ---
+// --- REAL WEB3 ---
 async function connectAndDeposit() {
     if (typeof window.ethereum === 'undefined') return alert("Please install a Web3 wallet.");
     if (VAULT_ADDRESS === "0x0000000000000000000000000000000000000000") return alert("Vault not configured yet.");
-
     const amount = parseFloat(document.getElementById("real-deposit-amount").value);
     if (isNaN(amount) || amount <= 0) return alert("Enter a valid amount.");
-
     try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         document.getElementById("network-status").innerHTML = `● CONNECTED: ${accounts[0].slice(0,6)}...${accounts[0].slice(-4)}`;
         document.getElementById("network-status").style.color = "#00ffcc";
-
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         if (chainId !== '0x2105') await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
-
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
         const btn = document.getElementById("real-deposit-btn");
-        
         btn.textContent = "Approving...";
         const tokenContract = new ethers.Contract(ASSET_ADDRESS, ["function approve(address spender, uint256 amount) public returns (bool)"], signer);
         const approveTx = await tokenContract.approve(VAULT_ADDRESS, ethers.parseUnits(amount.toString(), 18));
         await approveTx.wait();
-
         btn.textContent = "Depositing...";
         const vaultContract = new ethers.Contract(VAULT_ADDRESS, ["function deposit(uint256 assets, address receiver) public returns (uint256)"], signer);
         const depositTx = await vaultContract.deposit(ethers.parseUnits(amount.toString(), 18), accounts[0]);
         await depositTx.wait();
-
         btn.textContent = "Success!";
         logMemory(`Real deposit of ${amount} PIDX successful!`, "#00ffcc");
         setTimeout(() => { btn.textContent = "Connect Wallet to Deposit"; }, 3000);
@@ -226,12 +250,14 @@ async function boot() {
         grid.innerHTML = "";
         tokens.forEach(t => grid.appendChild(renderCard(t)));
         await syncAll(tokens);
-        setInterval(() => syncAll(tokens), 10000); 
-    } catch (e) {}
+        setInterval(() => syncAll(tokens), 10000);
+    } catch (e) { console.error("Token grid error:", e); }
     startGrowthEngine();
     startEbankEngine();
     updateWalletSim();
     document.getElementById("real-deposit-btn").addEventListener("click", connectAndDeposit);
+    // Load mining pools
+    await loadMiningPools();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -239,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     boot();
 });
 
-// 3D Background (Unchanged)
+// 3D Background
 function startBackground() {
     try {
         const canvas = document.getElementById("neural-canvas");
@@ -284,90 +310,5 @@ function startBackground() {
             renderer.render(scene, camera);
         })();
         addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
-    } catch(e) {}
+    } catch(e) { console.warn("3D Background failed:", e); }
 }
-
-
-// --- MINING POOLS ---
-async function loadMiningPools() {
-    try {
-        const res = await fetch("mining_pools.json");
-        const pools = await res.json();
-        const grid = document.getElementById("mining-grid");
-        grid.innerHTML = "";
-        pools.forEach(p => {
-            const el = document.createElement("div");
-            el.className = "card small mining-card";
-            el.innerHTML = `
-                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
-                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
-            `;
-            grid.appendChild(el);
-        });
-    } catch (e) {
-        console.error("Failed to load mining pools:", e);
-    }
-}
-
-async function testStratumConnection() {
-    const url = document.getElementById("stratum-test-url").value.trim();
-    const resultEl = document.getElementById("stratum-test-result");
-    if (!url.startsWith("stratum+tcp://")) {
-        resultEl.textContent = "❌ Please enter a valid stratum+tcp:// URL.";
-        resultEl.style.color = "#ff4444";
-        return;
-    }
-    resultEl.textContent = "🔄 Testing connection...";
-    resultEl.style.color = "var(--dim)";
-    // Note: Browser TCP connection testing is limited. We can only show a timeout/error.
-    // For a real test, a backend proxy or WebSocket bridge would be needed.
-    setTimeout(() => {
-        resultEl.textContent = "⚠️ Browser-based TCP testing is limited. Use a desktop miner to test the connection.";
-        resultEl.style.color = "#ffaa00";
-    }, 2000);
-}
-
-
-// --- MINING POOLS ---
-async function loadMiningPools() {
-    try {
-        const res = await fetch("mining_pools.json");
-        const pools = await res.json();
-        const grid = document.getElementById("mining-grid");
-        if(!grid) return;
-        grid.innerHTML = "";
-        pools.forEach(p => {
-            const el = document.createElement("div");
-            el.className = "card small mining-card";
-            el.innerHTML = `
-                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
-                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
-            `;
-            grid.appendChild(el);
-        });
-    } catch (e) {
-        console.error("Failed to load mining pools:", e);
-    }
-}
-
-async function testStratumConnection() {
-    const url = document.getElementById("stratum-test-url").value.trim();
-    const resultEl = document.getElementById("stratum-test-result");
-    if (!url.startsWith("stratum+tcp://")) {
-        resultEl.textContent = "❌ Please enter a valid stratum+tcp:// URL.";
-        resultEl.style.color = "#ff4444";
-        return;
-    }
-    resultEl.textContent = "🔄 Testing connection...";
-    resultEl.style.color = "var(--dim)";
-    setTimeout(() => {
-        resultEl.textContent = "⚠️ Browser-based TCP testing is limited. Use a desktop miner to test the connection.";
-        resultEl.style.color = "#ffaa00";
-    }, 2000);
-}
-
-document.addEventListener('DOMContentLoaded', loadMiningPools);

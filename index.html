@@ -7,7 +7,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>✧ THE COSMIC SCRIBE ✧ · eBank</title>
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=13">
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
@@ -26,6 +26,7 @@
 </header>
 
 <main>
+  <!-- eBANK VAULT -->
   <section class="grid-section">
     <h2>🏦 Digital eBank · Auto-Immune Vault</h2>
     <div class="ebank-container">
@@ -39,19 +40,16 @@
           <span id="immunity-score" style="font-family:monospace; font-size:1.2rem; color:#00ffcc; font-weight:bold;">99.80%</span>
         </div>
       </div>
-
       <div style="margin-bottom: 20px; display: flex; gap: 10px;">
         <input type="text" id="wallet-sim" class="wallet-input" placeholder="Enter any 0x address to simulate yield..." value="0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c">
         <button class="btn-secondary" onclick="updateWalletSim()">Track Simulated Wallet</button>
       </div>
-
       <div class="ebank-grid">
         <div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div>
         <div class="ebank-stat"><span class="label">Yield Accrued (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div>
         <div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div>
         <div class="ebank-stat"><span class="label">Total Protocol TVL</span><span class="value" id="ebank-tvl">$842,912.00</span></div>
       </div>
-
       <div class="ebank-actions">
         <div class="input-group">
           <input type="number" id="real-deposit-amount" placeholder="Amount (PIDX)" value="100" min="1">
@@ -62,6 +60,7 @@
     </div>
   </section>
 
+  <!-- TOKEN GRID -->
   <section class="grid-section">
     <h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2>
     <div id="token-grid" class="token-grid">
@@ -69,6 +68,7 @@
     </div>
   </section>
 
+  <!-- GROWTH ENGINE -->
   <section class="grid-section">
     <h2>🌱 Growth Engine & Voxel Dynamics</h2>
     <div class="engine-grid">
@@ -81,7 +81,7 @@
     </div>
   </section>
 
-  <!-- NEW: VITRUVIAN MEMORY & SCIENCE PANEL -->
+  <!-- VITRUVIAN MEMORY -->
   <section class="grid-section split">
     <div class="panel">
       <h2>🧬 Vitruvian System States</h2>
@@ -100,11 +100,30 @@
       </div>
     </div>
   </section>
+
+  <!-- ==================== MINING POOLS SECTION ==================== -->
+  <section class="grid-section">
+    <h2>⛏️ Mining Pools · Stratum Directory</h2>
+    <div class="mining-grid" id="mining-grid">
+      <p class="loading">LOADING MINING POOLS...</p>
+    </div>
+    <div class="panel" style="margin-top:20px;">
+      <h3>Test Stratum Connectivity</h3>
+      <p style="color:var(--dim); font-size:0.85rem; margin-bottom:10px;">Enter a Stratum URL to test TCP connectivity from your browser.</p>
+      <div style="display:flex; gap:10px;">
+        <input type="text" id="stratum-test-url" class="wallet-input" placeholder="stratum+tcp://host:port">
+        <button class="btn-secondary" onclick="testStratumConnection()">Test Connection</button>
+      </div>
+      <p id="stratum-test-result" style="margin-top:10px; font-family:monospace;"></p>
+    </div>
+  </section>
+  <!-- ============================================================= -->
+
 </main>
 
 <footer>
   <p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p>
 </footer>
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
