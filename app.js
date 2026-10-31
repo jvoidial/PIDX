@@ -3,7 +3,11 @@ const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
 const CACHE_TTL = 30000;
 
-// --- CACHING & API ---
+// *** IMPORTANT: REPLACE THIS WITH YOUR DEPLOYED VAULT ADDRESS ONCE YOU DEPLOY IT ***
+const VAULT_ADDRESS = "0x0000000000000000000000000000000000000000"; 
+const PIDX_ADDRESS = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c";
+
+// Caching, API fetching, renderCards are unchanged
 function getCached(key) {
     const item = localStorage.getItem(key);
     if (!item) return null;
@@ -17,7 +21,6 @@ async function fetchPoolData(token) {
     const cacheKey = `tvl_${token.id}`;
     const cached = getCached(cacheKey);
     if (cached !== null) return { tvl: cached, source: "cache" };
-
     try {
         const res = await fetch(`${GECKO_API}${token.pool}`);
         if (res.ok) {
@@ -26,7 +29,6 @@ async function fetchPoolData(token) {
             setCache(cacheKey, tvl); return { tvl, source: "gecko" };
         }
     } catch (e) {}
-
     try {
         const res = await fetch(`${DEX_API}${token.address}`);
         if (res.ok) {
@@ -76,77 +78,105 @@ async function syncAll(tokens) {
     }
 }
 
-// --- AUTONOMOUS eBANK ENGINE ---
+// --- REAL WEB3 INTEGRATION ---
+let provider, signer, userAddress;
+
+async function connectAndDeposit() {
+    if (typeof window.ethereum === 'undefined') {
+        return alert("Please install MetaMask or Coinbase Wallet.");
+    }
+
+    const amountInput = document.getElementById("real-deposit-amount").value;
+    const amount = parseFloat(amountInput);
+    if (isNaN(amount) || amount <= 0) return alert("Enter a valid amount.");
+
+    if (VAULT_ADDRESS === "0x0000000000000000000000000000000000000000") {
+        return alert("Vault not deployed yet. Please deploy the SpiritVault.sol contract and update VAULT_ADDRESS in app.js.");
+    }
+
+    try {
+        // 1. Connect
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+        document.getElementById("network-status").innerHTML = `● CONNECTED: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
+        document.getElementById("network-status").style.color = "#00ffcc";
+
+        // 2. Switch Network
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') {
+            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+        }
+
+        provider = new ethers.BrowserProvider(window.ethereum);
+        signer = await provider.getSigner();
+        
+        const btn = document.getElementById("real-deposit-btn");
+        btn.textContent = "Approving...";
+
+        // 3. Approve PIDX
+        const tokenContract = new ethers.Contract(PIDX_ADDRESS, ["function approve(address spender, uint256 amount) public returns (bool)"], signer);
+        const amountInWei = ethers.parseUnits(amount.toString(), 18);
+        const approveTx = await tokenContract.approve(VAULT_ADDRESS, amountInWei);
+        await approveTx.wait();
+
+        btn.textContent = "Depositing...";
+
+        // 4. Deposit into Vault
+        const vaultContract = new ethers.Contract(VAULT_ADDRESS, ["function deposit(uint256 assets, address receiver) public returns (uint256)"], signer);
+        const depositTx = await vaultContract.deposit(amountInWei, userAddress);
+        await depositTx.wait();
+
+        btn.textContent = "Success!";
+        btn.style.background = "#00ffcc";
+        btn.style.color = "#000";
+        setTimeout(() => {
+            btn.textContent = "Connect Wallet to Deposit";
+            btn.style.background = "";
+            btn.style.color = "";
+        }, 3000);
+
+    } catch (error) {
+        console.error("Transaction failed:", error);
+        alert(`Transaction failed: ${error.reason || error.message}`);
+    }
+}
+
+// --- SIMULATION ENGINE ---
 let ebankPrincipal = 1000.00;
 let ebankYield = 0.00000000;
-let currentAPY = 0.1842; // 18.42% Base APY
+let currentAPY = 0.1842;
 const SECONDS_IN_YEAR = 31536000;
 
 function updateWalletSim() {
     const addr = document.getElementById("wallet-sim").value;
     if (addr.length >= 10) {
-        // Generate pseudo-random principal based on address string
         let hash = 0;
         for (let i = 0; i < addr.length; i++) hash = addr.charCodeAt(i) + ((hash << 5) - hash);
-        const simulatedBase = Math.abs(hash % 5000) + 500; // between 500 and 5500
-        
-        ebankPrincipal = simulatedBase;
+        ebankPrincipal = Math.abs(hash % 5000) + 500;
         ebankYield = 0;
-        
-        const btn = document.getElementById("real-deposit-btn");
-        btn.textContent = "Tracking Address...";
-        setTimeout(() => { btn.textContent = "Real Deposit (Requires Smart Contract)"; }, 1000);
     }
 }
 
 function startEbankEngine() {
     setInterval(() => {
-        // Dynamic APY based on Coherence
         const coherence = parseFloat(document.getElementById("val-coherence").textContent) || 0.9356;
-        currentAPY = 0.15 + (coherence * 0.05); // Fluctuates between 15% and 20%
+        currentAPY = 0.15 + (coherence * 0.05);
         document.getElementById("ebank-apy").textContent = `${(currentAPY * 100).toFixed(2)}%`;
 
-        // Calculate yield per second
         const perSecondRate = Math.pow(1 + currentAPY, 1 / SECONDS_IN_YEAR) - 1;
         const earnedThisSecond = ebankPrincipal * perSecondRate;
         
-        // Auto-compound
         ebankYield += earnedThisSecond;
         ebankPrincipal += earnedThisSecond;
 
-        // Update UI
         document.getElementById("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
         document.getElementById("ebank-yield").textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
 
-        // Update Auto-Immune Shield
         const immunity = (99.8 - (1 - coherence) * 10).toFixed(2);
         document.getElementById("immunity-score").textContent = `${immunity}%`;
-
-        // Simulate TVL growth
-        const tvlEl = document.getElementById("ebank-tvl");
-        let currentTVL = parseFloat(tvlEl.textContent.replace(/[$,]/g, ""));
-        currentTVL += earnedThisSecond * 12; // Protocol TVL grows faster
-        tvlEl.textContent = `$${currentTVL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-
     }, 1000); 
 }
 
-// Handle Simulated Deposit
-document.getElementById("simulate-deposit").addEventListener("click", () => {
-    const amount = parseFloat(document.getElementById("deposit-amount").value);
-    if (!isNaN(amount) && amount > 0) {
-        ebankPrincipal += amount;
-        document.getElementById("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
-        
-        const btn = document.getElementById("simulate-deposit");
-        btn.textContent = "Deposited!";
-        btn.style.background = "#00ffcc";
-        btn.style.color = "#000";
-        setTimeout(() => { btn.textContent = "Auto-Deposit Simulation"; btn.style.background = ""; btn.style.color = ""; }, 1500);
-    }
-});
-
-// --- GROWTH ENGINE ---
 function startGrowthEngine() {
     let block = 53318083, time = 0;
     setInterval(() => {
@@ -157,11 +187,6 @@ function startGrowthEngine() {
         document.getElementById("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
         document.getElementById("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
         document.getElementById("val-energy").textContent = `MID (${(42.8 + Math.sin(time * 1.2) * 2.5).toFixed(1)} GW)`;
-        if (Math.floor(time) % 10 === 0) {
-            const statusEl = document.getElementById("val-engine");
-            statusEl.textContent = "CALIBRATING..."; statusEl.style.color = "#ffaa00";
-            setTimeout(() => { statusEl.textContent = "OPTIMAL"; statusEl.style.color = "var(--white)"; }, 1500);
-        }
     }, 1000);
 }
 
@@ -179,9 +204,8 @@ async function boot() {
     }
     startGrowthEngine();
     startEbankEngine();
-    
-    // Initialize with default wallet
     updateWalletSim();
+    document.getElementById("real-deposit-btn").addEventListener("click", connectAndDeposit);
 }
 
 // 3D Background

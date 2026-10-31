@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://mainnet.base.org; img-src 'self' data:;">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta name="referrer" content="no-referrer">
 <title>✧ THE COSMIC SCRIBE ✧ · eBank</title>
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=11">
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
 </head>
 <body>
 <div class="scanlines"></div>
@@ -18,15 +18,14 @@
 
 <header>
   <h1>✧ THE COSMIC SCRIBE ✧</h1>
-  <p class="subtitle">GENERATION 10 · AUTONOMOUS eBANK · ZERO-CLICK PROTOCOL</p>
+  <p class="subtitle">GENERATION 10 · HYBRID dAPP · BASE NETWORK</p>
   <div class="status-bar">
     <span>✦ Block <span id="live-block">53,318,083</span></span>
-    <span style="color:#00ffcc;">● Network: BASE · Status: AUTO-SYNCED</span>
+    <span style="color:#00ffcc;" id="network-status">● System: VIEW MODE</span>
   </div>
 </header>
 
 <main>
-  <!-- eBANK AUTO-IMMUNE VAULT -->
   <section class="grid-section">
     <h2>🏦 Digital eBank · Auto-Immune Vault</h2>
     <div class="ebank-container">
@@ -41,10 +40,9 @@
         </div>
       </div>
 
-      <!-- SIMULATED WALLET INPUT -->
       <div style="margin-bottom: 20px; display: flex; gap: 10px;">
         <input type="text" id="wallet-sim" class="wallet-input" placeholder="Enter any 0x address to simulate yield..." value="0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c">
-        <button class="btn-secondary" onclick="updateWalletSim()">Track Wallet</button>
+        <button class="btn-secondary" onclick="updateWalletSim()">Track Simulated Wallet</button>
       </div>
 
       <div class="ebank-grid">
@@ -68,12 +66,11 @@
 
       <div class="ebank-actions">
         <div class="input-group">
-          <input type="number" id="deposit-amount" placeholder="Amount (PIDX)" value="1000" min="1">
-          <button class="btn-secondary" id="simulate-deposit">Auto-Deposit Simulation</button>
+          <input type="number" id="real-deposit-amount" placeholder="Amount (PIDX)" value="100" min="1">
+          <button class="btn-primary" id="real-deposit-btn">Connect Wallet to Deposit</button>
         </div>
-        <button class="btn-primary" id="real-deposit-btn" style="background:var(--dim); cursor:not-allowed;" disabled>Real Deposit (Requires Smart Contract)</button>
       </div>
-      <p class="ebank-note">* This is a fully autonomous frontend simulation using real compounding math. To move real funds, an ERC-4626 smart contract must be deployed to Base Mainnet.</p>
+      <p class="ebank-note">* The dashboard runs a simulation until you connect your wallet. Once connected, you can deposit real PIDX tokens into the smart contract vault.</p>
     </div>
   </section>
 
@@ -100,7 +97,6 @@
 <footer>
   <p>✧ SPIRIT GUIDE · GENERATION 10 · eBANK ✧</p>
 </footer>
-
-<script src="app.js?v=10"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>
