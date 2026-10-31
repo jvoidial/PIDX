@@ -11,13 +11,11 @@ async function fetchPoolData(token) {
     const attrs = json.data?.attributes || {};
     return {
       tvl: Number(attrs.reserve_in_usd || 0),
-      price: attrs.base_token_price_usd || null,
-      volume: attrs.volume_usd?.h24 || null,
       source: "geckoterminal"
     };
   } catch (e) {
     console.warn(`GeckoTerminal failed for ${token.symbol}:`, e);
-    return { tvl: 0, price: null, volume: null, source: "error" };
+    return { tvl: 0, source: "error" };
   }
 }
 
@@ -28,7 +26,8 @@ function renderCard(t) {
   const safeAddr = DOMPurify.sanitize(t.address);
   const safePool = DOMPurify.sanitize(t.pool);
 
-  const uniswapUrl = `https://app.uniswap.org/explore/pools/base/${safePool}`;
+  // FIX: Using the search query format ensures Uniswap finds the pool regardless of V2/V3/V4
+  const uniswapUrl = `https://app.uniswap.org/explore/pools/base?query=${safePool}`;
   const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
 
   const el = document.createElement("div");
@@ -52,15 +51,16 @@ async function syncAll(tokens) {
     const span = document.getElementById(`tvl-${t.id}`);
     if (!span) continue;
 
-    if (data.tvl >= 1) {
+    // FIX: Ensure UI updates even if the request fails so it doesn't hang on "SYNCING"
+    if (data.source === "error") {
+      span.className = "badge empty";
+      span.textContent = "API ERROR";
+    } else if (data.tvl >= 1) {
       span.className = "badge tiny";
       span.textContent = `$${data.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    } else if (data.source === "geckoterminal") {
-      span.className = "badge empty";
-      span.textContent = "LOW LIQUIDITY";
     } else {
       span.className = "badge empty";
-      span.textContent = "EMPTY";
+      span.textContent = "LOW LIQUIDITY";
     }
   }
 }
@@ -81,6 +81,7 @@ async function boot() {
   }
 }
 
+// 3D Background (Unchanged)
 function startBackground() {
   const canvas = document.getElementById("neural-canvas");
   const scene = new THREE.Scene();
@@ -93,21 +94,16 @@ function startBackground() {
   const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
   const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
 
-  const hyper = new THREE.LineSegments(
-    new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
+  const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
   scene.add(hyper);
 
-  const core = new THREE.LineSegments(
-    new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)),
-    new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
+  const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
   scene.add(core);
 
   const N = 400;
   const pos = new Float32Array(N*3);
   for (let i=0;i<N*3;i+=3){
-    pos[i]=(Math.random()-.5)*30;
-    pos[i+1]=(Math.random()-.5)*30;
-    pos[i+2]=(Math.random()-.5)*30;
+    pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30;
   }
   const pGeo = new THREE.BufferGeometry();
   pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
@@ -117,8 +113,7 @@ function startBackground() {
   const lines = [];
   for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
     const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
-    if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5)
-      lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
+    if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5) lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
   }
   const lGeo = new THREE.BufferGeometry();
   lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
@@ -138,8 +133,7 @@ function startBackground() {
   })();
 
   addEventListener("resize", () => {
-    camera.aspect = innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
+    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight);
   });
 }
