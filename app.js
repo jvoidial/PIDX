@@ -11,6 +11,13 @@ function validateTokenSchema(tokens) {
         throw new Error(`Missing field "${field}"`);
       }
     }
+    // Relaxed: Accept both 40-char (V2/V3) and 64-char (V4) pool addresses
+    if (!/^0x[a-fA-F0-9]{40}$/.test(t.address)) {
+      throw new Error(`Invalid token address: ${t.address}`);
+    }
+    if (!/^0x[a-fA-F0-9]{40,64}$/.test(t.pool)) {
+      throw new Error(`Invalid pool address: ${t.pool}`);
+    }
   }
   return tokens;
 }
@@ -24,6 +31,7 @@ async function fetchPoolData(token) {
     const attrs = json.data?.attributes || {};
     return { tvl: Number(attrs.reserve_in_usd || 0), source: "geckoterminal" };
   } catch (e) {
+    console.warn(`GeckoTerminal failed for ${token.symbol}:`, e);
     return { tvl: 0, source: "error" };
   }
 }
@@ -35,6 +43,7 @@ function renderCard(t) {
   const safeAddr = DOMPurify.sanitize(t.address);
   const safePool = DOMPurify.sanitize(t.pool);
 
+  // Correct Uniswap URL format for both V2/V3 and V4 pools
   const uniswapUrl = `https://app.uniswap.org/explore/pools/base?query=${safePool}`;
   const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
 
@@ -82,9 +91,11 @@ async function boot() {
   } catch (e) {
     document.getElementById("token-grid").innerHTML =
       '<p class="loading">SECURITY: tokens.json FAILED VALIDATION</p>';
+    console.error(e);
   }
 }
 
+// 3D background (unchanged)
 function startBackground() {
   try {
     const canvas = document.getElementById("neural-canvas");
