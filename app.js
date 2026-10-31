@@ -3,6 +3,7 @@ const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
 const CACHE_TTL = 30000;
 
+// --- CACHING & API ---
 function getCached(key) {
     const item = localStorage.getItem(key);
     if (!item) return null;
@@ -46,7 +47,6 @@ function renderCard(t) {
     const safeFreq = DOMPurify.sanitize(t.freq);
     const safeAddr = DOMPurify.sanitize(t.address);
     const safePool = DOMPurify.sanitize(t.pool);
-    
     const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
     const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
 
@@ -76,52 +76,75 @@ async function syncAll(tokens) {
     }
 }
 
-// --- AUTONOMOUS VAULT SIMULATOR ---
-function startVaultSimulator() {
-    let tvl = 124592.40;
-    let yieldEarned = 8421.12;
-    let harvestTimer = 15;
-    
-    setInterval(() => {
-        // Fluctuate APY slightly
-        const apy = (14.82 + (Math.random() * 0.5 - 0.25)).toFixed(2);
-        document.getElementById("vault-apy").textContent = `${apy}%`;
+// --- AUTONOMOUS eBANK ENGINE ---
+let ebankPrincipal = 1000.00;
+let ebankYield = 0.00000000;
+let currentAPY = 0.1842; // 18.42% Base APY
+const SECONDS_IN_YEAR = 31536000;
+
+function updateWalletSim() {
+    const addr = document.getElementById("wallet-sim").value;
+    if (addr.length >= 10) {
+        // Generate pseudo-random principal based on address string
+        let hash = 0;
+        for (let i = 0; i < addr.length; i++) hash = addr.charCodeAt(i) + ((hash << 5) - hash);
+        const simulatedBase = Math.abs(hash % 5000) + 500; // between 500 and 5500
         
-        // Tick down harvest timer
-        harvestTimer--;
-        if (harvestTimer <= 0) {
-            harvestTimer = 15;
-            // Simulate yield harvest
-            const reward = 12.45;
-            tvl += reward;
-            yieldEarned += reward;
-            document.getElementById("vault-tvl").textContent = `$${tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById("vault-yield").textContent = `+ $${yieldEarned.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            // Flash effect
-            const tvlEl = document.getElementById("vault-tvl");
-            tvlEl.style.color = "#00ffcc";
-            setTimeout(() => tvlEl.style.color = "var(--white)", 500);
-        }
-        document.getElementById("vault-harvest").textContent = `00:${harvestTimer.toString().padStart(2, '0')}s`;
-    }, 1000);
+        ebankPrincipal = simulatedBase;
+        ebankYield = 0;
+        
+        const btn = document.getElementById("real-deposit-btn");
+        btn.textContent = "Tracking Address...";
+        setTimeout(() => { btn.textContent = "Real Deposit (Requires Smart Contract)"; }, 1000);
+    }
 }
 
-// --- OPTIONAL WALLET CONNECTION ---
-async function connectWalletForDeposit() {
-    if (typeof window.ethereum === 'undefined') {
-        alert("Please install MetaMask or Coinbase Wallet to deposit real funds.");
-        return;
-    }
-    try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x2105') {
-            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
-        }
-        alert(`Wallet ${accounts[0].slice(0,6)}...${accounts[0].slice(-4)} connected! Vault deposit functionality coming soon.`);
-    } catch (e) { console.error(e); }
+function startEbankEngine() {
+    setInterval(() => {
+        // Dynamic APY based on Coherence
+        const coherence = parseFloat(document.getElementById("val-coherence").textContent) || 0.9356;
+        currentAPY = 0.15 + (coherence * 0.05); // Fluctuates between 15% and 20%
+        document.getElementById("ebank-apy").textContent = `${(currentAPY * 100).toFixed(2)}%`;
+
+        // Calculate yield per second
+        const perSecondRate = Math.pow(1 + currentAPY, 1 / SECONDS_IN_YEAR) - 1;
+        const earnedThisSecond = ebankPrincipal * perSecondRate;
+        
+        // Auto-compound
+        ebankYield += earnedThisSecond;
+        ebankPrincipal += earnedThisSecond;
+
+        // Update UI
+        document.getElementById("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
+        document.getElementById("ebank-yield").textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
+
+        // Update Auto-Immune Shield
+        const immunity = (99.8 - (1 - coherence) * 10).toFixed(2);
+        document.getElementById("immunity-score").textContent = `${immunity}%`;
+
+        // Simulate TVL growth
+        const tvlEl = document.getElementById("ebank-tvl");
+        let currentTVL = parseFloat(tvlEl.textContent.replace(/[$,]/g, ""));
+        currentTVL += earnedThisSecond * 12; // Protocol TVL grows faster
+        tvlEl.textContent = `$${currentTVL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+    }, 1000); 
 }
+
+// Handle Simulated Deposit
+document.getElementById("simulate-deposit").addEventListener("click", () => {
+    const amount = parseFloat(document.getElementById("deposit-amount").value);
+    if (!isNaN(amount) && amount > 0) {
+        ebankPrincipal += amount;
+        document.getElementById("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
+        
+        const btn = document.getElementById("simulate-deposit");
+        btn.textContent = "Deposited!";
+        btn.style.background = "#00ffcc";
+        btn.style.color = "#000";
+        setTimeout(() => { btn.textContent = "Auto-Deposit Simulation"; btn.style.background = ""; btn.style.color = ""; }, 1500);
+    }
+});
 
 // --- GROWTH ENGINE ---
 function startGrowthEngine() {
@@ -155,8 +178,10 @@ async function boot() {
         document.getElementById("token-grid").innerHTML = '<p class="loading">FAILED TO LOAD tokens.json</p>';
     }
     startGrowthEngine();
-    startVaultSimulator();
-    document.getElementById("deposit-btn").addEventListener("click", connectWalletForDeposit);
+    startEbankEngine();
+    
+    // Initialize with default wallet
+    updateWalletSim();
 }
 
 // 3D Background

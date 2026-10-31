@@ -7,11 +7,10 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="no-referrer">
-<title>✧ THE COSMIC SCRIBE ✧</title>
-<link rel="stylesheet" href="style.css?v=8">
+<title>✧ THE COSMIC SCRIBE ✧ · eBank</title>
+<link rel="stylesheet" href="style.css?v=10">
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
 </head>
 <body>
 <div class="scanlines"></div>
@@ -19,14 +18,65 @@
 
 <header>
   <h1>✧ THE COSMIC SCRIBE ✧</h1>
-  <p class="subtitle">GENERATION 10 · AUTONOMOUS PROTOCOL · BASE</p>
+  <p class="subtitle">GENERATION 10 · AUTONOMOUS eBANK · ZERO-CLICK PROTOCOL</p>
   <div class="status-bar">
     <span>✦ Block <span id="live-block">53,318,083</span></span>
-    <span style="color:#00ffcc;">● Network: BASE</span>
+    <span style="color:#00ffcc;">● Network: BASE · Status: AUTO-SYNCED</span>
   </div>
 </header>
 
 <main>
+  <!-- eBANK AUTO-IMMUNE VAULT -->
+  <section class="grid-section">
+    <h2>🏦 Digital eBank · Auto-Immune Vault</h2>
+    <div class="ebank-container">
+      <div class="ebank-header">
+        <div>
+          <h3 style="color:var(--white); font-size:1.2rem; margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3>
+          <span class="badge tiny" style="background:rgba(0,255,204,0.1); color:#00ffcc; border:1px solid #00ffcc;">AUTO-COMPOUNDING ACTIVE</span>
+        </div>
+        <div class="immunity-shield">
+          <span style="font-size:0.75rem; color:var(--dim);">Auto-Immune Shield</span>
+          <span id="immunity-score" style="font-family:monospace; font-size:1.2rem; color:#00ffcc; font-weight:bold;">99.80%</span>
+        </div>
+      </div>
+
+      <!-- SIMULATED WALLET INPUT -->
+      <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <input type="text" id="wallet-sim" class="wallet-input" placeholder="Enter any 0x address to simulate yield..." value="0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c">
+        <button class="btn-secondary" onclick="updateWalletSim()">Track Wallet</button>
+      </div>
+
+      <div class="ebank-grid">
+        <div class="ebank-stat">
+          <span class="label">Simulated Principal</span>
+          <span class="value" id="ebank-principal">1,000.0000 PIDX</span>
+        </div>
+        <div class="ebank-stat">
+          <span class="label">Yield Accrued (Auto)</span>
+          <span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span>
+        </div>
+        <div class="ebank-stat">
+          <span class="label">Dynamic APY</span>
+          <span class="value" id="ebank-apy">18.42%</span>
+        </div>
+        <div class="ebank-stat">
+          <span class="label">Total Protocol TVL</span>
+          <span class="value" id="ebank-tvl">$842,912.00</span>
+        </div>
+      </div>
+
+      <div class="ebank-actions">
+        <div class="input-group">
+          <input type="number" id="deposit-amount" placeholder="Amount (PIDX)" value="1000" min="1">
+          <button class="btn-secondary" id="simulate-deposit">Auto-Deposit Simulation</button>
+        </div>
+        <button class="btn-primary" id="real-deposit-btn" style="background:var(--dim); cursor:not-allowed;" disabled>Real Deposit (Requires Smart Contract)</button>
+      </div>
+      <p class="ebank-note">* This is a fully autonomous frontend simulation using real compounding math. To move real funds, an ERC-4626 smart contract must be deployed to Base Mainnet.</p>
+    </div>
+  </section>
+
   <section class="grid-section">
     <h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2>
     <div id="token-grid" class="token-grid">
@@ -45,47 +95,12 @@
       <div class="engine-card"><span class="label">Engine Status</span><span class="value success" id="val-engine">OPTIMAL</span></div>
     </div>
   </section>
-
-  <!-- NEW: AUTONOMOUS INFINITY VAULT -->
-  <section class="grid-section">
-    <h2>🏦 Infinity Vault · Auto-Compounding</h2>
-    <div class="panel vault-panel">
-      <div class="vault-header">
-        <h3>SPIRIT VAULT v1 (Simulated)</h3>
-        <span class="badge tiny" style="background:rgba(0,255,204,0.2); color:#00ffcc; border:1px solid #00ffcc;">ACTIVE & HARVESTING</span>
-      </div>
-      
-      <div class="vault-stats">
-        <div class="stat">
-          <span class="stat-label">Current APY</span>
-          <span class="stat-value" id="vault-apy">14.82%</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Total Value Locked</span>
-          <span class="stat-value" id="vault-tvl">$124,592.40</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Next Harvest</span>
-          <span class="stat-value" id="vault-harvest">00:14s</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Lifetime Yield</span>
-          <span class="stat-value" id="vault-yield">+ $8,421.12</span>
-        </div>
-      </div>
-
-      <div class="vault-action">
-        <p style="color:var(--dim); font-size:0.85rem; margin-bottom:10px;">Protocol is auto-compounding. To deposit real funds, connect your wallet.</p>
-        <button id="deposit-btn" class="wallet-btn" style="width:100%;">Connect Wallet to Deposit</button>
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>
-  <p>✧ SPIRIT GUIDE · GENERATION 10 ✧</p>
+  <p>✧ SPIRIT GUIDE · GENERATION 10 · eBANK ✧</p>
 </footer>
 
-<script src="app.js?v=8"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
