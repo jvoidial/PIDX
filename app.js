@@ -49,7 +49,6 @@ function renderCard(t) {
     const safePool = DOMPurify.sanitize(t.pool);
     const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
     const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
-    const dexUrl = `https://dexscreener.com/base/${safePool}`;
 
     const el = document.createElement("div");
     el.className = "card";
@@ -60,6 +59,8 @@ function renderCard(t) {
         <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
         <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
         
+        <div class="chart-container" id="chart-${t.id}" style="height: 200px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2);"></div>
+        
         <div class="superchain-tracker" style="margin-top:10px; padding:10px; background:rgba(0,255,204,0.05); border:1px solid rgba(0,255,204,0.2); border-radius:8px;">
             <p style="font-size:0.8rem; color:#00ffcc; font-weight:bold;">🔗 Base Chain TVL</p>
             <p style="font-size:0.7rem; color:var(--dim);" id="base-tvl-${t.id}">Loading...</p>
@@ -67,7 +68,7 @@ function renderCard(t) {
         
         <div class="links" style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">
             <a href="${swapUrl}" target="_blank" class="swap-btn" style="font-size:0.7rem; padding:4px 8px;">🔄 Swap</a>
-            <a href="${dexUrl}" target="_blank" style="font-size:0.7rem; padding:4px 8px;">📊 DexChart</a>
+            <a href="https://basescan.org/token/${safeAddr}" target="_blank" style="font-size:0.7rem; padding:4px 8px;">BaseScan</a>
             <a href="${geckoUrl}" target="_blank" style="font-size:0.7rem; padding:4px 8px;">GeckoTerm</a>
         </div>`;
     return el;
@@ -472,3 +473,67 @@ document.addEventListener("visibilitychange", () => {
         loadMemory(); 
     }
 });
+
+
+// --- NATIVE CHART RENDERER (GeckoTerminal OHLCV + Lightweight Charts) ---
+async function renderChart(token) {
+    const container = document.getElementById(`chart-${token.id}`);
+    if (!container) return;
+
+    try {
+        const url = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const ohlcv = json.data?.attributes?.ohlcv_list;
+
+        if (!ohlcv || ohlcv.length === 0) {
+            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">No chart data available for this pool yet.</p>';
+            return;
+        }
+
+        // Sort by timestamp (oldest first)
+        ohlcv.sort((a, b) => a[0] - b[0]);
+
+        // Clear container
+        container.innerHTML = "";
+
+        // Create chart
+        const chart = LightweightCharts.createChart(container, {
+            width: container.clientWidth,
+            height: 200,
+            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+            timeScale: { borderColor: 'rgba(255,255,255,0.1)' },
+            rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+        });
+
+        const candleSeries = chart.addCandlestickSeries({
+            upColor: '#00ffcc',
+            downColor: '#ff4444',
+            borderDownColor: '#ff4444',
+            borderUpColor: '#00ffcc',
+            wickDownColor: '#ff4444',
+            wickUpColor: '#00ffcc',
+        });
+
+        const candleData = ohlcv.map(c => ({
+            time: Math.floor(c[0]),
+            open: parseFloat(c[1]),
+            high: parseFloat(c[2]),
+            low: parseFloat(c[3]),
+            close: parseFloat(c[4]),
+        }));
+
+        candleSeries.setData(candleData);
+
+        // Handle resize
+        new ResizeObserver(entries => {
+            if (entries.length === 0 || !entries[0].contentRect) return;
+            chart.applyOptions({ width: entries[0].contentRect.width });
+        }).observe(container);
+
+    } catch (e) {
+        console.warn(`Chart failed for ${token.symbol}:`, e);
+        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">Chart unavailable.</p>';
+    }
+}
