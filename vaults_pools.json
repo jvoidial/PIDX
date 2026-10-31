@@ -1,0 +1,83 @@
+[
+  {
+    "name": "Morpho USDC Vault",
+    "type": "Vault",
+    "asset": "USDC",
+    "apy": "7.89%",
+    "tvl": "$366K",
+    "description": "Top tracked stablecoin vault. High utilization lending pool.",
+    "link": "https://app.morpho.org/base"
+  },
+  {
+    "name": "Euler V2 USDC Vault",
+    "type": "Vault",
+    "asset": "USDC",
+    "apy": "6.85%",
+    "tvl": "$584K",
+    "description": "ERC-4626 compliant vault with strong, consistent yield.",
+    "link": "https://app.euler.finance/"
+  },
+  {
+    "name": "Morpho (High TVL)",
+    "type": "Vault",
+    "asset": "USDC",
+    "apy": "5.37%",
+    "tvl": "$31.6M",
+    "description": "Largest tracked Morpho vault by TVL, highly liquid.",
+    "link": "https://app.morpho.org/base"
+  },
+  {
+    "name": "Beefy Auto-Compounder",
+    "type": "Vault",
+    "asset": "Multiple",
+    "apy": "Variable",
+    "tvl": "High",
+    "description": "Auto-compounds rewards from LP positions. Check site for current APY.",
+    "link": "https://app.beefy.com/"
+  },
+  {
+    "name": "Alien Base USDC-CBBTC",
+    "type": "LP Pool",
+    "asset": "USDC/CBBTC",
+    "apy": "21.50%",
+    "tvl": "$1.47M",
+    "description": "Concentrated V3 pool. Higher APY, but exposed to Bitcoin price swings (IL risk).",
+    "link": "https://app.alienbase.xyz/"
+  },
+  {
+    "name": "Uniswap V3 WETH-USDC",
+    "type": "LP Pool",
+    "asset": "WETH/USDC",
+    "apy": "65%",
+    "tvl": "$125M",
+    "description": "Highest organic yield source tracked. Requires active management for best results.",
+    "link": "https://app.uniswap.org/pools"
+  },
+  {
+    "name": "Aerodrome WETH-CBBTC",
+    "type": "LP Pool",
+    "asset": "WETH/CBBTC",
+    "apy": "~50%",
+    "tvl": "$18M",
+    "description": "High-yield, high-volatility pair. Rewards are often paid in AERO.",
+    "link": "https://aerodrome.finance/"
+  },
+  {
+    "name": "PancakeSwap USDT/USDC",
+    "type": "LP Pool",
+    "asset": "USDT/USDC",
+    "apy": "15.37%",
+    "tvl": "$577K",
+    "description": "Stablecoin pair. Pure fee yield, but carries small depeg risk.",
+    "link": "https://pancakeswap.finance/"
+  },
+  {
+    "name": "Uniswap V3 USDT/USDC",
+    "type": "LP Pool",
+    "asset": "USDT/USDC",
+    "apy": "12.53%",
+    "tvl": "$140.9K",
+    "description": "Another stablecoin pair option for low-risk yield.",
+    "link": "https://app.uniswap.org/pools"
+  }
+]

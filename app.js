@@ -312,3 +312,57 @@ function startBackground() {
         addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
     } catch(e) { console.warn("3D Background failed:", e); }
 }
+
+
+// --- RENDER VAULTS & POOLS ---
+async function loadVaultsAndPools() {
+    try {
+        const res = await fetch("vaults_pools.json");
+        const data = await res.json();
+        const grid = document.getElementById("vault-grid");
+        if(!grid) return;
+        grid.innerHTML = "";
+        data.forEach(item => {
+            const el = document.createElement("div");
+            el.className = "card small vault-card";
+            const badgeClass = item.type === 'Vault' ? 'tiny' : 'empty';
+            const badgeColor = item.type === 'Vault' ? '#00ffcc' : '#ffaa00';
+            el.innerHTML = `
+                <h4>${item.name} <span class="badge ${badgeClass}" style="border-color:${badgeColor}; color:${badgeColor};">${item.type}</span></h4>
+                <p style="color:var(--dim); font-size:0.8rem;">${item.asset}</p>
+                <p style="font-size:1.2rem; color:#00ffcc; font-family:monospace; margin:5px 0;">${item.apy} APY</p>
+                <p style="color:var(--dim); font-size:0.75rem;">TVL: ${item.tvl}</p>
+                <p style="color:var(--dim); font-size:0.75rem; margin:5px 0;">${item.description}</p>
+                <a href="${item.link}" target="_blank" class="swap-btn" style="display:inline-block; margin-top:8px; font-size:0.7rem; padding:4px 8px;">View & Deposit →</a>
+            `;
+            grid.appendChild(el);
+        });
+    } catch(e) { console.error("Failed to load vaults/pools", e); }
+}
+
+// --- UPDATE MINING POOLS WITH NEW PROTOCOL ---
+async function loadMiningPools() {
+    try {
+        const res = await fetch("mining_pools.json");
+        const pools = await res.json();
+        const grid = document.getElementById("mining-grid");
+        if(!grid) return;
+        grid.innerHTML = "";
+        pools.forEach(p => {
+            const el = document.createElement("div");
+            el.className = "card small mining-card";
+            el.innerHTML = `
+                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
+                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
+                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
+                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
+            `;
+            grid.appendChild(el);
+        });
+    } catch (e) { console.error("Failed to load mining pools:", e); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadVaultsAndPools();
+    loadMiningPools();
+});

@@ -241,3 +241,12 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
+
+.vault-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 15px;
+}
+.vault-card {
+    border-left: 3px solid #00ffcc;
+}

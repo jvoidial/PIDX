@@ -62,5 +62,13 @@
     "stratum": "stratum+tcp://stratum.spiderpool.com:3333",
     "status": "online",
     "notes": "Stratum V2 Working Group member."
+  },
+  {
+    "name": "MineBean",
+    "fee": "Dynamic",
+    "coin": "ETH / BEAN",
+    "stratum": "N/A - On-chain Grid Mining",
+    "status": "online",
+    "notes": "Gamified mining on Base. Deploy ETH into a 5x5 grid every 60s to win rewards."
   }
 ]
