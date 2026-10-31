@@ -478,25 +478,46 @@ document.addEventListener("visibilitychange", () => {
 // --- NATIVE CHART RENDERER (GeckoTerminal OHLCV + Lightweight Charts) ---
 
 // --- ADVANCED FOREX-STYLE CHART RENDERER (Candles + Volume + RSI) ---
+
+// --- FOREX-STYLE CHART RENDERER (With CORS Proxy & Fixed Height) ---
 async function renderChart(token) {
     const container = document.getElementById(`chart-${token.id}`);
     if (!container) return;
 
+    // CRITICAL FIX: Force the container to have a visible height
+    container.style.height = '250px';
+    container.style.width = '100%';
+    container.style.position = 'relative';
+
     try {
-        const url = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100`;
-        const res = await fetch(url);
+        // Use a CORS proxy to fetch from GeckoTerminal
+        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        
         const json = await res.json();
-        const ohlcv = json.data?.attributes?.ohlcv_list;
+        // Handle cases where the proxy returns a string instead of JSON
+        const parsedData = typeof json === 'string' ? JSON.parse(json) : json;
+        const ohlcv = parsedData.data?.attributes?.ohlcv_list;
 
         if (!ohlcv || ohlcv.length === 0) {
-            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">No chart data available.</p>';
+            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available for this pool.</p>';
             return;
         }
 
-        ohlcv.sort((a, b) => a[0] - b[0]);
-        container.innerHTML = "";
+        // Clean data: sort by time and remove duplicates
+        const uniqueData = {};
+        ohlcv.forEach(c => {
+            const ts = Math.floor(c[0]);
+            uniqueData[ts] = c;
+        });
+        const sortedOhlcv = Object.values(uniqueData).sort((a, b) => a[0] - b[0]);
 
-        // Create main chart
+        container.innerHTML = ""; // Clear loading text
+
+        // Create Main Chart
         const chart = LightweightCharts.createChart(container, {
             width: container.clientWidth,
             height: 250,
@@ -506,75 +527,46 @@ async function renderChart(token) {
             rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
         });
 
+        // Candlestick Series
         const candleSeries = chart.addCandlestickSeries({
             upColor: '#00ffcc', downColor: '#ff4444',
             borderDownColor: '#ff4444', borderUpColor: '#00ffcc',
             wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
         });
 
-        const candleData = ohlcv.map(c => ({
+        const candleData = sortedOhlcv.map(c => ({
             time: Math.floor(c[0]),
             open: parseFloat(c[1]), high: parseFloat(c[2]),
             low: parseFloat(c[3]), close: parseFloat(c[4]),
-        }));
+        })).filter(d => d.open > 0 && d.high > 0 && d.low > 0 && d.close > 0);
+
         candleSeries.setData(candleData);
 
-        // Add Volume Histogram
+        // Volume Histogram
         const volumeSeries = chart.addHistogramSeries({
             color: '#26a69a', priceFormat: { type: 'volume' },
             priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 },
         });
-        const volumeData = ohlcv.map(c => ({
-            time: Math.floor(c[0]),
-            value: parseFloat(c[5] || 0),
-            color: parseFloat(c[4]) >= parseFloat(c[1]) ? '#00ffcc' : '#ff4444'
-        }));
+        const volumeData = candleData.map(c => {
+            const originalRow = sortedOhlcv.find(o => Math.floor(o[0]) === c.time);
+            return {
+                time: c.time,
+                value: parseFloat(originalRow[5]) || 0,
+                color: c.close >= c.open ? 'rgba(0, 255, 204, 0.5)' : 'rgba(255, 68, 68, 0.5)'
+            };
+        });
         volumeSeries.setData(volumeData);
 
-        // Calculate RSI (14-period)
-        const rsiPeriod = 14;
-        const closes = candleData.map(d => d.close);
-        const rsiData = [];
-        for (let i = rsiPeriod; i < closes.length; i++) {
-            let gains = 0, losses = 0;
-            for (let j = i - rsiPeriod + 1; j <= i; j++) {
-                const diff = closes[j] - closes[j-1];
-                if (diff > 0) gains += diff; else losses -= diff;
-            }
-            const avgGain = gains / rsiPeriod;
-            const avgLoss = losses / rsiPeriod;
-            const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
-            const rsi = 100 - (100 / (1 + rs));
-            rsiData.push({ time: candleData[i].time, value: rsi });
-        }
-
-        // Add RSI sub-chart
-        const rsiContainer = document.createElement('div');
-        rsiContainer.style.height = '80px';
-        rsiContainer.style.marginTop = '10px';
-        container.appendChild(rsiContainer);
-
-        const rsiChart = LightweightCharts.createChart(rsiContainer, {
-            width: container.clientWidth, height: 80,
-            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
-            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
-            timeScale: { borderColor: 'rgba(255,255,255,0.1)', visible: false },
-            rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
-        });
-
-        const rsiSeries = rsiChart.addLineSeries({ color: '#ffaa00', lineWidth: 2 });
-        rsiSeries.setData(rsiData);
-
-        // Handle resize
+        // Handle Resize
         new ResizeObserver(entries => {
             if (entries.length === 0 || !entries[0].contentRect) return;
             chart.applyOptions({ width: entries[0].contentRect.width });
-            rsiChart.applyOptions({ width: entries[0].contentRect.width });
         }).observe(container);
 
     } catch (e) {
         console.warn(`Chart failed for ${token.symbol}:`, e);
-        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">Chart unavailable.</p>';
+        container.innerHTML = '<p style="color:#ff4444; text-align:center; padding-top:100px; font-size:0.75rem;">Chart failed to load.</p>';
     }
 }
+
 
