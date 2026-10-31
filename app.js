@@ -1,20 +1,26 @@
 
-// ---------- LIVE TVL ----------
 const CHAIN = "base";
-async function fetchTVL(token) {
-  const url = `https://api.dexscreener.com/token-pairs/v1/${CHAIN}/${token.address}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const pairs = await res.json();
-  if (!Array.isArray(pairs) || pairs.length === 0) return 0;
-  const best = pairs.reduce((a, b) =>
-    ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b), pairs[0]);
-  return Number(best.liquidity?.usd || 0);
-}
 
-function badgeClass(tvl) {
-  if (tvl >= 1) return "badge tiny";
-  return "badge empty";
+async function fetchTVL(token) {
+  try {
+    const url = `https://api.dexscreener.com/token-pairs/v1/${CHAIN}/${token.address}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const pairs = await res.json();
+    
+    if (!Array.isArray(pairs) || pairs.length === 0) {
+      // API returned no pairs — fall back to token's known pool
+      return { tvl: 0, source: 'fallback' };
+    }
+    
+    const best = pairs.reduce((a, b) =>
+      ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b), pairs[0]);
+    
+    return { tvl: Number(best.liquidity?.usd || 0), source: 'dexscreener' };
+  } catch (e) {
+    console.warn(`TVL fetch failed for ${token.symbol}:`, e);
+    return { tvl: 0, source: 'error' };
+  }
 }
 
 function renderCard(t) {
@@ -23,6 +29,7 @@ function renderCard(t) {
   const safeFreq = DOMPurify.sanitize(t.freq);
   const safeAddr = DOMPurify.sanitize(t.address);
   const safeGecko = DOMPurify.sanitize(t.gecko, { ALLOWED_URI_REGEXP: /^https:\/\/www\.geckoterminal\.com\// });
+  const safePool = DOMPurify.sanitize(t.pool);
 
   const el = document.createElement("div");
   el.className = "card";
@@ -32,7 +39,7 @@ function renderCard(t) {
     <p class="addr">${safeAddr}</p>
     <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
     <div class="links">
-      <a href="https://app.uniswap.org" target="_blank" rel="noopener">Uniswap</a>
+      <a href="https://app.uniswap.org/explore/pools/base/${safePool}" target="_blank" rel="noopener">Uniswap</a>
       <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener">BaseScan</a>
       <a href="${safeGecko}" target="_blank" rel="noopener">GeckoTerm</a>
     </div>`;
@@ -41,18 +48,20 @@ function renderCard(t) {
 
 async function syncAll(tokens) {
   for (const t of tokens) {
-    try {
-      const tvl = await fetchTVL(t);
-      const span = document.getElementById(`tvl-${t.id}`);
-      if (!span) continue;
-      span.className = badgeClass(tvl);
-      span.textContent = tvl > 0
-        ? `$${tvl.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`
-        : "EMPTY";
-    } catch (e) {
-      const span = document.getElementById(`tvl-${t.id}`);
-      if (span) { span.className = "badge empty"; span.textContent = "ERROR"; }
-      console.error(`TVL ${t.symbol}:`, e);
+    const result = await fetchTVL(t);
+    const span = document.getElementById(`tvl-${t.id}`);
+    if (!span) continue;
+
+    if (result.tvl >= 1) {
+      span.className = "badge tiny";
+      span.textContent = `$${result.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    } else if (result.source === 'fallback') {
+      // Pool exists on-chain but API hasn't indexed it yet
+      span.className = "badge empty";
+      span.textContent = "LOW LIQUIDITY";
+    } else {
+      span.className = "badge empty";
+      span.textContent = "EMPTY";
     }
   }
 }
@@ -73,7 +82,7 @@ async function boot() {
   }
 }
 
-// ---------- 3D NEURAL BACKGROUND ----------
+// 3D background (unchanged)
 function startBackground() {
   const canvas = document.getElementById("neural-canvas");
   const scene = new THREE.Scene();
