@@ -10,34 +10,34 @@ async function fetchPoolData(token) {
         const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
         return { tvl: Number(best.liquidity?.usd || 0), source: "dexscreener" };
     } catch (e) {
-        console.warn(`DexScreener failed for ${token.symbol}:`, e);
         return { tvl: 0, source: "error" };
     }
 }
 
 function renderCard(t) {
-  const safeSymbol = DOMPurify.sanitize(t.symbol);
-  const safeName = DOMPurify.sanitize(t.name);
-  const safeFreq = DOMPurify.sanitize(t.freq);
-  const safeAddr = DOMPurify.sanitize(t.address);
-  const safePool = DOMPurify.sanitize(t.pool);
+    const safeSymbol = DOMPurify.sanitize(t.symbol);
+    const safeName = DOMPurify.sanitize(t.name);
+    const safeFreq = DOMPurify.sanitize(t.freq);
+    const safeAddr = DOMPurify.sanitize(t.address);
+    const safePool = DOMPurify.sanitize(t.pool);
+    
+    // DIRECT UNISWAP SWAP LINK: Opens ETH -> Token on Base
+    const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
+    const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
 
-  const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
-  const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
-
-  const el = document.createElement("div");
-  el.className = "card";
-  el.innerHTML = `
-    <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
-    <p class="name">${safeName}</p>
-    <p class="addr">${safeAddr}</p>
-    <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
-    <div class="links">
-      <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" style="background:var(--accent,#1d9bf0);color:#fff;border-color:transparent;font-weight:600;">🔄 Swap</a>
-      <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
-      <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
-    </div>`;
-  return el;
+    const el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML = `
+        <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
+        <p class="name">${safeName}</p>
+        <p class="addr">${safeAddr}</p>
+        <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
+        <div class="links">
+            <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
+            <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
+            <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
+        </div>`;
+    return el;
 }
 
 async function syncAll(tokens) {
@@ -67,7 +67,6 @@ async function boot() {
         setInterval(() => syncAll(tokens), 30000);
     } catch (e) {
         document.getElementById("token-grid").innerHTML = '<p class="loading">FAILED TO LOAD tokens.json</p>';
-        console.error(e);
     }
 }
 
