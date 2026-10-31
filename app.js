@@ -58,11 +58,13 @@ function renderCard(t) {
         <p class="addr">${safeAddr}</p>
         <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
         <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
+        
         <div class="superchain-tracker" id="sc-${t.id}" style="margin-top:10px; padding:10px; background:rgba(0,255,204,0.05); border:1px solid rgba(0,255,204,0.2); border-radius:8px;">
             <p style="font-size:0.8rem; color:#00ffcc; font-weight:bold;">🔗 Base Chain TVL</p>
             <p style="font-size:0.7rem; color:var(--dim);" id="base-tvl-${t.id}">Loading...</p>
             <a href="https://defillama.com/chain/Base" target="_blank" rel="noopener noreferrer" class="swap-btn" style="display:inline-block; margin-top:6px; font-size:0.7rem; padding:4px 10px;">View on DefiLlama →</a>
         </div>
+        
         <div class="links" style="margin-top:10px;">
             <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
             <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
