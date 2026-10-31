@@ -146,59 +146,116 @@ function renderCard(t) {
 
 
 // --- CHART RENDERER (GeckoTerminal with empty intervals) ---
+
+// --- ROBUST CHART RENDERER (Multi-proxy + Price-line fallback) ---
 async function renderChart(token) {
     const container = document.getElementById(`chart-${token.id}`);
     if (!container) return;
-
-    // CRITICAL: Force explicit height for Lightweight Charts
     container.style.height = '250px';
-    container.style.width = '100%';
     container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Loading chart...</p>';
 
-    try {
-        // include_empty_intervals=true fills gaps with flat lines instead of returning an empty array
-        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100&include_empty_intervals=true`;
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-        
-        const res = await fetchWithTimeout(proxyUrl, {}, 8000);
-        const json = await res.json();
-        const ohlcv = json.data?.attributes?.ohlcv_list;
+    // 1. Try GeckoTerminal via multiple CORS proxies
+    const proxies = [
+        'https://api.allorigins.win/raw?url=',
+        'https://proxy.cors.sh/',
+        'https://corsproxy.io/?'
+    ];
+    const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100&include_empty_intervals=true`;
 
-        if (!ohlcv || ohlcv.length === 0) {
-            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available.</p>';
-            return;
-        }
+    for (const proxy of proxies) {
+        try {
+            const res = await fetchWithTimeout(proxy + encodeURIComponent(targetUrl), {}, 5000);
+            const json = await res.json();
+            const ohlcv = json.data?.attributes?.ohlcv_list;
 
-        const uniqueData = {};
-        ohlcv.forEach(c => { uniqueData[Math.floor(c[0])] = c; });
-        const sortedOhlcv = Object.values(uniqueData).sort((a, b) => a[0] - b[0]);
-        container.innerHTML = "";
-
-        if (typeof LightweightCharts === 'undefined') {
-            container.innerHTML = '<p style="color:#ff4444; text-align:center; padding-top:100px; font-size:0.75rem;">Chart Library Failed.</p>';
-            return;
-        }
-
-        const chart = LightweightCharts.createChart(container, {
-            width: container.clientWidth, height: 250,
-            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
-            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
-            timeScale: { borderColor: 'rgba(255,255,255,0.1)' }, rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
-        });
-
-        const candleSeries = chart.addCandlestickSeries({
-            upColor: '#00ffcc', downColor: '#ff4444', borderDownColor: '#ff4444', borderUpColor: '#00ffcc', wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
-        });
-
-        const candleData = sortedOhlcv.map(c => ({
-            time: Math.floor(c[0]), open: parseFloat(c[1]), high: parseFloat(c[2]), low: parseFloat(c[3]), close: parseFloat(c[4]),
-        })).filter(d => d.open > 0);
-        
-        candleSeries.setData(candleData);
-    } catch (e) {
-        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Chart unavailable.</p>';
+            if (ohlcv && ohlcv.length > 0) {
+                drawCandlestickChart(container, ohlcv);
+                return;
+            }
+        } catch (e) { /* Try next proxy */ }
     }
+
+    // 2. Fallback: Simple price line from DexScreener
+    try {
+        const dexRes = await fetchWithTimeout(`https://api.dexscreener.com/token-pairs/v1/base/${token.address}`, {}, 5000);
+        const pairs = await dexRes.json();
+        
+        if (Array.isArray(pairs) && pairs.length > 0) {
+            const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
+            if (best.priceUsd) {
+                drawPriceLine(container, best.priceUsd);
+                return;
+            }
+        }
+    } catch (e) { /* Fall through */ }
+
+    // 3. Final fallback: Clear message
+    container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available (Low Liquidity).</p>';
 }
+
+function drawCandlestickChart(container, ohlcv) {
+    const uniqueData = {};
+    ohlcv.forEach(c => { uniqueData[Math.floor(c[0])] = c; });
+    const sortedOhlcv = Object.values(uniqueData).sort((a, b) => a[0] - b[0]);
+    container.innerHTML = "";
+
+    if (typeof LightweightCharts === 'undefined') {
+        container.innerHTML = '<p style="color:#ff4444; text-align:center; padding-top:100px; font-size:0.75rem;">Chart Library Failed.</p>';
+        return;
+    }
+
+    const chart = LightweightCharts.createChart(container, {
+        width: container.clientWidth, height: 250,
+        layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+        grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+        timeScale: { borderColor: 'rgba(255,255,255,0.1)' }, rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+    });
+
+    const candleSeries = chart.addCandlestickSeries({
+        upColor: '#00ffcc', downColor: '#ff4444', borderDownColor: '#ff4444', borderUpColor: '#00ffcc', wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
+    });
+
+    const candleData = sortedOhlcv.map(c => ({
+        time: Math.floor(c[0]), open: parseFloat(c[1]), high: parseFloat(c[2]), low: parseFloat(c[3]), close: parseFloat(c[4]),
+    })).filter(d => d.open > 0);
+    
+    candleSeries.setData(candleData);
+    new ResizeObserver(entries => {
+        if (entries.length === 0 || !entries[0].contentRect) return;
+        chart.applyOptions({ width: entries[0].contentRect.width });
+    }).observe(container);
+}
+
+function drawPriceLine(container, priceUsd) {
+    container.innerHTML = "";
+    if (typeof LightweightCharts === 'undefined') {
+        container.innerHTML = `<p style="color:var(--white); text-align:center; padding-top:100px; font-size:1rem; font-family:monospace;">Price: $${priceUsd}</p>`;
+        return;
+    }
+
+    const chart = LightweightCharts.createChart(container, {
+        width: container.clientWidth, height: 250,
+        layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+        grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+        timeScale: { borderColor: 'rgba(255,255,255,0.1)' }, rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+    });
+
+    const lineSeries = chart.addLineSeries({ color: '#00ffcc', lineWidth: 2 });
+    const now = Math.floor(Date.now() / 1000);
+    const price = parseFloat(priceUsd);
+    // Create a simple horizontal line at the current price
+    const lineData = [];
+    for (let i = 0; i < 100; i++) {
+        lineData.push({ time: now - (100 - i) * 60, value: price });
+    }
+    lineSeries.setData(lineData);
+
+    new ResizeObserver(entries => {
+        if (entries.length === 0 || !entries[0].contentRect) return;
+        chart.applyOptions({ width: entries[0].contentRect.width });
+    }).observe(container);
+}
+
 
 
 
