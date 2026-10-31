@@ -108,25 +108,44 @@ async function scanAllSecurity(tokens) { for (const t of tokens) await scanToken
 
 // --- FETCH BASE CHAIN TVL ---
 async function fetchBaseTVL() {
-    try {
-        const res = await fetch("https://api.llama.fi/v2/chains");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const chains = await res.json();
-        const base = chains.find(c => c.name === "Base");
-        
-        if (base) {
-            const tvlBillions = (base.tvl / 1e9).toFixed(2);
-            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
-                el.textContent = `$${tvlBillions}B TVL`;
-            });
-        } else {
-            // 如果没找到 Base，显示不可用
-            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
-                el.textContent = "Unavailable";
-            });
+    // Try multiple endpoints to bypass CORS issues
+    const endpoints = [
+        "https://api.llama.fi/v2/chains",
+        "https://api.llama.fi/chains",
+        "https://api.allorigins.win/raw?url=https://api.llama.fi/v2/chains"
+    ];
+    let success = false;
+    for (const url of endpoints) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            
+            // Handle both array and object response formats
+            let base;
+            if (Array.isArray(data)) {
+                base = data.find(c => c.name === "Base");
+            } else if (data && typeof data === 'object') {
+                base = data["Base"];
+            }
+
+            if (base && base.tvl) {
+                const tvlBillions = (base.tvl / 1e9).toFixed(2);
+                document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
+                    el.textContent = `$${tvlBillions}B TVL`;
+                });
+                success = true;
+                console.log("✅ Base TVL fetched from:", url);
+                break; // Exit loop on success
+            } else {
+                console.warn("Base chain not found in response from:", url);
+            }
+        } catch (e) {
+            console.warn("Failed to fetch from:", url, e);
         }
-    } catch (e) {
-        console.warn("DefiLlama TVL fetch failed:", e);
+    }
+    if (!success) {
+        console.warn("All Base TVL endpoints failed. Showing Unavailable.");
         document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
             el.textContent = "Unavailable";
         });
