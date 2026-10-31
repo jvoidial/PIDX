@@ -39,8 +39,7 @@ header {
     text-align: center; padding: 60px 20px;
     border-bottom: 1px solid var(--border);
     background: rgba(0,0,0,0.5); backdrop-filter: blur(12px);
-    position: relative;
-    z-index: 10;
+    position: relative; z-index: 10;
 }
 
 h1 {
@@ -113,12 +112,10 @@ h3 { color: var(--white); display: flex; justify-content: space-between; font-si
 .panel li strong { color: var(--white); }
 .panel li span { color: var(--silver); font-family: monospace; font-size: 0.8rem;}
 
-/* Mining Pools */
 .mining-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
 .card.small { padding: 15px; }
 .card.small h4 { font-size: 0.9rem; color: var(--silver); margin-bottom: 8px; }
 .mono { font-family: monospace; font-size: 0.8rem; color: var(--white); word-break: break-all; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid var(--border);}
-.warning { font-size: 0.8rem; color: #ffaa00; margin-bottom: 15px; background: rgba(255,170,0,0.1); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,170,0,0.3);}
 
 footer {
     text-align: center; padding: 40px 20px; border-top: 1px solid var(--border);
