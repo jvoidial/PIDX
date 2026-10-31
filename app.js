@@ -79,51 +79,44 @@ async function syncAll(tokens) {
     }
 }
 
-// ==================== MINING POOLS ====================
-async function loadMiningPools() {
-    console.log("Loading mining pools...");
+// --- GO PLUS SECURITY SCAN ---
+async function scanTokenSecurity(token) {
     try {
-        const res = await fetch("mining_pools.json");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const pools = await res.json();
-        const grid = document.getElementById("mining-grid");
-        if (!grid) { console.error("mining-grid not found"); return; }
-        grid.innerHTML = "";
-        pools.forEach(p => {
-            const el = document.createElement("div");
-            el.className = "card small mining-card";
-            el.innerHTML = `
-                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
-                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
-            `;
-            grid.appendChild(el);
-        });
-        console.log(`Loaded ${pools.length} mining pools`);
+        const url = `https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const result = json.result?.[token.address.toLowerCase()];
+        const badge = document.getElementById(`sec-${token.id}`);
+        if (!badge) return;
+        if (!result) {
+            badge.textContent = "🛡️ Security: No data";
+            badge.style.color = "var(--dim)";
+            return;
+        }
+        const isHoneypot = result.is_honeypot === "1";
+        const buyTax = parseFloat(result.buy_tax || "0") * 100;
+        const sellTax = parseFloat(result.sell_tax || "0") * 100;
+        const cannotSell = result.cannot_sell_all === "1";
+
+        if (isHoneypot || cannotSell) {
+            badge.textContent = "🚨 HONEYPOT / CANNOT SELL";
+            badge.style.color = "#ff4444";
+        } else if (sellTax > 10 || buyTax > 10) {
+            badge.textContent = `⚠️ High Tax (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
+            badge.style.color = "#ffaa00";
+        } else {
+            badge.textContent = `✅ Safe (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
+            badge.style.color = "#00ffcc";
+        }
     } catch (e) {
-        console.error("Failed to load mining pools:", e);
-        const grid = document.getElementById("mining-grid");
-        if (grid) grid.innerHTML = '<p class="loading" style="color:#ff4444;">FAILED TO LOAD mining_pools.json</p>';
+        const badge = document.getElementById(`sec-${token.id}`);
+        if (badge) { badge.textContent = "🛡️ Security: API error"; badge.style.color = "var(--dim)"; }
     }
 }
 
-async function testStratumConnection() {
-    const url = document.getElementById("stratum-test-url").value.trim();
-    const resultEl = document.getElementById("stratum-test-result");
-    if (!url.startsWith("stratum+tcp://")) {
-        resultEl.textContent = "❌ Please enter a valid stratum+tcp:// URL.";
-        resultEl.style.color = "#ff4444";
-        return;
-    }
-    resultEl.textContent = "🔄 Testing connection...";
-    resultEl.style.color = "var(--dim)";
-    setTimeout(() => {
-        resultEl.textContent = "⚠️ Browser-based TCP testing is limited. Use a desktop miner to test the connection.";
-        resultEl.style.color = "#ffaa00";
-    }, 2000);
+async function scanAllSecurity(tokens) {
+    for (const t of tokens) await scanTokenSecurity(t);
 }
-// ======================================================
 
 // --- VITRUVIAN MEMORY ---
 function loadMemory() {
@@ -260,8 +253,6 @@ async function boot() {
     startEbankEngine();
     updateWalletSim();
     document.getElementById("real-deposit-btn").addEventListener("click", connectAndDeposit);
-    // Load mining pools
-    await loadMiningPools();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -314,102 +305,5 @@ function startBackground() {
             renderer.render(scene, camera);
         })();
         addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
-    } catch(e) { console.warn("3D Background failed:", e); }
-}
-
-
-// --- RENDER VAULTS & POOLS ---
-async function loadVaultsAndPools() {
-    try {
-        const res = await fetch("vaults_pools.json");
-        const data = await res.json();
-        const grid = document.getElementById("vault-grid");
-        if(!grid) return;
-        grid.innerHTML = "";
-        data.forEach(item => {
-            const el = document.createElement("div");
-            el.className = "card small vault-card";
-            const badgeClass = item.type === 'Vault' ? 'tiny' : 'empty';
-            const badgeColor = item.type === 'Vault' ? '#00ffcc' : '#ffaa00';
-            el.innerHTML = `
-                <h4>${item.name} <span class="badge ${badgeClass}" style="border-color:${badgeColor}; color:${badgeColor};">${item.type}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">${item.asset}</p>
-                <p style="font-size:1.2rem; color:#00ffcc; font-family:monospace; margin:5px 0;">${item.apy} APY</p>
-                <p style="color:var(--dim); font-size:0.75rem;">TVL: ${item.tvl}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin:5px 0;">${item.description}</p>
-                <a href="${item.link}" target="_blank" class="swap-btn" style="display:inline-block; margin-top:8px; font-size:0.7rem; padding:4px 8px;">View & Deposit →</a>
-            `;
-            grid.appendChild(el);
-        });
-    } catch(e) { console.error("Failed to load vaults/pools", e); }
-}
-
-// --- UPDATE MINING POOLS WITH NEW PROTOCOL ---
-async function loadMiningPools() {
-    try {
-        const res = await fetch("mining_pools.json");
-        const pools = await res.json();
-        const grid = document.getElementById("mining-grid");
-        if(!grid) return;
-        grid.innerHTML = "";
-        pools.forEach(p => {
-            const el = document.createElement("div");
-            el.className = "card small mining-card";
-            el.innerHTML = `
-                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
-                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
-            `;
-            grid.appendChild(el);
-        });
-    } catch (e) { console.error("Failed to load mining pools:", e); }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadVaultsAndPools();
-    loadMiningPools();
-});
-
-
-// --- GoPlus Security Scan (free, public API) ---
-async function scanTokenSecurity(token) {
-    try {
-        const url = `https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`;
-        const res = await fetch(url);
-        const json = await res.json();
-        const result = json.result?.[token.address.toLowerCase()];
-        const badge = document.getElementById(`sec-${token.id}`);
-        if (!badge) return;
-
-        if (!result) {
-            badge.textContent = "🛡️ Security: No data";
-            badge.style.color = "var(--dim)";
-            return;
-        }
-
-        const isHoneypot = result.is_honeypot === "1";
-        const buyTax = parseFloat(result.buy_tax || "0") * 100;
-        const sellTax = parseFloat(result.sell_tax || "0") * 100;
-        const cannotSell = result.cannot_sell_all === "1";
-
-        if (isHoneypot || cannotSell) {
-            badge.textContent = "🚨 HONEYPOT / CANNOT SELL";
-            badge.style.color = "#ff4444";
-        } else if (sellTax > 10 || buyTax > 10) {
-            badge.textContent = `⚠️ High Tax (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
-            badge.style.color = "#ffaa00";
-        } else {
-            badge.textContent = `✅ Safe (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
-            badge.style.color = "#00ffcc";
-        }
-    } catch (e) {
-        const badge = document.getElementById(`sec-${token.id}`);
-        if (badge) { badge.textContent = "🛡️ Security: API error"; badge.style.color = "var(--dim)"; }
-    }
-}
-
-// Call after tokens render
-async function scanAllSecurity(tokens) {
-    for (const t of tokens) await scanTokenSecurity(t);
+    } catch(e) {}
 }
