@@ -49,7 +49,6 @@ function renderCard(t) {
     const safePool = DOMPurify.sanitize(t.pool);
     const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
     const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
-    const dexscreenerEmbed = `https://dexscreener.com/base/${safePool}?embed=1&theme=dark&trades=0&info=0`;
 
     const el = document.createElement("div");
     el.className = "card";
@@ -59,7 +58,11 @@ function renderCard(t) {
         <p class="addr">${safeAddr}</p>
         <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
         <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
-        <iframe src="${dexscreenerEmbed}" width="100%" height="220" frameborder="0" style="margin-top:10px; border-radius:8px; border:1px solid var(--border);"></iframe>
+        <div class="superchain-tracker" id="sc-${t.id}" style="margin-top:10px; padding:10px; background:rgba(0,255,204,0.05); border:1px solid rgba(0,255,204,0.2); border-radius:8px;">
+            <p style="font-size:0.8rem; color:#00ffcc; font-weight:bold;">🔗 Superchain Tracker</p>
+            <p style="font-size:0.7rem; color:var(--dim);">View live TVL & activity on DefiLlama's Superchain dashboard.</p>
+            <a href="https://defillama.com/chains/Base" target="_blank" rel="noopener noreferrer" class="swap-btn" style="display:inline-block; margin-top:6px; font-size:0.7rem; padding:4px 10px;">Open Tracker →</a>
+        </div>
         <div class="links" style="margin-top:10px;">
             <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
             <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
@@ -247,6 +250,7 @@ async function boot() {
         tokens.forEach(t => grid.appendChild(renderCard(t)));
         await syncAll(tokens);
         await scanAllSecurity(tokens);
+        await enrichWithSuperchainMetadata(tokens);
         setInterval(() => syncAll(tokens), 10000);
     } catch (e) { console.error("Token grid error:", e); }
     startGrowthEngine();
@@ -306,4 +310,45 @@ function startBackground() {
         })();
         addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
     } catch(e) {}
+}
+
+
+// --- SUPERCHAIN TOKEN METADATA (optional enrichment) ---
+// Fetches the Superchain Token List and adds official website links if available.
+async function enrichWithSuperchainMetadata(tokens) {
+    try {
+        // Official Superchain Token List (Base included)
+        const listUrl = "https://raw.githubusercontent.com/ethereum-optimism/ethereum-optimism.github.io/master/optimism.tokenlist.json";
+        const res = await fetch(listUrl);
+        const list = await res.json();
+        const tokenMap = {};
+        list.tokens.forEach(t => {
+            if (t.chainId === 8453) { // Base
+                tokenMap[t.address.toLowerCase()] = t;
+            }
+        });
+
+        tokens.forEach(t => {
+            const meta = tokenMap[t.address.toLowerCase()];
+            if (meta) {
+                const trackerDiv = document.getElementById(`sc-${t.id}`);
+                if (trackerDiv) {
+                    // Add official website link if present
+                    if (meta.website) {
+                        const webLink = document.createElement("a");
+                        webLink.href = meta.website;
+                        webLink.target = "_blank";
+                        webLink.textContent = "Official Site";
+                        webLink.className = "swap-btn";
+                        webLink.style.marginLeft = "6px";
+                        webLink.style.fontSize = "0.7rem";
+                        webLink.style.padding = "4px 8px";
+                        trackerDiv.appendChild(webLink);
+                    }
+                }
+            }
+        });
+    } catch (e) {
+        console.warn("Superchain metadata enrichment failed:", e);
+    }
 }
