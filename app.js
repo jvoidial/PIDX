@@ -476,6 +476,8 @@ document.addEventListener("visibilitychange", () => {
 
 
 // --- NATIVE CHART RENDERER (GeckoTerminal OHLCV + Lightweight Charts) ---
+
+// --- ADVANCED FOREX-STYLE CHART RENDERER (Candles + Volume + RSI) ---
 async function renderChart(token) {
     const container = document.getElementById(`chart-${token.id}`);
     if (!container) return;
@@ -487,20 +489,17 @@ async function renderChart(token) {
         const ohlcv = json.data?.attributes?.ohlcv_list;
 
         if (!ohlcv || ohlcv.length === 0) {
-            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">No chart data available for this pool yet.</p>';
+            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">No chart data available.</p>';
             return;
         }
 
-        // Sort by timestamp (oldest first)
         ohlcv.sort((a, b) => a[0] - b[0]);
-
-        // Clear container
         container.innerHTML = "";
 
-        // Create chart
+        // Create main chart
         const chart = LightweightCharts.createChart(container, {
             width: container.clientWidth,
-            height: 200,
+            height: 250,
             layout: { background: { color: 'transparent' }, textColor: '#71767b' },
             grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
             timeScale: { borderColor: 'rgba(255,255,255,0.1)' },
@@ -508,28 +507,69 @@ async function renderChart(token) {
         });
 
         const candleSeries = chart.addCandlestickSeries({
-            upColor: '#00ffcc',
-            downColor: '#ff4444',
-            borderDownColor: '#ff4444',
-            borderUpColor: '#00ffcc',
-            wickDownColor: '#ff4444',
-            wickUpColor: '#00ffcc',
+            upColor: '#00ffcc', downColor: '#ff4444',
+            borderDownColor: '#ff4444', borderUpColor: '#00ffcc',
+            wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
         });
 
         const candleData = ohlcv.map(c => ({
             time: Math.floor(c[0]),
-            open: parseFloat(c[1]),
-            high: parseFloat(c[2]),
-            low: parseFloat(c[3]),
-            close: parseFloat(c[4]),
+            open: parseFloat(c[1]), high: parseFloat(c[2]),
+            low: parseFloat(c[3]), close: parseFloat(c[4]),
         }));
-
         candleSeries.setData(candleData);
+
+        // Add Volume Histogram
+        const volumeSeries = chart.addHistogramSeries({
+            color: '#26a69a', priceFormat: { type: 'volume' },
+            priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 },
+        });
+        const volumeData = ohlcv.map(c => ({
+            time: Math.floor(c[0]),
+            value: parseFloat(c[5] || 0),
+            color: parseFloat(c[4]) >= parseFloat(c[1]) ? '#00ffcc' : '#ff4444'
+        }));
+        volumeSeries.setData(volumeData);
+
+        // Calculate RSI (14-period)
+        const rsiPeriod = 14;
+        const closes = candleData.map(d => d.close);
+        const rsiData = [];
+        for (let i = rsiPeriod; i < closes.length; i++) {
+            let gains = 0, losses = 0;
+            for (let j = i - rsiPeriod + 1; j <= i; j++) {
+                const diff = closes[j] - closes[j-1];
+                if (diff > 0) gains += diff; else losses -= diff;
+            }
+            const avgGain = gains / rsiPeriod;
+            const avgLoss = losses / rsiPeriod;
+            const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+            const rsi = 100 - (100 / (1 + rs));
+            rsiData.push({ time: candleData[i].time, value: rsi });
+        }
+
+        // Add RSI sub-chart
+        const rsiContainer = document.createElement('div');
+        rsiContainer.style.height = '80px';
+        rsiContainer.style.marginTop = '10px';
+        container.appendChild(rsiContainer);
+
+        const rsiChart = LightweightCharts.createChart(rsiContainer, {
+            width: container.clientWidth, height: 80,
+            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+            timeScale: { borderColor: 'rgba(255,255,255,0.1)', visible: false },
+            rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+        });
+
+        const rsiSeries = rsiChart.addLineSeries({ color: '#ffaa00', lineWidth: 2 });
+        rsiSeries.setData(rsiData);
 
         // Handle resize
         new ResizeObserver(entries => {
             if (entries.length === 0 || !entries[0].contentRect) return;
             chart.applyOptions({ width: entries[0].contentRect.width });
+            rsiChart.applyOptions({ width: entries[0].contentRect.width });
         }).observe(container);
 
     } catch (e) {
@@ -537,3 +577,4 @@ async function renderChart(token) {
         container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:80px; font-size:0.75rem;">Chart unavailable.</p>';
     }
 }
+
