@@ -110,14 +110,26 @@ async function scanAllSecurity(tokens) { for (const t of tokens) await scanToken
 async function fetchBaseTVL() {
     try {
         const res = await fetch("https://api.llama.fi/v2/chains");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const chains = await res.json();
         const base = chains.find(c => c.name === "Base");
+        
         if (base) {
             const tvlBillions = (base.tvl / 1e9).toFixed(2);
-            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => { el.textContent = `$${tvlB} TVL`; });
+            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
+                el.textContent = `$${tvlBillions}B TVL`;
+            });
+        } else {
+            // 如果没找到 Base，显示不可用
+            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
+                el.textContent = "Unavailable";
+            });
         }
     } catch (e) {
-        document.querySelectorAll('[id^="base-tvl-"]').forEach(el => { el.textContent = "Unavailable"; });
+        console.warn("DefiLlama TVL fetch failed:", e);
+        document.querySelectorAll('[id^="base-tvl-"]').forEach(el => {
+            el.textContent = "Unavailable";
+        });
     }
 }
 
