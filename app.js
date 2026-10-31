@@ -1,0 +1,143 @@
+
+// ---------- LIVE TVL ----------
+const CHAIN = "base";
+async function fetchTVL(token) {
+  const url = `https://api.dexscreener.com/token-pairs/v1/${CHAIN}/${token.address}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const pairs = await res.json();
+  if (!Array.isArray(pairs) || pairs.length === 0) return 0;
+  const best = pairs.reduce((a, b) =>
+    ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b), pairs[0]);
+  return Number(best.liquidity?.usd || 0);
+}
+
+function badgeClass(tvl) {
+  if (tvl >= 1) return "badge tiny";
+  return "badge empty";
+}
+
+function renderCard(t) {
+  const safeSymbol = DOMPurify.sanitize(t.symbol);
+  const safeName = DOMPurify.sanitize(t.name);
+  const safeFreq = DOMPurify.sanitize(t.freq);
+  const safeAddr = DOMPurify.sanitize(t.address);
+  const safeGecko = DOMPurify.sanitize(t.gecko, { ALLOWED_URI_REGEXP: /^https:\/\/www\.geckoterminal\.com\// });
+
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML = `
+    <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
+    <p class="name">${safeName}</p>
+    <p class="addr">${safeAddr}</p>
+    <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
+    <div class="links">
+      <a href="https://app.uniswap.org" target="_blank" rel="noopener">Uniswap</a>
+      <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener">BaseScan</a>
+      <a href="${safeGecko}" target="_blank" rel="noopener">GeckoTerm</a>
+    </div>`;
+  return el;
+}
+
+async function syncAll(tokens) {
+  for (const t of tokens) {
+    try {
+      const tvl = await fetchTVL(t);
+      const span = document.getElementById(`tvl-${t.id}`);
+      if (!span) continue;
+      span.className = badgeClass(tvl);
+      span.textContent = tvl > 0
+        ? `$${tvl.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`
+        : "EMPTY";
+    } catch (e) {
+      const span = document.getElementById(`tvl-${t.id}`);
+      if (span) { span.className = "badge empty"; span.textContent = "ERROR"; }
+      console.error(`TVL ${t.symbol}:`, e);
+    }
+  }
+}
+
+async function boot() {
+  try {
+    const res = await fetch("tokens.json");
+    const tokens = await res.json();
+    const grid = document.getElementById("token-grid");
+    grid.innerHTML = "";
+    tokens.forEach(t => grid.appendChild(renderCard(t)));
+    await syncAll(tokens);
+    setInterval(() => syncAll(tokens), 30000);
+  } catch (e) {
+    document.getElementById("token-grid").innerHTML =
+      '<p class="loading">FAILED TO LOAD TOKENS.JSON</p>';
+    console.error(e);
+  }
+}
+
+// ---------- 3D NEURAL BACKGROUND ----------
+function startBackground() {
+  const canvas = document.getElementById("neural-canvas");
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(devicePixelRatio);
+  camera.position.z = 15;
+
+  const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
+  const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
+
+  const hyper = new THREE.LineSegments(
+    new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
+  scene.add(hyper);
+
+  const core = new THREE.LineSegments(
+    new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)),
+    new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
+  scene.add(core);
+
+  const N = 400;
+  const pos = new Float32Array(N*3);
+  for (let i=0;i<N*3;i+=3){
+    pos[i]=(Math.random()-.5)*30;
+    pos[i+1]=(Math.random()-.5)*30;
+    pos[i+2]=(Math.random()-.5)*30;
+  }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+  const points = new THREE.Points(pGeo, white);
+  scene.add(points);
+
+  const lines = [];
+  for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+    const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
+    if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5)
+      lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
+  }
+  const lGeo = new THREE.BufferGeometry();
+  lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
+  const net = new THREE.LineSegments(lGeo, silver);
+  scene.add(net);
+
+  let t=0;
+  (function animate(){
+    requestAnimationFrame(animate);
+    t += .005;
+    hyper.rotation.x += .002; hyper.rotation.y += .003;
+    core.rotation.x -= .004; core.rotation.y -= .001;
+    points.rotation.y = net.rotation.y = t*.1;
+    const s = 1 + Math.sin(t*2)*.05;
+    hyper.scale.set(s,s,s); points.scale.set(s,s,s);
+    renderer.render(scene, camera);
+  })();
+
+  addEventListener("resize", () => {
+    camera.aspect = innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  startBackground();
+  boot();
+});
