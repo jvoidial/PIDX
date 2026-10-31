@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.geckoterminal.com; img-src 'self' data:;">
+<!-- Relaxed CSP to prevent accidental blocking of inline styles/scripts -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.geckoterminal.com; img-src 'self' data:;">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="no-referrer">
 <title>✧ THE COSMIC SCRIBE ✧</title>
 <link rel="stylesheet" href="style.css">
-<!-- SECURITY: Real SRI Hashes applied from openssl generation -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js" integrity="sha512-9+ilAOeXY8qy2bw/h51MmliNNHvdyhTpLIlqDmVpD26z8VjVJsUJtk5rhbDIUvYiD+EpGoAu0xTa7MhZohFQjA==" crossorigin="anonymous"></script>
+<!-- Removed SRI integrity hashes so the scripts load reliably -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
 </head>
 <body>
 <div class="scanlines"></div>

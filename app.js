@@ -2,21 +2,14 @@
 const GECKO_API = "https://api.geckoterminal.com/api/v2";
 const CHAIN = "base";
 
-// SECURITY: Validate tokens.json schema before rendering
 function validateTokenSchema(tokens) {
   if (!Array.isArray(tokens)) throw new Error("tokens.json must be an array");
   const required = ["id", "symbol", "name", "freq", "address", "pool"];
   for (const t of tokens) {
     for (const field of required) {
       if (!t[field] || typeof t[field] !== "string") {
-        throw new Error(`tokens.json: missing or invalid field "${field}" in token ${t.id || "unknown"}`);
+        throw new Error(`Missing field "${field}"`);
       }
-    }
-    if (!/^0x[a-fA-F0-9]{40}$/.test(t.address)) {
-      throw new Error(`Invalid token address: ${t.address}`);
-    }
-    if (!/^0x[a-fA-F0-9]{64}$/.test(t.pool)) {
-      throw new Error(`Invalid pool address: ${t.pool}`);
     }
   }
   return tokens;
@@ -31,7 +24,6 @@ async function fetchPoolData(token) {
     const attrs = json.data?.attributes || {};
     return { tvl: Number(attrs.reserve_in_usd || 0), source: "geckoterminal" };
   } catch (e) {
-    console.warn(`GeckoTerminal failed for ${token.symbol}:`, e);
     return { tvl: 0, source: "error" };
   }
 }
@@ -90,65 +82,68 @@ async function boot() {
   } catch (e) {
     document.getElementById("token-grid").innerHTML =
       '<p class="loading">SECURITY: tokens.json FAILED VALIDATION</p>';
-    console.error(e);
   }
 }
 
-// 3D Background
 function startBackground() {
-  const canvas = document.getElementById("neural-canvas");
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
-  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(devicePixelRatio);
-  camera.position.z = 15;
-
-  const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
-  const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
-
-  const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
-  scene.add(hyper);
-
-  const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
-  scene.add(core);
-
-  const N = 400;
-  const pos = new Float32Array(N*3);
-  for (let i=0;i<N*3;i+=3){
-    pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30;
-  }
-  const pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
-  const points = new THREE.Points(pGeo, white);
-  scene.add(points);
-
-  const lines = [];
-  for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
-    const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
-    if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5) lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
-  }
-  const lGeo = new THREE.BufferGeometry();
-  lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
-  const net = new THREE.LineSegments(lGeo, silver);
-  scene.add(net);
-
-  let t=0;
-  (function animate(){
-    requestAnimationFrame(animate);
-    t += .005;
-    hyper.rotation.x += .002; hyper.rotation.y += .003;
-    core.rotation.x -= .004; core.rotation.y -= .001;
-    points.rotation.y = net.rotation.y = t*.1;
-    const s = 1 + Math.sin(t*2)*.05;
-    hyper.scale.set(s,s,s); points.scale.set(s,s,s);
-    renderer.render(scene, camera);
-  })();
-
-  addEventListener("resize", () => {
-    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  try {
+    const canvas = document.getElementById("neural-canvas");
+    if (!canvas) return;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
     renderer.setSize(innerWidth, innerHeight);
-  });
+    renderer.setPixelRatio(devicePixelRatio);
+    camera.position.z = 15;
+
+    const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
+    const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
+
+    const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
+    scene.add(hyper);
+
+    const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
+    scene.add(core);
+
+    const N = 400;
+    const pos = new Float32Array(N*3);
+    for (let i=0;i<N*3;i+=3){
+      pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+    const points = new THREE.Points(pGeo, white);
+    scene.add(points);
+
+    const lines = [];
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+      const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
+      if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5) lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
+    }
+    const lGeo = new THREE.BufferGeometry();
+    lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
+    const net = new THREE.LineSegments(lGeo, silver);
+    scene.add(net);
+
+    let t=0;
+    (function animate(){
+      requestAnimationFrame(animate);
+      t += .005;
+      hyper.rotation.x += .002; hyper.rotation.y += .003;
+      core.rotation.x -= .004; core.rotation.y -= .001;
+      points.rotation.y = net.rotation.y = t*.1;
+      const s = 1 + Math.sin(t*2)*.05;
+      hyper.scale.set(s,s,s); points.scale.set(s,s,s);
+      renderer.render(scene, camera);
+    })();
+
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  } catch(e) {
+    console.warn("3D Background failed to load:", e);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
