@@ -16,26 +16,28 @@ async function fetchPoolData(token) {
 }
 
 function renderCard(t) {
-    const safeSymbol = DOMPurify.sanitize(t.symbol);
-    const safeName = DOMPurify.sanitize(t.name);
-    const safeFreq = DOMPurify.sanitize(t.freq);
-    const safeAddr = DOMPurify.sanitize(t.address);
-    const safePool = DOMPurify.sanitize(t.pool);
-    const uniswapUrl = `https://app.uniswap.org/explore/pools/base?query=${safePool}`;
-    const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
-    const el = document.createElement("div");
-    el.className = "card";
-    el.innerHTML = `
-        <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
-        <p class="name">${safeName}</p>
-        <p class="addr">${safeAddr}</p>
-        <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
-        <div class="links">
-            <a href="${uniswapUrl}" target="_blank" rel="noopener noreferrer">Uniswap</a>
-            <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
-            <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
-        </div>`;
-    return el;
+  const safeSymbol = DOMPurify.sanitize(t.symbol);
+  const safeName = DOMPurify.sanitize(t.name);
+  const safeFreq = DOMPurify.sanitize(t.freq);
+  const safeAddr = DOMPurify.sanitize(t.address);
+  const safePool = DOMPurify.sanitize(t.pool);
+
+  const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
+  const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
+
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML = `
+    <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
+    <p class="name">${safeName}</p>
+    <p class="addr">${safeAddr}</p>
+    <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
+    <div class="links">
+      <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" style="background:var(--accent,#1d9bf0);color:#fff;border-color:transparent;font-weight:600;">🔄 Swap</a>
+      <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
+      <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
+    </div>`;
+  return el;
 }
 
 async function syncAll(tokens) {
