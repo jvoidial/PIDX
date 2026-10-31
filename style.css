@@ -220,3 +220,24 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
 
 .mining-card { border-left: 3px solid var(--silver); }
 .mining-card .badge { margin-left: 8px; }
+
+/* X Link Button */
+.x-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 20px;
+    background: var(--white);
+    color: var(--bg);
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-family: monospace;
+    transition: all 0.2s;
+    border: 1px solid var(--white);
+}
+.x-link:hover {
+    background: transparent;
+    color: var(--white);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
