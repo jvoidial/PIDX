@@ -144,32 +144,34 @@ function renderCard(t) {
 
 
 
-// --- CHART RENDERER (DexPaprika for reliable OHLCV data) ---
+
+// --- CHART RENDERER (GeckoTerminal with empty intervals) ---
 async function renderChart(token) {
     const container = document.getElementById(`chart-${token.id}`);
     if (!container) return;
+
+    // CRITICAL: Force explicit height for Lightweight Charts
+    container.style.height = '250px';
+    container.style.width = '100%';
     container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Loading chart...</p>';
 
     try {
-        // DexPaprika API: /networks/{network}/pools/{pool}/ohlcv
-        const targetUrl = `https://api.dexpaprika.com/networks/base/pools/${token.pool}/ohlcv?interval=15m&limit=100`;
+        // include_empty_intervals=true fills gaps with flat lines instead of returning an empty array
+        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100&include_empty_intervals=true`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
         
-        const res = await fetchWithTimeout(targetUrl, {}, 8000);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        
-        const ohlcv = await res.json();
+        const res = await fetchWithTimeout(proxyUrl, {}, 8000);
+        const json = await res.json();
+        const ohlcv = json.data?.attributes?.ohlcv_list;
 
         if (!ohlcv || ohlcv.length === 0) {
-            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available yet.</p>';
+            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available.</p>';
             return;
         }
 
-        // Convert DexPaprika format to Lightweight Charts format
-        const candleData = ohlcv.map(c => ({
-            time: Math.floor(new Date(c.time_open).getTime() / 1000),
-            open: c.open, high: c.high, low: c.low, close: c.close
-        })).sort((a, b) => a.time - b.time);
-
+        const uniqueData = {};
+        ohlcv.forEach(c => { uniqueData[Math.floor(c[0])] = c; });
+        const sortedOhlcv = Object.values(uniqueData).sort((a, b) => a[0] - b[0]);
         container.innerHTML = "";
 
         if (typeof LightweightCharts === 'undefined') {
@@ -188,18 +190,16 @@ async function renderChart(token) {
             upColor: '#00ffcc', downColor: '#ff4444', borderDownColor: '#ff4444', borderUpColor: '#00ffcc', wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
         });
 
+        const candleData = sortedOhlcv.map(c => ({
+            time: Math.floor(c[0]), open: parseFloat(c[1]), high: parseFloat(c[2]), low: parseFloat(c[3]), close: parseFloat(c[4]),
+        })).filter(d => d.open > 0);
+        
         candleSeries.setData(candleData);
-
-        new ResizeObserver(entries => {
-            if (entries.length === 0 || !entries[0].contentRect) return;
-            chart.applyOptions({ width: entries[0].contentRect.width });
-        }).observe(container);
-
     } catch (e) {
-        console.warn(`Chart failed for ${token.symbol}:`, e);
-        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Chart unavailable (Low Data).</p>';
+        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Chart unavailable.</p>';
     }
 }
+
 
 
 function drawChart(container, ohlcv) {
@@ -340,3 +340,13 @@ function startBackground() {
     } catch(e) {}
 }
 startBackground();
+
+
+// --- FIX: Resume timers when tab becomes visible again ---
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        console.log("Page visible again. Resuming timers.");
+        // The setIntervals will automatically resume, but we force a memory refresh
+        if (typeof loadMemory === 'function') loadMemory();
+    }
+});
