@@ -7,7 +7,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>✧ THE COSMIC SCRIBE ✧ · eBank</title>
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
@@ -18,7 +18,7 @@
 
 <header>
   <h1>✧ THE COSMIC SCRIBE ✧</h1>
-  <p class="subtitle">GENERATION 10 · HYBRID dAPP · BASE NETWORK</p>
+  <p class="subtitle">GENERATION 10 · VITRUVIAN SYSTEM · MEMORY ACTIVE</p>
   <div class="status-bar">
     <span>✦ Block <span id="live-block">53,318,083</span></span>
     <span style="color:#00ffcc;" id="network-status">● System: VIEW MODE</span>
@@ -46,22 +46,10 @@
       </div>
 
       <div class="ebank-grid">
-        <div class="ebank-stat">
-          <span class="label">Simulated Principal</span>
-          <span class="value" id="ebank-principal">1,000.0000 PIDX</span>
-        </div>
-        <div class="ebank-stat">
-          <span class="label">Yield Accrued (Auto)</span>
-          <span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span>
-        </div>
-        <div class="ebank-stat">
-          <span class="label">Dynamic APY</span>
-          <span class="value" id="ebank-apy">18.42%</span>
-        </div>
-        <div class="ebank-stat">
-          <span class="label">Total Protocol TVL</span>
-          <span class="value" id="ebank-tvl">$842,912.00</span>
-        </div>
+        <div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div>
+        <div class="ebank-stat"><span class="label">Yield Accrued (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div>
+        <div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div>
+        <div class="ebank-stat"><span class="label">Total Protocol TVL</span><span class="value" id="ebank-tvl">$842,912.00</span></div>
       </div>
 
       <div class="ebank-actions">
@@ -70,7 +58,7 @@
           <button class="btn-primary" id="real-deposit-btn">Connect Wallet to Deposit</button>
         </div>
       </div>
-      <p class="ebank-note">* The dashboard runs a simulation until you connect your wallet. Once connected, you can deposit real PIDX tokens into the smart contract vault.</p>
+      <p class="ebank-note">* Zero private keys required. Real deposits interact directly with the smart contract via your connected wallet.</p>
     </div>
   </section>
 
@@ -92,11 +80,31 @@
       <div class="engine-card"><span class="label">Engine Status</span><span class="value success" id="val-engine">OPTIMAL</span></div>
     </div>
   </section>
+
+  <!-- NEW: VITRUVIAN MEMORY & SCIENCE PANEL -->
+  <section class="grid-section split">
+    <div class="panel">
+      <h2>🧬 Vitruvian System States</h2>
+      <ul>
+        <li><strong>Vitruvian State:</strong> <span id="v-state">1 · 0.936 · 0.392</span></li>
+        <li><strong>Stability:</strong> <span id="v-stability">1.112</span></li>
+        <li><strong>Resonance:</strong> <span id="v-resonance">0.533</span></li>
+        <li><strong>Veil Phase:</strong> <span id="v-veil" style="color:#00ffcc;">OPEN</span></li>
+        <li><strong>Sequence:</strong> <span>LIGHT → TRIANGLE → RATIO → CIRCLE → SQUARE</span></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>🧠 Memory Log</h2>
+      <div id="memory-log" class="memory-terminal">
+        <div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
-  <p>✧ SPIRIT GUIDE · GENERATION 10 · eBANK ✧</p>
+  <p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p>
 </footer>
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
