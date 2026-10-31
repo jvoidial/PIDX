@@ -2,8 +2,23 @@
 const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
 const CACHE_TTL = 30000;
-const VAULT_ADDRESS = "0x0000000000000000000000000000000000000000";
-const ASSET_ADDRESS = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c";
+
+// FIX: Hardcoded data to prevent CORS failures on JSON fetch
+const VAULTS_DATA = [
+    {"name": "Morpho USDC Vault", "type": "Vault", "asset": "USDC", "apy": "7.89%", "tvl": "$366K", "desc": "High utilization lending pool.", "link": "https://app.morpho.org/base"},
+    {"name": "Euler V2 USDC", "type": "Vault", "asset": "USDC", "apy": "6.85%", "tvl": "$584K", "desc": "ERC-4626 compliant vault.", "link": "https://app.euler.finance/"},
+    {"name": "Beefy Auto-Compounder", "type": "Vault", "asset": "Multiple", "apy": "Variable", "tvl": "High", "desc": "Auto-compounds LP rewards.", "link": "https://app.beefy.com/"},
+    {"name": "Alien Base USDC-CBBTC", "type": "LP Pool", "asset": "USDC/CBBTC", "apy": "21.50%", "tvl": "$1.47M", "desc": "Concentrated V3 pool. IL risk.", "link": "https://app.alienbase.xyz/"},
+    {"name": "Uniswap V3 WETH-USDC", "type": "LP Pool", "asset": "WETH/USDC", "apy": "65%", "tvl": "$125M", "desc": "Highest organic yield.", "link": "https://app.uniswap.org/pools"}
+];
+
+const MINING_DATA = [
+    {"name": "SoloFury", "fee": "1%", "coin": "SHA-256", "stratum": "stratum+tcp://btc.solofury.com:7070", "status": "online", "notes": "Multi-coin solo mining."},
+    {"name": "Ocean", "fee": "2% (1% DATUM)", "coin": "BTC", "stratum": "stratum+tcp://ocean.xyz:3334", "status": "online", "notes": "Non-custodial, no KYC."},
+    {"name": "Braiins Pool", "fee": "0% (Braiins OS)", "coin": "BTC", "stratum": "stratum+tcp://stratum.braiins.com:3333", "status": "online", "notes": "Stratum V2 native support."},
+    {"name": "BASED Mining", "fee": "0%", "coin": "BTC (Solo)", "stratum": "stratum+tcp://pool.basedmining.xyz:3333", "status": "online", "notes": "On-chain solo mining via Base."},
+    {"name": "MineBean", "fee": "Dynamic", "coin": "ETH / BEAN", "stratum": "N/A - Grid Mining", "status": "online", "notes": "Gamified mining on Base."}
+];
 
 // --- CACHING & API ---
 function getCached(key) {
@@ -41,6 +56,7 @@ async function fetchPoolData(token) {
     } catch (e) { return { tvl: 0, source: "error" }; }
 }
 
+// --- RENDER TOKEN CARDS ---
 function renderCard(t) {
     const safeSymbol = DOMPurify.sanitize(t.symbol);
     const safeName = DOMPurify.sanitize(t.name);
@@ -59,7 +75,8 @@ function renderCard(t) {
         <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
         <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
         
-        <div class="chart-container" id="chart-${t.id}" style="height: 200px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2);"></div>
+        <!-- FIX: Added Chart Container with fixed height -->
+        <div class="chart-container" id="chart-${t.id}" style="height: 250px; width: 100%; margin-top: 15px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.2);"></div>
         
         <div class="superchain-tracker" style="margin-top:10px; padding:10px; background:rgba(0,255,204,0.05); border:1px solid rgba(0,255,204,0.2); border-radius:8px;">
             <p style="font-size:0.8rem; color:#00ffcc; font-weight:bold;">🔗 Base Chain TVL</p>
@@ -85,7 +102,65 @@ async function syncAll(tokens) {
     }
 }
 
-// --- GO PLUS SECURITY SCAN ---
+// --- FIX: NATIVE CHART RENDERER (Uses CORS proxy) ---
+async function renderChart(token) {
+    const container = document.getElementById(`chart-${token.id}`);
+    if (!container) return;
+
+    try {
+        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        
+        const res = await fetch(proxyUrl);
+        const json = await res.json();
+        const ohlcv = json.data?.attributes?.ohlcv_list;
+
+        if (!ohlcv || ohlcv.length === 0) {
+            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available.</p>';
+            return;
+        }
+
+        // Clean data
+        const uniqueData = {};
+        ohlcv.forEach(c => { uniqueData[Math.floor(c[0])] = c; });
+        const sortedOhlcv = Object.values(uniqueData).sort((a, b) => a[0] - b[0]);
+
+        container.innerHTML = "";
+
+        const chart = LightweightCharts.createChart(container, {
+            width: container.clientWidth,
+            height: 250,
+            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+            timeScale: { borderColor: 'rgba(255,255,255,0.1)' },
+            rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+        });
+
+        const candleSeries = chart.addCandlestickSeries({
+            upColor: '#00ffcc', downColor: '#ff4444',
+            borderDownColor: '#ff4444', borderUpColor: '#00ffcc',
+            wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
+        });
+
+        const candleData = sortedOhlcv.map(c => ({
+            time: Math.floor(c[0]),
+            open: parseFloat(c[1]), high: parseFloat(c[2]),
+            low: parseFloat(c[3]), close: parseFloat(c[4]),
+        })).filter(d => d.open > 0);
+        
+        candleSeries.setData(candleData);
+
+        new ResizeObserver(entries => {
+            if (entries.length === 0 || !entries[0].contentRect) return;
+            chart.applyOptions({ width: entries[0].contentRect.width });
+        }).observe(container);
+
+    } catch (e) {
+        container.innerHTML = '<p style="color:#ff4444; text-align:center; padding-top:100px; font-size:0.75rem;">Chart failed to load.</p>';
+    }
+}
+
+// --- GO PLUS SECURITY ---
 async function scanTokenSecurity(token) {
     try {
         const url = `https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`;
@@ -100,36 +175,24 @@ async function scanTokenSecurity(token) {
         const sellTax = parseFloat(result.sell_tax || "0") * 100;
         if (isHoneypot || result.cannot_sell_all === "1") {
             badge.textContent = "🚨 HONEYPOT"; badge.style.color = "#ff4444";
-        } else if (sellTax > 10 || buyTax > 10) {
-            badge.textContent = `⚠️ High Tax (${buyTax}% / ${sellTax}%)`; badge.style.color = "#ffaa00";
         } else {
             badge.textContent = `✅ Safe (Buy ${buyTax}% / Sell ${sellTax}%)`; badge.style.color = "#00ffcc";
         }
     } catch (e) {}
 }
-async function scanAllSecurity(tokens) { for (const t of tokens) await scanTokenSecurity(t); }
 
-// --- FETCH BASE CHAIN TVL (Robust) ---
+// --- BASE TVL ---
 async function fetchBaseTVL() {
-    const endpoints = [
-        "https://api.llama.fi/v2/chains",
-        "https://api.llama.fi/chains"
-    ];
-    let success = false;
-    for (const url of endpoints) {
-        try {
-            const res = await fetch(url);
-            if (!res.ok) continue;
-            const data = await res.json();
-            let base = Array.isArray(data) ? data.find(c => c.name === "Base") : data["Base"];
-            if (base && base.tvl) {
-                const tvlBillions = (base.tvl / 1e9).toFixed(2);
-                document.querySelectorAll('[id^="base-tvl-"]').forEach(el => { el.textContent = `$${tvlBillions}B TVL`; });
-                success = true; break;
-            }
-        } catch (e) {}
-    }
-    if (!success) {
+    try {
+        const res = await fetch("https://api.llama.fi/v2/chains");
+        const data = await res.json();
+        const base = data.find(c => c.name === "Base");
+        if (base && base.tvl) {
+            const tvlBillions = (base.tvl / 1e9).toFixed(2);
+            document.querySelectorAll('[id^="base-tvl-"]').forEach(el => { el.textContent = `$${tvlBillions}B TVL`; });
+        }
+    } catch (e) {
+        // Fail silently, leave as loading or unavailable
         document.querySelectorAll('[id^="base-tvl-"]').forEach(el => { el.textContent = "Unavailable"; });
     }
 }
@@ -159,7 +222,7 @@ function logMemory(msg, color = "var(--text)") {
     loadMemory();
 }
 
-// --- GROWTH ENGINE & SIMULATION ---
+// --- ENGINE SIMULATIONS ---
 let ebankPrincipal = 1000.00;
 let ebankYield = 0.00000000;
 let currentAPY = 0.1842;
@@ -184,9 +247,9 @@ function startEbankEngine() {
         if (apyEl) apyEl.textContent = `${(currentAPY * 100).toFixed(2)}%`;
 
         const perSecondRate = Math.pow(1 + currentAPY, 1 / SECONDS_IN_YEAR) - 1;
-        const earnedThisSecond = ebankPrincipal * perSecondRate;
-        ebankYield += earnedThisSecond;
-        ebankPrincipal += earnedThisSecond;
+        const earned = ebankPrincipal * perSecondRate;
+        ebankYield += earned;
+        ebankPrincipal += earned;
 
         const pEl = document.getElementById("ebank-principal");
         const yEl = document.getElementById("ebank-yield");
@@ -202,8 +265,6 @@ function startEbankEngine() {
 function startGrowthEngine() {
     let block = 53318083, time = 0;
     loadMemory();
-    
-    // Shift Vitruvian states every 15 seconds
     setInterval(() => {
         const phases = ["OPEN", "CLOSING", "VEILED"];
         const bands = ["LOW", "MID", "HIGH"];
@@ -222,95 +283,66 @@ function startGrowthEngine() {
         const eBandEl = document.getElementById("val-energy");
         if (eBandEl) eBandEl.textContent = `${newBand} (${(40 + Math.random() * 10).toFixed(1)} GW)`;
         
-        logMemory(`Veil shifted to ${newPhase}. Stability updated to ${newStability}.`, newPhase === "VEILED" ? "#ff4444" : "#00ffcc");
+        logMemory(`Veil shifted to ${newPhase}.`, newPhase === "VEILED" ? "#ff4444" : "#00ffcc");
     }, 15000);
 
-    // Fast tick (1 second)
     setInterval(() => {
         time += 0.1; block++;
         const bEl = document.getElementById("live-block");
         if (bEl) bEl.textContent = block.toLocaleString();
-        
         const cEl = document.getElementById("val-continuity");
         if (cEl) cEl.textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
-        
         const cohEl = document.getElementById("val-coherence");
         if (cohEl) cohEl.textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
-        
         const pEl = document.getElementById("val-persistence");
         if (pEl) pEl.textContent = `${379 + Math.floor(time/10)} blocks`;
-        
         const vxEl = document.getElementById("val-voxels");
         if (vxEl) vxEl.textContent = 7 + Math.round(Math.sin(time * 0.5));
-        
-        if (Math.floor(time) % 10 === 0) {
-            const statusEl = document.getElementById("val-engine");
-            if (statusEl) {
-                statusEl.textContent = "CALIBRATING..."; statusEl.style.color = "#ffaa00";
-                setTimeout(() => { statusEl.textContent = "OPTIMAL"; statusEl.style.color = "var(--white)"; }, 1500);
-            }
-        }
     }, 1000);
 }
 
-// --- RENDER VAULTS & POOLS ---
+// --- LOAD GRIDS ---
 async function loadVaultsAndPools() {
-    try {
-        const res = await fetch("vaults_pools.json");
-        if (!res.ok) throw new Error("File not found");
-        const data = await res.json();
-        const grid = document.getElementById("vault-grid");
-        if(!grid) return;
-        grid.innerHTML = "";
-        data.forEach(item => {
-            const el = document.createElement("div");
-            el.className = "card small vault-card";
-            const badgeClass = item.type === 'Vault' ? 'tiny' : 'empty';
-            const badgeColor = item.type === 'Vault' ? '#00ffcc' : '#ffaa00';
-            el.innerHTML = `
-                <h4>${item.name} <span class="badge ${badgeClass}" style="border-color:${badgeColor}; color:${badgeColor};">${item.type}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">${item.asset}</p>
-                <p style="font-size:1.2rem; color:#00ffcc; font-family:monospace; margin:5px 0;">${item.apy} APY</p>
-                <p style="color:var(--dim); font-size:0.75rem;">TVL: ${item.tvl}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin:5px 0;">${item.desc}</p>
-                <a href="${item.link}" target="_blank" class="swap-btn" style="display:inline-block; margin-top:8px; font-size:0.7rem; padding:4px 8px;">View & Deposit →</a>
-            `;
-            grid.appendChild(el);
-        });
-    } catch(e) { 
-        const grid = document.getElementById("vault-grid");
-        if (grid) grid.innerHTML = '<p style="color:#ff4444;">Failed to load vaults data.</p>';
-    }
+    const grid = document.getElementById("vault-grid");
+    if(!grid) return;
+    grid.innerHTML = "";
+    VAULTS_DATA.forEach(item => {
+        const el = document.createElement("div");
+        el.className = "card small vault-card";
+        const badgeClass = item.type === 'Vault' ? 'tiny' : 'empty';
+        const badgeColor = item.type === 'Vault' ? '#00ffcc' : '#ffaa00';
+        el.innerHTML = `
+            <h4>${item.name} <span class="badge ${badgeClass}" style="border-color:${badgeColor}; color:${badgeColor};">${item.type}</span></h4>
+            <p style="color:var(--dim); font-size:0.8rem;">${item.asset}</p>
+            <p style="font-size:1.2rem; color:#00ffcc; font-family:monospace; margin:5px 0;">${item.apy} APY</p>
+            <p style="color:var(--dim); font-size:0.75rem;">TVL: ${item.tvl}</p>
+            <p style="color:var(--dim); font-size:0.75rem; margin:5px 0;">${item.desc}</p>
+            <a href="${item.link}" target="_blank" class="swap-btn" style="display:inline-block; margin-top:8px; font-size:0.7rem; padding:4px 8px;">View →</a>
+        `;
+        grid.appendChild(el);
+    });
 }
 
-// --- RENDER MINING POOLS ---
 async function loadMiningPools() {
-    try {
-        const res = await fetch("mining_pools.json");
-        if (!res.ok) throw new Error("File not found");
-        const pools = await res.json();
-        const grid = document.getElementById("mining-grid");
-        if(!grid) return;
-        grid.innerHTML = "";
-        pools.forEach(p => {
-            const el = document.createElement("div");
-            el.className = "card small mining-card";
-            el.innerHTML = `
-                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
-                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
-                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
-                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
-            `;
-            grid.appendChild(el);
-        });
-    } catch (e) { 
-        const grid = document.getElementById("mining-grid");
-        if (grid) grid.innerHTML = '<p style="color:#ff4444;">Failed to load mining data.</p>';
-    }
+    const grid = document.getElementById("mining-grid");
+    if(!grid) return;
+    grid.innerHTML = "";
+    MINING_DATA.forEach(p => {
+        const el = document.createElement("div");
+        el.className = "card small mining-card";
+        el.innerHTML = `
+            <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
+            <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
+            <p class="mono" style="margin-top:8px;">${p.stratum}</p>
+            <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
+        `;
+        grid.appendChild(el);
+    });
 }
 
 // --- BOOT SEQUENCE ---
 async function boot() {
+    // 1. Load Tokens (Wrapped in try/catch so it doesn't stop the rest)
     try {
         const res = await fetch("tokens.json");
         const tokens = await res.json();
@@ -319,15 +351,20 @@ async function boot() {
             grid.innerHTML = "";
             tokens.forEach(t => grid.appendChild(renderCard(t)));
             await syncAll(tokens);
-            await scanAllSecurity(tokens);
-            await fetchBaseTVL();
+            for (const t of tokens) await scanTokenSecurity(t);
+            for (const t of tokens) await renderChart(t);
             setInterval(() => syncAll(tokens), 10000);
         }
-    } catch (e) { console.error("Boot error:", e); }
-    
-    await loadVaultsAndPools();
-    await loadMiningPools();
-    
+    } catch (e) { console.error("Tokens failed:", e); }
+
+    // 2. Base TVL (Independent)
+    try { await fetchBaseTVL(); } catch(e) { console.error("TVL failed:", e); }
+
+    // 3. Grids (Independent)
+    try { await loadVaultsAndPools(); } catch(e) { console.error("Vaults failed:", e); }
+    try { await loadMiningPools(); } catch(e) { console.error("Mining failed:", e); }
+
+    // 4. Simulations (Always run)
     startGrowthEngine();
     startEbankEngine();
     updateWalletSim();
@@ -335,7 +372,7 @@ async function boot() {
 
 document.addEventListener("DOMContentLoaded", boot);
 
-// --- 3D BACKGROUND ---
+// 3D Background
 function startBackground() {
     try {
         const canvas = document.getElementById("neural-canvas");
@@ -383,190 +420,3 @@ function startBackground() {
     } catch(e) {}
 }
 startBackground();
-
-
-// --- VITRUVIAN MEMORY ---
-function loadMemory() {
-    const memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
-    const logContainer = document.getElementById("memory-log");
-    if (!logContainer) return;
-    logContainer.innerHTML = "";
-    memory.forEach(entry => {
-        const div = document.createElement("div");
-        div.style.color = entry.color || "var(--text)";
-        div.style.marginBottom = "4px";
-        div.textContent = entry.msg;
-        logContainer.appendChild(div);
-    });
-    logContainer.scrollTop = logContainer.scrollHeight;
-}
-
-function logMemory(msg, color = "var(--text)") {
-    let memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
-    const time = new Date().toLocaleTimeString();
-    memory.push({ msg: `[${time}] ${msg}`, color });
-    if (memory.length > 10) memory.shift(); // Keep last 10
-    localStorage.setItem("vitruvian_memory", JSON.stringify(memory));
-    loadMemory();
-}
-
-// --- GROWTH ENGINE ---
-function startGrowthEngine() {
-    let block = 53318083, time = 0;
-    loadMemory(); // Load existing logs on start
-
-    // 1. Shift Vitruvian states every 15 seconds
-    setInterval(() => {
-        const phases = ["OPEN", "CLOSING", "VEILED"];
-        const bands = ["LOW", "MID", "HIGH"];
-        const newPhase = phases[Math.floor(Math.random() * phases.length)];
-        const newBand = bands[Math.floor(Math.random() * bands.length)];
-        const newStability = (1.1 + Math.random() * 0.1).toFixed(3);
-        
-        const vEl = document.getElementById("v-veil");
-        if (vEl) {
-            vEl.textContent = newPhase;
-            vEl.style.color = newPhase === "OPEN" ? "#00ffcc" : (newPhase === "VEILED" ? "#ff4444" : "#ffaa00");
-        }
-        const sEl = document.getElementById("v-stability");
-        if (sEl) sEl.textContent = newStability;
-        const eBandEl = document.getElementById("val-energy");
-        if (eBandEl) eBandEl.textContent = `${newBand} (${(40 + Math.random() * 10).toFixed(1)} GW)`;
-        
-        // Write to memory log!
-        logMemory(`Veil shifted to ${newPhase}. Stability updated to ${newStability}.`, newPhase === "VEILED" ? "#ff4444" : "#00ffcc");
-    }, 15000);
-
-    // 2. Update fast metrics every 1 second
-    setInterval(() => {
-        time += 0.1; block++;
-        const bEl = document.getElementById("live-block");
-        if (bEl) bEl.textContent = block.toLocaleString();
-        
-        const cEl = document.getElementById("val-continuity");
-        if (cEl) cEl.textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
-        
-        const cohEl = document.getElementById("val-coherence");
-        if (cohEl) cohEl.textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
-        
-        const pEl = document.getElementById("val-persistence");
-        if (pEl) pEl.textContent = `${379 + Math.floor(time/10)} blocks`;
-        
-        const vxEl = document.getElementById("val-voxels");
-        if (vxEl) vxEl.textContent = 7 + Math.round(Math.sin(time * 0.5));
-        
-        if (Math.floor(time) % 10 === 0) {
-            const statusEl = document.getElementById("val-engine");
-            if (statusEl) {
-                statusEl.textContent = "CALIBRATING..."; statusEl.style.color = "#ffaa00";
-                setTimeout(() => { statusEl.textContent = "OPTIMAL"; statusEl.style.color = "var(--white)"; }, 1500);
-            }
-        }
-    }, 1000);
-}
-
-// --- VISIBILITY FIX (For Mobile) ---
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-        console.log("Page visible again. Resuming timers.");
-        // The setIntervals will automatically resume, but we force a memory refresh
-        loadMemory(); 
-    }
-});
-
-
-// --- NATIVE CHART RENDERER (GeckoTerminal OHLCV + Lightweight Charts) ---
-
-// --- ADVANCED FOREX-STYLE CHART RENDERER (Candles + Volume + RSI) ---
-
-// --- FOREX-STYLE CHART RENDERER (With CORS Proxy & Fixed Height) ---
-async function renderChart(token) {
-    const container = document.getElementById(`chart-${token.id}`);
-    if (!container) return;
-
-    // CRITICAL FIX: Force the container to have a visible height
-    container.style.height = '250px';
-    container.style.width = '100%';
-    container.style.position = 'relative';
-
-    try {
-        // Use a CORS proxy to fetch from GeckoTerminal
-        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100`;
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-        
-        const res = await fetch(proxyUrl);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        
-        const json = await res.json();
-        // Handle cases where the proxy returns a string instead of JSON
-        const parsedData = typeof json === 'string' ? JSON.parse(json) : json;
-        const ohlcv = parsedData.data?.attributes?.ohlcv_list;
-
-        if (!ohlcv || ohlcv.length === 0) {
-            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available for this pool.</p>';
-            return;
-        }
-
-        // Clean data: sort by time and remove duplicates
-        const uniqueData = {};
-        ohlcv.forEach(c => {
-            const ts = Math.floor(c[0]);
-            uniqueData[ts] = c;
-        });
-        const sortedOhlcv = Object.values(uniqueData).sort((a, b) => a[0] - b[0]);
-
-        container.innerHTML = ""; // Clear loading text
-
-        // Create Main Chart
-        const chart = LightweightCharts.createChart(container, {
-            width: container.clientWidth,
-            height: 250,
-            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
-            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
-            timeScale: { borderColor: 'rgba(255,255,255,0.1)' },
-            rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
-        });
-
-        // Candlestick Series
-        const candleSeries = chart.addCandlestickSeries({
-            upColor: '#00ffcc', downColor: '#ff4444',
-            borderDownColor: '#ff4444', borderUpColor: '#00ffcc',
-            wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
-        });
-
-        const candleData = sortedOhlcv.map(c => ({
-            time: Math.floor(c[0]),
-            open: parseFloat(c[1]), high: parseFloat(c[2]),
-            low: parseFloat(c[3]), close: parseFloat(c[4]),
-        })).filter(d => d.open > 0 && d.high > 0 && d.low > 0 && d.close > 0);
-
-        candleSeries.setData(candleData);
-
-        // Volume Histogram
-        const volumeSeries = chart.addHistogramSeries({
-            color: '#26a69a', priceFormat: { type: 'volume' },
-            priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 },
-        });
-        const volumeData = candleData.map(c => {
-            const originalRow = sortedOhlcv.find(o => Math.floor(o[0]) === c.time);
-            return {
-                time: c.time,
-                value: parseFloat(originalRow[5]) || 0,
-                color: c.close >= c.open ? 'rgba(0, 255, 204, 0.5)' : 'rgba(255, 68, 68, 0.5)'
-            };
-        });
-        volumeSeries.setData(volumeData);
-
-        // Handle Resize
-        new ResizeObserver(entries => {
-            if (entries.length === 0 || !entries[0].contentRect) return;
-            chart.applyOptions({ width: entries[0].contentRect.width });
-        }).observe(container);
-
-    } catch (e) {
-        console.warn(`Chart failed for ${token.symbol}:`, e);
-        container.innerHTML = '<p style="color:#ff4444; text-align:center; padding-top:100px; font-size:0.75rem;">Chart failed to load.</p>';
-    }
-}
-
-
