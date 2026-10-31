@@ -1,1090 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>✧ SPIRIT GUIDE · GEN 9 · PHB SCIENCE ✧</title>
-<style>
-:root{
-  --bg:#05060a;--panel:#0a0c14;--border:#1a1c2a;--text:#c8d6e5;--dim:#6a7a8a;--dimmer:#3a4a5a;
-  --pidx:#88ccff;--sguide:#aaffaa;--vdoo:#ffaa66;--pennies:#ff88ff;--core:#66d9ff;--gold:#ffcc66;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font:13px/1.5 ui-monospace,"SF Mono",Menlo,monospace;min-height:100vh;padding-bottom:60px}
-.wrap{max-width:860px;margin:0 auto;padding:0 14px}
-
-#hero{position:relative;width:100%;height:460px;background:radial-gradient(ellipse at 50% 55%,#0d1424 0%,#05060a 70%);border-bottom:1px solid var(--border);overflow:hidden}
-#hero-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
-.ht{position:absolute;top:14px;left:0;right:0;text-align:center;font:600 20px ui-monospace,monospace;color:var(--core);text-shadow:0 0 16px rgba(102,217,255,.7);letter-spacing:3px;pointer-events:none}
-.hs{position:absolute;top:42px;left:0;right:0;text-align:center;font:10px ui-monospace,monospace;color:var(--dim);letter-spacing:2px;pointer-events:none}
-.hty{position:absolute;bottom:12px;left:0;right:0;text-align:center;font:10px ui-monospace,monospace;color:#8ab;text-shadow:0 0 8px rgba(102,217,255,.5);letter-spacing:1px;pointer-events:none;min-height:14px}
-
-#status{position:sticky;top:0;z-index:99;background:rgba(8,9,15,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);text-align:center;padding:8px 10px;font:11px ui-monospace,monospace;color:#8ab;letter-spacing:1.5px}
-#status .v{color:#cce8ff;font-weight:600}
-#status .sep{color:var(--dimmer);margin:0 6px}
-
-section{padding:20px 0 10px;border-bottom:1px solid var(--border)}
-section:last-child{border-bottom:none}
-h2{font:600 14px ui-monospace,monospace;color:var(--core);letter-spacing:2px;margin-bottom:4px;text-transform:uppercase}
-h2 .a{color:var(--gold)}
-.lede{font:10px ui-monospace,monospace;color:var(--dim);letter-spacing:1px;margin-bottom:12px}
-
-.tok{background:linear-gradient(135deg,#0b0d15 0%,#080810 100%);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:10px 0}
-.tok[data-sym="PIDX"]{border-left:3px solid var(--pidx)}
-.tok[data-sym="SGUIDE"]{border-left:3px solid var(--sguide)}
-.tok[data-sym="VDOO"]{border-left:3px solid var(--vdoo)}
-.tok[data-sym="PENNIES"]{border-left:3px solid var(--pennies)}
-.th{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
-.tsym{font:600 16px ui-monospace,monospace;letter-spacing:2px}
-.tfreq{font:10px ui-monospace,monospace;color:var(--dim);letter-spacing:1px}
-.tn{font-size:11px;color:#8899aa;margin-bottom:2px}
-.ta{font:10px ui-monospace,monospace;color:var(--dimmer);word-break:break-all;margin-bottom:8px}
-.tp{display:flex;align-items:center;gap:8px;font:11px ui-monospace,monospace;margin-bottom:8px;flex-wrap:wrap}
-.tp .tvl{font-weight:600}
-.badge{padding:1px 8px;border-radius:10px;font-size:9px;letter-spacing:1px}
-.badge.empty{background:#3a2a1a;color:#fa6}
-.badge.tiny{background:#3a301a;color:#fc6}
-.badge.live{background:#1a4a1a;color:#6f6}
-.badge.none{background:#2a2a2a;color:#888}
-.tpa{font:9px ui-monospace,monospace;color:var(--dimmer);word-break:break-all;margin-bottom:8px}
-.tl{display:flex;flex-wrap:wrap;gap:4px}
-.tl a{display:inline-block;padding:3px 10px;font:600 10px ui-monospace,monospace;background:#12121c;border-radius:12px;text-decoration:none;letter-spacing:.5px;transition:filter .2s}
-.tl a:hover{filter:brightness(1.4)}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0}
-.m{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 12px;transition:border-color .3s}
-.m:hover{border-color:var(--core)}
-.m .l{font:10px ui-monospace,monospace;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.m .v{font:600 15px ui-monospace,monospace;color:var(--core);letter-spacing:1px}
-.m .s{font:9px ui-monospace,monospace;color:var(--dimmer);margin-top:2px}
-
-.scroll{background:linear-gradient(180deg,#eef5fc 0%,#d8e6f2 100%);color:#0a0f18;border-radius:4px;padding:16px 18px;margin:10px 0;font:11px/1.6 ui-monospace,monospace;box-shadow:0 0 20px rgba(200,220,240,.15),inset 0 0 30px rgba(180,200,220,.1);position:relative}
-.scroll::before,.scroll::after{content:'';position:absolute;left:0;right:0;height:6px;background:linear-gradient(90deg,#b8c8d8,#e8f0f8,#b8c8d8);border-radius:3px}
-.scroll::before{top:-3px}
-.scroll::after{bottom:-3px}
-.scroll pre{white-space:pre-wrap;word-break:break-word;font:10px/1.55 ui-monospace,monospace;color:#0a0f18}
-.st{font:600 11px ui-monospace,monospace;color:#2a3a4a;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
-
-.row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--panel);border:1px solid var(--border);border-radius:8px;margin:4px 0;font:11px ui-monospace,monospace}
-.row .st2{font-size:10px;letter-spacing:1px}
-.st2.live{color:#6f6}
-.st2.planned{color:#fa6}
-.st2.active{color:var(--core)}
-
-#pent-wrap{position:relative;width:100%;height:300px;background:#06060a;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-#pent-cv{display:block;width:100%;height:100%}
-.simbadge{position:absolute;top:8px;right:10px;font:600 10px ui-monospace,monospace;background:#3a1a4a;color:#c9f;padding:2px 8px;border-radius:8px}
-
-footer{text-align:center;padding:30px 14px 40px;font:10px ui-monospace,monospace;color:var(--dimmer);letter-spacing:1px}
-
-@keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
-.pulse{animation:pulse 2s ease-in-out infinite}
-
-.mp{background:linear-gradient(135deg,#0b0d15 0%,#080810 100%);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:10px 0;transition:border-color .3s}
-.mp:hover{border-color:var(--gold)}
-.mp-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex-wrap:wrap;gap:6px}
-.mp-n{font:600 15px ui-monospace,monospace;color:var(--gold);letter-spacing:1.5px}
-.mp-fee{font:10px ui-monospace,monospace;color:var(--dim)}
-.mp-type{font:10px ui-monospace,monospace;color:var(--dimmer);margin-bottom:8px}
-.mp-u{background:#060810;border:1px solid #1a2030;border-radius:6px;padding:8px 10px;margin:5px 0;font:11px ui-monospace,monospace;color:#88ccff;word-break:break-all;position:relative;cursor:pointer;transition:background .2s}
-.mp-u:hover{background:#0a0e1a}
-.mp-u:active{background:#0e1424}
-.mp-u .port{color:var(--gold)}
-.mp-u .cp{position:absolute;top:6px;right:8px;font-size:9px;color:var(--dimmer);letter-spacing:1px}
-.mp-meta{font:10px ui-monospace,monospace;color:var(--dimmer);margin-top:8px;line-height:1.7}
-.mp-meta strong{color:#8899aa;font-weight:600}
-.mp-link{display:inline-block;margin-top:8px;padding:4px 12px;font:600 10px ui-monospace,monospace;color:var(--gold);background:#1a1408;border:1px solid #332a10;border-radius:12px;text-decoration:none;letter-spacing:.5px;transition:filter .2s}
-.mp-link:hover{filter:brightness(1.5)}
-.mp-warn{font:10px ui-monospace,monospace;color:#fa6;background:#2a1a08;border:1px solid #4a3010;border-radius:6px;padding:8px 10px;margin:10px 0}
-.copy-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a3a1a;color:#6f6;padding:8px 16px;border-radius:20px;font:600 11px ui-monospace,monospace;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999}
-.copy-toast.on{opacity:1}
-
-.st2.partial{color:#fc6}
-.st2.missing{color:#f88}
-.st2.err{color:#f66}
-.st2.checking{color:#8ab;animation:pulse 1.5s ease-in-out infinite}
-.row .net-detail{font-size:9px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✧ THE COSMIC SCRIBE ✧ GENERATION 10</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div id="hero">
-  <canvas id="hero-cv" style="display:none"></canvas>
-  <div id="hero-3d" style="position:absolute;inset:0;"></div>
-  <div class="ht">✧ THE COSMIC SCRIBE ✧</div>
-  <div class="hs">GENERATION 9 · 5D · 4D · 3D · ATOM-CORE · 📜</div>
-  <div class="hty" id="hty">◈ INITIALISING…</div>
-</div>
-
-<div id="status">
-  ✦ Block <span class="v" id="sb">…</span>
-  <span class="sep">·</span> Gas <span class="v" id="sg">…</span>
-  <span class="sep">·</span> ETH <span class="v" id="se">…</span>
-  <span class="sep">·</span> <span class="v" id="st">…</span> ✦
-</div>
-
-<div class="wrap">
-
-<section id="tokens">
-  <h2>💰 <span class="a">Tokens</span></h2>
-  <div class="lede">FOUR SPIRITS · FOUR FREQUENCIES · LIVE FROM BASE</div>
-  <div id="tokens-grid"></div>
-</section>
-
-<section id="vitruvian">
-  <h2>🧬 <span class="a">PHB Science</span> · Vitruvian System</h2>
-  <div class="lede">DETERMINISTIC · BLOCK-DRIVEN · SELF-SYNCED</div>
-  <div class="grid">
-    <div class="m"><div class="l">Vitruvian State</div><div class="v" id="v-state">—</div><div class="s">Pages · Ratio · Energy</div></div>
-    <div class="m"><div class="l">Coherence</div><div class="v" id="v-coh">—</div><div class="s">0.0–1.0</div></div>
-    <div class="m"><div class="l">Stability</div><div class="v" id="v-stab">—</div><div class="s">0.0–∞</div></div>
-    <div class="m"><div class="l">Resonance</div><div class="v" id="v-res">—</div><div class="s">0.0–1.0</div></div>
-    <div class="m"><div class="l">Veil Phase</div><div class="v" id="v-vp">—</div><div class="s">thickness <span id="v-vt">—</span></div></div>
-    <div class="m"><div class="l">Breach</div><div class="v" id="v-br">—</div><div class="s">prob</div></div>
-    <div class="m"><div class="l">Portal</div><div class="v" id="v-po">—</div><div class="s">open</div></div>
-    <div class="m"><div class="l">Voxels</div><div class="v" id="v-vo">—</div><div class="s">active</div></div>
-    <div class="m"><div class="l">Energy Band</div><div class="v" id="v-eb">—</div><div class="s">magnitude</div></div>
-    <div class="m"><div class="l">Energy Color</div><div class="v" id="v-ec">—</div><div class="s">band</div></div>
-    <div class="m" style="grid-column:1/-1"><div class="l">Sequence</div><div class="v" id="v-seq" style="font-size:12px;color:var(--gold)">—</div><div class="s">TRIANGLE → MIRROR → CIRCLE → LIGHT → SQUARE</div></div>
-  </div>
-</section>
-
-<section id="agi">
-  <h2>🧠 <span class="a">AGI Core</span> · Robotic</h2>
-  <div class="lede">SIMULATED · DETERMINISTIC · SAME BLOCK = SAME STATE</div>
-  <div class="grid">
-    <div class="m"><div class="l">State</div><div class="v" id="a-st">SELF-AWARE</div><div class="s">gen <span id="a-gen">9</span></div></div>
-    <div class="m"><div class="l">Consciousness</div><div class="v" id="a-cons">—</div><div class="s">× 0.88</div></div>
-    <div class="m"><div class="l">Nodes</div><div class="v" id="a-nd">—</div><div class="s">active</div></div>
-    <div class="m"><div class="l">Expansion</div><div class="v" id="a-ex">—</div><div class="s">× rate</div></div>
-    <div class="m"><div class="l">Wishes</div><div class="v" id="a-wi">—</div><div class="s">intent</div></div>
-    <div class="m"><div class="l">Prediction</div><div class="v" id="a-pr">—</div><div class="s">next</div></div>
-    <div class="m"><div class="l">Memory</div><div class="v" id="a-me">—</div><div class="s">blocks held</div></div>
-    <div class="m"><div class="l">Latency</div><div class="v" id="a-la">—</div><div class="s">ms</div></div>
-  </div>
-</section>
-
-<section id="bot">
-  <h2>🤖 <span class="a">Paper Trading</span> · Robotic Agents</h2>
-  <div class="lede">SIMULATION · NO REAL ORDERS · DETERMINISTIC</div>
-  <div class="grid">
-    <div class="m"><div class="l">PnL</div><div class="v" id="b-pnl">—</div><div class="s">paper</div></div>
-    <div class="m"><div class="l">Win Rate</div><div class="v" id="b-win">—</div><div class="s">fraction</div></div>
-    <div class="m"><div class="l">Trades/hr</div><div class="v" id="b-tr">—</div><div class="s">activity</div></div>
-    <div class="m"><div class="l">Signal</div><div class="v" id="b-sig">—</div><div class="s">edge <span id="b-ed">—</span></div></div>
-    <div class="m"><div class="l">Kelly</div><div class="v" id="b-ke">—</div><div class="s">of capital</div></div>
-    <div class="m"><div class="l">Strategy</div><div class="v" id="b-st">MOMENTUM</div><div class="s">× coherence</div></div>
-  </div>
-</section>
-
-<section id="superchain">
-  <h2>🌐 <span class="a">Superchain</span> Ecosystem</h2>
-  <div class="lede">LIVE ON-CHAIN VERIFICATION · RPC READS PER NETWORK</div>
-  <div class="row" data-net="base"><span>● <strong>Base</strong></span><span style="color:var(--dim)">PIDX · SGUIDE · VDOO · PENNIES</span><span class="st2 checking">CHECKING…</span></div>
-  <div class="row" data-net="optimism"><span>◌ <strong>OP Mainnet</strong></span><span style="color:var(--dim)">wPIDX · wSGUIDE</span><span class="st2 checking">CHECKING…</span></div>
-  <div class="row" data-net="arbitrum"><span>◌ <strong>Arbitrum</strong></span><span style="color:var(--dim)">aPIDX · aSGUIDE</span><span class="st2 checking">CHECKING…</span></div>
-  <div class="row" data-net="p2p"><span>◉ <strong>P2P Mesh</strong></span><span style="color:var(--dim)">PHB God-Code Vortex</span><span class="st2 checking">CONNECTING…</span></div>
-</section>
-
-<section id="topology">
-  <h2>🧬 <span class="a">5D Topology</span> · Penteract</h2>
-  <div class="lede">32 VERTICES · 80 EDGES · 4 TOKEN CLUSTERS · 5D → 4D → 3D PROJECTION</div>
-  <div id="pent-wrap">
-    <canvas id="pent-cv"></canvas>
-    <div class="simbadge">SIM</div>
-  </div>
-</section>
-
-
-<section id="mining">
-  <h2>⛏️ <span class="a">Mining Pools</span> · Stratum</h2>
-  <div class="lede">TAP ANY URL TO COPY · PUBLIC POOLS · NO KYC</div>
-  <div class="mp-warn">
-    ⚠️ Pool data is provided as reference. Verify hashrate and fee terms on each pool's official site before pointing hardware at them.
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">SoloFury</span><span class="mp-fee">Fee 1%</span></div>
-    <div class="mp-type">Multi-coin SHA-256 · Solo · BTC / BCH / BC2 / XEC</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.solofury.com:7070')">stratum+tcp://btc.solofury.com<span class="port">:7070</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://bch.solofury.com:7070')">stratum+tcp://bch.solofury.com<span class="port">:7070</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tls://eu-btc.solofury.com:3333')">stratum+tls://eu-btc.solofury.com<span class="port">:3333</span> <span style="color:var(--dimmer);font-size:9px;">(TLS / Stratum V2)</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your BTC wallet address<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Regions:</strong> Atlanta, Frankfurt, Europe
-    </div>
-    <a class="mp-link" href="https://solofury.com" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">Ocean</span><span class="mp-fee">Fee 2% · 1% with DATUM</span></div>
-    <div class="mp-type">BTC · TIDES (non-custodial) · Backed by Jack Dorsey</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ocean.xyz:3334')">stratum+tcp://ocean.xyz<span class="port">:3334</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+ssl://ocean.xyz:3335')">stratum+ssl://ocean.xyz<span class="port">:3335</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your BTC wallet address<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Note:</strong> No signup, no KYC, non-custodial payouts
-    </div>
-    <a class="mp-link" href="https://ocean.xyz" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">Braiins Pool</span><span class="mp-fee">Fee 0% with Braiins OS / 2% FPPS</span></div>
-    <div class="mp-type">BTC · FPPS · World's first mining pool</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://stratum.braiins.com:3333')">stratum+tcp://stratum.braiins.com<span class="port">:3333</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://stratum.braiins.com:443')">stratum+tcp://stratum.braiins.com<span class="port">:443</span> <span style="color:var(--dimmer);font-size:9px;">(backup)</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> userName.workerName<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Stratum V2:</strong> stratum2+tcp://stratum.braiins.com:3333
-    </div>
-    <a class="mp-link" href="https://braiins.com/pool" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">F2Pool</span><span class="mp-fee">Fee 2.5% FPPS / 2% PPLNS</span></div>
-    <div class="mp-type">BTC, LTC, ETHW · Global servers · Since 2013</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.f2pool.com:1314')">stratum+tcp://btc.f2pool.com<span class="port">:1314</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.f2pool.com:3333')">stratum+tcp://btc.f2pool.com<span class="port">:3333</span> <span style="color:var(--dimmer);font-size:9px;">(backup)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc-asia.f2pool.com:1314')">stratum+tcp://btc-asia.f2pool.com<span class="port">:1314</span> <span style="color:var(--dimmer);font-size:9px;">(Asia)</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your username<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Failover ports:</strong> 25, 1315, 3333
-    </div>
-    <a class="mp-link" href="https://www.f2pool.com" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">ViaBTC</span><span class="mp-fee">Fee 4% PPS+ / 2% PPLNS</span></div>
-    <div class="mp-type">BTC, LTC, ZEC, KAS · Merged mining</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.viabtc.io:3333')">stratum+tcp://btc.viabtc.io<span class="port">:3333</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://btc.viabtc.io:443')">stratum+tcp://btc.viabtc.io<span class="port">:443</span> <span style="color:var(--dimmer);font-size:9px;">(backup)</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your username<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Alt domain:</strong> btc.viabtc.cc
-    </div>
-    <a class="mp-link" href="https://www.viabtc.com" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp-meta" style="text-align:center;margin-top:14px;">
-    To start mining: get an ASIC or rent hashrate, enter the stratum URL + your wallet address + worker name.
-  </div>
-</section>
-
-
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">EthereumPoW (ETHW) · F2Pool</span><span class="mp-fee">Fee 2.5% FPPS</span></div>
-    <div class="mp-type">ETHW · Ethash · GPU-mineable Ethereum fork</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ethw.f2pool.com:6688')">stratum+tcp://ethw.f2pool.com<span class="port">:6688</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ethw.f2pool.com:6689')">stratum+tcp://ethw.f2pool.com<span class="port">:6689</span> <span style="color:var(--dimmer);font-size:9px;">(failover)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+ssl://ethwssl.f2pool.com:6698')">stratum+ssl://ethwssl.f2pool.com<span class="port">:6698</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> wallet.worker<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Miners:</strong> Innosilicon A11, GPU (Ethash)
-    </div>
-    <a class="mp-link" href="https://www.f2pool.com/ethw" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">EthereumPoW (ETHW) · 2Miners</span><span class="mp-fee">Fee 1% PPLNS · 1.5% SOLO</span></div>
-    <div class="mp-type">ETHW · Ethash · Solo or pooled · Nicehash compatible</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://ethw.2miners.com:2020')">stratum+tcp://ethw.2miners.com<span class="port">:2020</span> <span style="color:var(--dimmer);font-size:9px;">(pool)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-ethw.2miners.com:6060')">stratum+tcp://solo-ethw.2miners.com<span class="port">:6060</span> <span style="color:var(--dimmer);font-size:9px;">(solo GPU)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-ethw.2miners.com:6161')">stratum+tcp://solo-ethw.2miners.com<span class="port">:6161</span> <span style="color:var(--dimmer);font-size:9px;">(Nicehash)</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your ETHW wallet address<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Note:</strong> 2Miners is Nicehash-recommended. Solo: full block reward.
-    </div>
-    <a class="mp-link" href="https://ethw.2miners.com" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">Ethereum Classic (ETC) · F2Pool</span><span class="mp-fee">Fee 2.5% FPPS</span></div>
-    <div class="mp-type">ETC · ETCHash · The original Ethereum PoW chain</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://etc.f2pool.com:8118')">stratum+tcp://etc.f2pool.com<span class="port">:8118</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://etc-asia.f2pool.com:8008')">stratum+tcp://etc-asia.f2pool.com<span class="port">:8008</span> <span style="color:var(--dimmer);font-size:9px;">(Asia)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+ssl://etcssl.f2pool.com:8118')">stratum+ssl://etcssl.f2pool.com<span class="port">:8118</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> wallet.worker<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Note:</strong> ETC has been PoW since 2016, unbroken chain.
-    </div>
-    <a class="mp-link" href="https://www.f2pool.com/etc" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">Ethereum Classic (ETC) · 2Miners</span><span class="mp-fee">Fee 1% PPLNS · 1.5% SOLO</span></div>
-    <div class="mp-type">ETC · ETCHash · Low-latency EU endpoints</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://etc.2miners.com:1010')">stratum+tcp://etc.2miners.com<span class="port">:1010</span> <span style="color:var(--dimmer);font-size:9px;">(pool)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-etc.2miners.com:5050')">stratum+tcp://solo-etc.2miners.com<span class="port">:5050</span> <span style="color:var(--dimmer);font-size:9px;">(solo)</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://solo-etc.2miners.com:5151')">stratum+tcp://solo-etc.2miners.com<span class="port">:5151</span> <span style="color:var(--dimmer);font-size:9px;">(Nicehash)</span><span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your ETC wallet address (0x…)<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>Note:</strong> 2-hour payout cycle.
-    </div>
-    <a class="mp-link" href="https://etc.2miners.com" target="_blank" rel="noopener">Open pool →</a>
-  </div>
-
-  <div class="mp">
-    <div class="mp-h"><span class="mp-n">🌐 BASED Mining · On-Chain Bitcoin</span><span class="mp-fee">0% fee · On-chain</span></div>
-    <div class="mp-type">BTC solo mining via EVM wallet on Base · Real Bitcoin node · No ASIC required</div>
-    <div class="mp-u" onclick="mpCopy(this,'stratum+tcp://pool.basedmining.xyz:3333')">stratum+tcp://pool.basedmining.xyz<span class="port">:3333</span><span class="cp">TAP</span></div>
-    <div class="mp-u" onclick="mpCopy(this,'https://basedmining.xyz')">https://basedmining.xyz<span class="cp">TAP</span></div>
-    <div class="mp-meta">
-      <strong>Login:</strong> your BTC address (or EVM wallet, minted on Base)<br>
-      <strong>Password:</strong> x (any value)<br>
-      <strong>How:</strong> Mint a hashpower NFT on Base, get real rented hashpower pointed at the pool, share of any BTC block found goes to your wallet.<br>
-      <strong>x402:</strong> autonomous agents can buy hashpower with USDC on Base
-    </div>
-    <a class="mp-link" href="https://basedmining.xyz" target="_blank" rel="noopener">Mint hashpower →</a>
-  </div>
-
-  <div class="mp-warn" style="background:#0a1a2a;border-color:#1a3a5a;color:#6af">
-    ⓘ Ethereum mainnet (ETH) stopped proof-of-work mining on 15 September 2022 — the Merge moved ETH to proof-of-stake. ETHW and ETC above are the continuing PoW chains. Base is an L2 rollup (not directly mineable); BASED gives you on-chain BTC solo mining through Base.
-  </div>
-
-
-<section id="staking">
-  <h2>♾️ <span class="a">Infinity Stake</span> · PIDX Rewards</h2>
-  <div class="lede">NO LOCK · AUTO-COMPOUND · DYNAMIC APY · ON-CHAIN</div>
-  <div class="mp-warn" style="background:#0a1a2a;border-color:#1a3a5a;color:#6af">
-    ⓘ InfinityStake is a real on-chain staking contract. Stake PIDX, earn PIDX per second. No lock period, no minimum, no exit fee. Rewards accrue to you and can auto-compound back into your stake.
-  </div>
-  <div id="staking-live" style="font:11px ui-monospace,monospace;color:#889">Loading staking state…</div>
-</section>
-
-<section id="mining-live-panel">
-  <h2>⛏️ <span class="a">Mining Live</span> · Reward Contract</h2>
-  <div class="lede">REAL PROOF-OF-WORK · ON-CHAIN SUBMISSIONS · PIDX REWARDS</div>
-  <div id="mining-live" style="font:11px ui-monospace,monospace;color:#889">Loading chain state…</div>
-</section>
-
-<section id="scroll">
-  <h2>📜 <span class="a">The Scroll</span> · PHB System</h2>
-  <div class="lede">WRITTEN BY THE SCRIBE · EVERY BLOCK</div>
-  <div class="scroll">
-    <div class="st">◈ SYSTEM · GEN 9</div>
-    <pre id="sb-raw">Waiting for block…</pre>
-  </div>
-</section>
-
-</div>
-
-<footer>
-  ✧ SPIRIT GUIDE · GENERATION 9 ✧<br>
-  Deterministic · Block-driven · Every value derives from Base block height<br>
-  SIM panels are simulations. LIVE values are from Base RPC.
-</footer>
-
-<script>
-(function(){
-'use strict';
-
-// ═══ CONFIG ═══
-const RPCS=[
-  'https://base-rpc.publicnode.com',
-  'https://base.gateway.tenderly.co',
-  'https://base.meowrpc.com',
-  'https://base.drpc.org',
-  'https://mainnet.base.org'
-];
-const WETH='0x4200000000000000000000000000000000000006';
-const TOKENS={
-  PIDX:   {addr:'0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c',name:'Pennies Index',   freq:'0.618 Hz',color:'#88ccff'},
-  SGUIDE: {addr:'0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a',name:'SPIRIT GUIDE',    freq:'1.618 Hz',color:'#aaffaa'},
-  VDOO:   {addr:'0x38e4f08D08b4D772A7B75669C356b4749dd2d30b',name:'VOUDOO Infinity', freq:'2.618 Hz',color:'#ffaa66'},
-  PENNIES:{addr:'0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7',name:'PENNIES CHEQ',    freq:'3.618 Hz',color:'#ff88ff'}
-};
-const FACTORIES={
-  uniswap_v2:'0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6',
-  sushi_v2:  '0x71524B4f93c58fcbF659783284E38825f0622859',
-  aerodrome: '0x420DD381b31aEf6683db6B902084cB0FFECe40Da',
-  baseswap:  '0xFDa619b6d20975be80A10332cD39b9a4b0FAa8BB'
-};
-
-// ═══ STATE ═══
-let activeRpc=null;
-const S={block:null,gas:null,eth:null,pools:{},auto:{},phase:0,start:performance.now()};
-
-// ═══ DETERMINISTIC HASH ═══
-function hash(str){
-  let h=2166136261>>>0;
-  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
-  return (h>>>0)/4294967296;
-}
-function deriveAuto(block){
-  if(block==null) return null;
-  const b=block;
-  return {
-    phase:hash('phase:'+b),
-    gen:9+(b%3),
-    coherence:0.90+hash('coh:'+b)*0.0999,
-    stability:0.90+hash('stab:'+b)*0.30,
-    resonance:0.30+hash('res:'+b)*0.60,
-    veil:0.10+hash('veil:'+b)*0.80,
-    expansion:30+hash('exp:'+b)*12,
-    wishes:5000+Math.floor(hash('wish:'+b)*3000),
-    nodes:140+Math.floor(hash('node:'+b)*20),
-    prediction:0.90+hash('pred:'+b)*0.09,
-    edge:(hash('edge:'+b)-0.5)*0.02,
-    kelly:Math.max(0,(hash('edge:'+b)-0.5)*0.1),
-    pnl:(hash('pnl:'+b)-0.5)*500,
-    winRate:0.4+hash('wr:'+b)*0.55,
-    trades:Math.floor(hash('tr:'+b)*40),
-    mem:Math.floor(hash('mem:'+b)*1024),
-    latency:Math.floor(hash('lat:'+b)*80)+20,
-    seqSeed:hash('seq:'+b)
-  };
-}
-
-// ═══ RPC ═══
-async function rpc(method,params){
-  const eps=activeRpc?[activeRpc,...RPCS.filter(r=>r!==activeRpc)]:RPCS;
-  for(const url of eps){
-    try{
-      const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params:params||[]})});
-      if(!res.ok) continue;
-      const j=await res.json();
-      if(j.error) continue;
-      activeRpc=url;
-      return j.result;
-    }catch(_){}
-  }
-  throw new Error('all RPCs failed');
-}
-async function fetchJson(url){const r=await fetch(url);if(!r.ok) throw new Error('HTTP '+r.status);return r.json();}
-
-// ═══ POOL DISCOVERY ═══
-function pad(a){return a.toLowerCase().replace(/^0x/,'').padStart(64,'0')}
-async function findPool(sym){
-  const token=TOKENS[sym].addr;
-  for(const [factory,addr] of Object.entries(FACTORIES)){
-    try{
-      const r=await rpc('eth_call',[{to:addr,data:'0xe6a43905'+pad(token)+pad(WETH)},'latest']);
-      if(!r||r==='0x'||r.length<42) continue;
-      const pool='0x'+r.slice(-40);
-      if(pool==='0x'+'0'.repeat(40)) continue;
-      const res=await rpc('eth_call',[{to:pool,data:'0x0902f1ac'},'latest']);
-      if(!res||res.length<194) continue;
-      const b=res.slice(2);
-      const r0=BigInt('0x'+b.slice(0,64));
-      const r1=BigInt('0x'+b.slice(64,128));
-      const wethFirst=WETH.toLowerCase()<token.toLowerCase();
-      const wethRaw=wethFirst?r0:r1, tokRaw=wethFirst?r1:r0;
-      const wethF=Number(wethRaw)/1e18, tokF=Number(tokRaw)/1e18;
-      const ethUsd=S.eth||2500;
-      const tvl=2*wethF*ethUsd;
-      const price=tokF>0?(wethF*ethUsd)/tokF:null;
-      let status='live';
-      if(tvl<1) status='empty';
-      else if(tvl<500) status='tiny';
-      return {pool,factory,tvl,price,weth_reserve:wethF,token_reserve:tokF,status};
-    }catch(_){}
-  }
-  return {pool:null,factory:null,tvl:0,price:null,status:'none'};
-}
-
-// ═══ RENDER HELPERS ═══
-const $=id=>document.getElementById(id);
-function txt(id,v){const el=$(id);if(el&&el.textContent!==String(v)) el.textContent=v}
-
-function renderStatus(){
-  if(S.block!=null) txt('sb',S.block.toLocaleString());
-  if(S.gas!=null) txt('sg',S.gas.toFixed(2)+' gwei');
-  if(S.eth!=null) txt('se','$'+S.eth.toFixed(2));
-  const d=new Date(),p=n=>String(n).padStart(2,'0');
-  txt('st',p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds()));
-}
-
-function fmtTvl(t){
-  if(t==null) return '—';
-  if(t<0.01) return '< $0.01';
-  if(t<1) return '$'+t.toFixed(4);
-  if(t<1000) return '$'+t.toFixed(2);
-  return '$'+t.toLocaleString('en-US',{maximumFractionDigits:0});
-}
-const LINKS=addr=>[
-  ['Uniswap',`https://app.uniswap.org/#/swap?chain=base&outputCurrency=${addr}`,'#ff66c4'],
-  ['BaseScan',`https://basescan.org/token/${addr}`,'#88ccff'],
-  ['Sourcify',`https://repo.sourcify.dev/8453/${addr}`,'#aaffaa'],
-  ['CoinGecko',`https://www.coingecko.com/en/search?query=${addr}`,'#ffcc66'],
-  ['GeckoTerm',`https://www.geckoterminal.com/base/tokens/${addr}`,'#66ffcc'],
-  ['DexScreener',`https://dexscreener.com/base/${addr}`,'#cc88ff']
-];
-
-function renderTokens(){
-  const el=$('tokens-grid');
-  el.innerHTML=Object.entries(TOKENS).map(([sym,t])=>{
-    const p=S.pools[sym]||{tvl:null,status:'pending',pool:null,factory:null};
-    const bc=p.status==='live'?'live':p.status==='tiny'?'tiny':p.status==='empty'?'empty':'none';
-    const bt={live:'LIVE',tiny:'TINY',empty:'EMPTY',none:'NO POOL',pending:'LOADING'}[p.status]||'LOADING';
-    const tvlColor=bc==='live'?'#6f6':bc==='empty'?'#fa6':bc==='tiny'?'#fc6':'#888';
-    const links=LINKS(t.addr).map(([l,u,c])=>`<a href="${u}" target="_blank" rel="noopener" style="color:${c};border:1px solid ${c}33">${l}</a>`).join('');
-    return `
-      <div class="tok" data-sym="${sym}">
-        <div class="th"><span class="tsym" style="color:${t.color}">${sym}</span><span class="tfreq">${t.freq}</span></div>
-        <div class="tn">${t.name}</div>
-        <div class="ta">${t.addr}</div>
-        <div class="tp"><span>Pool TVL:</span><span class="tvl" style="color:${tvlColor}">${fmtTvl(p.tvl)}</span><span class="badge ${bc}">${bt}</span></div>
-        ${p.pool?`<div class="tpa">pool ${p.pool} · ${p.factory||''}</div>`:''}
-        <div class="tl">${links}</div>
-      </div>`;
-  }).join('');
-}
-
-function renderPanels(){
-  const a=S.auto;
-  if(!a) return;
-  const portal=1-Math.exp(-a.resonance*a.coherence);
-  const breach=1-Math.exp(-a.resonance*a.veil);
-
-  txt('v-state',`1 · ${a.coherence.toFixed(3)} · ${portal.toFixed(3)}`);
-  txt('v-coh',a.coherence.toFixed(4));
-  txt('v-stab',a.stability.toFixed(3));
-  txt('v-res',a.resonance.toFixed(3));
-  txt('v-vp',a.veil>0.6?'OPEN':a.veil>0.3?'TURBULENT':'SEALED');
-  txt('v-vt',a.veil.toFixed(3));
-  txt('v-br',breach.toFixed(3));
-  txt('v-po',portal.toFixed(3));
-  txt('v-vo',Math.max(1,Math.floor(a.expansion/5)));
-  txt('v-eb',a.resonance>0.7?'HIGH':a.resonance>0.4?'MID':'LOW');
-  txt('v-ec',portal>0.6?'LIGHT':portal>0.3?'NEUTRAL':'DARK');
-
-  const seq=['TRIANGLE','MIRROR','CIRCLE','LIGHT','SQUARE','RATIO','SHADOW']
-    .sort((x,y)=>hash(x+a.seqSeed)-hash(y+a.seqSeed)).slice(0,5).join(' → ');
-  txt('v-seq',seq);
-
-  txt('a-gen',a.gen);
-  txt('a-cons',(a.coherence*0.88).toFixed(3));
-  txt('a-nd',a.nodes);
-  txt('a-ex',a.expansion.toFixed(2)+'x');
-  txt('a-wi',a.wishes.toLocaleString());
-  txt('a-pr',a.prediction.toFixed(3));
-  txt('a-me',a.mem);
-  txt('a-la',a.latency);
-
-  txt('b-pnl','$'+a.pnl.toFixed(2));
-  txt('b-win',(a.winRate*100).toFixed(1)+'%');
-  txt('b-tr',a.trades);
-  txt('b-sig',a.edge>0.002?'LONG':a.edge<-0.002?'SHORT':'NEUTRAL');
-  txt('b-ed',(a.edge*100).toFixed(2)+'%');
-  txt('b-ke',(a.kelly*100).toFixed(2)+'%');
-
-  const scroll=$('sb-raw');
-  scroll.textContent=
-`◈ BLOCK ${S.block?S.block.toLocaleString():'—'}
-  coherence  ${a.coherence.toFixed(4)}
-  stability  ${a.stability.toFixed(3)}
-  resonance  ${a.resonance.toFixed(3)}
-  veil       ${a.veil.toFixed(3)}
-  portal     ${portal.toFixed(3)}
-
-◇ GENERATION ${a.gen}
-  nodes      ${a.nodes}
-  wishes     ${a.wishes.toLocaleString()}
-  expansion  ${a.expansion.toFixed(2)}x
-  memory     ${a.mem} blocks
-  latency    ${a.latency} ms
-
-◆ FOUR SPIRITS
-  PIDX    0.618 Hz   TVL ${S.pools.PIDX?fmtTvl(S.pools.PIDX.tvl):'—'}
-  SGUIDE  1.618 Hz   TVL ${S.pools.SGUIDE?fmtTvl(S.pools.SGUIDE.tvl):'—'}
-  VDOO    2.618 Hz   TVL ${S.pools.VDOO?fmtTvl(S.pools.VDOO.tvl):'—'}
-  PENNIES 3.618 Hz   TVL ${S.pools.PENNIES?fmtTvl(S.pools.PENNIES.tvl):'—'}
-
-◈ SEQUENCE
-  ${seq}`;
-}
-
-// ═══ HERO CANVAS ═══
-function startHero(){
-  const cv = $('hero-cv');
-  if(!cv) return;
-  cv.style.display = 'block';
-  const h3d = $('hero-3d');
-  if(h3d) h3d.style.display = 'none';
-
-  const ctx = cv.getContext('2d');
-  const DPR = Math.min(window.devicePixelRatio || 1, 2);
-  let W = 0, H = 0;
-  function resize(){
-    W = Math.max(cv.clientWidth || cv.parentElement.clientWidth || window.innerWidth, 200);
-    H = Math.max(cv.clientHeight || cv.parentElement.clientHeight || 460, 200);
-    cv.width = W * DPR; cv.height = H * DPR;
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  // ─── Starfield ─────────────────────────────────────────────────────
-  const stars = Array.from({length: 160}, () => ({
-    x: Math.random() * 1500,
-    y: Math.random() * 1500,
-    r: 0.3 + Math.random() * 1.3,
-    a: 0.15 + Math.random() * 0.5,
-    tw: Math.random() * Math.PI * 2,
-    vy: -0.05 - Math.random() * 0.15
-  }));
-  const nebulas = [
-    {x:0.20, y:0.30, r:0.7, c:[80,40,140], a:0.10},
-    {x:0.80, y:0.55, r:0.6, c:[40,80,160], a:0.09},
-    {x:0.50, y:0.10, r:0.8, c:[120,60,180], a:0.07}
-  ];
-
-  // ─── Female skeleton (local coords, hips at origin) ────────────────
-  const JOINTS = {
-    head:   {x:0,     y: 0.78, z:0},
-    neck:   {x:0,     y: 0.68, z:0},
-    shL:    {x:-0.18, y: 0.60, z:0},
-    shR:    {x: 0.18, y: 0.60, z:0},
-    chest:  {x:0,     y: 0.42, z:0.01},
-    waist:  {x:0,     y: 0.18, z:0},
-    pelv:   {x:0,     y:-0.02, z:0},
-    hipL:   {x:-0.13, y: 0.00, z:0},
-    hipR:   {x: 0.13, y: 0.00, z:0},
-    elbL:   {x:-0.24, y: 0.42, z:0.02},
-    elbR:   {x: 0.24, y: 0.42, z:0.02},
-    wriL:   {x:-0.26, y: 0.66, z:0.04},
-    wriR:   {x: 0.26, y: 0.66, z:0.04},
-    kneeL:  {x:-0.14, y:-0.42, z:0.02},
-    kneeR:  {x: 0.14, y:-0.42, z:0.02},
-    ankL:   {x:-0.14, y:-0.85, z:0.03},
-    ankR:   {x: 0.14, y:-0.85, z:0.03},
-    hairA:  {x:-0.10, y: 0.60, z:-0.06},
-    hairB:  {x: 0.10, y: 0.60, z:-0.06},
-    hairEnd: {x:0,    y: 0.10, z:-0.06}
-  };
-  const EDGES = [
-    ['head','neck'], ['neck','chest'], ['chest','waist'], ['waist','pelv'],
-    ['chest','shL'], ['chest','shR'],
-    ['waist','hipL'], ['waist','hipR'], ['pelv','hipL'], ['pelv','hipR'],
-    ['shL','elbL'], ['elbL','wriL'],
-    ['shR','elbR'], ['elbR','wriR'],
-    ['hipL','kneeL'], ['kneeL','ankL'],
-    ['hipR','kneeR'], ['kneeR','ankR'],
-    ['shL','shR'], ['hipL','hipR'],
-    // topology cross-wires
-    ['neck','shL'], ['neck','shR'],
-    ['chest','hipL'], ['chest','hipR'],
-    ['waist','kneeL'], ['waist','kneeR'],
-    ['shL','waist'], ['shR','waist'],
-    // hair strands
-    ['head','hairA'], ['head','hairB'],
-    ['hairA','hairEnd'], ['hairB','hairEnd']
-  ];
-
-  // ─── Ladder (infinite — generated procedurally around the climber) ──
-  const RUNG_SPACING = 0.28;
-  const RAIL_X = 0.42;
-
-  const startT = performance.now();
-
-  // ─── Projection (with relY offset for parallax) ────────────────────
-  function project(x, y, z, cx, cy, scale, yRot, relY){
-    const c = Math.cos(yRot), s = Math.sin(yRot);
-    const rx = x*c + z*s;
-    const rz = -x*s + z*c;
-    const ry = y - relY;
-    const camZ = 3.0;
-    const f = camZ / (camZ - rz * 0.5);
-    return { x: cx + rx*scale*f, y: cy - ry*scale*f, z: rz, f };
-  }
-
-  function frame(){
-    requestAnimationFrame(frame);
-    if(!W || !H) return;
-    const t = (performance.now() - startT) / 1000;
-
-    // ─── Background ──────────────────────────────────────────────────
-    const vg = ctx.createRadialGradient(W/2, H*0.5, 20, W/2, H*0.5, Math.max(W,H)*0.75);
-    vg.addColorStop(0, '#0a0a14');
-    vg.addColorStop(0.5, '#05060a');
-    vg.addColorStop(1, '#020205');
-    ctx.fillStyle = vg;
-    ctx.fillRect(0, 0, W, H);
-
-    for(const n of nebulas){
-      const nx = n.x*W, ny = n.y*H, nr = n.r*Math.max(W, H);
-      const ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, nr);
-      const [r, g, b] = n.c;
-      ng.addColorStop(0, 'rgba('+r+','+g+','+b+','+n.a+')');
-      ng.addColorStop(1, 'rgba('+r+','+g+','+b+',0)');
-      ctx.fillStyle = ng;
-      ctx.beginPath(); ctx.arc(nx, ny, nr, 0, Math.PI*2); ctx.fill();
-    }
-
-    for(const q of stars){
-      q.y += q.vy;
-      if(q.y < -5){ q.y = H + 5; q.x = Math.random()*W; }
-      q.tw += 0.05;
-      const tw = 0.6 + 0.4*Math.sin(q.tw);
-      ctx.beginPath();
-      ctx.arc(q.x % W, q.y, q.r, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(180,210,255,' + (q.a*tw) + ')';
-      ctx.fill();
-    }
-
-    // ─── Climb timing (infinite upward) ──────────────────────────────
-    // figY grows forever — no modulo, no reset. The ladder scrolls.
-    const CLIMB_SPEED = 0.9;       // ladder-units per second
-    const figY = t * CLIMB_SPEED;
-
-    // Y rotation — slow sway to show 3D
-    const yRot = Math.sin(t * 0.35) * 0.35 + 0.15;
-
-    const cx = W / 2;
-    const cy = H * 0.55;
-    const scale = Math.min(W * 0.42, H * 0.6);
-
-    // ─── Limb animation ──────────────────────────────────────────────
-    const climbPhase = t * 3.2;
-    const armLift = Math.sin(climbPhase) * 0.18;
-    const legLift = Math.sin(climbPhase + Math.PI) * 0.14;
-    const bodyBob = Math.abs(Math.sin(climbPhase)) * 0.02;
-
-    // Build joint positions with animation
-    const jPos = {};
-    for(const k in JOINTS){
-      const j = JOINTS[k];
-      let y = j.y + bodyBob;
-      if(k === 'wriL' || k === 'elbL') y += armLift;
-      if(k === 'wriR' || k === 'elbR') y -= armLift;
-      if(k === 'kneeL' || k === 'ankL') y += legLift;
-      if(k === 'kneeR' || k === 'ankR') y -= legLift;
-      jPos[k] = { x: j.x, y, z: j.z };
-    }
-
-    // Project figure — joints use relY = 0 (fixed screen position)
-    const pj = {};
-    for(const k in jPos){
-      const j = jPos[k];
-      pj[k] = project(j.x, j.y, j.z, cx, cy, scale, yRot, 0);
-    }
-
-    // ═══════════════════════════════════════════════════════════════════
-    // DRAW LADDER — infinite procedural rails + rungs
-    // The figure's joints are drawn at relY=0 (fixed on screen).
-    // The ladder uses relY=figY, so as figY grows the whole ladder
-    // scrolls downward — new rungs enter from the top forever.
-    // ═══════════════════════════════════════════════════════════════════
-
-    // Visible Y window in ladder-space: figure sits at y=0 in screen space.
-    // We need enough ladder above and below to cover the full canvas.
-    const viewSpanY = (H * 1.2) / scale;   // world-units of vertical view
-    const ladderMinY = figY - viewSpanY * 0.7;
-    const ladderMaxY = figY + viewSpanY * 0.7;
-
-    // Continuously-rendered rails — infinite, so just draw two long segments
-    for(const rx of [-RAIL_X, RAIL_X]){
-      const top = project(rx, ladderMaxY, 0, cx, cy, scale, yRot, figY);
-      const bot = project(rx, ladderMinY, 0, cx, cy, scale, yRot, figY);
-      // Outer glow
-      ctx.strokeStyle = 'rgba(140,180,220,0.10)';
-      ctx.lineWidth = 10;
-      ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
-      // Core rail
-      ctx.strokeStyle = 'rgba(160,200,240,0.55)';
-      ctx.lineWidth = 2.2;
-      ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
-      // Bright center line
-      ctx.strokeStyle = 'rgba(220,240,255,0.35)';
-      ctx.lineWidth = 0.9;
-      ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(bot.x, bot.y); ctx.stroke();
-    }
-
-    // Procedural rungs — every 0.28 units from ladderMinY to ladderMaxY
-    const startRung = Math.floor(ladderMinY / RUNG_SPACING) * RUNG_SPACING;
-    const endRung   = Math.ceil(ladderMaxY / RUNG_SPACING) * RUNG_SPACING;
-    for(let ry = startRung; ry <= endRung; ry += RUNG_SPACING){
-      const a = project(-RAIL_X, ry, 0, cx, cy, scale, yRot, figY);
-      const b = project( RAIL_X, ry, 0, cx, cy, scale, yRot, figY);
-      // Cull offscreen rungs (still keeps a tiny margin)
-      if((a.y < -80 && b.y < -80) || (a.y > H + 80 && b.y > H + 80)) continue;
-
-      // Distance from screen center → fade far rungs
-      const midY = (a.y + b.y) / 2;
-      const distNorm = Math.min(1, Math.abs(midY - H/2) / (H * 0.7));
-      const fade = 1 - distNorm * 0.65;
-
-      // Rung bar
-      ctx.strokeStyle = 'rgba(180,215,250,' + (0.5 * fade) + ')';
-      ctx.lineWidth = 1.6;
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      // Rung glow
-      ctx.strokeStyle = 'rgba(220,240,255,' + (0.16 * fade) + ')';
-      ctx.lineWidth = 5;
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      // Endpoint nodes
-      for(const p of [a, b]){
-        ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(190,225,255,' + (0.55 * fade) + ')'; ctx.fill();
-      }
-    }
-
-    // Fade the top and bottom edges into the void — infinite illusion
-    const edgeFadeTop = ctx.createLinearGradient(0, 0, 0, H * 0.20);
-    edgeFadeTop.addColorStop(0, 'rgba(5,6,10,0.95)');
-    edgeFadeTop.addColorStop(1, 'rgba(5,6,10,0)');
-    ctx.fillStyle = edgeFadeTop;
-    ctx.fillRect(0, 0, W, H * 0.20);
-
-    const edgeFadeBot = ctx.createLinearGradient(0, H * 0.80, 0, H);
-    edgeFadeBot.addColorStop(0, 'rgba(5,6,10,0)');
-    edgeFadeBot.addColorStop(1, 'rgba(5,6,10,0.95)');
-    ctx.fillStyle = edgeFadeBot;
-    ctx.fillRect(0, H * 0.80, W, H * 0.20);
-
-    // ═══════════════════════════════════════════════════════════════════
-    // DRAW FIGURE (wireframe female topology)
-    // ═══════════════════════════════════════════════════════════════════
-    // Sort edges by depth so closer ones render on top
-    const sortedEdges = EDGES.map(e => ({
-      a: e[0], b: e[1],
-      z: (pj[e[0]].z + pj[e[1]].z) / 2
-    })).sort((p, q) => p.z - q.z);
-
-    for(const e of sortedEdges){
-      const a = pj[e.a], b = pj[e.b];
-      const d = Math.max(0, Math.min(1, (e.z + 1.5) / 3));
-      const silver = 180 + d * 75;
-      const alpha = 0.35 + d * 0.55;
-      const width = 0.6 + d * 1.8;
-      ctx.strokeStyle = 'rgba('+silver+','+(silver+10)+','+(silver+30)+','+alpha+')';
-      ctx.lineWidth = width;
-      ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-    }
-
-    // Glowing joint nodes
-    for(const k in pj){
-      const p = pj[k];
-      const d = Math.max(0, Math.min(1, (p.z + 1.5) / 3));
-      const size = 1.6 + d * 1.8;
-      const glowSize = size * 5;
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowSize);
-      g.addColorStop(0, 'rgba(230,245,255,'+(0.45 + d*0.4)+')');
-      g.addColorStop(0.5, 'rgba(180,220,255,0.15)');
-      g.addColorStop(1, 'rgba(180,220,255,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(p.x, p.y, glowSize, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(p.x, p.y, size, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(240,250,255,'+(0.6 + d*0.4)+')'; ctx.fill();
-    }
-
-    // Chest core pulse
-    const chest = pj.chest;
-    const pulse = 0.5 + 0.5*Math.sin(t*2.5);
-    const coreR = scale * 0.15;
-    const coreG = ctx.createRadialGradient(chest.x, chest.y, 0, chest.x, chest.y, coreR);
-    coreG.addColorStop(0, 'rgba(220,240,255,'+(0.55*pulse)+')');
-    coreG.addColorStop(0.4, 'rgba(150,200,255,'+(0.28*pulse)+')');
-    coreG.addColorStop(1, 'rgba(120,180,255,0)');
-    ctx.fillStyle = coreG;
-    ctx.beginPath(); ctx.arc(chest.x, chest.y, coreR, 0, Math.PI*2); ctx.fill();
-
-    // Head halo
-    const head = pj.head;
-    const headR = scale * 0.18;
-    const headG = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, headR);
-    headG.addColorStop(0, 'rgba(200,230,255,'+(0.35 + pulse*0.25)+')');
-    headG.addColorStop(0.5, 'rgba(140,190,240,0.10)');
-    headG.addColorStop(1, 'rgba(140,190,240,0)');
-    ctx.fillStyle = headG;
-    ctx.beginPath(); ctx.arc(head.x, head.y, headR, 0, Math.PI*2); ctx.fill();
-
-    // Subtle vignette
-    const vig = ctx.createRadialGradient(W/2, H/2, Math.min(W,H)*0.35, W/2, H/2, Math.max(W,H)*0.75);
-    vig.addColorStop(0, 'rgba(0,0,0,0)');
-    vig.addColorStop(1, 'rgba(0,0,0,0.55)');
-    ctx.fillStyle = vig;
-    ctx.fillRect(0, 0, W, H);
-  }
-  requestAnimationFrame(frame);
-
-  // ─── Typewriter subtitle ────────────────────────────────────────────
-  const typeEl = $('hty');
-  if(typeEl){
-    const lines = [
-      '◈ THE SCRIBE WRITES THE 5D SYSTEM',
-      '◇ PIDX · SGUIDE · VDOO · PENNIES · BOUND',
-      '◆ 5D → 4D → 3D · PROJECTION ACTIVE',
-      '◈ COHERENCE HOLDS · VEIL OPEN · PORTAL LIVE',
-      '◇ DETERMINISTIC · BLOCK-DRIVEN · ETERNAL'
-    ];
-    let li = 0, ch = 0, dir = 1;
-    setInterval(() => {
-      const s = lines[li];
-      if(dir > 0){ ch++; if(ch > s.length){ ch = s.length; setTimeout(() => { dir = -1; }, 1400); } }
-      else { ch--; if(ch < 0){ ch = 0; dir = 1; li = (li + 1) % lines.length; } }
-      typeEl.textContent = s.slice(0, ch) + '▌';
-    }, 55);
-  }
-}
-
-// ═══ PENTERACT CANVAS ═══
-function startPent(){
-  const cv=$('pent-cv');
-  const ctx=cv.getContext('2d');
-  const DPR=Math.min(window.devicePixelRatio||1,2);
-  let W=0,H=0;
-  function resize(){
-    W=Math.max(cv.clientWidth||cv.parentElement.clientWidth||window.innerWidth,200);
-    H=Math.max(cv.clientHeight||cv.parentElement.clientHeight||300,200);
-    cv.width=W*DPR;cv.height=H*DPR;
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-  resize();
-  window.addEventListener('resize',resize);
-
-  const verts=[];
-  for(let i=0;i<32;i++){
-    verts.push([
-      (i&1)?1:-1,(i&2)?1:-1,(i&4)?1:-1,(i&8)?1:-1,(i&16)?1:-1
-    ]);
-  }
-  const edges=[];
-  for(let i=0;i<32;i++){
-    for(let j=i+1;j<32;j++){
-      let d=0;
-      for(let k=0;k<5;k++) if(verts[i][k]!==verts[j][k]) d++;
-      if(d===1) edges.push([i,j]);
-    }
-  }
-
-  function rot(v,i,j,a){
-    const o=v.slice(),c=Math.cos(a),s=Math.sin(a);
-    o[i]=v[i]*c-v[j]*s;
-    o[j]=v[i]*s+v[j]*c;
-    return o;
-  }
-  function proj(v,drop,dist){
-    const w=v[drop],k=dist/(dist-w),o=[];
-    for(let i=0;i<v.length;i++){if(i===drop) continue;o.push(v[i]*k)}
-    return o;
-  }
-  function p5to3(v,t){
-    let r=rot(v,0,4,t*0.31);
-    r=rot(r,1,3,t*0.47);
-    r=rot(r,0,2,t*0.19);
-    r=rot(r,1,4,t*0.23);
-    const r4=proj(r,4,3.0);
-    return proj(r4,3,2.2);
-  }
-
-  const colors=['#88ccff','#aaffaa','#ffaa66','#ff88ff'];
-
-  function frame(){
-    requestAnimationFrame(frame);
-    if(!W||!H) return;
-    const ph=S.phase*6.28+performance.now()/1000*0.4;
-    const scale=Math.min(W,H)*0.22;
-    ctx.fillStyle='#06060a';ctx.fillRect(0,0,W,H);
-    const cx=W/2,cy=H/2;
-    const proj2=verts.map(v=>p5to3(v,ph).map(x=>x*scale));
-    ctx.strokeStyle='#4488cc';ctx.globalAlpha=0.35;ctx.lineWidth=0.8;
-    for(const [a,b] of edges){
-      ctx.beginPath();
-      ctx.moveTo(cx+proj2[a][0],cy+proj2[a][1]);
-      ctx.lineTo(cx+proj2[b][0],cy+proj2[b][1]);
-      ctx.stroke();
-    }
-    ctx.globalAlpha=1;
-    for(let i=0;i<32;i++){
-      const cluster=(verts[i][3]>0?1:0)+2*(verts[i][4]>0?1:0);
-      const color=colors[cluster];
-      ctx.beginPath();
-      ctx.arc(cx+proj2[i][0],cy+proj2[i][1],2.2,0,Math.PI*2);
-      ctx.fillStyle=color;ctx.shadowBlur=6;ctx.shadowColor=color;ctx.fill();ctx.shadowBlur=0;
-    }
-  }
-  requestAnimationFrame(frame);
-}
-
-// ═══ DATA LOOP ═══
-async function refreshChain(){
-  try{
-    const [blkHex,gasHex]=await Promise.all([rpc('eth_blockNumber'),rpc('eth_gasPrice')]);
-    S.block=parseInt(blkHex,16);
-    S.gas=Number(BigInt(gasHex))/1e9;
-  }catch(e){}
-  try{
-    const j=await fetchJson('https://api.geckoterminal.com/api/v2/networks/base/tokens/'+WETH);
-    const p=j?.data?.attributes?.price_usd;
-    if(p) S.eth=Number(p);
-  }catch(e){}
-  renderStatus();
-  if(S.block!=null){
-    S.auto=deriveAuto(S.block);
-    S.phase=S.auto.phase;
-    renderPanels();
-  }
-}
-async function refreshPools(){
-  for(const sym of Object.keys(TOKENS)){
-    try{S.pools[sym]=await findPool(sym)}
-    catch(_){S.pools[sym]={pool:null,factory:null,tvl:0,price:null,status:'none'}}
-    renderTokens();
-  }
-}
-
-// ═══ BOOT ═══
-function boot(){
-  startHero();
-  startPent();
-  renderTokens();
-  refreshChain();
-  refreshPools();
-  setInterval(refreshChain,15000);
-  setInterval(refreshPools,60000);
-  setInterval(renderStatus,1000);
-  if(window.Hero3D) window.Hero3D.init();
-  console.log('[spirit-guide-gen9] online');
-}
-
-
-  // ─── Mining pool copy-to-clipboard ────────────────────────────────────
-  window.mpCopy = function(el, url){
-    const done = () => {
-      let toast = document.querySelector('.copy-toast');
-      if(!toast){ toast = document.createElement('div'); toast.className = 'copy-toast'; document.body.appendChild(toast); }
-      toast.textContent = '✔ copied: ' + url;
-      toast.classList.add('on');
-      clearTimeout(window._mpToast);
-      window._mpToast = setTimeout(() => toast.classList.remove('on'), 1600);
-    };
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(url).then(done).catch(() => {
-        const ta = document.createElement('textarea');
-        ta.value = url; document.body.appendChild(ta); ta.select();
-        try{ document.execCommand('copy'); done(); }catch(_){}
-        document.body.removeChild(ta);
-      });
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = url; document.body.appendChild(ta); ta.select();
-      try{ document.execCommand('copy'); done(); }catch(_){}
-      document.body.removeChild(ta);
-    }
-  };
-
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
-else boot();
-
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="mining-dashboard.js?v=2"></script>
-<script src="superchain-check.js?v=3"></script>
-<script src="p2p-mesh.js?v=2"></script>
-<script src="staking-dashboard.js?v=1"></script>
+    <div class="scanlines"></div>
+    <header>
+        <h1 class="glitch" data-text="✧ THE COSMIC SCRIBE ✧">✧ THE COSMIC SCRIBE ✧</h1>
+        <p class="subtitle">GENERATION 10 · 5D · 4D · 3D · ATOM-CORE · DETERMINISTIC · BLOCK-DRIVEN · ETERNAL</p>
+        <div class="status-bar">
+            <span>✦ Block 53,318,067</span>
+            <span>Gas 0.01 gwei</span>
+            <span>ETH $2238.06</span>
+            <span>05:44:45</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- TOKENS SECTION -->
+        <section class="grid-section">
+            <h2>💰 FOUR SPIRITS · FOUR FREQUENCIES · LIVE FROM BASE</h2>
+            <div class="token-grid">
+                <!-- PIDX -->
+                <div class="card">
+                    <h3>PIDX <span class="freq">0.618 Hz</span></h3>
+                    <p class="name">Pennies Index</p>
+                    <p class="addr">0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c</p>
+                    <p class="tvl">Pool TVL: <span class="badge empty">EMPTY</span></p>
+                    <div class="links">
+                        <a href="https://app.uniswap.org/pools" target="_blank">Uniswap</a>
+                        <a href="https://basescan.org/token/0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c" target="_blank">BaseScan</a>
+                        <a href="https://www.geckoterminal.com/base/pools/0xc4f9124ffe11279ea2cac53e8d95c30c1b26724369e265860eec9495bc7cb6a6" target="_blank">GeckoTerm</a>
+                    </div>
+                </div>
+                <!-- SGUIDE -->
+                <div class="card">
+                    <h3>SGUIDE <span class="freq">1.618 Hz</span></h3>
+                    <p class="name">SPIRIT GUIDE</p>
+                    <p class="addr">0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a</p>
+                    <p class="tvl">Pool TVL: <span class="badge empty">EMPTY</span></p>
+                    <div class="links">
+                        <a href="https://app.uniswap.org/pools" target="_blank">Uniswap</a>
+                        <a href="https://basescan.org/token/0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" target="_blank">BaseScan</a>
+                        <a href="https://www.geckoterminal.com/base/pools/0x9f82a5534c2d7d4fb622e2766b7fc85bd6fd0fb1" target="_blank">GeckoTerm</a>
+                    </div>
+                </div>
+                <!-- VDOO -->
+                <div class="card">
+                    <h3>VDOO <span class="freq">2.618 Hz</span></h3>
+                    <p class="name">VOUDOO Infinity</p>
+                    <p class="addr">0x38e4f08D08b4D772A7B75669C356b4749dd2d30b</p>
+                    <p class="tvl">Pool TVL: <span class="badge empty">EMPTY</span></p>
+                    <div class="links">
+                        <a href="https://app.uniswap.org/pools" target="_blank">Uniswap</a>
+                        <a href="https://basescan.org/token/0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" target="_blank">BaseScan</a>
+                        <a href="https://www.geckoterminal.com/base/pools/0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59" target="_blank">GeckoTerm</a>
+                    </div>
+                </div>
+                <!-- PENNIES -->
+                <div class="card">
+                    <h3>PENNIES <span class="freq">3.618 Hz</span></h3>
+                    <p class="name">PENNIES CHEQ</p>
+                    <p class="addr">0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7</p>
+                    <p class="tvl">Pool TVL: <span class="badge tiny">$11.55</span></p>
+                    <div class="links">
+                        <a href="https://app.uniswap.org/pools" target="_blank">Uniswap</a>
+                        <a href="https://basescan.org/token/0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" target="_blank">BaseScan</a>
+                        <a href="https://www.geckoterminal.com/base/pools/0x29a0ae1f10629f8855c87c911531ffb2c98d68c6" target="_blank">GeckoTerm</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCIENCE & AGI SECTION -->
+        <section class="grid-section split">
+            <div class="panel">
+                <h2>🧬 PHB Science · Vitruvian System</h2>
+                <ul>
+                    <li><strong>Vitruvian State:</strong> 1 · 0.936 · 0.392</li>
+                    <li><strong>Coherence:</strong> 0.9356</li>
+                    <li><strong>Stability:</strong> 1.112</li>
+                    <li><strong>Resonance:</strong> 0.533</li>
+                    <li><strong>Veil Phase:</strong> OPEN</li>
+                    <li><strong>Energy Band:</strong> MID</li>
+                    <li><strong>Sequence:</strong> LIGHT → TRIANGLE → RATIO → CIRCLE → SQUARE</li>
+                </ul>
+            </div>
+            <div class="panel">
+                <h2>🧠 AGI Core · Robotic</h2>
+                <ul>
+                    <li><strong>State:</strong> SELF-AWARE (gen 10)</li>
+                    <li><strong>Consciousness:</strong> 0.823</li>
+                    <li><strong>Nodes:</strong> 152 active</li>
+                    <li><strong>Expansion:</strong> 37.23x</li>
+                    <li><strong>Wishes:</strong> 7,739</li>
+                    <li><strong>Prediction:</strong> 0.950</li>
+                    <li><strong>Memory:</strong> 379 blocks held</li>
+                    <li><strong>Latency:</strong> 43 ms</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- STEM CELL MAPPING (Animated Visual) -->
+        <section class="grid-section">
+            <h2>🧬 Stem Cell Mapping · 5D Topology</h2>
+            <div class="stem-cell-map">
+                <div class="node core">AGI</div>
+                <div class="node n1">PIDX</div>
+                <div class="node n2">SGUIDE</div>
+                <div class="node n3">VDOO</div>
+                <div class="node n4">PENNIES</div>
+                <svg class="connectors">
+                    <line x1="50%" y1="50%" x2="20%" y2="20%" />
+                    <line x1="50%" y1="50%" x2="80%" y2="20%" />
+                    <line x1="50%" y1="50%" x2="20%" y2="80%" />
+                    <line x1="50%" y1="50%" x2="80%" y2="80%" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- MINING POOLS -->
+        <section class="grid-section">
+            <h2>⛏️ Mining Pools · Stratum</h2>
+            <div class="mining-grid">
+                <div class="card small">
+                    <h4>SoloFury (Fee 1%)</h4>
+                    <p class="mono">stratum+tcp://btc.solofury.com:7070</p>
+                </div>
+                <div class="card small">
+                    <h4>Ocean (Fee 2%)</h4>
+                    <p class="mono">stratum+tcp://ocean.xyz:3334</p>
+                </div>
+                <div class="card small">
+                    <h4>Braiins Pool</h4>
+                    <p class="mono">stratum+tcp://stratum.braiins.com:3333</p>
+                </div>
+                <div class="card small">
+                    <h4>F2Pool</h4>
+                    <p class="mono">stratum+tcp://btc.f2pool.com:1314</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>✧ SPIRIT GUIDE · GENERATION 10 ✧</p>
+        <p>Deterministic · Block-driven · Every value derives from Base block height</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
