@@ -1,159 +1,181 @@
 
-const GECKO_API = "https://api.geckoterminal.com/api/v2";
-const CHAIN = "base";
-
-function validateTokenSchema(tokens) {
-  if (!Array.isArray(tokens)) throw new Error("tokens.json must be an array");
-  const required = ["id", "symbol", "name", "freq", "address", "pool"];
-  for (const t of tokens) {
-    for (const field of required) {
-      if (!t[field] || typeof t[field] !== "string") {
-        throw new Error(`Missing field "${field}"`);
-      }
-    }
-    if (!/^0x[a-fA-F0-9]{40}$/.test(t.address)) {
-      throw new Error(`Invalid token address: ${t.address}`);
-    }
-    if (!/^0x[a-fA-F0-9]{40,64}$/.test(t.pool)) {
-      throw new Error(`Invalid pool address: ${t.pool}`);
-    }
-  }
-  return tokens;
-}
+const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 
 async function fetchPoolData(token) {
-  try {
-    const url = `${GECKO_API}/networks/${CHAIN}/pools/${token.pool}`;
-    const res = await fetch(url, { headers: { Accept: "application/json" } });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    const attrs = json.data?.attributes || {};
-    return { tvl: Number(attrs.reserve_in_usd || 0), source: "geckoterminal" };
-  } catch (e) {
-    console.warn(`GeckoTerminal failed for ${token.symbol}:`, e);
-    return { tvl: 0, source: "error" };
-  }
+    try {
+        const res = await fetch(`${DEX_API}${token.address}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const pairs = await res.json();
+        if (!Array.isArray(pairs) || pairs.length === 0) return { tvl: 0, source: "dexscreener" };
+        const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
+        return { tvl: Number(best.liquidity?.usd || 0), source: "dexscreener" };
+    } catch (e) {
+        return { tvl: 0, source: "error" };
+    }
 }
 
 function renderCard(t) {
-  const safeSymbol = DOMPurify.sanitize(t.symbol);
-  const safeName = DOMPurify.sanitize(t.name);
-  const safeFreq = DOMPurify.sanitize(t.freq);
-  const safeAddr = DOMPurify.sanitize(t.address);
-  const safePool = DOMPurify.sanitize(t.pool);
+    const safeSymbol = DOMPurify.sanitize(t.symbol);
+    const safeName = DOMPurify.sanitize(t.name);
+    const safeFreq = DOMPurify.sanitize(t.freq);
+    const safeAddr = DOMPurify.sanitize(t.address);
+    const safePool = DOMPurify.sanitize(t.pool);
+    
+    const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
+    const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
 
-  const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
-  const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
-
-  const el = document.createElement("div");
-  el.className = "card";
-  el.innerHTML = `
-    <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
-    <p class="name">${safeName}</p>
-    <p class="addr">${safeAddr}</p>
-    <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
-    <div class="links">
-      <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
-      <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
-      <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
-    </div>`;
-  return el;
+    const el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML = `
+        <h3>${safeSymbol} <span class="freq">${safeFreq}</span></h3>
+        <p class="name">${safeName}</p>
+        <p class="addr">${safeAddr}</p>
+        <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
+        <div class="links">
+            <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
+            <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
+            <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
+        </div>`;
+    return el;
 }
 
 async function syncAll(tokens) {
-  for (const t of tokens) {
-    const data = await fetchPoolData(t);
-    const span = document.getElementById(`tvl-${t.id}`);
-    if (!span) continue;
-    if (data.source === "error") {
-      span.className = "badge empty"; span.textContent = "API ERROR";
-    } else if (data.tvl >= 1) {
-      span.className = "badge tiny";
-      span.textContent = `$${data.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    } else {
-      span.className = "badge empty"; span.textContent = "LOW LIQUIDITY";
+    for (const t of tokens) {
+        const data = await fetchPoolData(t);
+        const span = document.getElementById(`tvl-${t.id}`);
+        if (!span) continue;
+        if (data.source === "error") {
+            span.className = "badge empty"; span.textContent = "API ERROR";
+        } else if (data.tvl >= 1) {
+            span.className = "badge tiny";
+            span.textContent = `$${data.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        } else {
+            span.className = "badge empty"; span.textContent = "LOW LIQUIDITY";
+        }
     }
-  }
+}
+
+// NEW: Simulate the Growth Engine Metrics
+function startGrowthEngine() {
+    let block = 53318067;
+    let time = 0;
+
+    setInterval(() => {
+        time += 0.1;
+        block++;
+
+        // 1. Block Number
+        document.getElementById("live-block").textContent = block.toLocaleString();
+
+        // 2. Continuity (Fluctuates between 0.998 and 1.000)
+        const continuity = (0.999 + Math.sin(time) * 0.001).toFixed(4);
+        document.getElementById("val-continuity").textContent = continuity;
+
+        // 3. Coherence (Fluctuates around 0.9356)
+        const coherence = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
+        document.getElementById("val-coherence").textContent = coherence;
+
+        // 4. Persistence (Slowly increments with blocks)
+        document.getElementById("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
+
+        // 5. Active Voxels (Oscillates between 6 and 9)
+        const voxels = 7 + Math.round(Math.sin(time * 0.5));
+        document.getElementById("val-voxels").textContent = voxels;
+
+        // 6. Energy Band (Calculates a random walk for GW)
+        const energyGW = (42.8 + Math.sin(time * 1.2) * 2.5).toFixed(1);
+        document.getElementById("val-energy").textContent = `MID (${energyGW} GW)`;
+
+        // 7. Engine Status (Occasionally toggles to show "processing")
+        if (Math.floor(time) % 10 === 0) {
+            const statusEl = document.getElementById("val-engine");
+            statusEl.textContent = "CALIBRATING...";
+            statusEl.style.color = "#ffaa00";
+            setTimeout(() => {
+                statusEl.textContent = "OPTIMAL";
+                statusEl.style.color = "var(--white)";
+            }, 1500);
+        }
+
+    }, 1000); // Update every second
 }
 
 async function boot() {
-  try {
-    const res = await fetch("tokens.json");
-    const raw = await res.json();
-    const tokens = validateTokenSchema(raw);
-    const grid = document.getElementById("token-grid");
-    grid.innerHTML = "";
-    tokens.forEach(t => grid.appendChild(renderCard(t)));
-    await syncAll(tokens);
-    setInterval(() => syncAll(tokens), 30000);
-  } catch (e) {
-    document.getElementById("token-grid").innerHTML =
-      '<p class="loading">SECURITY: tokens.json FAILED VALIDATION</p>';
-    console.error(e);
-  }
+    try {
+        const res = await fetch("tokens.json");
+        const tokens = await res.json();
+        const grid = document.getElementById("token-grid");
+        grid.innerHTML = "";
+        tokens.forEach(t => grid.appendChild(renderCard(t)));
+        await syncAll(tokens);
+        setInterval(() => syncAll(tokens), 30000);
+    } catch (e) {
+        document.getElementById("token-grid").innerHTML = '<p class="loading">FAILED TO LOAD tokens.json</p>';
+    }
+    
+    // Start the engine simulation
+    startGrowthEngine();
 }
 
 function startBackground() {
-  try {
-    const canvas = document.getElementById("neural-canvas");
-    if (!canvas || typeof THREE === "undefined") return;
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
-    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(devicePixelRatio);
-    camera.position.z = 15;
+    try {
+        const canvas = document.getElementById("neural-canvas");
+        if (!canvas || typeof THREE === "undefined") return;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
+        const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setPixelRatio(devicePixelRatio);
+        camera.position.z = 15;
 
-    const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
-    const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
+        const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
+        const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
 
-    const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
-    scene.add(hyper);
-    const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
-    scene.add(core);
+        const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
+        scene.add(hyper);
+        const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
+        scene.add(core);
 
-    const N = 400;
-    const pos = new Float32Array(N*3);
-    for (let i=0;i<N*3;i+=3){
-      pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30;
+        const N = 400;
+        const pos = new Float32Array(N*3);
+        for (let i=0;i<N*3;i+=3){ pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30; }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+        const points = new THREE.Points(pGeo, white);
+        scene.add(points);
+
+        const lines = [];
+        for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+            const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
+            if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5) lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
+        }
+        const lGeo = new THREE.BufferGeometry();
+        lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
+        const net = new THREE.LineSegments(lGeo, silver);
+        scene.add(net);
+
+        let t=0;
+        (function animate(){
+            requestAnimationFrame(animate);
+            t += .005;
+            hyper.rotation.x += .002; hyper.rotation.y += .003;
+            core.rotation.x -= .004; core.rotation.y -= .001;
+            points.rotation.y = net.rotation.y = t*.1;
+            const s = 1 + Math.sin(t*2)*.05;
+            hyper.scale.set(s,s,s); points.scale.set(s,s,s);
+            renderer.render(scene, camera);
+        })();
+
+        addEventListener("resize", () => {
+            camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+        });
+    } catch(e) {
+        console.warn("3D Background failed to load:", e);
     }
-    const pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
-    const points = new THREE.Points(pGeo, white);
-    scene.add(points);
-
-    const lines = [];
-    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
-      const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
-      if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5) lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
-    }
-    const lGeo = new THREE.BufferGeometry();
-    lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
-    const net = new THREE.LineSegments(lGeo, silver);
-    scene.add(net);
-
-    let t=0;
-    (function animate(){
-      requestAnimationFrame(animate);
-      t += .005;
-      hyper.rotation.x += .002; hyper.rotation.y += .003;
-      core.rotation.x -= .004; core.rotation.y -= .001;
-      points.rotation.y = net.rotation.y = t*.1;
-      const s = 1 + Math.sin(t*2)*.05;
-      hyper.scale.set(s,s,s); points.scale.set(s,s,s);
-      renderer.render(scene, camera);
-    })();
-
-    addEventListener("resize", () => {
-      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
-  } catch(e) {
-    console.warn("3D Background failed to load:", e);
-  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  startBackground();
-  boot();
+    startBackground();
+    boot();
 });
