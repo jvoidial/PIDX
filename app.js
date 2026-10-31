@@ -382,3 +382,93 @@ function startBackground() {
     } catch(e) {}
 }
 startBackground();
+
+
+// --- VITRUVIAN MEMORY ---
+function loadMemory() {
+    const memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
+    const logContainer = document.getElementById("memory-log");
+    if (!logContainer) return;
+    logContainer.innerHTML = "";
+    memory.forEach(entry => {
+        const div = document.createElement("div");
+        div.style.color = entry.color || "var(--text)";
+        div.style.marginBottom = "4px";
+        div.textContent = entry.msg;
+        logContainer.appendChild(div);
+    });
+    logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+function logMemory(msg, color = "var(--text)") {
+    let memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
+    const time = new Date().toLocaleTimeString();
+    memory.push({ msg: `[${time}] ${msg}`, color });
+    if (memory.length > 10) memory.shift(); // Keep last 10
+    localStorage.setItem("vitruvian_memory", JSON.stringify(memory));
+    loadMemory();
+}
+
+// --- GROWTH ENGINE ---
+function startGrowthEngine() {
+    let block = 53318083, time = 0;
+    loadMemory(); // Load existing logs on start
+
+    // 1. Shift Vitruvian states every 15 seconds
+    setInterval(() => {
+        const phases = ["OPEN", "CLOSING", "VEILED"];
+        const bands = ["LOW", "MID", "HIGH"];
+        const newPhase = phases[Math.floor(Math.random() * phases.length)];
+        const newBand = bands[Math.floor(Math.random() * bands.length)];
+        const newStability = (1.1 + Math.random() * 0.1).toFixed(3);
+        
+        const vEl = document.getElementById("v-veil");
+        if (vEl) {
+            vEl.textContent = newPhase;
+            vEl.style.color = newPhase === "OPEN" ? "#00ffcc" : (newPhase === "VEILED" ? "#ff4444" : "#ffaa00");
+        }
+        const sEl = document.getElementById("v-stability");
+        if (sEl) sEl.textContent = newStability;
+        const eBandEl = document.getElementById("val-energy");
+        if (eBandEl) eBandEl.textContent = `${newBand} (${(40 + Math.random() * 10).toFixed(1)} GW)`;
+        
+        // Write to memory log!
+        logMemory(`Veil shifted to ${newPhase}. Stability updated to ${newStability}.`, newPhase === "VEILED" ? "#ff4444" : "#00ffcc");
+    }, 15000);
+
+    // 2. Update fast metrics every 1 second
+    setInterval(() => {
+        time += 0.1; block++;
+        const bEl = document.getElementById("live-block");
+        if (bEl) bEl.textContent = block.toLocaleString();
+        
+        const cEl = document.getElementById("val-continuity");
+        if (cEl) cEl.textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
+        
+        const cohEl = document.getElementById("val-coherence");
+        if (cohEl) cohEl.textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
+        
+        const pEl = document.getElementById("val-persistence");
+        if (pEl) pEl.textContent = `${379 + Math.floor(time/10)} blocks`;
+        
+        const vxEl = document.getElementById("val-voxels");
+        if (vxEl) vxEl.textContent = 7 + Math.round(Math.sin(time * 0.5));
+        
+        if (Math.floor(time) % 10 === 0) {
+            const statusEl = document.getElementById("val-engine");
+            if (statusEl) {
+                statusEl.textContent = "CALIBRATING..."; statusEl.style.color = "#ffaa00";
+                setTimeout(() => { statusEl.textContent = "OPTIMAL"; statusEl.style.color = "var(--white)"; }, 1500);
+            }
+        }
+    }, 1000);
+}
+
+// --- VISIBILITY FIX (For Mobile) ---
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        console.log("Page visible again. Resuming timers.");
+        // The setIntervals will automatically resume, but we force a memory refresh
+        loadMemory(); 
+    }
+});
