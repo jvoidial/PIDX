@@ -12,7 +12,6 @@ function validateTokenSchema(tokens) {
         throw new Error(`tokens.json: missing or invalid field "${field}" in token ${t.id || "unknown"}`);
       }
     }
-    // SECURITY: Enforce hexadecimal address format
     if (!/^0x[a-fA-F0-9]{40}$/.test(t.address)) {
       throw new Error(`Invalid token address: ${t.address}`);
     }
@@ -38,7 +37,6 @@ async function fetchPoolData(token) {
 }
 
 function renderCard(t) {
-  // DOMPurify is still applied as a second layer of defense
   const safeSymbol = DOMPurify.sanitize(t.symbol);
   const safeName = DOMPurify.sanitize(t.name);
   const safeFreq = DOMPurify.sanitize(t.freq);
@@ -83,7 +81,7 @@ async function boot() {
   try {
     const res = await fetch("tokens.json");
     const raw = await res.json();
-    const tokens = validateTokenSchema(raw); // SECURITY: validate before use
+    const tokens = validateTokenSchema(raw);
     const grid = document.getElementById("token-grid");
     grid.innerHTML = "";
     tokens.forEach(t => grid.appendChild(renderCard(t)));
@@ -96,6 +94,64 @@ async function boot() {
   }
 }
 
-// 3D background remains unchanged (code omitted for brevity)
-function startBackground() { /* ... same as before ... */ }
-document.addEventListener("DOMContentLoaded", () => { startBackground(); boot(); });
+// 3D Background
+function startBackground() {
+  const canvas = document.getElementById("neural-canvas");
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(devicePixelRatio);
+  camera.position.z = 15;
+
+  const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
+  const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
+
+  const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
+  scene.add(hyper);
+
+  const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
+  scene.add(core);
+
+  const N = 400;
+  const pos = new Float32Array(N*3);
+  for (let i=0;i<N*3;i+=3){
+    pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30;
+  }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+  const points = new THREE.Points(pGeo, white);
+  scene.add(points);
+
+  const lines = [];
+  for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+    const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
+    if (Math.sqrt(dx*dx+dy*dy+dz*dz) < 5) lines.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
+  }
+  const lGeo = new THREE.BufferGeometry();
+  lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
+  const net = new THREE.LineSegments(lGeo, silver);
+  scene.add(net);
+
+  let t=0;
+  (function animate(){
+    requestAnimationFrame(animate);
+    t += .005;
+    hyper.rotation.x += .002; hyper.rotation.y += .003;
+    core.rotation.x -= .004; core.rotation.y -= .001;
+    points.rotation.y = net.rotation.y = t*.1;
+    const s = 1 + Math.sin(t*2)*.05;
+    hyper.scale.set(s,s,s); points.scale.set(s,s,s);
+    renderer.render(scene, camera);
+  })();
+
+  addEventListener("resize", () => {
+    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  startBackground();
+  boot();
+});
