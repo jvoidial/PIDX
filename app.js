@@ -4,19 +4,16 @@ const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
 
 // --- HARDCODED DATA (Guarantees rendering) ---
 const VAULTS_DATA = [
-    {"name": "Morpho USDC Vault", "type": "Vault", "asset": "USDC", "apy": "7.89%", "tvl": "$366K", "desc": "High utilization lending pool.", "link": "https://app.morpho.org/base"},
-    {"name": "Euler V2 USDC", "type": "Vault", "asset": "USDC", "apy": "6.85%", "tvl": "$584K", "desc": "ERC-4626 compliant vault.", "link": "https://app.euler.finance/"},
-    {"name": "Beefy Auto-Compounder", "type": "Vault", "asset": "Multiple", "apy": "Variable", "tvl": "High", "desc": "Auto-compounds LP rewards.", "link": "https://app.beefy.com/"},
-    {"name": "Alien Base USDC-CBBTC", "type": "LP Pool", "asset": "USDC/CBBTC", "apy": "21.50%", "tvl": "$1.47M", "desc": "Concentrated V3 pool. IL risk.", "link": "https://app.alienbase.xyz/"},
-    {"name": "Uniswap V3 WETH-USDC", "type": "LP Pool", "asset": "WETH/USDC", "apy": "65%", "tvl": "$125M", "desc": "Highest organic yield.", "link": "https://app.uniswap.org/pools"}
+  {"name": "YO Protocol USDC Vault", "type": "Vault", "asset": "USDC", "apy": "Variable", "tvl": "On-chain", "desc": "ERC-4626 yield-optimizer vault on Base.", "link": "https://yo.xyz"},
+  {"name": "Moonwell Morpho Vault", "type": "Vault", "asset": "USDC", "apy": "Variable", "tvl": "On-chain", "desc": "ERC-4626 vault allocating across Morpho Blue markets.", "link": "https://docs.moonwell.fi"},
+  {"name": "Beefy tBTC-WETH CLM", "type": "LP Pool", "asset": "tBTC/WETH", "apy": "7.74%", "tvl": "$103K", "desc": "Aerodrome CLM vault with auto-compounding.", "link": "https://app.beefy.com/vault/aero-cow-tbtc-weth-vault"},
+  {"name": "Gyroscope WETH/USDC", "type": "LP Pool", "asset": "WETH/USDC", "apy": "78%", "tvl": "High", "desc": "Dynamic CLP with OP rewards on Base.", "link": "https://gyro.finance"},
+  {"name": "KyberSwap ETH/USDC", "type": "LP Pool", "asset": "ETH/USDC", "apy": "Variable", "tvl": "High", "desc": "Uniswap v4 FairFlow hook with UNI rewards.", "link": "https://kyberswap.com/earn/pools"}
 ];
 
 const MINING_DATA = [
-    {"name": "SoloFury", "fee": "1%", "coin": "SHA-256", "stratum": "stratum+tcp://btc.solofury.com:7070", "status": "online", "notes": "Multi-coin solo mining."},
-    {"name": "Ocean", "fee": "2% (1% DATUM)", "coin": "BTC", "stratum": "stratum+tcp://ocean.xyz:3334", "status": "online", "notes": "Non-custodial, no KYC."},
-    {"name": "Braiins Pool", "fee": "0% (Braiins OS)", "coin": "BTC", "stratum": "stratum+tcp://stratum.braiins.com:3333", "status": "online", "notes": "Stratum V2 native support."},
-    {"name": "BASED Mining", "fee": "0%", "coin": "BTC (Solo)", "stratum": "stratum+tcp://pool.basedmining.xyz:3333", "status": "online", "notes": "On-chain solo mining via Base."},
-    {"name": "MineBean", "fee": "Dynamic", "coin": "ETH / BEAN", "stratum": "N/A - Grid Mining", "status": "online", "notes": "Gamified mining on Base."}
+  {"name": "Irium Public Stratum Pool", "fee": "0%", "coin": "IRM", "stratum": "stratum+tcp://pool.iriumlabs.org:3333", "status": "online", "notes": "Direct-payout solo mining, zero pool fee."},
+  {"name": "Linkrra Pool", "fee": "0% extra (upstream applies)", "coin": "PRL", "stratum": "stratum.linkrra.com:5567", "status": "online", "notes": "PPLNS payout, 80% in USDC on Base."}
 ];
 
 // --- HELPER: Fetch with Timeout ---
