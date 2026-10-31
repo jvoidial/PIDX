@@ -1,25 +1,23 @@
 
+const GECKO_API = "https://api.geckoterminal.com/api/v2";
 const CHAIN = "base";
 
-async function fetchTVL(token) {
+async function fetchPoolData(token) {
   try {
-    const url = `https://api.dexscreener.com/token-pairs/v1/${CHAIN}/${token.address}`;
-    const res = await fetch(url);
+    const url = `${GECKO_API}/networks/${CHAIN}/pools/${token.pool}`;
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const pairs = await res.json();
-    
-    if (!Array.isArray(pairs) || pairs.length === 0) {
-      // API returned no pairs — fall back to token's known pool
-      return { tvl: 0, source: 'fallback' };
-    }
-    
-    const best = pairs.reduce((a, b) =>
-      ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b), pairs[0]);
-    
-    return { tvl: Number(best.liquidity?.usd || 0), source: 'dexscreener' };
+    const json = await res.json();
+    const attrs = json.data?.attributes || {};
+    return {
+      tvl: Number(attrs.reserve_in_usd || 0),
+      price: attrs.base_token_price_usd || null,
+      volume: attrs.volume_usd?.h24 || null,
+      source: "geckoterminal"
+    };
   } catch (e) {
-    console.warn(`TVL fetch failed for ${token.symbol}:`, e);
-    return { tvl: 0, source: 'error' };
+    console.warn(`GeckoTerminal failed for ${token.symbol}:`, e);
+    return { tvl: 0, price: null, volume: null, source: "error" };
   }
 }
 
@@ -28,8 +26,10 @@ function renderCard(t) {
   const safeName = DOMPurify.sanitize(t.name);
   const safeFreq = DOMPurify.sanitize(t.freq);
   const safeAddr = DOMPurify.sanitize(t.address);
-  const safeGecko = DOMPurify.sanitize(t.gecko, { ALLOWED_URI_REGEXP: /^https:\/\/www\.geckoterminal\.com\// });
   const safePool = DOMPurify.sanitize(t.pool);
+
+  const uniswapUrl = `https://app.uniswap.org/explore/pools/base/${safePool}`;
+  const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
 
   const el = document.createElement("div");
   el.className = "card";
@@ -39,24 +39,23 @@ function renderCard(t) {
     <p class="addr">${safeAddr}</p>
     <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
     <div class="links">
-      <a href="https://app.uniswap.org/explore/pools/base/${safePool}" target="_blank" rel="noopener">Uniswap</a>
+      <a href="${uniswapUrl}" target="_blank" rel="noopener">Uniswap</a>
       <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener">BaseScan</a>
-      <a href="${safeGecko}" target="_blank" rel="noopener">GeckoTerm</a>
+      <a href="${geckoUrl}" target="_blank" rel="noopener">GeckoTerm</a>
     </div>`;
   return el;
 }
 
 async function syncAll(tokens) {
   for (const t of tokens) {
-    const result = await fetchTVL(t);
+    const data = await fetchPoolData(t);
     const span = document.getElementById(`tvl-${t.id}`);
     if (!span) continue;
 
-    if (result.tvl >= 1) {
+    if (data.tvl >= 1) {
       span.className = "badge tiny";
-      span.textContent = `$${result.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    } else if (result.source === 'fallback') {
-      // Pool exists on-chain but API hasn't indexed it yet
+      span.textContent = `$${data.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    } else if (data.source === "geckoterminal") {
       span.className = "badge empty";
       span.textContent = "LOW LIQUIDITY";
     } else {
@@ -82,7 +81,6 @@ async function boot() {
   }
 }
 
-// 3D background (unchanged)
 function startBackground() {
   const canvas = document.getElementById("neural-canvas");
   const scene = new THREE.Scene();
