@@ -1,14 +1,55 @@
 
 const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
+const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
+const CACHE_TTL = 30000; // 30 seconds
 
+// --- PRIORITY 4: CACHING STRATEGY ---
+function getCached(key) {
+    const item = localStorage.getItem(key);
+    if (!item) return null;
+    const { value, timestamp } = JSON.parse(item);
+    if (Date.now() - timestamp > CACHE_TTL) {
+        localStorage.removeItem(key);
+        return null;
+    }
+    return value;
+}
+function setCache(key, value) {
+    localStorage.setItem(key, JSON.stringify({ value, timestamp: Date.now() }));
+}
+
+// --- PRIORITY 1: DUAL-API FALLBACK ---
 async function fetchPoolData(token) {
+    const cacheKey = `tvl_${token.id}`;
+    const cached = getCached(cacheKey);
+    if (cached !== null) return { tvl: cached, source: "cache" };
+
+    // Try GeckoTerminal First
+    try {
+        const res = await fetch(`${GECKO_API}${token.pool}`);
+        if (res.ok) {
+            const json = await res.json();
+            const tvl = Number(json.data?.attributes?.reserve_in_usd || 0);
+            setCache(cacheKey, tvl);
+            return { tvl, source: "gecko" };
+        }
+    } catch (e) { /* Silently fail and fallback */ }
+
+    // Fallback to DexScreener
     try {
         const res = await fetch(`${DEX_API}${token.address}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const pairs = await res.json();
-        if (!Array.isArray(pairs) || pairs.length === 0) return { tvl: 0, source: "dexscreener" };
-        const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
-        return { tvl: Number(best.liquidity?.usd || 0), source: "dexscreener" };
+        if (res.ok) {
+            const pairs = await res.json();
+            if (Array.isArray(pairs) && pairs.length > 0) {
+                const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
+                const tvl = Number(best.liquidity?.usd || 0);
+                setCache(cacheKey, tvl);
+                return { tvl, source: "dexscreener" };
+            }
+        }
+        // If both fail or return empty
+        setCache(cacheKey, 0);
+        return { tvl: 0, source: "fallback" };
     } catch (e) {
         return { tvl: 0, source: "error" };
     }
@@ -44,6 +85,7 @@ async function syncAll(tokens) {
         const data = await fetchPoolData(t);
         const span = document.getElementById(`tvl-${t.id}`);
         if (!span) continue;
+        
         if (data.source === "error") {
             span.className = "badge empty"; span.textContent = "API ERROR";
         } else if (data.tvl >= 1) {
@@ -55,38 +97,64 @@ async function syncAll(tokens) {
     }
 }
 
-// NEW: Simulate the Growth Engine Metrics
+// --- PRIORITY 2: WALLET CONNECTION ---
+let provider, signer, userAddress;
+const ERC20_ABI = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"];
+
+async function connectWallet() {
+    if (typeof window.ethereum === 'undefined') {
+        alert("Please install MetaMask or Coinbase Wallet.");
+        return;
+    }
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+        
+        // Ensure we are on Base
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') { // Base Mainnet
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x2105' }],
+                });
+            } catch (switchError) {
+                alert("Please switch your wallet to the Base network manually.");
+                return;
+            }
+        }
+
+        provider = new ethers.BrowserProvider(window.ethereum);
+        signer = await provider.getSigner();
+        
+        document.getElementById('connect-btn').textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
+        document.getElementById('connect-btn').style.background = 'var(--dim)';
+        
+        document.getElementById('portfolio-section').style.display = 'block';
+        document.getElementById('wallet-address').textContent = userAddress;
+        
+        const ethBalance = await provider.getBalance(userAddress);
+        document.getElementById('wallet-eth').textContent = `${parseFloat(ethers.formatEther(ethBalance)).toFixed(4)} ETH`;
+        
+    } catch (e) {
+        console.error("Wallet connection failed", e);
+    }
+}
+
+// --- GROWTH ENGINE ---
 function startGrowthEngine() {
     let block = 53318067;
     let time = 0;
-
     setInterval(() => {
         time += 0.1;
         block++;
-
-        // 1. Block Number
         document.getElementById("live-block").textContent = block.toLocaleString();
-
-        // 2. Continuity (Fluctuates between 0.998 and 1.000)
-        const continuity = (0.999 + Math.sin(time) * 0.001).toFixed(4);
-        document.getElementById("val-continuity").textContent = continuity;
-
-        // 3. Coherence (Fluctuates around 0.9356)
-        const coherence = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
-        document.getElementById("val-coherence").textContent = coherence;
-
-        // 4. Persistence (Slowly increments with blocks)
+        document.getElementById("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
+        document.getElementById("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
         document.getElementById("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
-
-        // 5. Active Voxels (Oscillates between 6 and 9)
-        const voxels = 7 + Math.round(Math.sin(time * 0.5));
-        document.getElementById("val-voxels").textContent = voxels;
-
-        // 6. Energy Band (Calculates a random walk for GW)
-        const energyGW = (42.8 + Math.sin(time * 1.2) * 2.5).toFixed(1);
-        document.getElementById("val-energy").textContent = `MID (${energyGW} GW)`;
-
-        // 7. Engine Status (Occasionally toggles to show "processing")
+        document.getElementById("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
+        document.getElementById("val-energy").textContent = `MID (${(42.8 + Math.sin(time * 1.2) * 2.5).toFixed(1)} GW)`;
+        
         if (Math.floor(time) % 10 === 0) {
             const statusEl = document.getElementById("val-engine");
             statusEl.textContent = "CALIBRATING...";
@@ -96,8 +164,7 @@ function startGrowthEngine() {
                 statusEl.style.color = "var(--white)";
             }, 1500);
         }
-
-    }, 1000); // Update every second
+    }, 1000);
 }
 
 async function boot() {
@@ -107,16 +174,17 @@ async function boot() {
         const grid = document.getElementById("token-grid");
         grid.innerHTML = "";
         tokens.forEach(t => grid.appendChild(renderCard(t)));
+        
         await syncAll(tokens);
-        setInterval(() => syncAll(tokens), 30000);
+        // Reduced polling to 10 seconds for near real-time
+        setInterval(() => syncAll(tokens), 10000); 
     } catch (e) {
         document.getElementById("token-grid").innerHTML = '<p class="loading">FAILED TO LOAD tokens.json</p>';
     }
-    
-    // Start the engine simulation
     startGrowthEngine();
 }
 
+// 3D Background
 function startBackground() {
     try {
         const canvas = document.getElementById("neural-canvas");
@@ -127,15 +195,12 @@ function startBackground() {
         renderer.setSize(innerWidth, innerHeight);
         renderer.setPixelRatio(devicePixelRatio);
         camera.position.z = 15;
-
         const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
         const white = new THREE.PointsMaterial({color:0xffffff, size:.15, transparent:true, opacity:.8});
-
         const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
         scene.add(hyper);
         const core = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(4,4,4)), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.3}));
         scene.add(core);
-
         const N = 400;
         const pos = new Float32Array(N*3);
         for (let i=0;i<N*3;i+=3){ pos[i]=(Math.random()-.5)*30; pos[i+1]=(Math.random()-.5)*30; pos[i+2]=(Math.random()-.5)*30; }
@@ -143,7 +208,6 @@ function startBackground() {
         pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
         const points = new THREE.Points(pGeo, white);
         scene.add(points);
-
         const lines = [];
         for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
             const dx=pos[i*3]-pos[j*3], dy=pos[i*3+1]-pos[j*3+1], dz=pos[i*3+2]-pos[j*3+2];
@@ -153,7 +217,6 @@ function startBackground() {
         lGeo.setAttribute("position", new THREE.Float32BufferAttribute(lines,3));
         const net = new THREE.LineSegments(lGeo, silver);
         scene.add(net);
-
         let t=0;
         (function animate(){
             requestAnimationFrame(animate);
@@ -165,17 +228,12 @@ function startBackground() {
             hyper.scale.set(s,s,s); points.scale.set(s,s,s);
             renderer.render(scene, camera);
         })();
-
-        addEventListener("resize", () => {
-            camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
-            renderer.setSize(innerWidth, innerHeight);
-        });
-    } catch(e) {
-        console.warn("3D Background failed to load:", e);
-    }
+        addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+    } catch(e) { console.warn("3D Background failed to load:", e); }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     startBackground();
     boot();
+    document.getElementById('connect-btn').addEventListener('click', connectWallet);
 });
