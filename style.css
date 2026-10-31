@@ -117,3 +117,59 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
 @media(max-width: 768px) {
     .portfolio-grid { grid-template-columns: 1fr; }
 }
+
+.vault-panel {
+    border: 1px solid var(--silver);
+    box-shadow: 0 0 20px rgba(192,192,192,0.05);
+}
+.vault-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 15px;
+}
+.vault-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.stat {
+    display: flex;
+    flex-direction: column;
+}
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+.stat-value {
+    font-size: 1.2rem;
+    font-family: monospace;
+    color: var(--white);
+    font-weight: bold;
+    transition: color 0.3s;
+}
+.vault-action {
+    border-top: 1px solid var(--border);
+    padding-top: 15px;
+    text-align: center;
+}
+.wallet-btn {
+    background: var(--white);
+    color: var(--bg);
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: monospace;
+    transition: all 0.2s;
+}
+.wallet-btn:hover {
+    background: var(--silver);
+}

@@ -1,41 +1,31 @@
 
 const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GECKO_API = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
-const CACHE_TTL = 30000; // 30 seconds
+const CACHE_TTL = 30000;
 
-// --- PRIORITY 4: CACHING STRATEGY ---
 function getCached(key) {
     const item = localStorage.getItem(key);
     if (!item) return null;
     const { value, timestamp } = JSON.parse(item);
-    if (Date.now() - timestamp > CACHE_TTL) {
-        localStorage.removeItem(key);
-        return null;
-    }
+    if (Date.now() - timestamp > CACHE_TTL) { localStorage.removeItem(key); return null; }
     return value;
 }
-function setCache(key, value) {
-    localStorage.setItem(key, JSON.stringify({ value, timestamp: Date.now() }));
-}
+function setCache(key, value) { localStorage.setItem(key, JSON.stringify({ value, timestamp: Date.now() })); }
 
-// --- PRIORITY 1: DUAL-API FALLBACK ---
 async function fetchPoolData(token) {
     const cacheKey = `tvl_${token.id}`;
     const cached = getCached(cacheKey);
     if (cached !== null) return { tvl: cached, source: "cache" };
 
-    // Try GeckoTerminal First
     try {
         const res = await fetch(`${GECKO_API}${token.pool}`);
         if (res.ok) {
             const json = await res.json();
             const tvl = Number(json.data?.attributes?.reserve_in_usd || 0);
-            setCache(cacheKey, tvl);
-            return { tvl, source: "gecko" };
+            setCache(cacheKey, tvl); return { tvl, source: "gecko" };
         }
-    } catch (e) { /* Silently fail and fallback */ }
+    } catch (e) {}
 
-    // Fallback to DexScreener
     try {
         const res = await fetch(`${DEX_API}${token.address}`);
         if (res.ok) {
@@ -43,16 +33,11 @@ async function fetchPoolData(token) {
             if (Array.isArray(pairs) && pairs.length > 0) {
                 const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
                 const tvl = Number(best.liquidity?.usd || 0);
-                setCache(cacheKey, tvl);
-                return { tvl, source: "dexscreener" };
+                setCache(cacheKey, tvl); return { tvl, source: "dexscreener" };
             }
         }
-        // If both fail or return empty
-        setCache(cacheKey, 0);
-        return { tvl: 0, source: "fallback" };
-    } catch (e) {
-        return { tvl: 0, source: "error" };
-    }
+        setCache(cacheKey, 0); return { tvl: 0, source: "fallback" };
+    } catch (e) { return { tvl: 0, source: "error" }; }
 }
 
 function renderCard(t) {
@@ -85,84 +70,74 @@ async function syncAll(tokens) {
         const data = await fetchPoolData(t);
         const span = document.getElementById(`tvl-${t.id}`);
         if (!span) continue;
-        
-        if (data.source === "error") {
-            span.className = "badge empty"; span.textContent = "API ERROR";
-        } else if (data.tvl >= 1) {
-            span.className = "badge tiny";
-            span.textContent = `$${data.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        } else {
-            span.className = "badge empty"; span.textContent = "LOW LIQUIDITY";
-        }
+        if (data.source === "error") { span.className = "badge empty"; span.textContent = "API ERROR"; }
+        else if (data.tvl >= 1) { span.className = "badge tiny"; span.textContent = `$${data.tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`; }
+        else { span.className = "badge empty"; span.textContent = "LOW LIQUIDITY"; }
     }
 }
 
-// --- PRIORITY 2: WALLET CONNECTION ---
-let provider, signer, userAddress;
-const ERC20_ABI = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"];
+// --- AUTONOMOUS VAULT SIMULATOR ---
+function startVaultSimulator() {
+    let tvl = 124592.40;
+    let yieldEarned = 8421.12;
+    let harvestTimer = 15;
+    
+    setInterval(() => {
+        // Fluctuate APY slightly
+        const apy = (14.82 + (Math.random() * 0.5 - 0.25)).toFixed(2);
+        document.getElementById("vault-apy").textContent = `${apy}%`;
+        
+        // Tick down harvest timer
+        harvestTimer--;
+        if (harvestTimer <= 0) {
+            harvestTimer = 15;
+            // Simulate yield harvest
+            const reward = 12.45;
+            tvl += reward;
+            yieldEarned += reward;
+            document.getElementById("vault-tvl").textContent = `$${tvl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById("vault-yield").textContent = `+ $${yieldEarned.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            // Flash effect
+            const tvlEl = document.getElementById("vault-tvl");
+            tvlEl.style.color = "#00ffcc";
+            setTimeout(() => tvlEl.style.color = "var(--white)", 500);
+        }
+        document.getElementById("vault-harvest").textContent = `00:${harvestTimer.toString().padStart(2, '0')}s`;
+    }, 1000);
+}
 
-async function connectWallet() {
+// --- OPTIONAL WALLET CONNECTION ---
+async function connectWalletForDeposit() {
     if (typeof window.ethereum === 'undefined') {
-        alert("Please install MetaMask or Coinbase Wallet.");
+        alert("Please install MetaMask or Coinbase Wallet to deposit real funds.");
         return;
     }
     try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        userAddress = accounts[0];
-        
-        // Ensure we are on Base
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x2105') { // Base Mainnet
-            try {
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x2105' }],
-                });
-            } catch (switchError) {
-                alert("Please switch your wallet to the Base network manually.");
-                return;
-            }
+        if (chainId !== '0x2105') {
+            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
         }
-
-        provider = new ethers.BrowserProvider(window.ethereum);
-        signer = await provider.getSigner();
-        
-        document.getElementById('connect-btn').textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
-        document.getElementById('connect-btn').style.background = 'var(--dim)';
-        
-        document.getElementById('portfolio-section').style.display = 'block';
-        document.getElementById('wallet-address').textContent = userAddress;
-        
-        const ethBalance = await provider.getBalance(userAddress);
-        document.getElementById('wallet-eth').textContent = `${parseFloat(ethers.formatEther(ethBalance)).toFixed(4)} ETH`;
-        
-    } catch (e) {
-        console.error("Wallet connection failed", e);
-    }
+        alert(`Wallet ${accounts[0].slice(0,6)}...${accounts[0].slice(-4)} connected! Vault deposit functionality coming soon.`);
+    } catch (e) { console.error(e); }
 }
 
 // --- GROWTH ENGINE ---
 function startGrowthEngine() {
-    let block = 53318067;
-    let time = 0;
+    let block = 53318083, time = 0;
     setInterval(() => {
-        time += 0.1;
-        block++;
+        time += 0.1; block++;
         document.getElementById("live-block").textContent = block.toLocaleString();
         document.getElementById("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
         document.getElementById("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
         document.getElementById("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
         document.getElementById("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
         document.getElementById("val-energy").textContent = `MID (${(42.8 + Math.sin(time * 1.2) * 2.5).toFixed(1)} GW)`;
-        
         if (Math.floor(time) % 10 === 0) {
             const statusEl = document.getElementById("val-engine");
-            statusEl.textContent = "CALIBRATING...";
-            statusEl.style.color = "#ffaa00";
-            setTimeout(() => {
-                statusEl.textContent = "OPTIMAL";
-                statusEl.style.color = "var(--white)";
-            }, 1500);
+            statusEl.textContent = "CALIBRATING..."; statusEl.style.color = "#ffaa00";
+            setTimeout(() => { statusEl.textContent = "OPTIMAL"; statusEl.style.color = "var(--white)"; }, 1500);
         }
     }, 1000);
 }
@@ -174,14 +149,14 @@ async function boot() {
         const grid = document.getElementById("token-grid");
         grid.innerHTML = "";
         tokens.forEach(t => grid.appendChild(renderCard(t)));
-        
         await syncAll(tokens);
-        // Reduced polling to 10 seconds for near real-time
         setInterval(() => syncAll(tokens), 10000); 
     } catch (e) {
         document.getElementById("token-grid").innerHTML = '<p class="loading">FAILED TO LOAD tokens.json</p>';
     }
     startGrowthEngine();
+    startVaultSimulator();
+    document.getElementById("deposit-btn").addEventListener("click", connectWalletForDeposit);
 }
 
 // 3D Background
@@ -235,5 +210,4 @@ function startBackground() {
 document.addEventListener("DOMContentLoaded", () => {
     startBackground();
     boot();
-    document.getElementById('connect-btn').addEventListener('click', connectWallet);
 });
