@@ -217,3 +217,6 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
 .mining-card .badge {
     margin-left: 8px;
 }
+
+.mining-card { border-left: 3px solid var(--silver); }
+.mining-card .badge { margin-left: 8px; }

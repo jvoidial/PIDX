@@ -328,3 +328,46 @@ async function testStratumConnection() {
         resultEl.style.color = "#ffaa00";
     }, 2000);
 }
+
+
+// --- MINING POOLS ---
+async function loadMiningPools() {
+    try {
+        const res = await fetch("mining_pools.json");
+        const pools = await res.json();
+        const grid = document.getElementById("mining-grid");
+        if(!grid) return;
+        grid.innerHTML = "";
+        pools.forEach(p => {
+            const el = document.createElement("div");
+            el.className = "card small mining-card";
+            el.innerHTML = `
+                <h4>${p.name} <span class="badge ${p.status === 'online' ? 'tiny' : 'empty'}">${p.status.toUpperCase()}</span></h4>
+                <p style="color:var(--dim); font-size:0.8rem;">Fee: ${p.fee} | Coin: ${p.coin}</p>
+                <p class="mono" style="margin-top:8px;">${p.stratum}</p>
+                <p style="color:var(--dim); font-size:0.75rem; margin-top:5px;">${p.notes}</p>
+            `;
+            grid.appendChild(el);
+        });
+    } catch (e) {
+        console.error("Failed to load mining pools:", e);
+    }
+}
+
+async function testStratumConnection() {
+    const url = document.getElementById("stratum-test-url").value.trim();
+    const resultEl = document.getElementById("stratum-test-result");
+    if (!url.startsWith("stratum+tcp://")) {
+        resultEl.textContent = "❌ Please enter a valid stratum+tcp:// URL.";
+        resultEl.style.color = "#ff4444";
+        return;
+    }
+    resultEl.textContent = "🔄 Testing connection...";
+    resultEl.style.color = "var(--dim)";
+    setTimeout(() => {
+        resultEl.textContent = "⚠️ Browser-based TCP testing is limited. Use a desktop miner to test the connection.";
+        resultEl.style.color = "#ffaa00";
+    }, 2000);
+}
+
+document.addEventListener('DOMContentLoaded', loadMiningPools);
