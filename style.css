@@ -31,6 +31,9 @@ h3{color:var(--white);display:flex;justify-content:space-between;font-size:1.1re
 .links{display:flex;flex-wrap:wrap;gap:10px}
 .links a{color:var(--text);text-decoration:none;font-size:.75rem;background:rgba(255,255,255,.05);border:1px solid var(--border);padding:5px 10px;border-radius:20px;transition:all .2s}
 .links a:hover{background:var(--silver);color:var(--bg)}
+/* NEW: Highlighted Swap Button */
+.links a.swap-btn{background:var(--white);color:var(--bg);border-color:var(--white);font-weight:bold;display:flex;align-items:center;gap:5px}
+.links a.swap-btn:hover{background:var(--silver);transform:scale(1.05)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 @media(max-width:768px){.split{grid-template-columns:1fr}}
 .panel{background:var(--panel);border:1px solid var(--border);padding:20px;border-radius:12px;backdrop-filter:blur(10px)}
