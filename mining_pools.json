@@ -1,0 +1,66 @@
+[
+  {
+    "name": "SoloFury",
+    "fee": "1%",
+    "coin": "SHA-256 (BTC/BCH/XEC)",
+    "stratum": "stratum+tcp://btc.solofury.com:7070",
+    "status": "online",
+    "notes": "Multi-coin solo mining. TLS available."
+  },
+  {
+    "name": "Ocean",
+    "fee": "2% (1% with DATUM)",
+    "coin": "BTC",
+    "stratum": "stratum+tcp://ocean.xyz:3334",
+    "status": "online",
+    "notes": "Non-custodial, no KYC."
+  },
+  {
+    "name": "Braiins Pool",
+    "fee": "0% (Braiins OS) / 2% FPPS",
+    "coin": "BTC",
+    "stratum": "stratum+tcp://stratum.braiins.com:3333",
+    "status": "online",
+    "notes": "Stratum V2 native support."
+  },
+  {
+    "name": "F2Pool",
+    "fee": "2.5% FPPS / 2% PPLNS",
+    "coin": "BTC, LTC, ETHW, ETC",
+    "stratum": "stratum+tcp://btc.f2pool.com:1314",
+    "status": "online",
+    "notes": "Global servers, since 2013."
+  },
+  {
+    "name": "BASED Mining",
+    "fee": "0%",
+    "coin": "BTC (Solo)",
+    "stratum": "stratum+tcp://pool.basedmining.xyz:3333",
+    "status": "online",
+    "notes": "On-chain solo mining via Base. No signup."
+  },
+  {
+    "name": "AntPool",
+    "fee": "1-2%",
+    "coin": "BTC, BCH, LTC",
+    "stratum": "stratum+tcp://stratum.antpool.com:3333",
+    "status": "online",
+    "notes": "Stratum V2 Working Group member."
+  },
+  {
+    "name": "Foundry USA",
+    "fee": "0.5-1%",
+    "coin": "BTC",
+    "stratum": "stratum+tcp://stratum.foundryusa.com:3333",
+    "status": "online",
+    "notes": "Major US pool, Stratum V2 adopter."
+  },
+  {
+    "name": "SpiderPool",
+    "fee": "1-2%",
+    "coin": "BTC, LTC",
+    "stratum": "stratum+tcp://stratum.spiderpool.com:3333",
+    "status": "online",
+    "notes": "Stratum V2 Working Group member."
+  }
+]
