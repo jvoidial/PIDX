@@ -118,3 +118,31 @@ function startBackground() {
 }
 
 document.addEventListener("DOMContentLoaded", () => { startBackground(); boot(); });
+
+
+// ... existing code from app.js ...
+// Add placeholders for Phase 1 dashboard upgrades
+
+async function connectWallet() {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            console.log("Connected wallet:", accounts[0]);
+            // TODO: Fetch portfolio data using a service like Zerion or Vaults.fyi
+        } catch (error) {
+            console.error("Wallet connection failed:", error);
+        }
+    } else {
+        alert("Please install MetaMask or another Web3 wallet.");
+    }
+}
+
+async function fetchVaultData() {
+    // TODO: Replace with actual vault contract address and ABI
+    const VAULT_ADDRESS = "0x..."; // Your deployed vault
+    // Use ethers.js to read totalAssets, APY, etc.
+    console.log("Fetching vault data from:", VAULT_ADDRESS);
+}
+
+// Add a "Connect Wallet" button and "Vaults" section to the UI
+// (This would be done in your index.html)
