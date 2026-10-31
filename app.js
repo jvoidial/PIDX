@@ -49,6 +49,7 @@ function renderCard(t) {
     const safePool = DOMPurify.sanitize(t.pool);
     const swapUrl = `https://app.uniswap.org/swap?chain=base&inputCurrency=NATIVE&outputCurrency=${safeAddr}`;
     const geckoUrl = `https://www.geckoterminal.com/base/pools/${safePool}`;
+    const dexscreenerEmbed = `https://dexscreener.com/base/${safePool}?embed=1&theme=dark&trades=0&info=0`;
 
     const el = document.createElement("div");
     el.className = "card";
@@ -57,7 +58,9 @@ function renderCard(t) {
         <p class="name">${safeName}</p>
         <p class="addr">${safeAddr}</p>
         <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
-        <div class="links">
+        <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
+        <iframe src="${dexscreenerEmbed}" width="100%" height="220" frameborder="0" style="margin-top:10px; border-radius:8px; border:1px solid var(--border);"></iframe>
+        <div class="links" style="margin-top:10px;">
             <a href="${swapUrl}" target="_blank" rel="noopener noreferrer" class="swap-btn">🔄 Swap</a>
             <a href="https://basescan.org/token/${safeAddr}" target="_blank" rel="noopener noreferrer">BaseScan</a>
             <a href="${geckoUrl}" target="_blank" rel="noopener noreferrer">GeckoTerm</a>
@@ -250,6 +253,7 @@ async function boot() {
         grid.innerHTML = "";
         tokens.forEach(t => grid.appendChild(renderCard(t)));
         await syncAll(tokens);
+        await scanAllSecurity(tokens);
         setInterval(() => syncAll(tokens), 10000);
     } catch (e) { console.error("Token grid error:", e); }
     startGrowthEngine();
@@ -366,3 +370,46 @@ document.addEventListener('DOMContentLoaded', () => {
     loadVaultsAndPools();
     loadMiningPools();
 });
+
+
+// --- GoPlus Security Scan (free, public API) ---
+async function scanTokenSecurity(token) {
+    try {
+        const url = `https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const result = json.result?.[token.address.toLowerCase()];
+        const badge = document.getElementById(`sec-${token.id}`);
+        if (!badge) return;
+
+        if (!result) {
+            badge.textContent = "🛡️ Security: No data";
+            badge.style.color = "var(--dim)";
+            return;
+        }
+
+        const isHoneypot = result.is_honeypot === "1";
+        const buyTax = parseFloat(result.buy_tax || "0") * 100;
+        const sellTax = parseFloat(result.sell_tax || "0") * 100;
+        const cannotSell = result.cannot_sell_all === "1";
+
+        if (isHoneypot || cannotSell) {
+            badge.textContent = "🚨 HONEYPOT / CANNOT SELL";
+            badge.style.color = "#ff4444";
+        } else if (sellTax > 10 || buyTax > 10) {
+            badge.textContent = `⚠️ High Tax (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
+            badge.style.color = "#ffaa00";
+        } else {
+            badge.textContent = `✅ Safe (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
+            badge.style.color = "#00ffcc";
+        }
+    } catch (e) {
+        const badge = document.getElementById(`sec-${token.id}`);
+        if (badge) { badge.textContent = "🛡️ Security: API error"; badge.style.color = "var(--dim)"; }
+    }
+}
+
+// Call after tokens render
+async function scanAllSecurity(tokens) {
+    for (const t of tokens) await scanTokenSecurity(t);
+}
