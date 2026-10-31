@@ -136,44 +136,64 @@ function renderCard(t) {
 }
 
 
-// --- CHART RENDERER (GeckoTerminal with DexScreener fallback) ---
+
+// --- CHART RENDERER (DexPaprika for reliable OHLCV data) ---
 async function renderChart(token) {
     const container = document.getElementById(`chart-${token.id}`);
     if (!container) return;
     container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Loading chart...</p>';
 
-    // 1. Try GeckoTerminal first
     try {
-        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100`;
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-        const res = await fetchWithTimeout(proxyUrl, {}, 5000);
-        const json = await res.json();
-        const ohlcv = json.data?.attributes?.ohlcv_list;
+        // DexPaprika API: /networks/{network}/pools/{pool}/ohlcv
+        const targetUrl = `https://api.dexpaprika.com/networks/base/pools/${token.pool}/ohlcv?interval=15m&limit=100`;
+        
+        const res = await fetchWithTimeout(targetUrl, {}, 8000);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
+        const ohlcv = await res.json();
 
-        if (ohlcv && ohlcv.length > 0) {
-            drawChart(container, ohlcv);
+        if (!ohlcv || ohlcv.length === 0) {
+            container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available yet.</p>';
             return;
         }
-    } catch (e) { /* Fall through to DexScreener */ }
 
-    // 2. Fallback to DexScreener
-    try {
-        const dexRes = await fetchWithTimeout(`https://api.dexscreener.com/token-pairs/v1/base/${token.address}`, {}, 5000);
-        const pairs = await dexRes.json();
-        
-        if (Array.isArray(pairs) && pairs.length > 0) {
-            const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
-            if (best.priceUsd) {
-                // DexScreener doesn't provide OHLCV, so we create a simple price line from available data
-                container.innerHTML = `<p style="color:var(--white); text-align:center; padding-top:100px; font-size:1rem; font-family:monospace;">Price: $${best.priceUsd}</p>`;
-                return;
-            }
+        // Convert DexPaprika format to Lightweight Charts format
+        const candleData = ohlcv.map(c => ({
+            time: Math.floor(new Date(c.time_open).getTime() / 1000),
+            open: c.open, high: c.high, low: c.low, close: c.close
+        })).sort((a, b) => a.time - b.time);
+
+        container.innerHTML = "";
+
+        if (typeof LightweightCharts === 'undefined') {
+            container.innerHTML = '<p style="color:#ff4444; text-align:center; padding-top:100px; font-size:0.75rem;">Chart Library Failed.</p>';
+            return;
         }
-        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">No chart data available (Low Liquidity).</p>';
+
+        const chart = LightweightCharts.createChart(container, {
+            width: container.clientWidth, height: 250,
+            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+            timeScale: { borderColor: 'rgba(255,255,255,0.1)' }, rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+        });
+
+        const candleSeries = chart.addCandlestickSeries({
+            upColor: '#00ffcc', downColor: '#ff4444', borderDownColor: '#ff4444', borderUpColor: '#00ffcc', wickDownColor: '#ff4444', wickUpColor: '#00ffcc',
+        });
+
+        candleSeries.setData(candleData);
+
+        new ResizeObserver(entries => {
+            if (entries.length === 0 || !entries[0].contentRect) return;
+            chart.applyOptions({ width: entries[0].contentRect.width });
+        }).observe(container);
+
     } catch (e) {
-        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Chart data unavailable.</p>';
+        console.warn(`Chart failed for ${token.symbol}:`, e);
+        container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:100px; font-size:0.75rem;">Chart unavailable (Low Data).</p>';
     }
 }
+
 
 function drawChart(container, ohlcv) {
     const uniqueData = {};
