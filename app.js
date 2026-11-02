@@ -407,3 +407,85 @@ document.addEventListener("visibilitychange", () => {
         if (typeof loadMemory === 'function') loadMemory();
     }
 });
+
+
+// --- WALLET PORTFOLIO TRACKER UTILITY ---
+const ERC20_ABI = [
+    "function balanceOf(address owner) view returns (uint256)",
+    "function decimals() view returns (uint8)"
+];
+
+const TOKEN_LIST = [
+    { symbol: "PIDX", address: "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c" },
+    { symbol: "SGUIDE", address: "0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a" },
+    { symbol: "VDOO", address: "0x38e4f08D08b4D772A7B75669C356b4749dd2d30b" },
+    { symbol: "PENNIES", address: "0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7" }
+];
+
+document.getElementById('connect-wallet-btn')?.addEventListener('click', async () => {
+    if (typeof window.ethereum === 'undefined') {
+        alert("Please install MetaMask or Coinbase Wallet to use the portfolio tracker.");
+        return;
+    }
+
+    try {
+        // Connect Wallet
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const userAddress = accounts[0];
+        
+        // Ensure Base Network
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') {
+            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+        }
+
+        document.getElementById('wallet-address').textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
+        document.getElementById('connect-wallet-btn').textContent = "Connected";
+        document.getElementById('connect-wallet-btn').style.background = "var(--dim)";
+        document.getElementById('portfolio-section').style.display = 'block';
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        let totalValueUsd = 0;
+        let balancesHtml = "";
+
+        for (const token of TOKEN_LIST) {
+            const contract = new ethers.Contract(token.address, ERC20_ABI, provider);
+            
+            // Get balance
+            const balanceWei = await contract.balanceOf(userAddress);
+            const decimals = await contract.decimals();
+            const balance = parseFloat(ethers.formatUnits(balanceWei, decimals));
+            
+            if (balance > 0) {
+                // Get price from DexScreener (using the token address)
+                let priceUsd = 0;
+                try {
+                    const res = await fetch(`https://api.dexscreener.com/token-pairs/v1/base/${token.address}`);
+                    const pairs = await res.json();
+                    if (pairs && pairs.length > 0) {
+                        const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), pairs[0]);
+                        priceUsd = parseFloat(best.priceUsd) || 0;
+                    }
+                } catch(e) {}
+
+                const usdValue = balance * priceUsd;
+                totalValueUsd += usdValue;
+
+                balancesHtml += `
+                    <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                        <p style="color: var(--dim); font-size: 0.8rem;">${token.symbol}</p>
+                        <p style="color: var(--white); font-family: monospace; font-size: 1.1rem;">${balance.toLocaleString(undefined, {maximumFractionDigits: 4})}</p>
+                        <p style="color: #00ffcc; font-size: 0.8rem; font-family: monospace;">$${usdValue.toFixed(2)}</p>
+                    </div>
+                `;
+            }
+        }
+
+        document.getElementById('total-portfolio-value').textContent = `$${totalValueUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('token-balances').innerHTML = balancesHtml || '<p style="color: var(--dim);">No tokens found in this wallet.</p>';
+
+    } catch (error) {
+        console.error("Wallet connection failed:", error);
+        alert("Could not connect wallet. Please try again.");
+    }
+});
