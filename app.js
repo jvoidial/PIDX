@@ -225,86 +225,68 @@ document.getElementById('connect-wallet-btn')?.addEventListener('click', async (
 
 
 // --- CLEAN EBANK ENGINE (Bulletproof) ---
+
 let ebankPrincipal = 1000.00;
 let ebankYield = 0.00000000;
-const SECONDS_IN_YEAR = 31536000;
-
 function startEbankEngine() {
     setInterval(() => {
-        const cohEl = document.getElementById("val-coherence");
-        const coherence = cohEl ? parseFloat(cohEl.textContent) || 0.9356 : 0.9356;
-        const apy = 0.15 + (coherence * 0.05);
+        const coh = parseFloat(document.getElementById("val-coherence")?.textContent) || 0.9356;
+        const apy = 0.15 + (coh * 0.05);
+        if(document.getElementById("ebank-apy")) document.getElementById("ebank-apy").textContent = `${(apy * 100).toFixed(2)}%`;
         
-        const apyEl = document.getElementById("ebank-apy");
-        if (apyEl) apyEl.textContent = `${(apy * 100).toFixed(2)}%`;
-
-        const perSecondRate = Math.pow(1 + apy, 1 / SECONDS_IN_YEAR) - 1;
-        const earnedThisSecond = ebankPrincipal * perSecondRate;
+        const perSec = Math.pow(1 + apy, 1 / 31536000) - 1;
+        const earned = ebankPrincipal * perSec;
+        ebankYield += earned;
+        ebankPrincipal += earned;
         
-        ebankYield += earnedThisSecond;
-        ebankPrincipal += earnedThisSecond;
-
-        const pEl = document.getElementById("ebank-principal");
-        const yEl = document.getElementById("ebank-yield");
-        
-        if (pEl) pEl.textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
-        if (yEl) yEl.textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
-
-        const immEl = document.getElementById("immunity-score");
-        if (immEl) immEl.textContent = `${(99.8 - (1 - coherence) * 10).toFixed(2)}%`;
+        if(document.getElementById("ebank-principal")) document.getElementById("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
+        if(document.getElementById("ebank-yield")) document.getElementById("ebank-yield").textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
     }, 1000);
 }
 
 
+
 // --- ROBUST TOKEN SECURITY SCANNER (GoPlus API for Base) ---
 
 // --- ROBUST TOKEN SECURITY SCANNER (GoPlus API for Base) ---
+
 async function scanTokenSecurity(token) {
     const badge = document.getElementById(`sec-${token.id}`);
     if (!badge) return;
-
-    badge.textContent = "🛡️ Security: scanning...";
-    badge.style.color = "var(--dim)";
-
     try {
-        const url = `https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`;
-        const res = await fetchWithTimeout(url, {}, 5000);
+        const res = await fetch(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`);
         const json = await res.json();
-
-        if (json.code !== 1 || !json.result) {
-            badge.textContent = "🛡️ Security: No data";
-            return;
-        }
-
-        const result = json.result[token.address.toLowerCase()];
-        if (!result) {
-            badge.textContent = "🛡️ Security: No data";
-            return;
-        }
-
-        const isHoneypot = result.is_honeypot === "1";
-        const cannotSell = result.cannot_sell_all === "1";
-        const isOpenSource = result.is_open_source === "1";
+        const result = json.result?.[token.address.toLowerCase()];
+        if (!result) { badge.textContent = "🛡️ No data"; return; }
+        
+        const isHoneypot = result.is_honeypot === "1" || result.cannot_sell_all === "1";
         const buyTax = parseFloat(result.buy_tax || "0") * 100;
         const sellTax = parseFloat(result.sell_tax || "0") * 100;
-
-        if (isHoneypot || cannotSell) {
-            badge.textContent = "🚨 HONEYPOT / CANNOT SELL";
-            badge.style.color = "#ff4444";
+        
+        if (isHoneypot) {
+            badge.textContent = "🚨 HONEYPOT"; badge.style.color = "#ff4444";
         } else if (sellTax > 10 || buyTax > 10) {
-            badge.textContent = `⚠️ High Tax (Buy ${buyTax.toFixed(1)}% / Sell ${sellTax.toFixed(1)}%)`;
-            badge.style.color = "#ffaa00";
-        } else if (!isOpenSource) {
-            badge.textContent = "⚠️ Unverified Source";
-            badge.style.color = "#ffaa00";
+            badge.textContent = `⚠️ Tax ${sellTax.toFixed(1)}%`; badge.style.color = "#ffaa00";
         } else {
-            badge.textContent = "✅ Safe";
-            badge.style.color = "#00ffcc";
+            badge.textContent = "✅ Safe"; badge.style.color = "#00ffcc";
         }
-    } catch (e) {
-        console.warn(`Security scan failed for ${token.symbol}:`, e);
-        badge.textContent = "🛡️ Security: Error";
-        badge.style.color = "var(--dim)";
-    }
+    } catch (e) { badge.textContent = "🛡️ Error"; }
 }
 
+
+
+
+// --- AGI BRAIN ---
+function startAGIBrain() {
+    const canvas = document.getElementById('agi-canvas'); if (!canvas || typeof THREE === 'undefined') return;
+    const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight); renderer.setPixelRatio(window.devicePixelRatio); camera.position.z = 20;
+    const nodes = []; const nodeGeo = new THREE.SphereGeometry(0.3, 8, 8); const nodeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    for (let i = 0; i < 70; i++) { const node = new THREE.Mesh(nodeGeo, nodeMat); node.position.set((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 30, (Math.random() - 0.5) * 30); scene.add(node); nodes.push({ mesh: node }); }
+    const linePos = []; for (let i = 0; i < nodes.length; i++) { for (let j = i + 1; j < nodes.length; j++) { if (nodes[i].mesh.position.distanceTo(nodes[j].mesh.position) < 9) { linePos.push(nodes[i].mesh.position.x, nodes[i].mesh.position.y, nodes[i].mesh.position.z, nodes[j].mesh.position.x, nodes[j].mesh.position.y, nodes[j].mesh.position.z); } } }
+    const lineGeo = new THREE.BufferGeometry(); lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3)); const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({ color: 0x888888, transparent: true, opacity: 0.3 })); scene.add(lines);
+    let time = 0; function animate() { requestAnimationFrame(animate); time += 0.01; scene.rotation.y += 0.001; scene.rotation.x += 0.0005; nodes.forEach((n, i) => { const s = 1 + Math.sin(time * 2 + i) * 0.3; n.mesh.scale.set(s, s, s); }); renderer.render(scene, camera); } animate();
+    window.addEventListener('resize', () => { camera.aspect = canvas.clientWidth / canvas.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(canvas.clientWidth, canvas.clientHeight); });
+}
+document.addEventListener("DOMContentLoaded", () => { startAGIBrain(); });
