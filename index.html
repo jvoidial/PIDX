@@ -98,9 +98,40 @@
     </div>
   </section>
     
+
+  <section class="grid-section" id="bots-section">
+    <h2>🤖 Trading Bots · Automated Strategies</h2>
+    <div class="bots-grid">
+      <!-- DCA Bot Card -->
+      <div class="card bot-card">
+        <h4>DCA Bot <span class="badge tiny" id="dca-status" style="color:#ffaa00; border-color:#ffaa00;">PAUSED</span></h4>
+        <p style="color:var(--dim); font-size:0.8rem;">Dollar-Cost Averaging</p>
+        <div class="bot-metrics">
+          <div><span class="label">PnL</span><span class="value" id="dca-pnl" style="color:#00ffcc;">+$0.00</span></div>
+          <div><span class="label">Win Rate</span><span class="value" id="dca-win">0%</span></div>
+          <div><span class="label">Trades/hr</span><span class="value" id="dca-trades">0</span></div>
+          <div><span class="label">Strategy</span><span class="value" id="dca-strategy">MOMENTUM</span></div>
+        </div>
+        <button class="bot-btn" id="dca-btn" style="background:#00ffcc; color:#000; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:pointer;">Start Bot</button>
+      </div>
+      <!-- Grid Bot Card -->
+      <div class="card bot-card">
+        <h4>Grid Bot <span class="badge tiny" id="grid-status" style="color:#ffaa00; border-color:#ffaa00;">PAUSED</span></h4>
+        <p style="color:var(--dim); font-size:0.8rem;">Grid Trading</p>
+        <div class="bot-metrics">
+          <div><span class="label">PnL</span><span class="value" id="grid-pnl" style="color:#00ffcc;">+$0.00</span></div>
+          <div><span class="label">Win Rate</span><span class="value" id="grid-win">0%</span></div>
+          <div><span class="label">Trades/hr</span><span class="value" id="grid-trades">0</span></div>
+          <div><span class="label">Strategy</span><span class="value" id="grid-strategy">GRID</span></div>
+        </div>
+        <button class="bot-btn" id="grid-btn" style="background:#00ffcc; color:#000; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:pointer;">Start Bot</button>
+      </div>
+    </div>
+  </section>
+
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=9999"></script>
+<script src="app.js?v=100001"></script>
   <script src="agi_brain.js"></script>
 </body>
 </html>

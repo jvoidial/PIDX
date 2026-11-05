@@ -182,3 +182,114 @@ window.addEventListener("DOMContentLoaded", () => {
     runSafety();
     startAGIBrain();
 });
+
+
+// --- WALLET CONNECT ---
+let connectedWallet = null;
+
+async function connectWallet() {
+    if (typeof window.ethereum === 'undefined') {
+        return alert("Please install MetaMask or Coinbase Wallet.");
+    }
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        connectedWallet = accounts[0];
+        
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') {
+            try {
+                await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+            } catch (e) {
+                alert("Please switch to Base network manually.");
+                return;
+            }
+        }
+
+        const btn = document.getElementById("connect-wallet-btn");
+        const display = document.getElementById("wallet-address");
+        if(btn) { btn.textContent = "Connected"; btn.style.background = "var(--dim)"; }
+        if(display) display.textContent = `${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
+        
+        if (typeof logMemory === 'function') logMemory(`Wallet connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`, "#00ffcc");
+    } catch (e) {
+        console.error(e);
+    }
+}
+document.getElementById('connect-wallet-btn')?.addEventListener('click', connectWallet);
+
+
+// --- TRADING BOTS SIMULATION ---
+let dcaActive = false;
+let gridActive = false;
+let dcaPnl = 0.00;
+let gridPnl = 0.00;
+let dcaTrades = 0;
+let gridTrades = 0;
+let dcaWin = 0;
+let gridWin = 0;
+
+function updateBotsUI() {
+    const dcaStatus = document.getElementById("dca-status");
+    const dcaBtn = document.getElementById("dca-btn");
+    if (dcaStatus) {
+        if (dcaActive) {
+            dcaStatus.textContent = "ACTIVE"; dcaStatus.style.color = "#00ffcc"; dcaStatus.style.borderColor = "#00ffcc";
+            if (dcaBtn) { dcaBtn.textContent = "Stop Bot"; dcaBtn.style.background = "#ff4444"; dcaBtn.style.color = "#fff"; }
+        } else {
+            dcaStatus.textContent = "PAUSED"; dcaStatus.style.color = "#ffaa00"; dcaStatus.style.borderColor = "#ffaa00";
+            if (dcaBtn) { dcaBtn.textContent = "Start Bot"; dcaBtn.style.background = "#00ffcc"; dcaBtn.style.color = "#000"; }
+        }
+        if (document.getElementById("dca-pnl")) document.getElementById("dca-pnl").textContent = `+$${dcaPnl.toFixed(2)}`;
+        if (document.getElementById("dca-trades")) document.getElementById("dca-trades").textContent = dcaTrades;
+        if (document.getElementById("dca-win")) document.getElementById("dca-win").textContent = `${dcaWin.toFixed(1)}%`;
+    }
+
+    const gridStatus = document.getElementById("grid-status");
+    const gridBtn = document.getElementById("grid-btn");
+    if (gridStatus) {
+        if (gridActive) {
+            gridStatus.textContent = "ACTIVE"; gridStatus.style.color = "#00ffcc"; gridStatus.style.borderColor = "#00ffcc";
+            if (gridBtn) { gridBtn.textContent = "Stop Bot"; gridBtn.style.background = "#ff4444"; gridBtn.style.color = "#fff"; }
+        } else {
+            gridStatus.textContent = "PAUSED"; gridStatus.style.color = "#ffaa00"; gridStatus.style.borderColor = "#ffaa00";
+            if (gridBtn) { gridBtn.textContent = "Start Bot"; gridBtn.style.background = "#00ffcc"; gridBtn.style.color = "#000"; }
+        }
+        if (document.getElementById("grid-pnl")) document.getElementById("grid-pnl").textContent = `+$${gridPnl.toFixed(2)}`;
+        if (document.getElementById("grid-trades")) document.getElementById("grid-trades").textContent = gridTrades;
+        if (document.getElementById("grid-win")) document.getElementById("grid-win").textContent = `${gridWin.toFixed(1)}%`;
+    }
+}
+
+function startBotsEngine() {
+    updateBotsUI();
+
+    setInterval(() => {
+        if (dcaActive) {
+            dcaPnl += Math.random() * 2.5 - 0.5;
+            dcaTrades += Math.floor(Math.random() * 3);
+            dcaWin = 70 + Math.random() * 15;
+            updateBotsUI();
+            if (typeof logMemory === 'function') logMemory(`DCA Bot executed trade. PnL: $${dcaPnl.toFixed(2)}`, "#00ffcc");
+        }
+        if (gridActive) {
+            gridPnl += Math.random() * 1.5 - 0.3;
+            gridTrades += Math.floor(Math.random() * 2);
+            gridWin = 60 + Math.random() * 20;
+            updateBotsUI();
+        }
+    }, 3000);
+
+    document.getElementById("dca-btn")?.addEventListener("click", () => {
+        if (!connectedWallet) return alert("Please connect your wallet first to start the bot.");
+        dcaActive = !dcaActive;
+        updateBotsUI();
+        if (typeof logMemory === 'function') logMemory(`DCA Bot ${dcaActive ? 'Started' : 'Stopped'}.`, dcaActive ? "#00ffcc" : "#ff4444");
+    });
+
+    document.getElementById("grid-btn")?.addEventListener("click", () => {
+        if (!connectedWallet) return alert("Please connect your wallet first to start the bot.");
+        gridActive = !gridActive;
+        updateBotsUI();
+        if (typeof logMemory === 'function') logMemory(`Grid Bot ${gridActive ? 'Started' : 'Stopped'}.`, gridActive ? "#00ffcc" : "#ff4444");
+    });
+}
