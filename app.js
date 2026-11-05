@@ -499,3 +499,238 @@ window.addEventListener("DOMContentLoaded", () => {
     const engramBtn = $("upload-engram-btn");
     if (engramBtn) engramBtn.addEventListener("click", initializeSoulkiller);
 });
+
+
+// --- PROJECT MIKOSHI: IMMORTALITY ENGRAM PROTOCOL ---
+async function initializeSoulkiller() {
+    const btn = document.getElementById('upload-engram-btn');
+    if (!btn) return;
+
+    // Detect if standard mobile browser (No Web3 wallet)
+    if (typeof window.ethereum === 'undefined') {
+        return alert("UPLINK FAILED: No Web3 wallet detected.\n\nIf you are on a mobile phone, you must open this website inside the MetaMask app browser or Coinbase Wallet app browser. Standard Chrome/Safari cannot sign transactions.");
+    }
+    
+    btn.textContent = "CONNECTING WALLET...";
+    btn.style.background = "#ffaa00";
+
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const address = accounts[0];
+        
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') {
+            btn.textContent = "SWITCHING TO BASE...";
+            try {
+                await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x2105', chainName: 'Base',
+                            nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+                            rpcUrls: ['https://mainnet.base.org'], blockExplorerUrls: ['https://basescan.org']
+                        }]
+                    });
+                } else { throw new Error("Please switch to Base network manually."); }
+            }
+        }
+
+        btn.textContent = "AWAITING SIGNATURE...";
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        
+        const nonce = Math.random().toString(36).substring(2, 15);
+        const timestamp = Date.now();
+        const message = `MIKOSHI UPLINK REQUEST\nDomain: ${window.location.host}\nAddress: ${address}\nNonce: ${nonce}\nTimestamp: ${timestamp}\n\nSign this message to extract your digital engram. Zero gas required.`;
+        
+        const signature = await signer.signMessage(message);
+        
+        const hash = ethers.keccak256(ethers.toUtf8Bytes(signature));
+        const engramId = `${address.slice(0,6)}...${address.slice(-4)}`;
+        
+        const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
+        let longevitySeq = "";
+        const rawHash = hash.substring(2, 34);
+        for (let i = 0; i < rawHash.length; i++) {
+            longevitySeq += baseMap[rawHash[i].toLowerCase()] || "X";
+            if (i < rawHash.length - 1) longevitySeq += "-";
+        }
+
+        const probBase = parseInt(hash.substring(2, 6), 16);
+        const immortalityProb = (99.00 + (probBase / 65535) * 0.99).toFixed(2);
+
+        document.getElementById('engram-id').textContent = engramId;
+        document.getElementById('longevity-seq').textContent = longevitySeq;
+        document.getElementById('immortality-prob').textContent = `${immortalityProb}%`;
+        document.getElementById('relic-integrity').textContent = "STABLE / ONLINE";
+        document.getElementById('relic-integrity').style.color = "#00ffcc";
+        
+        const statusEl = document.getElementById('mikoshi-status');
+        statusEl.textContent = "SOULKILLER COMPLETE";
+        statusEl.style.color = "#00ffcc";
+
+        btn.textContent = "ENGRAM SECURED";
+        btn.style.background = "#333";
+        btn.style.color = "#00ffcc";
+        btn.disabled = true;
+
+        const engramData = { address, engramId, longevitySeq, immortalityProb, timestamp };
+        const checksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(engramData))).substring(0, 16);
+        localStorage.setItem("mikoshi_engram", JSON.stringify({ data: engramData, checksum: checksum }));
+
+        if (typeof logMemory === 'function') logMemory(`MIKOSHI UPLINK: Engram secured. Immortality at ${immortalityProb}%.`, "#ff0055");
+
+    } catch (e) {
+        console.error(e);
+        btn.textContent = "UPLINK FAILED";
+        btn.style.background = "#ff0055";
+        if (e.code === 4001) alert("UPLINK ABORTED: Signature rejected.");
+        else alert(e.message || "Failed to extract engram. Ensure you are on the Base network.");
+    }
+}
+
+function loadMikoshiEngram() {
+    const storedString = localStorage.getItem("mikoshi_engram");
+    if (!storedString) return;
+    try {
+        const stored = JSON.parse(storedString);
+        const data = stored.data;
+        const checksum = stored.checksum;
+        
+        const computedChecksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(data))).substring(0, 16);
+        if (computedChecksum !== checksum) {
+            console.warn("SECURITY ALERT: Engram tampering detected. Wiping Mikoshi data.");
+            localStorage.removeItem("mikoshi_engram");
+            return;
+        }
+
+        document.getElementById('engram-id').textContent = data.engramId;
+        document.getElementById('longevity-seq').textContent = data.longevitySeq;
+        document.getElementById('immortality-prob').textContent = `${data.immortalityProb}%`;
+        document.getElementById('relic-integrity').textContent = "STABLE / ONLINE";
+        document.getElementById('relic-integrity').style.color = "#00ffcc";
+        
+        const statusEl = document.getElementById('mikoshi-status');
+        statusEl.textContent = "ENGRAM LOADED";
+        statusEl.style.color = "#00ffcc";
+
+        const btn = document.getElementById('upload-engram-btn');
+        if(btn) { btn.textContent = "ENGRAM SECURED"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
+
+    } catch (e) {
+        localStorage.removeItem("mikoshi_engram");
+    }
+}
+
+
+// --- GLOBAL SAFETY MODULE (Relaxed GoPlus Risk Engine) ---
+async function runGlobalSafety() {
+    let totalLiquidityUsd = 0;
+    let safeTokens = 0;
+    let totalTokens = 0;
+    let warnings = 0;
+
+    try {
+        const res = await fetch("tokens.json");
+        const tokens = await res.json();
+        totalTokens = tokens.length;
+
+        for (const t of tokens) {
+            let isSafe = true;
+            let hasWarning = false;
+
+            try {
+                const secRes = await fetch(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`);
+                const secJson = await secRes.json();
+                const result = secJson.result?.[t.address.toLowerCase()];
+
+                if (!result) {
+                    isSafe = false;
+                } else {
+                    // ONLY flag as CRITICAL if it's an actual honeypot or extreme tax
+                    if (result.is_honeypot === "1" || result.cannot_sell_all === "1") isSafe = false;
+                    if (result.owner_change_balance === "1" || result.hidden_owner === "1") isSafe = false;
+                    
+                    const sellTax = parseFloat(result.sell_tax || "0") * 100;
+                    const buyTax = parseFloat(result.buy_tax || "0") * 100;
+                    if (sellTax > 10 || buyTax > 10) isSafe = false; 
+                    
+                    // NON-CRITICAL WARNINGS (Does not flag the token as a risk)
+                    if (result.is_open_source === "0") hasWarning = true;
+                    if (result.is_mintable === "1") hasWarning = true;
+                }
+            } catch(e) {
+                isSafe = false;
+            }
+
+            if (isSafe) safeTokens++;
+            if (hasWarning) warnings++;
+
+            // Liquidity Check
+            try {
+                const dexRes = await fetch(`https://api.dexscreener.com/token-pairs/v1/base/${t.address}`);
+                const pairs = await dexRes.json();
+                if (Array.isArray(pairs)) {
+                    const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), { liquidity: { usd: 0 } });
+                    totalLiquidityUsd += Number(best.liquidity?.usd || 0);
+                }
+            } catch(e) {}
+        }
+
+        const contractEl = document.getElementById("global-contract-status");
+        if (contractEl) {
+            if (safeTokens === totalTokens) {
+                if (warnings > 0) {
+                    contractEl.textContent = `${safeTokens}/${totalTokens} SECURE (WARNINGS)`;
+                    contractEl.className = "status-badge pending";
+                    contractEl.style.color = "#ffaa00";
+                    contractEl.style.borderColor = "#ffaa00";
+                } else {
+                    contractEl.textContent = `${safeTokens}/${totalTokens} SECURE`;
+                    contractEl.className = "status-badge verified";
+                    contractEl.style.color = "#00ffcc";
+                    contractEl.style.borderColor = "#00ffcc";
+                }
+            } else {
+                contractEl.textContent = `RISK: ${totalTokens - safeTokens} FLAGGED`;
+                contractEl.className = "status-badge danger";
+                contractEl.style.color = "#ff4444";
+                contractEl.style.borderColor = "#ff4444";
+            }
+        }
+
+        const liqEl = document.getElementById("global-liquidity-status");
+        if (liqEl) {
+            if (totalLiquidityUsd > 10000) {
+                liqEl.textContent = `HEALTHY ($${(totalLiquidityUsd/1000).toFixed(1)}K)`;
+                liqEl.className = "status-badge verified";
+            } else if (totalLiquidityUsd > 1000) {
+                liqEl.textContent = `LOW ($${(totalLiquidityUsd/1000).toFixed(1)}K)`;
+                liqEl.className = "status-badge pending";
+            } else {
+                liqEl.textContent = `CRITICAL (< $1K)`;
+                liqEl.className = "status-badge danger";
+            }
+        }
+    } catch (e) {
+        console.error("Safety Check failed:", e);
+    }
+}
+
+
+// --- ENSURE LISTENERS ARE ATTACHED ---
+document.addEventListener("DOMContentLoaded", () => {
+    const engramBtn = document.getElementById('upload-engram-btn');
+    if (engramBtn) {
+        // Remove any existing listeners to prevent duplicates
+        const newBtn = engramBtn.cloneNode(true);
+        engramBtn.parentNode.replaceChild(newBtn, engramBtn);
+        newBtn.addEventListener('click', initializeSoulkiller);
+    }
+
+    if (typeof loadMikoshiEngram === 'function') loadMikoshiEngram();
+    if (typeof runGlobalSafety === 'function') runGlobalSafety();
+});
