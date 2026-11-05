@@ -176,6 +176,7 @@ function runSafety() {
 
 // ============ BOOT ============
 window.addEventListener("DOMContentLoaded", () => {
+    startEbankEngine();
     startSimulations();
     generateAutoEngram();
     loadGrids();
@@ -221,3 +222,35 @@ document.getElementById('connect-wallet-btn')?.addEventListener('click', async (
         alert("Connection failed.");
     }
 });
+
+
+// --- CLEAN EBANK ENGINE (Bulletproof) ---
+let ebankPrincipal = 1000.00;
+let ebankYield = 0.00000000;
+const SECONDS_IN_YEAR = 31536000;
+
+function startEbankEngine() {
+    setInterval(() => {
+        const cohEl = document.getElementById("val-coherence");
+        const coherence = cohEl ? parseFloat(cohEl.textContent) || 0.9356 : 0.9356;
+        const apy = 0.15 + (coherence * 0.05);
+        
+        const apyEl = document.getElementById("ebank-apy");
+        if (apyEl) apyEl.textContent = `${(apy * 100).toFixed(2)}%`;
+
+        const perSecondRate = Math.pow(1 + apy, 1 / SECONDS_IN_YEAR) - 1;
+        const earnedThisSecond = ebankPrincipal * perSecondRate;
+        
+        ebankYield += earnedThisSecond;
+        ebankPrincipal += earnedThisSecond;
+
+        const pEl = document.getElementById("ebank-principal");
+        const yEl = document.getElementById("ebank-yield");
+        
+        if (pEl) pEl.textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
+        if (yEl) yEl.textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
+
+        const immEl = document.getElementById("immunity-score");
+        if (immEl) immEl.textContent = `${(99.8 - (1 - coherence) * 10).toFixed(2)}%`;
+    }, 1000);
+}
