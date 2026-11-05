@@ -27,6 +27,21 @@ const MINING_DATA = [
 
 function $(id) { return document.getElementById(id); }
 
+// --- WALLET CONNECT ---
+let connectedWallet = null;
+async function connectWallet() {
+    if (typeof window.ethereum === 'undefined') return alert("Please install MetaMask or Coinbase Wallet.");
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        connectedWallet = accounts[0];
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+        if($("connect-wallet-btn")) { $("connect-wallet-btn").textContent = "Connected"; $("connect-wallet-btn").style.background = "var(--dim)"; }
+        if($("wallet-address")) $("wallet-address").textContent = `${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
+        if (typeof logMemory === 'function') logMemory(`Wallet connected: ${connectedWallet.slice(0,6)}...`, "#00ffcc");
+    } catch (e) { console.error(e); }
+}
+
 // --- MEMORY LOG ---
 function loadMemory() {
     const mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
@@ -68,70 +83,18 @@ function startSimulations() {
     }, 15000);
 }
 
-// --- EBANK YIELD ENGINE ---
-let ebankPrincipal = 1000.00;
-let ebankYield = 0.00000000;
-const SECONDS_IN_YEAR = 31536000;
+// --- EBANK YIELD ---
+let ebankPrincipal = 1000.00, ebankYield = 0.00000000;
 function startEbankEngine() {
     setInterval(() => {
         const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
         const apy = 0.15 + (coh * 0.05);
-        const perSec = Math.pow(1 + apy, 1 / SECONDS_IN_YEAR) - 1;
+        const perSec = Math.pow(1 + apy, 1 / 31536000) - 1;
         const earned = ebankPrincipal * perSec;
-        ebankYield += earned;
-        ebankPrincipal += earned;
+        ebankYield += earned; ebankPrincipal += earned;
         if($("ebank-principal")) $("ebank-principal").textContent = `${ebankPrincipal.toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4})} PIDX`;
         if($("ebank-yield")) $("ebank-yield").textContent = `+ ${ebankYield.toLocaleString(undefined, {minimumFractionDigits: 8, maximumFractionDigits: 8})} PIDX`;
     }, 1000);
-}
-
-// --- GO PLUS SECURITY SCANNER (Base Chain 8453) ---
-async function scanTokenSecurity(token) {
-    const badge = $(`sec-${token.id}`);
-    if (!badge) return;
-    try {
-        const res = await fetch(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`);
-        const json = await res.json();
-        const result = json.result?.[token.address.toLowerCase()];
-        if (!result) { badge.textContent = "🛡️ No data"; return; }
-        const isHoneypot = result.is_honeypot === "1" || result.cannot_sell_all === "1";
-        const buyTax = parseFloat(result.buy_tax || "0") * 100;
-        const sellTax = parseFloat(result.sell_tax || "0") * 100;
-        if (isHoneypot) { badge.textContent = "🚨 HONEYPOT"; badge.style.color = "#ff4444"; }
-        else if (sellTax > 10 || buyTax > 10) { badge.textContent = `⚠️ Tax ${sellTax.toFixed(1)}%`; badge.style.color = "#ffaa00"; }
-        else { badge.textContent = "✅ Safe"; badge.style.color = "#00ffcc"; }
-    } catch (e) { badge.textContent = "🛡️ Error"; }
-}
-
-// --- LOAD TOKENS & TRIGGER SCANS ---
-async function loadTokens() {
-    let tokens = FALLBACK_TOKENS;
-    try { const r = await fetch("tokens.json"); if(r.ok) tokens = await r.json(); } catch(e) {}
-    const grid = $("token-grid"); if (!grid) return;
-    grid.innerHTML = "";
-    tokens.forEach(t => {
-        const el = document.createElement("div"); el.className = "card";
-        el.innerHTML = `<h3>${t.symbol} <span class="freq">${t.freq}</span></h3><p class="name">${t.name}</p><p class="addr">${t.address}</p><p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p><p class="security-status" id="sec-${t.id}" style="font-size:0.75rem;color:var(--dim);">🛡️ Security: scanning...</p><div class="chart-container" id="chart-${t.id}" style="height:180px;margin-top:10px;border:1px solid var(--border);border-radius:8px;overflow:hidden;"></div><div class="links"><a href="https://app.uniswap.org/swap?chain=base&outputCurrency=${t.address}" target="_blank" class="swap-btn">🔄 Swap</a><a href="https://basescan.org/token/${t.address}" target="_blank">BaseScan</a></div>`;
-        grid.appendChild(el);
-    });
-    tokens.forEach(async t => {
-        // TVL
-        try { const r = await fetch(`${DEX_API}${t.address}`); const p = await r.json(); if (p && p.length > 0) { const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]); if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; } } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } } } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
-        // Security
-        await scanTokenSecurity(t);
-    });
-}
-
-// --- GLOBAL SAFETY ---
-function runSafety() {
-    if($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
-    if($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
-}
-
-// --- VAULTS & MINING ---
-function loadGrids() {
-    if($("vault-grid")) { $("vault-grid").innerHTML = ""; VAULTS_DATA.forEach(v => { const el = document.createElement("div"); el.className = "card small vault-card"; el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`; $("vault-grid").appendChild(el); }); }
-    if($("mining-grid")) { $("mining-grid").innerHTML = ""; MINING_DATA.forEach(p => { const el = document.createElement("div"); el.className = "card small mining-card"; el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`; $("mining-grid").appendChild(el); }); }
 }
 
 // --- MIKOSHI AUTO-ENGRAM ---
@@ -158,9 +121,108 @@ function renderEngramUI(id, seq, prob) {
     if($('upload-engram-btn')) $('upload-engram-btn').style.display = "none";
 }
 
+// --- RESONANCE PROTOCOL (Guest Mode Enabled) ---
+let resonanceTimerInterval = null;
+function playResonanceSound() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.setValueAtTime(528, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1056, ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+        osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 1.5);
+    } catch(e) {}
+}
+function detectNetworkBand() {
+    if (navigator.connection) {
+        const type = navigator.connection.type, eff = navigator.connection.effectiveType || "";
+        if (type === 'wifi' || type === 'ethernet') return "WIFI 6E / 5G";
+        if (type === 'cellular') { if (eff === '5g' || eff === '4g') return "5G ULTRA"; if (eff === '3g') return "3G LEGACY"; if (eff === '2g') return "2G DECAY"; }
+    }
+    return "WIFI/5G (EST)";
+}
+function startResonanceTimer(startTime) {
+    if (resonanceTimerInterval) clearInterval(resonanceTimerInterval);
+    const el = $("resonance-longevity");
+    resonanceTimerInterval = setInterval(() => {
+        const diff = Math.floor((Date.now() - startTime) / 1000);
+        if (el) el.textContent = `${String(Math.floor(diff/3600)).padStart(2,'0')}:${String(Math.floor((diff%3600)/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}`;
+    }, 1000);
+}
+async function initiateResonance() {
+    const humanId = $("resonance-human-id")?.value.trim();
+    if (!humanId) return alert("Please enter a Human Identity Code.");
+    let walletSeed = connectedWallet;
+    let isGuest = false;
+    if (!walletSeed) { isGuest = true; walletSeed = localStorage.getItem("guest_soul_seed") || ("GUEST_" + Math.random().toString(36).substring(2) + Date.now()); localStorage.setItem("guest_soul_seed", walletSeed); }
+    
+    const btn = $("resonance-initiate-btn"); btn.textContent = "CALIBRATING..."; btn.style.background = "#ffaa00";
+    setTimeout(() => {
+        try {
+            const hash = ethers.keccak256(ethers.toUtf8Bytes(walletSeed + "|" + humanId + "|RESONANCE"));
+            const freq = (2400 + ((parseInt(hash.substring(6, 10), 16) % 5000) / 5000) * 1500).toFixed(3);
+            const band = detectNetworkBand();
+            if($('resonance-freq')) $('resonance-freq').textContent = `${freq} MHz`;
+            if($('resonance-band')) { $('resonance-band').textContent = band; $('resonance-band').style.color = "#00ffcc"; }
+            if($('resonance-soul-status')) { $('resonance-soul-status').textContent = isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL"; $('resonance-soul-status').style.color = "#00ffcc"; }
+            if($('resonance-status')) { $('resonance-status').textContent = "PROTOCOL ACTIVE"; $('resonance-status').style.color = "#00ffcc"; }
+            playResonanceSound(); const startTime = Date.now(); startResonanceTimer(startTime);
+            btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; if($("resonance-human-id")) $("resonance-human-id").disabled = true;
+            logMemory(`Resonance Bound (${isGuest ? 'Guest' : 'Wallet'}). Band: ${band}. Freq: ${freq} MHz.`, "#00ffcc");
+            localStorage.setItem("ebank_resonance_data", JSON.stringify({ humanId, freq, band, startTime, isGuest }));
+        } catch(e) { btn.textContent = "ERROR"; btn.style.background = "#ff4444"; }
+    }, 1500);
+}
+
+// --- TOKENS & SECURITY ---
+async function loadTokens() {
+    let tokens = FALLBACK_TOKENS;
+    try { const r = await fetch("tokens.json"); if(r.ok) tokens = await r.json(); } catch(e) {}
+    const grid = $("token-grid"); if (!grid) return;
+    grid.innerHTML = "";
+    tokens.forEach(t => {
+        const el = document.createElement("div"); el.className = "card";
+        el.innerHTML = `<h3>${t.symbol} <span class="freq">${t.freq}</span></h3><p class="name">${t.name}</p><p class="addr">${t.address}</p><p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p><p class="security-status" id="sec-${t.id}" style="font-size:0.75rem;color:var(--dim);">🛡️ Security: scanning...</p><div class="links"><a href="https://app.uniswap.org/swap?chain=base&outputCurrency=${t.address}" target="_blank" class="swap-btn">🔄 Swap</a><a href="https://basescan.org/token/${t.address}" target="_blank">BaseScan</a></div>`;
+        grid.appendChild(el);
+    });
+    tokens.forEach(async t => {
+        try { const r = await fetch(`${DEX_API}${t.address}`); const p = await r.json(); if (p && p.length > 0) { const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]); if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; } } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } } } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
+        try { const r = await fetch(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`); const j = await r.json(); const res = j.result?.[t.address.toLowerCase()]; if(res && $(`sec-${t.id}`)) { const h = res.is_honeypot === "1" || res.cannot_sell_all === "1"; $(`sec-${t.id}`).textContent = h ? "🚨 HONEYPOT" : "✅ Safe"; $(`sec-${t.id}`).style.color = h ? "#ff4444" : "#00ffcc"; } } catch(e) {}
+    });
+}
+function runSafety() {
+    if($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
+    if($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
+}
+
+// --- GRIDS ---
+function loadGrids() {
+    if($("vault-grid")) { $("vault-grid").innerHTML = ""; VAULTS_DATA.forEach(v => { const el = document.createElement("div"); el.className = "card small vault-card"; el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`; $("vault-grid").appendChild(el); }); }
+    if($("mining-grid")) { $("mining-grid").innerHTML = ""; MINING_DATA.forEach(p => { const el = document.createElement("div"); el.className = "card small mining-card"; el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`; $("mining-grid").appendChild(el); }); }
+}
+
+// --- BOTS ---
+let dcaActive = false, gridActive = false, dcaPnl = 0, gridPnl = 0, dcaTrades = 0, gridTrades = 0, dcaWin = 0, gridWin = 0;
+function updateBotsUI() {
+    if($("dca-status")) { $("dca-status").textContent = dcaActive ? "ACTIVE" : "PAUSED"; $("dca-status").style.color = dcaActive ? "#00ffcc" : "#ffaa00"; $("dca-status").style.borderColor = dcaActive ? "#00ffcc" : "#ffaa00"; }
+    if($("dca-btn")) { $("dca-btn").textContent = dcaActive ? "Stop Bot" : "Start Bot"; $("dca-btn").style.background = dcaActive ? "#ff4444" : "#00ffcc"; $("dca-btn").style.color = dcaActive ? "#fff" : "#000"; }
+    if($("dca-pnl")) $("dca-pnl").textContent = `+$${dcaPnl.toFixed(2)}`; if($("dca-trades")) $("dca-trades").textContent = dcaTrades; if($("dca-win")) $("dca-win").textContent = `${dcaWin.toFixed(1)}%`;
+    if($("grid-status")) { $("grid-status").textContent = gridActive ? "ACTIVE" : "PAUSED"; $("grid-status").style.color = gridActive ? "#00ffcc" : "#ffaa00"; $("grid-status").style.borderColor = gridActive ? "#00ffcc" : "#ffaa00"; }
+    if($("grid-btn")) { $("grid-btn").textContent = gridActive ? "Stop Bot" : "Start Bot"; $("grid-btn").style.background = gridActive ? "#ff4444" : "#00ffcc"; $("grid-btn").style.color = gridActive ? "#fff" : "#000"; }
+    if($("grid-pnl")) $("grid-pnl").textContent = `+$${gridPnl.toFixed(2)}`; if($("grid-trades")) $("grid-trades").textContent = gridTrades; if($("grid-win")) $("grid-win").textContent = `${gridWin.toFixed(1)}%`;
+}
+function startBotsEngine() {
+    updateBotsUI();
+    setInterval(() => {
+        if (dcaActive) { dcaPnl += Math.random() * 2.5 - 0.5; dcaTrades += Math.floor(Math.random() * 3); dcaWin = 70 + Math.random() * 15; updateBotsUI(); logMemory(`DCA Bot executed trade. PnL: $${dcaPnl.toFixed(2)}`, "#00ffcc"); }
+        if (gridActive) { gridPnl += Math.random() * 1.5 - 0.3; gridTrades += Math.floor(Math.random() * 2); gridWin = 60 + Math.random() * 20; updateBotsUI(); }
+    }, 3000);
+    $("dca-btn")?.addEventListener("click", () => { if (!connectedWallet) return alert("Connect wallet first."); dcaActive = !dcaActive; updateBotsUI(); logMemory(`DCA Bot ${dcaActive ? 'Started' : 'Stopped'}.`, dcaActive ? "#00ffcc" : "#ff4444"); });
+    $("grid-btn")?.addEventListener("click", () => { if (!connectedWallet) return alert("Connect wallet first."); gridActive = !gridActive; updateBotsUI(); logMemory(`Grid Bot ${gridActive ? 'Started' : 'Stopped'}.`, gridActive ? "#00ffcc" : "#ff4444"); });
+}
+
 // --- AGI BRAIN ---
 function startAGIBrain() {
-    const canvas = document.getElementById('agi-canvas'); if (!canvas || typeof THREE === 'undefined') return;
+    const canvas = $('agi-canvas'); if (!canvas || typeof THREE === 'undefined') return;
     const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight); renderer.setPixelRatio(window.devicePixelRatio); camera.position.z = 20;
@@ -174,392 +236,30 @@ function startAGIBrain() {
 
 // --- BOOT ---
 window.addEventListener("DOMContentLoaded", () => {
+    $("connect-wallet-btn")?.addEventListener("click", connectWallet);
+    $("resonance-initiate-btn")?.addEventListener("click", initiateResonance);
+    
     startSimulations();
     startEbankEngine();
     generateAutoEngram();
     loadGrids();
     loadTokens();
     runSafety();
+    startBotsEngine();
     startAGIBrain();
-});
-
-
-// --- WALLET CONNECT ---
-let connectedWallet = null;
-
-async function connectWallet() {
-    if (typeof window.ethereum === 'undefined') {
-        return alert("Please install MetaMask or Coinbase Wallet.");
-    }
-    try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        connectedWallet = accounts[0];
-        
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x2105') {
-            try {
-                await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
-            } catch (e) {
-                alert("Please switch to Base network manually.");
-                return;
-            }
-        }
-
-        const btn = document.getElementById("connect-wallet-btn");
-        const display = document.getElementById("wallet-address");
-        if(btn) { btn.textContent = "Connected"; btn.style.background = "var(--dim)"; }
-        if(display) display.textContent = `${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`;
-        
-        if (typeof logMemory === 'function') logMemory(`Wallet connected: ${connectedWallet.slice(0,6)}...${connectedWallet.slice(-4)}`, "#00ffcc");
-    } catch (e) {
-        console.error(e);
-    }
-}
-document.getElementById('connect-wallet-btn')?.addEventListener('click', connectWallet);
-
-
-// --- TRADING BOTS SIMULATION ---
-let dcaActive = false;
-let gridActive = false;
-let dcaPnl = 0.00;
-let gridPnl = 0.00;
-let dcaTrades = 0;
-let gridTrades = 0;
-let dcaWin = 0;
-let gridWin = 0;
-
-function updateBotsUI() {
-    const dcaStatus = document.getElementById("dca-status");
-    const dcaBtn = document.getElementById("dca-btn");
-    if (dcaStatus) {
-        if (dcaActive) {
-            dcaStatus.textContent = "ACTIVE"; dcaStatus.style.color = "#00ffcc"; dcaStatus.style.borderColor = "#00ffcc";
-            if (dcaBtn) { dcaBtn.textContent = "Stop Bot"; dcaBtn.style.background = "#ff4444"; dcaBtn.style.color = "#fff"; }
-        } else {
-            dcaStatus.textContent = "PAUSED"; dcaStatus.style.color = "#ffaa00"; dcaStatus.style.borderColor = "#ffaa00";
-            if (dcaBtn) { dcaBtn.textContent = "Start Bot"; dcaBtn.style.background = "#00ffcc"; dcaBtn.style.color = "#000"; }
-        }
-        if (document.getElementById("dca-pnl")) document.getElementById("dca-pnl").textContent = `+$${dcaPnl.toFixed(2)}`;
-        if (document.getElementById("dca-trades")) document.getElementById("dca-trades").textContent = dcaTrades;
-        if (document.getElementById("dca-win")) document.getElementById("dca-win").textContent = `${dcaWin.toFixed(1)}%`;
-    }
-
-    const gridStatus = document.getElementById("grid-status");
-    const gridBtn = document.getElementById("grid-btn");
-    if (gridStatus) {
-        if (gridActive) {
-            gridStatus.textContent = "ACTIVE"; gridStatus.style.color = "#00ffcc"; gridStatus.style.borderColor = "#00ffcc";
-            if (gridBtn) { gridBtn.textContent = "Stop Bot"; gridBtn.style.background = "#ff4444"; gridBtn.style.color = "#fff"; }
-        } else {
-            gridStatus.textContent = "PAUSED"; gridStatus.style.color = "#ffaa00"; gridStatus.style.borderColor = "#ffaa00";
-            if (gridBtn) { gridBtn.textContent = "Start Bot"; gridBtn.style.background = "#00ffcc"; gridBtn.style.color = "#000"; }
-        }
-        if (document.getElementById("grid-pnl")) document.getElementById("grid-pnl").textContent = `+$${gridPnl.toFixed(2)}`;
-        if (document.getElementById("grid-trades")) document.getElementById("grid-trades").textContent = gridTrades;
-        if (document.getElementById("grid-win")) document.getElementById("grid-win").textContent = `${gridWin.toFixed(1)}%`;
-    }
-}
-
-function startBotsEngine() {
-    updateBotsUI();
-
-    setInterval(() => {
-        if (dcaActive) {
-            dcaPnl += Math.random() * 2.5 - 0.5;
-            dcaTrades += Math.floor(Math.random() * 3);
-            dcaWin = 70 + Math.random() * 15;
-            updateBotsUI();
-            if (typeof logMemory === 'function') logMemory(`DCA Bot executed trade. PnL: $${dcaPnl.toFixed(2)}`, "#00ffcc");
-        }
-        if (gridActive) {
-            gridPnl += Math.random() * 1.5 - 0.3;
-            gridTrades += Math.floor(Math.random() * 2);
-            gridWin = 60 + Math.random() * 20;
-            updateBotsUI();
-        }
-    }, 3000);
-
-    document.getElementById("dca-btn")?.addEventListener("click", () => {
-        if (!connectedWallet) return alert("Please connect your wallet first to start the bot.");
-        dcaActive = !dcaActive;
-        updateBotsUI();
-        if (typeof logMemory === 'function') logMemory(`DCA Bot ${dcaActive ? 'Started' : 'Stopped'}.`, dcaActive ? "#00ffcc" : "#ff4444");
-    });
-
-    document.getElementById("grid-btn")?.addEventListener("click", () => {
-        if (!connectedWallet) return alert("Please connect your wallet first to start the bot.");
-        gridActive = !gridActive;
-        updateBotsUI();
-        if (typeof logMemory === 'function') logMemory(`Grid Bot ${gridActive ? 'Started' : 'Stopped'}.`, gridActive ? "#00ffcc" : "#ff4444");
-    });
-}
-
-
-// ==========================================
-// START_RESONANCE_PROTOCOL (Isolated, does not touch Mikoshi)
-// ==========================================
-let resonanceTimerInterval = null;
-
-function playResonanceSoundIsolated() {
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(528, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1056, ctx.currentTime + 0.5);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 1.5);
-    } catch(e) {}
-}
-
-function detectNetworkBandIsolated() {
-    if (navigator.connection) {
-        const type = navigator.connection.type;
-        const eff = navigator.connection.effectiveType || "";
-        if (type === 'wifi' || type === 'ethernet') return "WIFI 6E / 5G";
-        if (type === 'cellular') {
-            if (eff === '5g' || eff === '4g') return "5G ULTRA";
-            if (eff === '3g') return "3G LEGACY";
-            if (eff === '2g') return "2G DECAY";
-        }
-    }
-    return "WIFI/5G (EST)";
-}
-
-function startResonanceTimerIsolated(startTime) {
-    if (resonanceTimerInterval) clearInterval(resonanceTimerInterval);
-    const el = document.getElementById("resonance-longevity");
-    resonanceTimerInterval = setInterval(() => {
-        const diff = Math.floor((Date.now() - startTime) / 1000);
-        const h = String(Math.floor(diff / 3600)).padStart(2, '0');
-        const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
-        const s = String(diff % 60).padStart(2, '0');
-        if (el) el.textContent = `${h}:${m}:${s}`;
-    }, 1000);
-}
-
-async function initiateResonanceIsolated() {
-    const humanId = document.getElementById("resonance-human-id")?.value.trim();
-    if (!connectedWallet) return alert("Please connect your wallet in the header first.");
-    if (!humanId) return alert("Please enter a Human Identity Code (e.g., NHS barcode).");
-
-    const btn = document.getElementById("resonance-initiate-btn");
-    btn.textContent = "CALIBRATING RESONANCE...";
-    btn.style.background = "#ffaa00";
-
-    setTimeout(() => {
+    
+    // Restore resonance state if saved
+    const savedRes = localStorage.getItem("ebank_resonance_data");
+    if (savedRes) {
         try {
-            const combinedSeed = connectedWallet + "|" + humanId + "|RESONANCE";
-            const hash = ethers.keccak256(ethers.toUtf8Bytes(combinedSeed));
-
-            const freqBase = parseInt(hash.substring(6, 10), 16) % 5000;
-            const resonanceHz = (2400 + (freqBase / 5000) * 1500).toFixed(3);
-            const networkBand = detectNetworkBandIsolated();
-
-            if (document.getElementById('resonance-freq')) document.getElementById('resonance-freq').textContent = `${resonanceHz} MHz`;
-            if (document.getElementById('resonance-band')) {
-                document.getElementById('resonance-band').textContent = networkBand;
-                document.getElementById('resonance-band').style.color = "#00ffcc";
-            }
-            if (document.getElementById('resonance-soul-status')) {
-                document.getElementById('resonance-soul-status').textContent = "IMMORTAL";
-                document.getElementById('resonance-soul-status').style.color = "#00ffcc";
-            }
-            if (document.getElementById('resonance-status')) {
-                document.getElementById('resonance-status').textContent = "PROTOCOL ACTIVE";
-                document.getElementById('resonance-status').style.color = "#00ffcc";
-            }
-
-            playResonanceSoundIsolated();
-            const startTime = Date.now();
-            startResonanceTimerIsolated(startTime);
-
-            btn.textContent = "IMMORTALITY ACTIVE";
-            btn.style.background = "#333";
-            btn.style.color = "#00ffcc";
-            btn.disabled = true;
-            if (document.getElementById("resonance-human-id")) document.getElementById("resonance-human-id").disabled = true;
-
-            if (typeof logMemory === 'function') logMemory(`Resonance Bound: ${humanId}. Band: ${networkBand}. Freq: ${resonanceHz} MHz.`, "#00ffcc");
-
-            localStorage.setItem("ebank_resonance_data", JSON.stringify({ humanId, freq: resonanceHz, band: networkBand, startTime }));
-
-        } catch(e) {
-            btn.textContent = "PROTOCOL ERROR";
-            btn.style.background = "#ff4444";
-            console.error(e);
-        }
-    }, 2000);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("resonance-initiate-btn")?.addEventListener("click", initiateResonanceIsolated);
-
-    // Restore state if previously initialized
-    const saved = localStorage.getItem("ebank_resonance_data");
-    if (saved) {
-        const data = JSON.parse(saved);
-        const btn = document.getElementById("resonance-initiate-btn");
-        const input = document.getElementById("resonance-human-id");
-        if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
-        if (input) { input.value = data.humanId; input.disabled = true; }
-
-        if (document.getElementById('resonance-freq')) document.getElementById('resonance-freq').textContent = `${data.freq} MHz`;
-        if (document.getElementById('resonance-band')) {
-            document.getElementById('resonance-band').textContent = data.band;
-            document.getElementById('resonance-band').style.color = "#00ffcc";
-        }
-        if (document.getElementById('resonance-soul-status')) {
-            document.getElementById('resonance-soul-status').textContent = "IMMORTAL";
-            document.getElementById('resonance-soul-status').style.color = "#00ffcc";
-        }
-        if (document.getElementById('resonance-status')) {
-            document.getElementById('resonance-status').textContent = "PROTOCOL ACTIVE";
-            document.getElementById('resonance-status').style.color = "#00ffcc";
-        }
-        if (data.startTime) startResonanceTimerIsolated(data.startTime);
-    }
-});
-
-
-// --- RESONANCE PROTOCOL (Guest Mode Enabled) ---
-let resonanceTimerInterval = null;
-
-function playResonanceSoundIsolated() {
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(528, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1056, ctx.currentTime + 0.5);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 1.5);
-    } catch(e) {}
-}
-
-function detectNetworkBandIsolated() {
-    if (navigator.connection) {
-        const type = navigator.connection.type;
-        const eff = navigator.connection.effectiveType || "";
-        if (type === 'wifi' || type === 'ethernet') return "WIFI 6E / 5G";
-        if (type === 'cellular') {
-            if (eff === '5g' || eff === '4g') return "5G ULTRA";
-            if (eff === '3g') return "3G LEGACY";
-            if (eff === '2g') return "2G DECAY";
-        }
-    }
-    return "WIFI/5G (EST)";
-}
-
-function startResonanceTimerIsolated(startTime) {
-    if (resonanceTimerInterval) clearInterval(resonanceTimerInterval);
-    const el = document.getElementById("resonance-longevity");
-    resonanceTimerInterval = setInterval(() => {
-        const diff = Math.floor((Date.now() - startTime) / 1000);
-        const h = String(Math.floor(diff / 3600)).padStart(2, '0');
-        const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
-        const s = String(diff % 60).padStart(2, '0');
-        if (el) el.textContent = `${h}:${m}:${s}`;
-    }, 1000);
-}
-
-async function initiateResonanceIsolated() {
-    const humanId = document.getElementById("resonance-human-id")?.value.trim();
-    if (!humanId) return alert("Please enter a Human Identity Code (e.g., NHS barcode).");
-
-    // GUEST MODE FALLBACK
-    let walletSeed = connectedWallet;
-    let isGuest = false;
-    if (!walletSeed) {
-        isGuest = true;
-        // Create a persistent guest seed if it doesn't exist
-        let guestSeed = localStorage.getItem("guest_soul_seed");
-        if (!guestSeed) {
-            guestSeed = "GUEST_" + Math.random().toString(36).substring(2) + Date.now();
-            localStorage.setItem("guest_soul_seed", guestSeed);
-        }
-        walletSeed = guestSeed;
-    }
-
-    const btn = document.getElementById("resonance-initiate-btn");
-    btn.textContent = "CALIBRATING RESONANCE...";
-    btn.style.background = "#ffaa00";
-
-    setTimeout(() => {
-        try {
-            const combinedSeed = walletSeed + "|" + humanId + "|RESONANCE";
-            const hash = ethers.keccak256(ethers.toUtf8Bytes(combinedSeed));
-
-            const freqBase = parseInt(hash.substring(6, 10), 16) % 5000;
-            const resonanceHz = (2400 + (freqBase / 5000) * 1500).toFixed(3);
-            const networkBand = detectNetworkBandIsolated();
-
-            if (document.getElementById('resonance-freq')) document.getElementById('resonance-freq').textContent = `${resonanceHz} MHz`;
-            if (document.getElementById('resonance-band')) {
-                document.getElementById('resonance-band').textContent = networkBand;
-                document.getElementById('resonance-band').style.color = "#00ffcc";
-            }
-            if (document.getElementById('resonance-soul-status')) {
-                document.getElementById('resonance-soul-status').textContent = isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL";
-                document.getElementById('resonance-soul-status').style.color = "#00ffcc";
-            }
-            if (document.getElementById('resonance-status')) {
-                document.getElementById('resonance-status').textContent = "PROTOCOL ACTIVE";
-                document.getElementById('resonance-status').style.color = "#00ffcc";
-            }
-
-            playResonanceSoundIsolated();
-            const startTime = Date.now();
-            startResonanceTimerIsolated(startTime);
-
-            btn.textContent = "IMMORTALITY ACTIVE";
-            btn.style.background = "#333";
-            btn.style.color = "#00ffcc";
-            btn.disabled = true;
-            if (document.getElementById("resonance-human-id")) document.getElementById("resonance-human-id").disabled = true;
-
-            if (typeof logMemory === 'function') logMemory(`Resonance Bound (${isGuest ? 'Guest' : 'Wallet'}). Band: ${networkBand}. Freq: ${resonanceHz} MHz.`, "#00ffcc");
-
-            localStorage.setItem("ebank_resonance_data", JSON.stringify({ humanId, freq: resonanceHz, band: networkBand, startTime, isGuest }));
-
-        } catch(e) {
-            btn.textContent = "PROTOCOL ERROR";
-            btn.style.background = "#ff4444";
-            console.error(e);
-        }
-    }, 2000);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("resonance-initiate-btn")?.addEventListener("click", initiateResonanceIsolated);
-
-    const saved = localStorage.getItem("ebank_resonance_data");
-    if (saved) {
-        const data = JSON.parse(saved);
-        const btn = document.getElementById("resonance-initiate-btn");
-        const input = document.getElementById("resonance-human-id");
-        if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
-        if (input) { input.value = data.humanId; input.disabled = true; }
-
-        if (document.getElementById('resonance-freq')) document.getElementById('resonance-freq').textContent = `${data.freq} MHz`;
-        if (document.getElementById('resonance-band')) {
-            document.getElementById('resonance-band').textContent = data.band;
-            document.getElementById('resonance-band').style.color = "#00ffcc";
-        }
-        if (document.getElementById('resonance-soul-status')) {
-            document.getElementById('resonance-soul-status').textContent = data.isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL";
-            document.getElementById('resonance-soul-status').style.color = "#00ffcc";
-        }
-        if (document.getElementById('resonance-status')) {
-            document.getElementById('resonance-status').textContent = "PROTOCOL ACTIVE";
-            document.getElementById('resonance-status').style.color = "#00ffcc";
-        }
-        if (data.startTime) startResonanceTimerIsolated(data.startTime);
+            const data = JSON.parse(savedRes);
+            if($('resonance-freq')) $('resonance-freq').textContent = `${data.freq} MHz`;
+            if($('resonance-band')) { $('resonance-band').textContent = data.band; $('resonance-band').style.color = "#00ffcc"; }
+            if($('resonance-soul-status')) { $('resonance-soul-status').textContent = data.isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL"; $('resonance-soul-status').style.color = "#00ffcc"; }
+            if($('resonance-status')) { $('resonance-status').textContent = "PROTOCOL ACTIVE"; $('resonance-status').style.color = "#00ffcc"; }
+            const btn = $("resonance-initiate-btn"); if(btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
+            const input = $("resonance-human-id"); if(input) { input.value = data.humanId; input.disabled = true; }
+            if(data.startTime) startResonanceTimer(data.startTime);
+        } catch(e) {}
     }
 });
