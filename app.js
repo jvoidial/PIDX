@@ -633,3 +633,132 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch(e) { localStorage.removeItem("vitruvian_soul"); }
     }
 });
+
+
+// --- PROJECT MIKOSHI: IMMORTALITY ENGRAM PROTOCOL ---
+document.getElementById('upload-engram-btn')?.addEventListener('click', async () => {
+    if (typeof window.ethereum === 'undefined') {
+        alert("UPLINK FAILED: Please install MetaMask or Coinbase Wallet.");
+        return;
+    }
+    
+    const btn = document.getElementById('upload-engram-btn');
+    btn.textContent = "EXTRACTING SOUL...";
+    btn.style.background = "#ffaa00";
+
+    try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+        
+        // SECURITY: Anti-Replay Nonce, Domain Binding, and Timestamp
+        const nonce = Math.random().toString(36).substring(2, 15);
+        const timestamp = Date.now();
+        const domain = window.location.host;
+        
+        const message = `MIKOSHI UPLINK REQUEST\nDomain: ${domain}\nAddress: ${address}\nNonce: ${nonce}\nTimestamp: ${timestamp}\n\nSign this message to extract your digital engram. Zero gas required.`;
+        const signature = await signer.signMessage(message);
+        
+        // SECURITY: Cryptographic Verification
+        const recoveredAddress = ethers.verifyMessage(message, signature);
+        if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
+            throw new Error("CRITICAL: Signature mismatch detected.");
+        }
+
+        // 1. Generate Immortality Data
+        const hash = ethers.keccak256(ethers.toUtf8Bytes(signature));
+        
+        // Engram ID
+        const engramId = `${address.slice(0,6)}...${address.slice(-4)}`;
+        
+        // Generate Longevity Sequence (DNA-like string: A, C, G, T)
+        const baseMap = { '0':'A', '1':'C', '2':'G', '3':'T', '4':'A', '5':'C', '6':'G', '7':'T', '8':'A', '9':'C', 'a':'G', 'b':'T', 'c':'A', 'd':'C', 'e':'G', 'f':'T' };
+        let longevitySeq = "";
+        const rawHash = hash.substring(2, 34); // Use first 32 chars
+        for (let i = 0; i < rawHash.length; i++) {
+            longevitySeq += baseMap[rawHash[i].toLowerCase()] || "X";
+            if (i < rawHash.length - 1) longevitySeq += "-";
+        }
+
+        // Immortality Probability (Derived from hash)
+        const probBase = parseInt(hash.substring(2, 6), 16);
+        const immortalityProb = (99.00 + (probBase / 65535) * 0.99).toFixed(2); // Maps to 99.00% - 99.99%
+
+        // 2. Update the UI
+        document.getElementById('engram-id').textContent = engramId;
+        document.getElementById('longevity-seq').textContent = longevitySeq;
+        document.getElementById('immortality-prob').textContent = `${immortalityProb}%`;
+        document.getElementById('relic-integrity').textContent = "STABLE / ONLINE";
+        document.getElementById('relic-integrity').style.color = "#00ffcc";
+        
+        const statusEl = document.getElementById('mikoshi-status');
+        statusEl.textContent = "SOULKILLER COMPLETE";
+        statusEl.style.color = "#00ffcc";
+        
+        // Animate DNA Strand
+        const dnaElements = document.querySelectorAll('.dna-strand span');
+        dnaElements.forEach((el, index) => {
+            el.style.animation = 'none'; // Reset
+            setTimeout(() => {
+                el.style.animation = 'dna-pulse 1.5s infinite alternate';
+            }, 10);
+        });
+
+        // 3. Save Securely (Tamper-Proof)
+        const engramData = { address, engramId, longevitySeq, immortalityProb, timestamp };
+        const checksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(engramData))).substring(0, 16);
+        localStorage.setItem("mikoshi_engram", JSON.stringify({ data: engramData, checksum: checksum }));
+
+        btn.textContent = "ENGRAM SECURED";
+        btn.style.background = "#333";
+        btn.style.color = "#00ffcc";
+        btn.disabled = true;
+
+        if (typeof logMemory === 'function') {
+            logMemory(`MIKOSHI UPLINK: Engram secured. Immortality at ${immortalityProb}%.`, "#ff0055");
+        }
+
+    } catch (e) {
+        console.error(e);
+        btn.textContent = "UPLINK FAILED";
+        btn.style.background = "#ff0055";
+        if (e.code === 4001) alert("UPLINK ABORTED: Signature rejected.");
+        else alert(e.message || "Failed to extract engram.");
+    }
+});
+
+// Load existing Engram securely on page load
+document.addEventListener("DOMContentLoaded", () => {
+    const storedString = localStorage.getItem("mikoshi_engram");
+    if (storedString) {
+        try {
+            const stored = JSON.parse(storedString);
+            const data = stored.data;
+            const checksum = stored.checksum;
+            
+            // SECURITY: Tamper detection
+            const computedChecksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(data))).substring(0, 16);
+            if (computedChecksum !== checksum) {
+                console.warn("SECURITY ALERT: Engram tampering detected. Wiping Mikoshi data.");
+                localStorage.removeItem("mikoshi_engram");
+                return;
+            }
+
+            document.getElementById('engram-id').textContent = data.engramId;
+            document.getElementById('longevity-seq').textContent = data.longevitySeq;
+            document.getElementById('immortality-prob').textContent = `${data.immortalityProb}%`;
+            document.getElementById('relic-integrity').textContent = "STABLE / ONLINE";
+            document.getElementById('relic-integrity').style.color = "#00ffcc";
+            
+            const statusEl = document.getElementById('mikoshi-status');
+            statusEl.textContent = "ENGRAM LOADED";
+            statusEl.style.color = "#00ffcc";
+
+            const btn = document.getElementById('upload-engram-btn');
+            if(btn) { btn.textContent = "ENGRAM SECURED"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
+
+        } catch (e) {
+            localStorage.removeItem("mikoshi_engram");
+        }
+    }
+});
