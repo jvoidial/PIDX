@@ -125,41 +125,102 @@ function loadGrids() {
     if($("mining-grid")) { $("mining-grid").innerHTML = ""; MINING_DATA.forEach(p => { const el = document.createElement("div"); el.className = "card small mining-card"; el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`; $("mining-grid").appendChild(el); }); }
 }
 
-function generateEngram(input) {
-    const hash = ethers.keccak256(ethers.toUtf8Bytes(input));
-    const engramId = `${input.slice(0,6)}...${input.slice(-4)}`;
+
+// ==========================================
+// AUTO-IMMORTALITY ENGRAM PROTOCOL
+// ==========================================
+function generateAutoEngram() {
+    // Check if user already has an engram saved in their browser
+    let saved = localStorage.getItem("ebank_immortality_engram");
+    
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            renderEngramUI(data.id, data.seq, data.prob);
+            return;
+        } catch(e) {
+            localStorage.removeItem("ebank_immortality_engram");
+        }
+    }
+
+    // If no engram exists, generate a brand new unique one for this user
+    const seed = Date.now().toString() + Math.random().toString() + navigator.userAgent;
+    const hash = ethers.keccak256(ethers.toUtf8Bytes(seed));
+    
+    // Create a pseudo-wallet address for the ID
+    const engramId = `0x${hash.substring(2, 8)}...${hash.substring(58, 64)}`;
+    
+    // Generate DNA Sequence
+    const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
+    let seq = ""; const raw = hash.substring(2, 34);
+    for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
+    
+    // Generate Probability
+    const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
+
+    // Save to browser
+    const engramData = { id: engramId, seq: seq, prob: prob };
+    localStorage.setItem("ebank_immortality_engram", JSON.stringify(engramData));
+
+    // Render to UI
+    renderEngramUI(engramId, seq, prob);
+}
+
+function renderEngramUI(id, seq, prob) {
+    const idEl = document.getElementById('engram-id');
+    const seqEl = document.getElementById('longevity-seq');
+    const probEl = document.getElementById('immortality-prob');
+    const statusEl = document.getElementById('mikoshi-status');
+    const integrityEl = document.getElementById('relic-integrity');
+    const btn = document.getElementById('upload-engram-btn');
+
+    if(idEl) idEl.textContent = id;
+    if(seqEl) seqEl.textContent = seq;
+    if(probEl) probEl.textContent = `${prob}%`;
+    
+    if(statusEl) {
+        statusEl.textContent = "ENGRAM ACTIVE";
+        statusEl.style.color = "#00ffcc";
+        statusEl.style.animation = "none"; // Stop blinking
+    }
+    if(integrityEl) {
+        integrityEl.textContent = "STABLE / IMMORTAL";
+        integrityEl.style.color = "#00ffcc";
+    }
+
+    // Hide the "Synchronize" button since it's auto-done
+    if(btn) {
+        btn.style.display = "none";
+        btn.textContent = "ENGRAM ACTIVE";
+    }
+
+    // If a manual override div exists, hide it
+    const manualDiv = document.getElementById('manual-connect-div');
+    if(manualDiv) manualDiv.style.display = "none";
+
+    if (typeof logMemory === 'function' && !window.hasLoggedEnrgram) {
+        logMemory(`eBank Immortality Engram Initialized. Sequence: ${seq.substring(0,10)}...`, "#00ffcc");
+        window.hasLoggedEnrgram = true;
+    }
+}
+
+// Allow users to manually overwrite if they want a custom signature
+function handleManualConnect() {
+    const val = document.getElementById("manual-wallet-input").value.trim();
+    if(val.length < 5) return alert("Enter a custom text or address.");
+    
+    const hash = ethers.keccak256(ethers.toUtf8Bytes(val));
+    const engramId = `0x${hash.substring(2, 8)}...${hash.substring(58, 64)}`;
     const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
     let seq = ""; const raw = hash.substring(2, 34);
     for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
     const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
-    $("engram-id").textContent = engramId; $("longevity-seq").textContent = seq; $("immortality-prob").textContent = `${prob}%`;
-    $("relic-integrity").textContent = "STABLE / ONLINE"; $("relic-integrity").style.color = "#00ffcc";
-    $("mikoshi-status").textContent = "SOULKILLER COMPLETE"; $("mikoshi-status").style.color = "#00ffcc";
-    $("upload-engram-btn").style.display = "none"; $("manual-connect-div").style.display = "none";
-    logMemory(`Uplink secured. Immortality: ${prob}%`, "#ff0055");
+
+    const engramData = { id: engramId, seq: seq, prob: prob };
+    localStorage.setItem("ebank_immortality_engram", JSON.stringify(engramData));
+    renderEngramUI(engramId, seq, prob);
 }
 
-async function initializeSoulkiller() {
-    const btn = $("upload-engram-btn");
-    if (typeof window.ethereum === 'undefined') { btn.style.display = "none"; $("manual-connect-div").style.display = "block"; alert("No Web3 wallet detected. Manual input appeared below."); return; }
-    try {
-        btn.textContent = "CONNECTING...";
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        btn.textContent = "SIGNING...";
-        const msg = `MIKOSHI UPLINK\nAddress: ${address}\nTime: ${Date.now()}`;
-        const sig = await signer.signMessage(msg);
-        generateEngram(sig);
-    } catch(e) { btn.textContent = "FAILED"; alert(e.message || "Connection failed"); }
-}
-
-function handleManualConnect() {
-    const val = $("manual-wallet-input").value.trim();
-    if(val.length < 10) return alert("Enter a valid address.");
-    generateEngram(val);
-}
 
 function startBackground() {
     try {
