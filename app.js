@@ -28,6 +28,69 @@ const MINING_DATA = [
 
 function $(id) { return document.getElementById(id); }
 
+// ============ MEMORY LOG (THE MISSING PIECE) ============
+function loadMemory() {
+    const mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
+    const log = $("memory-log");
+    if (!log) return;
+    log.innerHTML = "";
+    if (mem.length === 0) {
+        log.innerHTML = '<div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>';
+    } else {
+        mem.forEach(e => {
+            const d = document.createElement("div");
+            d.style.color = e.color || "var(--text)";
+            d.textContent = e.msg;
+            log.appendChild(d);
+        });
+    }
+    log.scrollTop = log.scrollHeight;
+}
+
+function logMemory(msg, color = "var(--text)") {
+    let mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
+    mem.push({ msg: `[${new Date().toLocaleTimeString()}] ${msg}`, color });
+    if (mem.length > 10) mem.shift();
+    localStorage.setItem("vitruvian_memory", JSON.stringify(mem));
+    loadMemory();
+}
+
+// ============ GROWTH ENGINE & SIMULATIONS ============
+function startSimulations() {
+    let block = 53318083;
+    let time = 0;
+    loadMemory();
+
+    // Fast tick every 1s
+    setInterval(() => {
+        time += 0.1; block++;
+        if ($("live-block")) $("live-block").textContent = block.toLocaleString();
+        if ($("val-continuity")) $("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
+        if ($("val-coherence")) $("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
+        if ($("val-persistence")) $("val-persistence").textContent = `${379 + Math.floor(time / 10)} blocks`;
+        if ($("val-voxels")) $("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
+
+        const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
+        const apy = 0.15 + (coh * 0.05);
+        if ($("ebank-apy")) $("ebank-apy").textContent = `${(apy * 100).toFixed(2)}%`;
+        if ($("immunity-score")) $("immunity-score").textContent = `${(99.8 - (1 - coh) * 10).toFixed(2)}%`;
+    }, 1000);
+
+    // State shift every 15s (writes to Memory Log)
+    setInterval(() => {
+        const phases = ["OPEN", "CLOSING", "VEILED"];
+        const bands = ["LOW", "MID", "HIGH"];
+        const p = phases[Math.floor(Math.random() * phases.length)];
+        const b = bands[Math.floor(Math.random() * bands.length)];
+        if ($("v-veil")) {
+            $("v-veil").textContent = p;
+            $("v-veil").style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00");
+        }
+        if ($("val-energy")) $("val-energy").textContent = `${b} (${(40 + Math.random() * 10).toFixed(1)} GW)`;
+        logMemory(`Veil shifted to ${p}. Energy band: ${b}.`, p === "VEILED" ? "#ff4444" : "#00ffcc");
+    }, 15000);
+}
+
 // ============ AUTO-IMMORTALITY ENGRAM ============
 function generateAutoEngram() {
     let saved = localStorage.getItem("ebank_immortality_engram");
@@ -44,26 +107,26 @@ function generateAutoEngram() {
     const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
     let seq = ""; const raw = hash.substring(2, 34);
     for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
-    const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
+    const prob = (99.00 + (parseInt(hash.substring(2, 6), 16) / 65535) * 0.99).toFixed(2);
     const engramData = { id: engramId, seq: seq, prob: prob };
     localStorage.setItem("ebank_immortality_engram", JSON.stringify(engramData));
     renderEngramUI(engramId, seq, prob);
 }
 
 function renderEngramUI(id, seq, prob) {
-    if($('engram-id')) $('engram-id').textContent = id;
-    if($('longevity-seq')) $('longevity-seq').textContent = seq;
-    if($('immortality-prob')) $('immortality-prob').textContent = `${prob}%`;
-    if($('mikoshi-status')) { $('mikoshi-status').textContent = "ENGRAM ACTIVE"; $('mikoshi-status').style.color = "#00ffcc"; }
-    if($('relic-integrity')) { $('relic-integrity').textContent = "STABLE / IMMORTAL"; $('relic-integrity').style.color = "#00ffcc"; }
-    if($('upload-engram-btn')) $('upload-engram-btn').style.display = "none";
-    if($('manual-connect-div')) $('manual-connect-div').style.display = "none";
+    if ($('engram-id')) $('engram-id').textContent = id;
+    if ($('longevity-seq')) $('longevity-seq').textContent = seq;
+    if ($('immortality-prob')) $('immortality-prob').textContent = `${prob}%`;
+    if ($('mikoshi-status')) { $('mikoshi-status').textContent = "ENGRAM ACTIVE"; $('mikoshi-status').style.color = "#00ffcc"; }
+    if ($('relic-integrity')) { $('relic-integrity').textContent = "STABLE / IMMORTAL"; $('relic-integrity').style.color = "#00ffcc"; }
+    if ($('upload-engram-btn')) $('upload-engram-btn').style.display = "none";
+    if ($('manual-connect-div')) $('manual-connect-div').style.display = "none";
 }
 
 // ============ TOKENS & CHARTS ============
 async function loadTokens() {
     let tokens = FALLBACK_TOKENS;
-    try { const r = await fetch("tokens.json"); if(r.ok) tokens = await r.json(); } catch(e) {}
+    try { const r = await fetch("tokens.json"); if (r.ok) tokens = await r.json(); } catch(e) {}
     const grid = $("token-grid"); if (!grid) return;
     grid.innerHTML = "";
     tokens.forEach(t => {
@@ -72,24 +135,48 @@ async function loadTokens() {
         grid.appendChild(el);
     });
     tokens.forEach(async t => {
-        try { const r = await fetch(`${DEX_API}${t.address}`); const p = await r.json(); if (p && p.length > 0) { const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]); if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; } } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } } } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
+        try {
+            const r = await fetch(`${DEX_API}${t.address}`);
+            const p = await r.json();
+            if (p && p.length > 0) {
+                const b = p.reduce((a, b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]);
+                if ($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd || 0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; }
+            } else {
+                if ($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; }
+            }
+        } catch(e) { if ($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
     });
 }
 
 // ============ VAULTS & MINING ============
 function loadGrids() {
-    if($("vault-grid")) { $("vault-grid").innerHTML = ""; VAULTS_DATA.forEach(v => { const el = document.createElement("div"); el.className = "card small vault-card"; el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`; $("vault-grid").appendChild(el); }); }
-    if($("mining-grid")) { $("mining-grid").innerHTML = ""; MINING_DATA.forEach(p => { const el = document.createElement("div"); el.className = "card small mining-card"; el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`; $("mining-grid").appendChild(el); }); }
+    if ($("vault-grid")) {
+        $("vault-grid").innerHTML = "";
+        VAULTS_DATA.forEach(v => {
+            const el = document.createElement("div"); el.className = "card small vault-card";
+            el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`;
+            $("vault-grid").appendChild(el);
+        });
+    }
+    if ($("mining-grid")) {
+        $("mining-grid").innerHTML = "";
+        MINING_DATA.forEach(p => {
+            const el = document.createElement("div"); el.className = "card small mining-card";
+            el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`;
+            $("mining-grid").appendChild(el);
+        });
+    }
 }
 
-// ============ SAFETY (WARNINGS) ============
+// ============ SAFETY ============
 function runSafety() {
-    if($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
-    if($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
+    if ($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
+    if ($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
 }
 
 // ============ BOOT ============
 window.addEventListener("DOMContentLoaded", () => {
+    startSimulations();
     generateAutoEngram();
     loadGrids();
     loadTokens();
