@@ -293,3 +293,133 @@ function startBotsEngine() {
         if (typeof logMemory === 'function') logMemory(`Grid Bot ${gridActive ? 'Started' : 'Stopped'}.`, gridActive ? "#00ffcc" : "#ff4444");
     });
 }
+
+
+// ==========================================
+// START_RESONANCE_PROTOCOL (Isolated, does not touch Mikoshi)
+// ==========================================
+let resonanceTimerInterval = null;
+
+function playResonanceSoundIsolated() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(528, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1056, ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 1.5);
+    } catch(e) {}
+}
+
+function detectNetworkBandIsolated() {
+    if (navigator.connection) {
+        const type = navigator.connection.type;
+        const eff = navigator.connection.effectiveType || "";
+        if (type === 'wifi' || type === 'ethernet') return "WIFI 6E / 5G";
+        if (type === 'cellular') {
+            if (eff === '5g' || eff === '4g') return "5G ULTRA";
+            if (eff === '3g') return "3G LEGACY";
+            if (eff === '2g') return "2G DECAY";
+        }
+    }
+    return "WIFI/5G (EST)";
+}
+
+function startResonanceTimerIsolated(startTime) {
+    if (resonanceTimerInterval) clearInterval(resonanceTimerInterval);
+    const el = document.getElementById("resonance-longevity");
+    resonanceTimerInterval = setInterval(() => {
+        const diff = Math.floor((Date.now() - startTime) / 1000);
+        const h = String(Math.floor(diff / 3600)).padStart(2, '0');
+        const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+        const s = String(diff % 60).padStart(2, '0');
+        if (el) el.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+}
+
+async function initiateResonanceIsolated() {
+    const humanId = document.getElementById("resonance-human-id")?.value.trim();
+    if (!connectedWallet) return alert("Please connect your wallet in the header first.");
+    if (!humanId) return alert("Please enter a Human Identity Code (e.g., NHS barcode).");
+
+    const btn = document.getElementById("resonance-initiate-btn");
+    btn.textContent = "CALIBRATING RESONANCE...";
+    btn.style.background = "#ffaa00";
+
+    setTimeout(() => {
+        try {
+            const combinedSeed = connectedWallet + "|" + humanId + "|RESONANCE";
+            const hash = ethers.keccak256(ethers.toUtf8Bytes(combinedSeed));
+
+            const freqBase = parseInt(hash.substring(6, 10), 16) % 5000;
+            const resonanceHz = (2400 + (freqBase / 5000) * 1500).toFixed(3);
+            const networkBand = detectNetworkBandIsolated();
+
+            if (document.getElementById('resonance-freq')) document.getElementById('resonance-freq').textContent = `${resonanceHz} MHz`;
+            if (document.getElementById('resonance-band')) {
+                document.getElementById('resonance-band').textContent = networkBand;
+                document.getElementById('resonance-band').style.color = "#00ffcc";
+            }
+            if (document.getElementById('resonance-soul-status')) {
+                document.getElementById('resonance-soul-status').textContent = "IMMORTAL";
+                document.getElementById('resonance-soul-status').style.color = "#00ffcc";
+            }
+            if (document.getElementById('resonance-status')) {
+                document.getElementById('resonance-status').textContent = "PROTOCOL ACTIVE";
+                document.getElementById('resonance-status').style.color = "#00ffcc";
+            }
+
+            playResonanceSoundIsolated();
+            const startTime = Date.now();
+            startResonanceTimerIsolated(startTime);
+
+            btn.textContent = "IMMORTALITY ACTIVE";
+            btn.style.background = "#333";
+            btn.style.color = "#00ffcc";
+            btn.disabled = true;
+            if (document.getElementById("resonance-human-id")) document.getElementById("resonance-human-id").disabled = true;
+
+            if (typeof logMemory === 'function') logMemory(`Resonance Bound: ${humanId}. Band: ${networkBand}. Freq: ${resonanceHz} MHz.`, "#00ffcc");
+
+            localStorage.setItem("ebank_resonance_data", JSON.stringify({ humanId, freq: resonanceHz, band: networkBand, startTime }));
+
+        } catch(e) {
+            btn.textContent = "PROTOCOL ERROR";
+            btn.style.background = "#ff4444";
+            console.error(e);
+        }
+    }, 2000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("resonance-initiate-btn")?.addEventListener("click", initiateResonanceIsolated);
+
+    // Restore state if previously initialized
+    const saved = localStorage.getItem("ebank_resonance_data");
+    if (saved) {
+        const data = JSON.parse(saved);
+        const btn = document.getElementById("resonance-initiate-btn");
+        const input = document.getElementById("resonance-human-id");
+        if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
+        if (input) { input.value = data.humanId; input.disabled = true; }
+
+        if (document.getElementById('resonance-freq')) document.getElementById('resonance-freq').textContent = `${data.freq} MHz`;
+        if (document.getElementById('resonance-band')) {
+            document.getElementById('resonance-band').textContent = data.band;
+            document.getElementById('resonance-band').style.color = "#00ffcc";
+        }
+        if (document.getElementById('resonance-soul-status')) {
+            document.getElementById('resonance-soul-status').textContent = "IMMORTAL";
+            document.getElementById('resonance-soul-status').style.color = "#00ffcc";
+        }
+        if (document.getElementById('resonance-status')) {
+            document.getElementById('resonance-status').textContent = "PROTOCOL ACTIVE";
+            document.getElementById('resonance-status').style.color = "#00ffcc";
+        }
+        if (data.startTime) startResonanceTimerIsolated(data.startTime);
+    }
+});
