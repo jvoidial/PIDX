@@ -1,5 +1,4 @@
 
-// ============ CONSTANTS & DATA ============
 const DEX_API = "https://api.dexscreener.com/token-pairs/v1/base/";
 const FALLBACK_TOKENS = [
     {id:"pidx", symbol:"PIDX", name:"Pennies Index", freq:"0.618 Hz", address:"0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c", pool:"0xfa8f70efe22da989ec3e77fb25647d44cdb2248f"},
@@ -7,26 +6,24 @@ const FALLBACK_TOKENS = [
     {id:"vdoo", symbol:"VDOO", name:"VOUDOO Infinity", freq:"2.618 Hz", address:"0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", pool:"0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59"},
     {id:"pennies", symbol:"PENNIES", name:"Pennies CHEQ", freq:"3.618 Hz", address:"0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", pool:"0x29a0ae1f10629f8855c87c911531ffb2c98d68c6"}
 ];
-
 const VAULTS_DATA = [
-    {"name": "Morpho USDC Vault", "type": "Vault", "asset": "USDC", "apy": "7.89%", "tvl": "$366K", "desc": "High utilization lending pool.", "link": "https://app.morpho.org/base"},
-    {"name": "Euler V2 USDC Vault", "type": "Vault", "asset": "USDC", "apy": "6.85%", "tvl": "$584K", "desc": "ERC-4626 compliant vault.", "link": "https://app.euler.finance/"},
-    {"name": "YO Protocol USDC", "type": "Vault", "asset": "USDC", "apy": "Variable", "tvl": "On-chain", "desc": "ERC-4626 yield-optimizer.", "link": "https://yo.xyz"},
-    {"name": "Moonwell Morpho", "type": "Vault", "asset": "USDC", "apy": "Variable", "tvl": "On-chain", "desc": "Allocates across Morpho markets.", "link": "https://docs.moonwell.fi"},
-    {"name": "Beefy Auto-Compounder", "type": "Vault", "asset": "Multiple", "apy": "Variable", "tvl": "High", "desc": "Auto-compounds LP rewards.", "link": "https://app.beefy.com/"},
-    {"name": "Beefy tBTC-WETH CLM", "type": "LP Pool", "asset": "tBTC/WETH", "apy": "7.74%", "tvl": "$103K", "desc": "Aerodrome CLM vault.", "link": "https://app.beefy.com/"},
-    {"name": "Alien Base USDC-CBBTC", "type": "LP Pool", "asset": "USDC/CBBTC", "apy": "21.50%", "tvl": "$1.47M", "desc": "Concentrated V3 pool.", "link": "https://app.alienbase.xyz/"},
-    {"name": "Uniswap V3 WETH-USDC", "type": "LP Pool", "asset": "WETH/USDC", "apy": "65%", "tvl": "$125M", "desc": "Highest organic yield.", "link": "https://app.uniswap.org/pools"}
+    {"name":"Morpho USDC Vault","type":"Vault","asset":"USDC","apy":"7.89%","tvl":"$366K","desc":"High utilization lending pool.","link":"https://app.morpho.org/base"},
+    {"name":"Euler V2 USDC","type":"Vault","asset":"USDC","apy":"6.85%","tvl":"$584K","desc":"ERC-4626 compliant vault.","link":"https://app.euler.finance/"},
+    {"name":"YO Protocol USDC","type":"Vault","asset":"USDC","apy":"Variable","tvl":"On-chain","desc":"ERC-4626 yield-optimizer.","link":"https://yo.xyz"},
+    {"name":"Moonwell Morpho","type":"Vault","asset":"USDC","apy":"Variable","tvl":"On-chain","desc":"Allocates across Morpho markets.","link":"https://docs.moonwell.fi"},
+    {"name":"Beefy Auto-Compounder","type":"Vault","asset":"Multiple","apy":"Variable","tvl":"High","desc":"Auto-compounds LP rewards.","link":"https://app.beefy.com/"},
+    {"name":"Beefy tBTC-WETH CLM","type":"LP Pool","asset":"tBTC/WETH","apy":"7.74%","tvl":"$103K","desc":"Aerodrome CLM vault.","link":"https://app.beefy.com/"},
+    {"name":"Alien Base USDC-CBBTC","type":"LP Pool","asset":"USDC/CBBTC","apy":"21.50%","tvl":"$1.47M","desc":"Concentrated V3 pool.","link":"https://app.alienbase.xyz/"},
+    {"name":"Uniswap V3 WETH-USDC","type":"LP Pool","asset":"WETH/USDC","apy":"65%","tvl":"$125M","desc":"Highest organic yield.","link":"https://app.uniswap.org/pools"}
 ];
-
 const MINING_DATA = [
-    {"name": "Irium Public Pool", "fee": "0%", "coin": "IRM", "stratum": "stratum+tcp://pool.iriumlabs.org:3333", "status": "online", "notes": "Direct-payout solo mining."},
-    {"name": "Linkrra Pool", "fee": "0% extra", "coin": "PRL", "stratum": "stratum.linkrra.com:5567", "status": "online", "notes": "PPLNS payout, 80% USDC on Base."},
-    {"name": "SoloFury", "fee": "1%", "coin": "SHA-256", "stratum": "stratum+tcp://btc.solofury.com:7070", "status": "online", "notes": "Multi-coin solo mining."},
-    {"name": "Ocean", "fee": "2% (1% DATUM)", "coin": "BTC", "stratum": "stratum+tcp://ocean.xyz:3334", "status": "online", "notes": "Non-custodial, no KYC."},
-    {"name": "Braiins Pool", "fee": "0% (Braiins OS)", "coin": "BTC", "stratum": "stratum+tcp://stratum.braiins.com:3333", "status": "online", "notes": "Stratum V2 native."},
-    {"name": "BASED Mining", "fee": "0%", "coin": "BTC (Solo)", "stratum": "stratum+tcp://pool.basedmining.xyz:3333", "status": "online", "notes": "On-chain solo mining via Base."},
-    {"name": "MineBean", "fee": "Dynamic", "coin": "ETH / BEAN", "stratum": "N/A - Grid Mining", "status": "online", "notes": "Gamified mining on Base."}
+    {"name":"Irium Public Pool","fee":"0%","coin":"IRM","stratum":"stratum+tcp://pool.iriumlabs.org:3333","status":"online","notes":"Direct-payout solo mining."},
+    {"name":"Linkrra Pool","fee":"0% extra","coin":"PRL","stratum":"stratum.linkrra.com:5567","status":"online","notes":"PPLNS payout, 80% USDC on Base."},
+    {"name":"SoloFury","fee":"1%","coin":"SHA-256","stratum":"stratum+tcp://btc.solofury.com:7070","status":"online","notes":"Multi-coin solo mining."},
+    {"name":"Ocean","fee":"2% (1% DATUM)","coin":"BTC","stratum":"stratum+tcp://ocean.xyz:3334","status":"online","notes":"Non-custodial, no KYC."},
+    {"name":"Braiins Pool","fee":"0% (Braiins OS)","coin":"BTC","stratum":"stratum+tcp://stratum.braiins.com:3333","status":"online","notes":"Stratum V2 native."},
+    {"name":"BASED Mining","fee":"0%","coin":"BTC (Solo)","stratum":"stratum+tcp://pool.basedmining.xyz:3333","status":"online","notes":"On-chain solo mining via Base."},
+    {"name":"MineBean","fee":"Dynamic","coin":"ETH / BEAN","stratum":"N/A - Grid Mining","status":"online","notes":"Gamified mining on Base."}
 ];
 
 function $(id) { return document.getElementById(id); }
@@ -36,22 +33,15 @@ function fetchWithTimeout(url, options = {}, timeout = 5000) {
     return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(id));
 }
 
-// ============ MEMORY LOG ============
 function loadMemory() {
-    const memory = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
-    const log = $("memory-log");
-    if (!log) return;
+    const mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
+    const log = $("memory-log"); if (!log) return;
     log.innerHTML = "";
-    if(memory.length===0) log.innerHTML = '<div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>';
-    memory.forEach(e => {
-        const d = document.createElement("div");
-        d.style.color = e.color || "var(--text)";
-        d.textContent = e.msg;
-        log.appendChild(d);
-    });
+    if (mem.length === 0) log.innerHTML = '<div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>';
+    mem.forEach(e => { const d = document.createElement("div"); d.style.color = e.color || "var(--text)"; d.textContent = e.msg; log.appendChild(d); });
     log.scrollTop = log.scrollHeight;
 }
-function logMemory(msg, color="var(--text)") {
+function logMemory(msg, color = "var(--text)") {
     let mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
     mem.push({ msg: `[${new Date().toLocaleTimeString()}] ${msg}`, color });
     if (mem.length > 10) mem.shift();
@@ -59,11 +49,9 @@ function logMemory(msg, color="var(--text)") {
     loadMemory();
 }
 
-// ============ SIMULATIONS ============
 function startSimulations() {
     let block = 53318083, time = 0;
     loadMemory();
-    
     setInterval(() => {
         time += 0.1; block++;
         if($("live-block")) $("live-block").textContent = block.toLocaleString();
@@ -71,171 +59,138 @@ function startSimulations() {
         if($("val-coherence")) $("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
         if($("val-persistence")) $("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
         if($("val-voxels")) $("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
-        
-        // eBank
         const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
         const apy = 0.15 + (coh * 0.05);
         if($("ebank-apy")) $("ebank-apy").textContent = `${(apy * 100).toFixed(2)}%`;
         if($("immunity-score")) $("immunity-score").textContent = `${(99.8 - (1-coh)*10).toFixed(2)}%`;
     }, 1000);
-
     setInterval(() => {
         const phases = ["OPEN", "CLOSING", "VEILED"];
         const p = phases[Math.floor(Math.random()*phases.length)];
-        if($("v-veil")) {
-            $("v-veil").textContent = p;
-            $("v-veil").style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00");
-        }
+        if($("v-veil")) { $("v-veil").textContent = p; $("v-veil").style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00"); }
         logMemory(`Veil shifted to ${p}.`, p === "VEILED" ? "#ff4444" : "#00ffcc");
     }, 15000);
 }
 
-// ============ TOKENS ============
 async function loadTokens() {
     let tokens = FALLBACK_TOKENS;
-    try {
-        const res = await fetchWithTimeout("tokens.json", {}, 2000);
-        tokens = await res.json();
-    } catch(e) { console.warn("Using fallback tokens"); }
-
-    const grid = $("token-grid");
-    if(!grid) return;
+    try { const res = await fetchWithTimeout("tokens.json", {}, 2000); tokens = await res.json(); } catch(e) {}
+    const grid = $("token-grid"); if (!grid) return;
     grid.innerHTML = "";
-    
     tokens.forEach(t => {
-        const el = document.createElement("div");
-        el.className = "card";
-        el.innerHTML = `
-            <h3>${t.symbol} <span class="freq">${t.freq}</span></h3>
-            <p class="name">${t.name}</p>
-            <p class="addr">${t.address}</p>
-            <p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p>
-            <p class="security-status" id="sec-${t.id}" style="font-size:0.75rem; color:var(--dim);">🛡️ Security: scanning...</p>
-            <div class="chart-container" id="chart-${t.id}" style="height: 200px; margin-top:10px; border:1px solid var(--border); border-radius:8px;"></div>
-            <div class="links" style="margin-top:10px; display:flex; gap:5px;">
-                <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=${t.address}" target="_blank" class="swap-btn">🔄 Swap</a>
-                <a href="https://basescan.org/token/${t.address}" target="_blank">BaseScan</a>
-            </div>`;
+        const el = document.createElement("div"); el.className = "card";
+        el.innerHTML = `<h3>${t.symbol} <span class="freq">${t.freq}</span></h3><p class="name">${t.name}</p><p class="addr">${t.address}</p><p class="tvl">Pool TVL: <span id="tvl-${t.id}" class="badge loading">SYNCING...</span></p><p class="security-status" id="sec-${t.id}" style="font-size:0.75rem;color:var(--dim);">🛡️ Security: scanning...</p><div class="chart-container" id="chart-${t.id}" style="height:180px;margin-top:10px;border:1px solid var(--border);border-radius:8px;overflow:hidden;"></div><div class="links"><a href="https://app.uniswap.org/swap?chain=base&outputCurrency=${t.address}" target="_blank" class="swap-btn">🔄 Swap</a><a href="https://basescan.org/token/${t.address}" target="_blank">BaseScan</a></div>`;
         grid.appendChild(el);
     });
-
-    // Load TVL & Security async
     tokens.forEach(async t => {
-        try {
-            const r = await fetchWithTimeout(`${DEX_API}${t.address}`, {}, 3000);
-            const p = await r.json();
-            if(p && p.length > 0) {
-                const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]);
-                if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; }
-            } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } }
-        } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
-
-        try {
-            const r = await fetchWithTimeout(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`, {}, 3000);
-            const j = await r.json();
-            const res = j.result?.[t.address.toLowerCase()];
-            if(res && $(`sec-${t.id}`)) {
-                const isHoney = res.is_honeypot === "1" || res.cannot_sell_all === "1";
-                $(`sec-${t.id}`).textContent = isHoney ? "🚨 HONEYPOT" : "✅ Safe";
-                $(`sec-${t.id}`).style.color = isHoney ? "#ff4444" : "#00ffcc";
-            }
-        } catch(e) {}
+        try { const r = await fetchWithTimeout(`${DEX_API}${t.address}`, {}, 3000); const p = await r.json(); if (p && p.length > 0) { const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]); if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; } } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } } } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
+        try { const r = await fetchWithTimeout(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`, {}, 3000); const j = await r.json(); const res = j.result?.[t.address.toLowerCase()]; if(res && $(`sec-${t.id}`)) { const h = res.is_honeypot === "1" || res.cannot_sell_all === "1"; $(`sec-${t.id}`).textContent = h ? "🚨 HONEYPOT" : "✅ Safe"; $(`sec-${t.id}`).style.color = h ? "#ff4444" : "#00ffcc"; } } catch(e) {}
+        renderChart(t);
     });
 }
 
-// ============ GLOBAL SAFETY ============
-async function runSafety() {
+async function renderChart(token) {
+    const container = $(`chart-${token.id}`); if(!container) return;
+    try {
+        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100&include_empty_intervals=true`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        const res = await fetchWithTimeout(proxyUrl, {}, 6000);
+        const json = await res.json();
+        const ohlcv = json.data?.attributes?.ohlcv_list;
+        if (!ohlcv || ohlcv.length === 0) throw new Error("No data");
+        
+        const unique = {}; ohlcv.forEach(c => unique[Math.floor(c[0])] = c);
+        const sorted = Object.values(unique).sort((a,b) => a[0]-b[0]);
+        container.innerHTML = "";
+        if(typeof LightweightCharts === 'undefined') throw new Error("Lib missing");
+
+        const chart = LightweightCharts.createChart(container, {
+            width: container.clientWidth, height: 180,
+            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
+            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
+            timeScale: { borderColor: 'rgba(255,255,255,0.1)' }, rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+        });
+        const candle = chart.addCandlestickSeries({ upColor: '#00ffcc', downColor: '#ff4444', borderDownColor: '#ff4444', borderUpColor: '#00ffcc', wickDownColor: '#ff4444', wickUpColor: '#00ffcc' });
+        candle.setData(sorted.map(c => ({ time: Math.floor(c[0]), open: parseFloat(c[1]), high: parseFloat(c[2]), low: parseFloat(c[3]), close: parseFloat(c[4]) })).filter(d => d.open > 0));
+    } catch(e) { container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:70px; font-size:0.75rem;">Chart unavailable (low data)</p>'; }
+}
+
+function runSafety() {
     if($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
     if($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
 }
 
-// ============ VAULTS & MINING ============
 function loadGrids() {
-    if($("vault-grid")) {
-        $("vault-grid").innerHTML = "";
-        VAULTS_DATA.forEach(v => {
-            const el = document.createElement("div"); el.className = "card small vault-card";
-            el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`;
-            $("vault-grid").appendChild(el);
-        });
-    }
-    if($("mining-grid")) {
-        $("mining-grid").innerHTML = "";
-        MINING_DATA.forEach(p => {
-            const el = document.createElement("div"); el.className = "card small mining-card";
-            el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`;
-            $("mining-grid").appendChild(el);
-        });
-    }
+    if($("vault-grid")) { $("vault-grid").innerHTML = ""; VAULTS_DATA.forEach(v => { const el = document.createElement("div"); el.className = "card small vault-card"; el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`; $("vault-grid").appendChild(el); }); }
+    if($("mining-grid")) { $("mining-grid").innerHTML = ""; MINING_DATA.forEach(p => { const el = document.createElement("div"); el.className = "card small mining-card"; el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`; $("mining-grid").appendChild(el); }); }
 }
 
-// ============ MIKOSHI MANUAL OVERRIDE ============
-function generateEngram(addressString) {
-    // Deterministic hash based on the input string
-    const hash = ethers.keccak256(ethers.toUtf8Bytes(addressString));
-    const engramId = `${addressString.slice(0,6)}...${addressString.slice(-4)}`;
+function generateEngram(input) {
+    const hash = ethers.keccak256(ethers.toUtf8Bytes(input));
+    const engramId = `${input.slice(0,6)}...${input.slice(-4)}`;
     const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
-    let seq = "";
-    const raw = hash.substring(2, 34);
+    let seq = ""; const raw = hash.substring(2, 34);
     for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
     const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
-
-    $("engram-id").textContent = engramId;
-    $("longevity-seq").textContent = seq;
-    $("immortality-prob").textContent = `${prob}%`;
-    $("relic-integrity").textContent = "STABLE / ONLINE";
-    $("relic-integrity").style.color = "#00ffcc";
-    $("mikoshi-status").textContent = "SOULKILLER COMPLETE";
-    $("mikoshi-status").style.color = "#00ffcc";
-    
-    $("upload-engram-btn").style.display = "none";
-    $("manual-connect-div").style.display = "none";
-    
-    logMemory(`Manual Uplink Secured. Immortality: ${prob}%`, "#ff0055");
+    $("engram-id").textContent = engramId; $("longevity-seq").textContent = seq; $("immortality-prob").textContent = `${prob}%`;
+    $("relic-integrity").textContent = "STABLE / ONLINE"; $("relic-integrity").style.color = "#00ffcc";
+    $("mikoshi-status").textContent = "SOULKILLER COMPLETE"; $("mikoshi-status").style.color = "#00ffcc";
+    $("upload-engram-btn").style.display = "none"; $("manual-connect-div").style.display = "none";
+    logMemory(`Uplink secured. Immortality: ${prob}%`, "#ff0055");
 }
 
 async function initializeSoulkiller() {
     const btn = $("upload-engram-btn");
-    
-    if (typeof window.ethereum === 'undefined') {
-        // Mobile browser fallback
-        btn.style.display = "none";
-        $("manual-connect-div").style.display = "block";
-        alert("Web3 Wallet not detected. A Manual Input box has appeared below.");
-        return;
-    }
-    
+    if (typeof window.ethereum === 'undefined') { btn.style.display = "none"; $("manual-connect-div").style.display = "block"; alert("No Web3 wallet detected. Manual input appeared below."); return; }
     try {
         btn.textContent = "CONNECTING...";
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
-        
         btn.textContent = "SIGNING...";
         const msg = `MIKOSHI UPLINK\nAddress: ${address}\nTime: ${Date.now()}`;
         const sig = await signer.signMessage(msg);
-        
-        generateEngram(sig); // Use signature for real web3
-    } catch(e) {
-        btn.textContent = "FAILED";
-        alert(e.message || "Connection failed");
-    }
+        generateEngram(sig);
+    } catch(e) { btn.textContent = "FAILED"; alert(e.message || "Connection failed"); }
 }
 
 function handleManualConnect() {
     const val = $("manual-wallet-input").value.trim();
-    if(val.length < 10) return alert("Please enter a valid wallet address.");
-    generateEngram(val); // Generate based on string input
+    if(val.length < 10) return alert("Enter a valid address.");
+    generateEngram(val);
 }
 
-// ============ BOOT ============
+function startBackground() {
+    try {
+        const canvas = $("neural-canvas");
+        if (!canvas || typeof THREE === "undefined") return;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
+        const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setPixelRatio(devicePixelRatio);
+        camera.position.z = 15;
+        const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
+        const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
+        scene.add(hyper);
+        let t=0;
+        (function animate(){
+            requestAnimationFrame(animate);
+            t += .005;
+            hyper.rotation.x += .002; hyper.rotation.y += .003;
+            renderer.render(scene, camera);
+        })();
+        addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+    } catch(e) {}
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+    startBackground();
     startSimulations();
     loadGrids();
     loadTokens();
     runSafety();
-
     if($("upload-engram-btn")) $("upload-engram-btn").addEventListener("click", initializeSoulkiller);
     if($("manual-connect-btn")) $("manual-connect-btn").addEventListener("click", handleManualConnect);
 });
