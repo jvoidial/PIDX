@@ -40,8 +40,6 @@ h3,h4{color:var(--white);display:flex;justify-content:space-between;font-size:1.
 .panel li span{color:var(--silver);font-family:monospace;font-size:.8rem}
 .mono{font-family:monospace;font-size:.8rem;color:var(--white);word-break:break-all;background:rgba(0,0,0,.5);padding:8px;border-radius:6px;border:1px solid var(--border);margin-top:5px}
 .memory-terminal{background:rgba(0,0,0,.6);border:1px solid var(--border);padding:10px;border-radius:8px;height:120px;overflow-y:auto;font-family:monospace;font-size:.75rem;color:var(--text)}
-
-/* MIKOSHI */
 .mikoshi-container{display:flex;justify-content:center}
 .mikoshi-card{background:rgba(5,5,5,.95);border:1px solid #ff0055;border-radius:4px;padding:20px;width:100%;max-width:600px;box-shadow:0 0 20px rgba(255,0,85,.2);position:relative;overflow:hidden;font-family:'Courier New',monospace}
 .mikoshi-glitch{position:absolute;inset:0;background:linear-gradient(rgba(255,0,85,.05) 50%,transparent 50%);background-size:100% 4px;pointer-events:none;z-index:1;animation:glitch-flicker .1s infinite}
@@ -59,8 +57,6 @@ h3,h4{color:var(--white);display:flex;justify-content:space-between;font-size:1.
 .mikoshi-data span{color:#00ffcc;font-family:monospace}
 .mikoshi-footer{margin-top:20px;text-align:right;border-top:1px dashed #333;padding-top:15px;position:relative;z-index:2}
 .btn-primary{padding:10px 16px;border-radius:4px;font-weight:bold;cursor:pointer;transition:all .2s}
-
-/* SAFETY */
 .safety-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
 .safety-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:15px;text-align:center;backdrop-filter:blur(10px)}
 .safety-icon{font-size:1.5rem;margin-bottom:10px;display:block}
@@ -70,8 +66,6 @@ h3,h4{color:var(--white);display:flex;justify-content:space-between;font-size:1.
 .status-badge.verified{background:rgba(0,255,204,.1);color:#00ffcc;border:1px solid #00ffcc}
 .status-badge.danger{background:rgba(255,68,68,.1);color:#ff4444;border:1px solid #ff4444}
 .status-badge.pending{background:rgba(255,255,255,.1);color:var(--dim);border:1px solid var(--border)}
-
-/* EBANK */
 .ebank-container{background:linear-gradient(180deg,rgba(22,24,28,.9) 0%,rgba(10,12,15,.9) 100%);border:1px solid var(--silver);border-radius:16px;padding:25px;box-shadow:0 0 30px rgba(192,192,192,.08);backdrop-filter:blur(12px)}
 .ebank-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:25px;border-bottom:1px solid var(--border);padding-bottom:20px}
 .immunity-shield{text-align:right;display:flex;flex-direction:column;background:rgba(0,255,204,.05);padding:8px 15px;border-radius:8px;border:1px solid rgba(0,255,204,.2)}
@@ -79,8 +73,6 @@ h3,h4{color:var(--white);display:flex;justify-content:space-between;font-size:1.
 .ebank-stat{display:flex;flex-direction:column}
 .ebank-stat .label{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 .ebank-stat .value{font-size:1.3rem;font-family:monospace;color:var(--white);font-weight:bold}
-
-/* ENGINE */
 .engine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px}
 .engine-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:15px;text-align:center;backdrop-filter:blur(10px);transition:all .3s}
 .engine-card:hover{border-color:var(--silver);transform:scale(1.02)}

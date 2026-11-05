@@ -3,14 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://api.llama.fi; img-src 'self' data:;">
 <title>✧ THE COSMIC SCRIBE ✧</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20000">
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
-<header><h1>✧ THE COSMIC SCRIBE ✧</h1></header>
+<div class="scanlines"></div>
+<canvas id="neural-canvas"></canvas>
+
+<header>
+  <h1>✧ THE COSMIC SCRIBE ✧</h1>
+  <p class="subtitle">GENERATION 10 · VITRUVIAN SYSTEM · MEMORY ACTIVE</p>
+  <div style="text-align:center;margin-top:10px;"><a href="https://x.com/PIDXRAIN" target="_blank" style="display:inline-block;background:#fff;color:#000;padding:8px 20px;border-radius:20px;font-weight:bold;text-decoration:none;font-family:monospace;">𝕏 Follow @PIDXRAIN</a></div>
+  <div class="status-bar" style="margin-top:15px;"><span>✦ Block <span id="live-block">53,318,083</span></span><span style="color:#00ffcc;">● System: VIEW MODE</span></div>
+</header>
+
 <main>
-  <div id="memory-log" style="background:#111;padding:20px;color:#0f0;font-family:monospace;min-height:100px;"></div>
+  <section class="grid-section" id="mikoshi-section">
+    <h2>💾 Project Mikoshi · Immortality Engram</h2>
+    <div class="mikoshi-container"><div class="mikoshi-card">
+      <div class="mikoshi-header"><span class="mikoshi-title">IMMORTALITY PROTOCOL</span><span class="mikoshi-status" id="mikoshi-status">AWAITING UPLINK</span></div>
+      <div class="mikoshi-body"><div class="dna-strand" id="dna-strand"><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span></div>
+        <div class="mikoshi-data">
+          <p><strong>ENGRAM ID:</strong> <span id="engram-id">Disconnected</span></p>
+          <p><strong>LONGEVITY SEQ:</strong> <span id="longevity-seq" style="font-size:0.7rem;color:#ff0055;">Awaiting Sequence...</span></p>
+          <p><strong>IMMORTALITY PROB:</strong> <span id="immortality-prob">0.00%</span></p>
+          <p><strong>RELIC INTEGRITY:</strong> <span id="relic-integrity" style="color:#ffaa00;">UNVERIFIED</span></p>
+        </div>
+      </div>
+      <div id="manual-connect-div" style="display:none;margin-top:15px;border-top:1px dashed #333;padding-top:15px;">
+        <p style="color:#ff0055;font-size:0.75rem;margin-bottom:8px;">⚠️ Custom Signature Override:</p>
+        <input type="text" id="manual-wallet-input" placeholder="Paste 0x address..." style="width:100%;padding:10px;background:#000;border:1px solid #ff0055;color:#00ffcc;font-family:monospace;margin-bottom:10px;">
+        <button id="manual-connect-btn" class="btn-primary" style="width:100%;background:#ff0055;color:#fff;border:none;">Simulate Uplink</button>
+      </div>
+      <div class="mikoshi-footer"><button id="upload-engram-btn" class="btn-primary" style="background:#ff0055;color:#fff;border:none;">Synchronize Engram</button></div>
+    </div></div>
+  </section>
+
+  <section class="grid-section" id="global-safety-section">
+    <h2>🛡️ Global Safety & Network Compatibility</h2>
+    <div class="safety-grid">
+      <div class="safety-card"><span class="safety-icon">🔗</span><h4>Wallet Compatibility</h4><p>MetaMask, Coinbase, Trust, Rabby</p><span class="status-badge verified">EIP-1193 READY</span></div>
+      <div class="safety-card"><span class="safety-icon">🔒</span><h4>Contract Security</h4><p>GoPlus Honeypot & Tax Scan</p><span id="global-contract-status" class="status-badge pending">SCANNING...</span></div>
+      <div class="safety-card"><span class="safety-icon">💧</span><h4>Liquidity Health</h4><p>Pool Depth & Trading Risk</p><span id="global-liquidity-status" class="status-badge pending">CALCULATING...</span></div>
+      <div class="safety-card"><span class="safety-icon">⚡</span><h4>Exchange Routing</h4><p>Uniswap V2/V3/V4 + Aggregators</p><span class="status-badge verified">ACTIVE</span></div>
+    </div>
+  </section>
+
+  <section class="grid-section"><h2>🏦 Digital eBank · Auto-Immune Vault</h2><div class="ebank-container">
+    <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(0,255,204,0.1);color:#00ffcc;border:1px solid #00ffcc;">AUTO-COMPOUNDING ACTIVE</span></div><div class="immunity-shield"><span style="font-size:0.75rem;color:var(--dim);">Auto-Immune Shield</span><span id="immunity-score" style="font-family:monospace;font-size:1.2rem;color:#00ffcc;font-weight:bold;">99.80%</span></div></div>
+    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Yield Accrued (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div><div class="ebank-stat"><span class="label">Total Protocol TVL</span><span class="value" id="ebank-tvl">$842,912.00</span></div></div>
+  </div></section>
+
+  <section class="grid-section"><h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2><div id="token-grid" class="token-grid"><p class="loading">SYNCING TELEMETRY...</p></div></section>
+
+  <section class="grid-section"><h2>🌱 Growth Engine & Voxel Dynamics</h2><div class="engine-grid">
+    <div class="engine-card"><span class="label">Continuity</span><span class="value" id="val-continuity">1.000</span></div><div class="engine-card"><span class="label">Coherence</span><span class="value" id="val-coherence">0.9356</span></div><div class="engine-card"><span class="label">Persistence</span><span class="value" id="val-persistence">379 blocks</span></div><div class="engine-card"><span class="label">Active Voxels</span><span class="value" id="val-voxels">7</span></div><div class="engine-card"><span class="label">Energy Band</span><span class="value" id="val-energy">MID (42.8 GW)</span></div><div class="engine-card"><span class="label">Engine Status</span><span class="value success" id="val-engine">OPTIMAL</span></div>
+  </div></section>
+
+  <section class="grid-section split"><div class="panel"><h2>🧬 Vitruvian System States</h2><ul><li><strong>Vitruvian State:</strong> <span id="v-state">1 · 0.936 · 0.392</span></li><li><strong>Stability:</strong> <span id="v-stability">1.112</span></li><li><strong>Resonance:</strong> <span id="v-resonance">0.533</span></li><li><strong>Veil Phase:</strong> <span id="v-veil" style="color:#00ffcc;">OPEN</span></li></ul></div><div class="panel"><h2>🧠 Memory Log</h2><div id="memory-log" class="memory-terminal"></div></div></section>
+
+  <section class="grid-section"><h2>🏦 Yield Vaults & Liquidity Pools</h2><div class="vault-grid" id="vault-grid"></div></section>
+  <section class="grid-section"><h2>⛏️ Mining Pools · Stratum Directory</h2><div class="mining-grid" id="mining-grid"></div></section>
 </main>
-<script src="app.js"></script>
+
+<footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
+<script src="app.js?v=20000"></script>
 </body>
 </html>
