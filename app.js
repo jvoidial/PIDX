@@ -491,11 +491,13 @@ document.getElementById('connect-wallet-btn')?.addEventListener('click', async (
 });
 
 
-// --- GLOBAL SAFETY & COMPATIBILITY CHECK ---
+
+// --- GLOBAL SAFETY MODULE (Granular GoPlus Risk Engine) ---
 async function runGlobalSafetyCheck() {
     let totalLiquidityUsd = 0;
     let safeTokens = 0;
     let totalTokens = 0;
+    const riskDetails = [];
 
     try {
         const res = await fetch("tokens.json");
@@ -503,13 +505,42 @@ async function runGlobalSafetyCheck() {
         totalTokens = tokens.length;
 
         for (const t of tokens) {
-            // Check GoPlus Security
+            let isSafe = true;
+            let criticalFlags = [];
+
             try {
                 const secRes = await fetch(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`);
                 const secJson = await secRes.json();
                 const result = secJson.result?.[t.address.toLowerCase()];
-                if (result && result.is_honeypot !== "1" && result.cannot_sell_all !== "1") safeTokens++;
-            } catch(e) {}
+
+                if (!result) {
+                    isSafe = false;
+                    criticalFlags.push("No GoPlus data");
+                } else {
+                    // Granular risk evaluation based on GoPlus documentation
+                    if (result.is_honeypot === "1") { isSafe = false; criticalFlags.push("Honeypot"); }
+                    if (result.cannot_sell_all === "1") { isSafe = false; criticalFlags.push("Cannot sell all"); }
+                    if (result.is_open_source === "0") { isSafe = false; criticalFlags.push("Unverified contract"); }
+                    if (result.is_mintable === "1") { criticalFlags.push("Mintable supply"); }
+                    if (result.owner_change_balance === "1") { isSafe = false; criticalFlags.push("Owner can change balance"); }
+                    if (result.hidden_owner === "1") { isSafe = false; criticalFlags.push("Hidden owner"); }
+                    if (result.selfdestruct === "1") { isSafe = false; criticalFlags.push("Self-destruct"); }
+                    if (result.transfer_pausable === "1") { isSafe = false; criticalFlags.push("Transfer pausable"); }
+                    const buyTax = parseFloat(result.buy_tax || "0") * 100;
+                    const sellTax = parseFloat(result.sell_tax || "0") * 100;
+                    if (sellTax > 10) { criticalFlags.push(`High sell tax (${sellTax}%)`); }
+                    if (buyTax > 10) { criticalFlags.push(`High buy tax (${buyTax}%)`); }
+                }
+            } catch(e) {
+                isSafe = false;
+                criticalFlags.push("API error");
+            }
+
+            if (isSafe) {
+                safeTokens++;
+            } else {
+                riskDetails.push(`${t.symbol}: ${criticalFlags.join(", ")}`);
+            }
 
             // Check Liquidity via DexScreener
             try {
@@ -528,8 +559,9 @@ async function runGlobalSafetyCheck() {
                 contractEl.textContent = `${safeTokens}/${totalTokens} SECURE`;
                 contractEl.className = "status-badge verified";
             } else {
-                contractEl.textContent = `WARNING: ${totalTokens - safeTokens} FLAGGED`;
+                contractEl.textContent = `RISK: ${totalTokens - safeTokens} TOKENS FLAGGED`;
                 contractEl.className = "status-badge danger";
+                console.warn("Token risks:", riskDetails);
             }
         }
 
@@ -550,6 +582,7 @@ async function runGlobalSafetyCheck() {
         console.error("Safety Check failed:", e);
     }
 }
+
 
 // Run safety check on load
 document.addEventListener('DOMContentLoaded', runGlobalSafetyCheck);
@@ -635,7 +668,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// --- PROJECT MIKOSHI: IMMORTALITY ENGRAM PROTOCOL ---
+
+// --- PROJECT MIKOSHI: IMMORTALITY ENGRAM PROTOCOL (Hardened) ---
 document.getElementById('upload-engram-btn')?.addEventListener('click', async () => {
     if (typeof window.ethereum === 'undefined') {
         alert("UPLINK FAILED: Please install MetaMask or Coinbase Wallet.");
@@ -656,33 +690,56 @@ document.getElementById('upload-engram-btn')?.addEventListener('click', async ()
         const timestamp = Date.now();
         const domain = window.location.host;
         
-        const message = `MIKOSHI UPLINK REQUEST\nDomain: ${domain}\nAddress: ${address}\nNonce: ${nonce}\nTimestamp: ${timestamp}\n\nSign this message to extract your digital engram. Zero gas required.`;
+        // IMPORTANT: The message string must be EXACTLY the same for signing and verification
+        const message = `MIKOSHI UPLINK REQUEST
+Domain: ${domain}
+Address: ${address}
+Nonce: ${nonce}
+Timestamp: ${timestamp}
+
+Sign this message to extract your digital engram. Zero gas required.`;
+        
         const signature = await signer.signMessage(message);
         
-        // SECURITY: Cryptographic Verification
-        const recoveredAddress = ethers.verifyMessage(message, signature);
-        if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
-            throw new Error("CRITICAL: Signature mismatch detected.");
+        // SECURITY: Cryptographic Verification with fallback
+        let verified = false;
+        try {
+            const recoveredAddress = ethers.verifyMessage(message, signature);
+            if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
+                verified = true;
+            }
+        } catch (e) {
+            console.warn("Standard verifyMessage failed, attempting manual recovery...");
+            // Fallback: If the wallet uses eth_sign (hash-first), the standard verify might fail
+            try {
+                const digest = ethers.hashMessage(message);
+                const recoveredAddress = ethers.recoverAddress(digest, signature);
+                if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
+                    verified = true;
+                }
+            } catch (e2) {
+                console.error("Manual recovery also failed:", e2);
+            }
+        }
+
+        if (!verified) {
+            throw new Error("CRITICAL: Signature verification failed. Please ensure your wallet supports personal_sign.");
         }
 
         // 1. Generate Immortality Data
         const hash = ethers.keccak256(ethers.toUtf8Bytes(signature));
-        
-        // Engram ID
         const engramId = `${address.slice(0,6)}...${address.slice(-4)}`;
         
-        // Generate Longevity Sequence (DNA-like string: A, C, G, T)
         const baseMap = { '0':'A', '1':'C', '2':'G', '3':'T', '4':'A', '5':'C', '6':'G', '7':'T', '8':'A', '9':'C', 'a':'G', 'b':'T', 'c':'A', 'd':'C', 'e':'G', 'f':'T' };
         let longevitySeq = "";
-        const rawHash = hash.substring(2, 34); // Use first 32 chars
+        const rawHash = hash.substring(2, 34);
         for (let i = 0; i < rawHash.length; i++) {
             longevitySeq += baseMap[rawHash[i].toLowerCase()] || "X";
             if (i < rawHash.length - 1) longevitySeq += "-";
         }
 
-        // Immortality Probability (Derived from hash)
         const probBase = parseInt(hash.substring(2, 6), 16);
-        const immortalityProb = (99.00 + (probBase / 65535) * 0.99).toFixed(2); // Maps to 99.00% - 99.99%
+        const immortalityProb = (99.00 + (probBase / 65535) * 0.99).toFixed(2);
 
         // 2. Update the UI
         document.getElementById('engram-id').textContent = engramId;
@@ -694,15 +751,6 @@ document.getElementById('upload-engram-btn')?.addEventListener('click', async ()
         const statusEl = document.getElementById('mikoshi-status');
         statusEl.textContent = "SOULKILLER COMPLETE";
         statusEl.style.color = "#00ffcc";
-        
-        // Animate DNA Strand
-        const dnaElements = document.querySelectorAll('.dna-strand span');
-        dnaElements.forEach((el, index) => {
-            el.style.animation = 'none'; // Reset
-            setTimeout(() => {
-                el.style.animation = 'dna-pulse 1.5s infinite alternate';
-            }, 10);
-        });
 
         // 3. Save Securely (Tamper-Proof)
         const engramData = { address, engramId, longevitySeq, immortalityProb, timestamp };
@@ -723,7 +771,7 @@ document.getElementById('upload-engram-btn')?.addEventListener('click', async ()
         btn.textContent = "UPLINK FAILED";
         btn.style.background = "#ff0055";
         if (e.code === 4001) alert("UPLINK ABORTED: Signature rejected.");
-        else alert(e.message || "Failed to extract engram.");
+        else alert(e.message || "Failed to extract engram. Please try again.");
     }
 });
 
@@ -736,7 +784,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = stored.data;
             const checksum = stored.checksum;
             
-            // SECURITY: Tamper detection
             const computedChecksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(data))).substring(0, 16);
             if (computedChecksum !== checksum) {
                 console.warn("SECURITY ALERT: Engram tampering detected. Wiping Mikoshi data.");
@@ -762,3 +809,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
