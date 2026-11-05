@@ -257,26 +257,31 @@ function startEbankEngine() {
 
 
 // --- ROBUST TOKEN SECURITY SCANNER (GoPlus API for Base) ---
+
+// --- ROBUST TOKEN SECURITY SCANNER (GoPlus API for Base) ---
 async function scanTokenSecurity(token) {
     const badge = document.getElementById(`sec-${token.id}`);
     if (!badge) return;
 
+    badge.textContent = "🛡️ Security: scanning...";
+    badge.style.color = "var(--dim)";
+
     try {
-        // Base chain ID is 8453
         const url = `https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${token.address}`;
         const res = await fetchWithTimeout(url, {}, 5000);
         const json = await res.json();
-        
-        // The API returns an object keyed by the lowercased contract address
-        const result = json.result?.[token.address.toLowerCase()];
 
-        if (!result) {
+        if (json.code !== 1 || !json.result) {
             badge.textContent = "🛡️ Security: No data";
-            badge.style.color = "var(--dim)";
             return;
         }
 
-        // Evaluate risk flags from the GoPlus response
+        const result = json.result[token.address.toLowerCase()];
+        if (!result) {
+            badge.textContent = "🛡️ Security: No data";
+            return;
+        }
+
         const isHoneypot = result.is_honeypot === "1";
         const cannotSell = result.cannot_sell_all === "1";
         const isOpenSource = result.is_open_source === "1";
@@ -296,10 +301,10 @@ async function scanTokenSecurity(token) {
             badge.textContent = "✅ Safe";
             badge.style.color = "#00ffcc";
         }
-
     } catch (e) {
         console.warn(`Security scan failed for ${token.symbol}:`, e);
         badge.textContent = "🛡️ Security: Error";
         badge.style.color = "var(--dim)";
     }
 }
+
