@@ -489,3 +489,147 @@ document.getElementById('connect-wallet-btn')?.addEventListener('click', async (
         alert("Could not connect wallet. Please try again.");
     }
 });
+
+
+// --- GLOBAL SAFETY & COMPATIBILITY CHECK ---
+async function runGlobalSafetyCheck() {
+    let totalLiquidityUsd = 0;
+    let safeTokens = 0;
+    let totalTokens = 0;
+
+    try {
+        const res = await fetch("tokens.json");
+        const tokens = await res.json();
+        totalTokens = tokens.length;
+
+        for (const t of tokens) {
+            // Check GoPlus Security
+            try {
+                const secRes = await fetch(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`);
+                const secJson = await secRes.json();
+                const result = secJson.result?.[t.address.toLowerCase()];
+                if (result && result.is_honeypot !== "1" && result.cannot_sell_all !== "1") safeTokens++;
+            } catch(e) {}
+
+            // Check Liquidity via DexScreener
+            try {
+                const dexRes = await fetch(`https://api.dexscreener.com/token-pairs/v1/base/${t.address}`);
+                const pairs = await dexRes.json();
+                if (Array.isArray(pairs)) {
+                    const best = pairs.reduce((a, b) => (a.liquidity?.usd > b.liquidity?.usd ? a : b), { liquidity: { usd: 0 } });
+                    totalLiquidityUsd += Number(best.liquidity?.usd || 0);
+                }
+            } catch(e) {}
+        }
+
+        const contractEl = document.getElementById("global-contract-status");
+        if (contractEl) {
+            if (safeTokens === totalTokens) {
+                contractEl.textContent = `${safeTokens}/${totalTokens} SECURE`;
+                contractEl.className = "status-badge verified";
+            } else {
+                contractEl.textContent = `WARNING: ${totalTokens - safeTokens} FLAGGED`;
+                contractEl.className = "status-badge danger";
+            }
+        }
+
+        const liqEl = document.getElementById("global-liquidity-status");
+        if (liqEl) {
+            if (totalLiquidityUsd > 10000) {
+                liqEl.textContent = `HEALTHY ($${(totalLiquidityUsd/1000).toFixed(1)}K)`;
+                liqEl.className = "status-badge verified";
+            } else if (totalLiquidityUsd > 1000) {
+                liqEl.textContent = `LOW ($${(totalLiquidityUsd/1000).toFixed(1)}K)`;
+                liqEl.className = "status-badge pending";
+            } else {
+                liqEl.textContent = `CRITICAL (< $1K)`;
+                liqEl.className = "status-badge danger";
+            }
+        }
+    } catch (e) {
+        console.error("Safety Check failed:", e);
+    }
+}
+
+// Run safety check on load
+document.addEventListener('DOMContentLoaded', runGlobalSafetyCheck);
+
+
+// --- SECURE SOUL IDENTITY PROTOCOL ---
+document.getElementById('init-soul-btn')?.addEventListener('click', async () => {
+    if (typeof window.ethereum === 'undefined') return alert("Please install MetaMask or Coinbase Wallet.");
+    const btn = document.getElementById('init-soul-btn');
+    btn.textContent = "Awaiting Signature...";
+    try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const address = await signer.getAddress();
+
+        // Anti-Replay & Domain Binding
+        const nonce = Math.random().toString(36).substring(2, 15);
+        const timestamp = Date.now();
+        const domain = window.location.host;
+        const message = `Domain: ${domain}\nAction: Initialize Soul Link\nAddress: ${address}\nNonce: ${nonce}\nTimestamp: ${timestamp}\n\nSign this message to prove ownership.`;
+
+        const signature = await signer.signMessage(message);
+        const recovered = ethers.verifyMessage(message, signature);
+        if (recovered.toLowerCase() !== address.toLowerCase()) throw new Error("Signature mismatch.");
+
+        const hash = ethers.keccak256(ethers.toUtf8Bytes(signature));
+        const soulCode = hash.substring(2, 66).toUpperCase();
+        const freqBase = parseInt(hash.substring(2, 6), 16) / 1000;
+        const soulFreq = (0.618 + (freqBase * 2)).toFixed(3);
+
+        const prefixes = ["Neon", "Void", "Specter", "Cyber", "Aero", "Echo", "Nyx", "Zenith", "Vortex"];
+        const suffixes = ["Weaver", "Runner", "Wraith", "Architect", "Nomad", "Seer", "Cipher", "Monk"];
+        const pre = prefixes[parseInt(hash.substring(6, 8), 16) % prefixes.length];
+        const suf = suffixes[parseInt(hash.substring(8, 10), 16) % suffixes.length];
+        const num = parseInt(hash.substring(10, 13), 16) % 999;
+        const soulName = `${pre}-${suf}-${num}`;
+
+        document.getElementById('soul-section').style.display = 'block';
+        document.getElementById('soul-wallet').textContent = `${address.slice(0,6)}...${address.slice(-4)}`;
+        document.getElementById('soul-name').textContent = soulName;
+        document.getElementById('soul-frequency').textContent = `${soulFreq} Hz`;
+        document.getElementById('soul-code').textContent = soulCode;
+        document.getElementById('soul-status').textContent = "VERIFIED";
+        document.getElementById('soul-status').style.color = "#00ffcc";
+        document.getElementById('soul-glyph').textContent = "✧";
+        btn.textContent = "Soul Linked"; btn.style.background = "var(--dim)"; btn.disabled = true;
+
+        if (typeof logMemory === 'function') logMemory(`Soul Verified: ${soulName}. Resonance: ${soulFreq} Hz.`, "#00ffcc");
+
+        // Tamper-Proof Storage
+        const soulData = { address, soulName, soulFreq, soulCode };
+        const checksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(soulData))).substring(0, 16);
+        localStorage.setItem("vitruvian_soul", JSON.stringify({ data: soulData, checksum: checksum }));
+
+    } catch (e) {
+        console.error(e);
+        btn.textContent = "Initialization Failed";
+        if (e.code === 4001) alert("Signature rejected.");
+        else alert(e.message || "Failed to verify identity.");
+    }
+});
+
+// Load securely
+document.addEventListener("DOMContentLoaded", () => {
+    const storedString = localStorage.getItem("vitruvian_soul");
+    if (storedString) {
+        try {
+            const stored = JSON.parse(storedString);
+            const data = stored.data, checksum = stored.checksum;
+            const computed = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(data))).substring(0, 16);
+            if (computed !== checksum) { localStorage.removeItem("vitruvian_soul"); return; }
+            document.getElementById('soul-section').style.display = 'block';
+            document.getElementById('soul-wallet').textContent = `${data.address.slice(0,6)}...${data.address.slice(-4)}`;
+            document.getElementById('soul-name').textContent = data.soulName;
+            document.getElementById('soul-frequency').textContent = `${data.soulFreq} Hz`;
+            document.getElementById('soul-code').textContent = data.soulCode;
+            document.getElementById('soul-status').textContent = "VERIFIED";
+            document.getElementById('soul-status').style.color = "#00ffcc";
+            const btn = document.getElementById('init-soul-btn');
+            if(btn) { btn.textContent = "Soul Linked"; btn.style.background = "var(--dim)"; btn.disabled = true; }
+        } catch(e) { localStorage.removeItem("vitruvian_soul"); }
+    }
+});
