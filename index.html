@@ -45,6 +45,48 @@
     </div></div>
   </section>
 
+  <!-- SOUL RESONANCE & LONGEVITY (Standalone Card) -->
+  <section class="grid-section" id="resonance-section">
+    <h2>🧬 Soul Resonance & Longevity Protocol</h2>
+    <div class="mikoshi-container">
+      <div class="mikoshi-card" style="border-color: #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.2);">
+        <div class="mikoshi-header" style="border-bottom-color: #00ffcc;">
+            <span class="mikoshi-title" style="color: #00ffcc; text-shadow: 0 0 5px #00ffcc;">RESONANCE PROTOCOL</span>
+            <span class="mikoshi-status" id="resonance-status" style="color: #ffaa00;">AWAITING INPUT</span>
+        </div>
+
+        <div class="mikoshi-body">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-family: monospace;">
+                <div>
+                    <p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">LONGEVITY TIME</p>
+                    <p id="resonance-longevity" style="color: #ffaa00; font-size: 1.1rem; font-weight: bold;">00:00:00</p>
+                </div>
+                <div>
+                    <p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">FREQ RESONANCE</p>
+                    <p id="resonance-freq" style="color: #00ffcc; font-size: 1.1rem; font-weight: bold;">0.000 MHz</p>
+                </div>
+                <div>
+                    <p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">NETWORK BAND</p>
+                    <p id="resonance-band" style="color: #00ffcc; font-size: 1.1rem; font-weight: bold;">UNKNOWN</p>
+                </div>
+                <div>
+                    <p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">SOUL STATUS</p>
+                    <p id="resonance-soul-status" style="color: #ff0055; font-size: 1.1rem; font-weight: bold;">UNBOUND</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="resonance-input-div" style="margin-top:15px; border-top:1px dashed #00ffcc; padding-top:15px;">
+            <p style="color:#00ffcc; font-size:0.75rem; margin-bottom:8px;">🧬 HUMAN IDENTITY INPUT (NHS Barcode / Personal ID):</p>
+            <input type="text" id="resonance-human-id" placeholder="Enter your identity code..." style="width:100%; padding:10px; background:#000; border:1px solid #00ffcc; color:#00ffcc; font-family:monospace; margin-bottom:10px; border-radius:4px; box-sizing:border-box;">
+            <button id="resonance-initiate-btn" class="btn-primary" style="width:100%; background:#00ffcc; color:#000; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">Initialize Resonance Protocol</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
   <section class="grid-section" id="global-safety-section">
     <h2>🛡️ Global Safety & Network Compatibility</h2>
     <div class="safety-grid">
@@ -131,7 +173,7 @@
 
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=100001"></script>
+<script src="app.js?v=100021"></script>
   <script src="agi_brain.js"></script>
 </body>
 </html>
