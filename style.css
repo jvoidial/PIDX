@@ -250,3 +250,63 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
 .vault-card {
     border-left: 3px solid #00ffcc;
 }
+
+/* --- GLOBAL SAFETY MODULE --- */
+.safety-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.safety-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+.safety-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+.safety-card h4 { color: var(--white); font-size: 0.9rem; margin-bottom: 5px; }
+.safety-card p { color: var(--dim); font-size: 0.75rem; margin-bottom: 10px; }
+.status-badge {
+    display: inline-block; padding: 4px 8px; border-radius: 4px;
+    font-size: 0.7rem; font-weight: bold; font-family: monospace;
+}
+.status-badge.verified { background: rgba(0, 255, 204, 0.1); color: #00ffcc; border: 1px solid #00ffcc; }
+.status-badge.danger { background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid #ff4444; }
+.status-badge.pending { background: rgba(255, 255, 255, 0.1); color: var(--dim); border: 1px solid var(--border); }
+
+/* --- SECURE SOUL IDENTITY STYLES --- */
+.soul-container { display: flex; justify-content: center; }
+.soul-card {
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid #00ffcc;
+    border-radius: 12px; padding: 20px;
+    width: 100%; max-width: 500px;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+    position: relative; overflow: hidden; font-family: monospace;
+}
+.soul-scanline {
+    position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+    background: #00ffcc; box-shadow: 0 0 10px #00ffcc;
+    animation: scanline 3s linear infinite;
+}
+@keyframes scanline { 0% { top: 0; } 100% { top: 100%; } }
+.soul-header {
+    display: flex; justify-content: space-between;
+    border-bottom: 1px dashed #333; padding-bottom: 10px; margin-bottom: 15px;
+}
+.soul-title { color: #fff; font-weight: bold; letter-spacing: 2px; }
+.soul-status { color: #ff4444; font-size: 0.75rem; font-weight: bold; }
+.soul-body { display: flex; gap: 20px; align-items: center; }
+.soul-glyph {
+    font-size: 4rem; color: #00ffcc;
+    text-shadow: 0 0 15px rgba(0,255,204,0.5);
+    animation: pulse-glyph 2s infinite alternate;
+}
+@keyframes pulse-glyph { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.1); opacity: 1; } }
+.soul-data p { margin-bottom: 8px; font-size: 0.8rem; color: #71767b; }
+.soul-data strong { color: #fff; }
+.soul-data span { color: #00ffcc; }
+.soul-footer { margin-top: 20px; text-align: right; border-top: 1px dashed #333; padding-top: 15px; }
