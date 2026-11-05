@@ -194,3 +194,47 @@ window.addEventListener("DOMContentLoaded", () => {
     if($("upload-engram-btn")) $("upload-engram-btn").addEventListener("click", initializeSoulkiller);
     if($("manual-connect-btn")) $("manual-connect-btn").addEventListener("click", handleManualConnect);
 });
+
+
+// ==========================================
+// FORCE AUTO-CONNECT ENGRAM ON LOAD
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Check if we already have a saved engram
+    const stored = localStorage.getItem("mikoshi_engram");
+    
+    // 2. If not, auto-generate one using the PIDX token address as the default "System" identity
+    if (!stored) {
+        const defaultAddress = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c"; // PIDX Token
+        const hash = ethers.keccak256(ethers.toUtf8Bytes(defaultAddress));
+        const engramId = `${defaultAddress.slice(0,6)}...${defaultAddress.slice(-4)}`;
+        const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
+        let seq = ""; const raw = hash.substring(2, 34);
+        for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
+        const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
+
+        // Update the UI immediately
+        if(document.getElementById('engram-id')) document.getElementById('engram-id').textContent = engramId;
+        if(document.getElementById('longevity-seq')) document.getElementById('longevity-seq').textContent = seq;
+        if(document.getElementById('immortality-prob')) document.getElementById('immortality-prob').textContent = `${prob}%`;
+        if(document.getElementById('relic-integrity')) {
+            document.getElementById('relic-integrity').textContent = "STABLE / ONLINE (AUTO)";
+            document.getElementById('relic-integrity').style.color = "#00ffcc";
+        }
+        if(document.getElementById('mikoshi-status')) {
+            document.getElementById('mikoshi-status').textContent = "AUTO-ENGRAM ACTIVE";
+            document.getElementById('mikoshi-status').style.color = "#00ffcc";
+        }
+
+        // Hide the manual input and initialize buttons so it just looks active
+        if(document.getElementById('upload-engram-btn')) document.getElementById('upload-engram-btn').style.display = "none";
+        if(document.getElementById('manual-connect-div')) document.getElementById('manual-connect-div').style.display = "none";
+
+        // Save it
+        const engramData = { address: defaultAddress, engramId, longevitySeq: seq, immortalityProb: prob, timestamp: Date.now() };
+        const checksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(engramData))).substring(0, 16);
+        localStorage.setItem("mikoshi_engram", JSON.stringify({ data: engramData, checksum: checksum }));
+        
+        if (typeof logMemory === 'function') logMemory("System Auto-Engram generated successfully.", "#00ffcc");
+    }
+});
