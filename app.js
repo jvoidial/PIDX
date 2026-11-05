@@ -182,3 +182,42 @@ window.addEventListener("DOMContentLoaded", () => {
     loadTokens();
     runSafety();
 });
+
+
+// --- MANUAL WALLET CONNECT ---
+document.getElementById('connect-wallet-btn')?.addEventListener('click', async () => {
+    if (typeof window.ethereum === 'undefined') {
+        return alert("Please install MetaMask or Coinbase Wallet.");
+    }
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const address = accounts[0];
+        
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x2105') {
+            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+        }
+
+        document.getElementById('wallet-display').textContent = `${address.slice(0,6)}...${address.slice(-4)}`;
+        document.getElementById('connect-wallet-btn').textContent = "Connected";
+        document.getElementById('connect-wallet-btn').style.background = "var(--dim)";
+        
+        // Override the auto-engram with the real wallet address
+        const hash = ethers.keccak256(ethers.toUtf8Bytes(address));
+        const engramId = `${address.slice(0,6)}...${address.slice(-4)}`;
+        const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
+        let seq = ""; const raw = hash.substring(2, 34);
+        for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
+        const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
+
+        if(document.getElementById('engram-id')) document.getElementById('engram-id').textContent = engramId;
+        if(document.getElementById('longevity-seq')) document.getElementById('longevity-seq').textContent = seq;
+        if(document.getElementById('immortality-prob')) document.getElementById('immortality-prob').textContent = `${prob}%`;
+        
+        if (typeof logMemory === 'function') logMemory(`Wallet Linked: ${engramId}`, "#00ffcc");
+
+    } catch (e) {
+        console.error(e);
+        alert("Connection failed.");
+    }
+});
