@@ -493,6 +493,8 @@ document.getElementById('connect-wallet-btn')?.addEventListener('click', async (
 
 
 // --- GLOBAL SAFETY MODULE (Granular GoPlus Risk Engine) ---
+
+// --- GLOBAL SAFETY MODULE (Refined GoPlus Risk Engine) ---
 async function runGlobalSafetyCheck() {
     let totalLiquidityUsd = 0;
     let safeTokens = 0;
@@ -517,27 +519,34 @@ async function runGlobalSafetyCheck() {
                     isSafe = false;
                     criticalFlags.push("No GoPlus data");
                 } else {
-                    // Granular risk evaluation based on GoPlus documentation
+                    // Critical failures (always unsafe)
                     if (result.is_honeypot === "1") { isSafe = false; criticalFlags.push("Honeypot"); }
                     if (result.cannot_sell_all === "1") { isSafe = false; criticalFlags.push("Cannot sell all"); }
-                    if (result.is_open_source === "0") { isSafe = false; criticalFlags.push("Unverified contract"); }
-                    if (result.is_mintable === "1") { criticalFlags.push("Mintable supply"); }
                     if (result.owner_change_balance === "1") { isSafe = false; criticalFlags.push("Owner can change balance"); }
                     if (result.hidden_owner === "1") { isSafe = false; criticalFlags.push("Hidden owner"); }
                     if (result.selfdestruct === "1") { isSafe = false; criticalFlags.push("Self-destruct"); }
                     if (result.transfer_pausable === "1") { isSafe = false; criticalFlags.push("Transfer pausable"); }
+
                     const buyTax = parseFloat(result.buy_tax || "0") * 100;
                     const sellTax = parseFloat(result.sell_tax || "0") * 100;
-                    if (sellTax > 10) { criticalFlags.push(`High sell tax (${sellTax}%)`); }
-                    if (buyTax > 10) { criticalFlags.push(`High buy tax (${buyTax}%)`); }
+                    if (sellTax > 10) { isSafe = false; criticalFlags.push(`High sell tax (${sellTax}%)`); }
+                    if (buyTax > 10) { isSafe = false; criticalFlags.push(`High buy tax (${buyTax}%)`); }
+
+                    // Non-critical warnings (still safe, but flag them)
+                    if (result.is_open_source === "0") { criticalFlags.push("Unverified source"); }
+                    if (result.is_mintable === "1") { criticalFlags.push("Mintable"); }
                 }
             } catch(e) {
                 isSafe = false;
                 criticalFlags.push("API error");
             }
 
+            // If there are only non-critical warnings, still count as safe
             if (isSafe) {
                 safeTokens++;
+                if (criticalFlags.length > 0) {
+                    console.log(`${t.symbol} warnings: ${criticalFlags.join(", ")}`);
+                }
             } else {
                 riskDetails.push(`${t.symbol}: ${criticalFlags.join(", ")}`);
             }
@@ -582,6 +591,7 @@ async function runGlobalSafetyCheck() {
         console.error("Safety Check failed:", e);
     }
 }
+
 
 
 // Run safety check on load
