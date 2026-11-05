@@ -27,54 +27,43 @@ const MINING_DATA = [
 ];
 
 function $(id) { return document.getElementById(id); }
-function fetchWithTimeout(url, options = {}, timeout = 5000) {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-    return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(id));
+
+// ============ AUTO-IMMORTALITY ENGRAM ============
+function generateAutoEngram() {
+    let saved = localStorage.getItem("ebank_immortality_engram");
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            renderEngramUI(data.id, data.seq, data.prob);
+            return;
+        } catch(e) { localStorage.removeItem("ebank_immortality_engram"); }
+    }
+    const seed = Date.now().toString() + Math.random().toString() + navigator.userAgent;
+    const hash = ethers.keccak256(ethers.toUtf8Bytes(seed));
+    const engramId = `0x${hash.substring(2, 8)}...${hash.substring(58, 64)}`;
+    const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
+    let seq = ""; const raw = hash.substring(2, 34);
+    for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
+    const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
+    const engramData = { id: engramId, seq: seq, prob: prob };
+    localStorage.setItem("ebank_immortality_engram", JSON.stringify(engramData));
+    renderEngramUI(engramId, seq, prob);
 }
 
-function loadMemory() {
-    const mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
-    const log = $("memory-log"); if (!log) return;
-    log.innerHTML = "";
-    if (mem.length === 0) log.innerHTML = '<div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>';
-    mem.forEach(e => { const d = document.createElement("div"); d.style.color = e.color || "var(--text)"; d.textContent = e.msg; log.appendChild(d); });
-    log.scrollTop = log.scrollHeight;
-}
-function logMemory(msg, color = "var(--text)") {
-    let mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || [];
-    mem.push({ msg: `[${new Date().toLocaleTimeString()}] ${msg}`, color });
-    if (mem.length > 10) mem.shift();
-    localStorage.setItem("vitruvian_memory", JSON.stringify(mem));
-    loadMemory();
+function renderEngramUI(id, seq, prob) {
+    if($('engram-id')) $('engram-id').textContent = id;
+    if($('longevity-seq')) $('longevity-seq').textContent = seq;
+    if($('immortality-prob')) $('immortality-prob').textContent = `${prob}%`;
+    if($('mikoshi-status')) { $('mikoshi-status').textContent = "ENGRAM ACTIVE"; $('mikoshi-status').style.color = "#00ffcc"; }
+    if($('relic-integrity')) { $('relic-integrity').textContent = "STABLE / IMMORTAL"; $('relic-integrity').style.color = "#00ffcc"; }
+    if($('upload-engram-btn')) $('upload-engram-btn').style.display = "none";
+    if($('manual-connect-div')) $('manual-connect-div').style.display = "none";
 }
 
-function startSimulations() {
-    let block = 53318083, time = 0;
-    loadMemory();
-    setInterval(() => {
-        time += 0.1; block++;
-        if($("live-block")) $("live-block").textContent = block.toLocaleString();
-        if($("val-continuity")) $("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
-        if($("val-coherence")) $("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
-        if($("val-persistence")) $("val-persistence").textContent = `${379 + Math.floor(time/10)} blocks`;
-        if($("val-voxels")) $("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
-        const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
-        const apy = 0.15 + (coh * 0.05);
-        if($("ebank-apy")) $("ebank-apy").textContent = `${(apy * 100).toFixed(2)}%`;
-        if($("immunity-score")) $("immunity-score").textContent = `${(99.8 - (1-coh)*10).toFixed(2)}%`;
-    }, 1000);
-    setInterval(() => {
-        const phases = ["OPEN", "CLOSING", "VEILED"];
-        const p = phases[Math.floor(Math.random()*phases.length)];
-        if($("v-veil")) { $("v-veil").textContent = p; $("v-veil").style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00"); }
-        logMemory(`Veil shifted to ${p}.`, p === "VEILED" ? "#ff4444" : "#00ffcc");
-    }, 15000);
-}
-
+// ============ TOKENS & CHARTS ============
 async function loadTokens() {
     let tokens = FALLBACK_TOKENS;
-    try { const res = await fetchWithTimeout("tokens.json", {}, 2000); tokens = await res.json(); } catch(e) {}
+    try { const r = await fetch("tokens.json"); if(r.ok) tokens = await r.json(); } catch(e) {}
     const grid = $("token-grid"); if (!grid) return;
     grid.innerHTML = "";
     tokens.forEach(t => {
@@ -83,219 +72,26 @@ async function loadTokens() {
         grid.appendChild(el);
     });
     tokens.forEach(async t => {
-        try { const r = await fetchWithTimeout(`${DEX_API}${t.address}`, {}, 3000); const p = await r.json(); if (p && p.length > 0) { const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]); if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; } } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } } } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
-        try { const r = await fetchWithTimeout(`https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=${t.address}`, {}, 3000); const j = await r.json(); const res = j.result?.[t.address.toLowerCase()]; if(res && $(`sec-${t.id}`)) { const h = res.is_honeypot === "1" || res.cannot_sell_all === "1"; $(`sec-${t.id}`).textContent = h ? "🚨 HONEYPOT" : "✅ Safe"; $(`sec-${t.id}`).style.color = h ? "#ff4444" : "#00ffcc"; } } catch(e) {}
-        renderChart(t);
+        try { const r = await fetch(`${DEX_API}${t.address}`); const p = await r.json(); if (p && p.length > 0) { const b = p.reduce((a,b) => a.liquidity?.usd > b.liquidity?.usd ? a : b, p[0]); if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = `$${(b.liquidity?.usd||0).toFixed(2)}`; $(`tvl-${t.id}`).className = "badge tiny"; } } else { if($(`tvl-${t.id}`)) { $(`tvl-${t.id}`).textContent = "LOW LIQUIDITY"; $(`tvl-${t.id}`).className = "badge empty"; } } } catch(e) { if($(`tvl-${t.id}`)) $(`tvl-${t.id}`).textContent = "ERROR"; }
     });
 }
 
-async function renderChart(token) {
-    const container = $(`chart-${token.id}`); if(!container) return;
-    try {
-        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/base/pools/${token.pool}/ohlcv/minute?aggregate=15&limit=100&include_empty_intervals=true`;
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-        const res = await fetchWithTimeout(proxyUrl, {}, 6000);
-        const json = await res.json();
-        const ohlcv = json.data?.attributes?.ohlcv_list;
-        if (!ohlcv || ohlcv.length === 0) throw new Error("No data");
-        
-        const unique = {}; ohlcv.forEach(c => unique[Math.floor(c[0])] = c);
-        const sorted = Object.values(unique).sort((a,b) => a[0]-b[0]);
-        container.innerHTML = "";
-        if(typeof LightweightCharts === 'undefined') throw new Error("Lib missing");
-
-        const chart = LightweightCharts.createChart(container, {
-            width: container.clientWidth, height: 180,
-            layout: { background: { color: 'transparent' }, textColor: '#71767b' },
-            grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
-            timeScale: { borderColor: 'rgba(255,255,255,0.1)' }, rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
-        });
-        const candle = chart.addCandlestickSeries({ upColor: '#00ffcc', downColor: '#ff4444', borderDownColor: '#ff4444', borderUpColor: '#00ffcc', wickDownColor: '#ff4444', wickUpColor: '#00ffcc' });
-        candle.setData(sorted.map(c => ({ time: Math.floor(c[0]), open: parseFloat(c[1]), high: parseFloat(c[2]), low: parseFloat(c[3]), close: parseFloat(c[4]) })).filter(d => d.open > 0));
-    } catch(e) { container.innerHTML = '<p style="color:var(--dim); text-align:center; padding-top:70px; font-size:0.75rem;">Chart unavailable (low data)</p>'; }
-}
-
-function runSafety() {
-    if($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
-    if($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
-}
-
+// ============ VAULTS & MINING ============
 function loadGrids() {
     if($("vault-grid")) { $("vault-grid").innerHTML = ""; VAULTS_DATA.forEach(v => { const el = document.createElement("div"); el.className = "card small vault-card"; el.innerHTML = `<h4>${v.name} <span class="badge tiny" style="color:#00ffcc;">${v.type}</span></h4><p style="color:var(--dim);font-size:0.8rem;">${v.asset}</p><p style="font-size:1.2rem;color:#00ffcc;">${v.apy} APY</p><p style="color:var(--dim);font-size:0.75rem;">${v.tvl}</p><a href="${v.link}" target="_blank" class="swap-btn" style="margin-top:5px;font-size:0.7rem;">View →</a>`; $("vault-grid").appendChild(el); }); }
     if($("mining-grid")) { $("mining-grid").innerHTML = ""; MINING_DATA.forEach(p => { const el = document.createElement("div"); el.className = "card small mining-card"; el.innerHTML = `<h4>${p.name} <span class="badge tiny">ONLINE</span></h4><p style="font-size:0.8rem;color:var(--dim);">${p.fee} | ${p.coin}</p><p class="mono" style="margin-top:5px;">${p.stratum}</p>`; $("mining-grid").appendChild(el); }); }
 }
 
-
-// ==========================================
-// AUTO-IMMORTALITY ENGRAM PROTOCOL
-// ==========================================
-function generateAutoEngram() {
-    // Check if user already has an engram saved in their browser
-    let saved = localStorage.getItem("ebank_immortality_engram");
-    
-    if (saved) {
-        try {
-            const data = JSON.parse(saved);
-            renderEngramUI(data.id, data.seq, data.prob);
-            return;
-        } catch(e) {
-            localStorage.removeItem("ebank_immortality_engram");
-        }
-    }
-
-    // If no engram exists, generate a brand new unique one for this user
-    const seed = Date.now().toString() + Math.random().toString() + navigator.userAgent;
-    const hash = ethers.keccak256(ethers.toUtf8Bytes(seed));
-    
-    // Create a pseudo-wallet address for the ID
-    const engramId = `0x${hash.substring(2, 8)}...${hash.substring(58, 64)}`;
-    
-    // Generate DNA Sequence
-    const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
-    let seq = ""; const raw = hash.substring(2, 34);
-    for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
-    
-    // Generate Probability
-    const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
-
-    // Save to browser
-    const engramData = { id: engramId, seq: seq, prob: prob };
-    localStorage.setItem("ebank_immortality_engram", JSON.stringify(engramData));
-
-    // Render to UI
-    renderEngramUI(engramId, seq, prob);
+// ============ SAFETY (WARNINGS) ============
+function runSafety() {
+    if($("global-contract-status")) { $("global-contract-status").textContent = "4/4 SECURE (WARNINGS)"; $("global-contract-status").className = "status-badge pending"; }
+    if($("global-liquidity-status")) { $("global-liquidity-status").textContent = "CRITICAL (< $1K)"; $("global-liquidity-status").className = "status-badge danger"; }
 }
 
-function renderEngramUI(id, seq, prob) {
-    const idEl = document.getElementById('engram-id');
-    const seqEl = document.getElementById('longevity-seq');
-    const probEl = document.getElementById('immortality-prob');
-    const statusEl = document.getElementById('mikoshi-status');
-    const integrityEl = document.getElementById('relic-integrity');
-    const btn = document.getElementById('upload-engram-btn');
-
-    if(idEl) idEl.textContent = id;
-    if(seqEl) seqEl.textContent = seq;
-    if(probEl) probEl.textContent = `${prob}%`;
-    
-    if(statusEl) {
-        statusEl.textContent = "ENGRAM ACTIVE";
-        statusEl.style.color = "#00ffcc";
-        statusEl.style.animation = "none"; // Stop blinking
-    }
-    if(integrityEl) {
-        integrityEl.textContent = "STABLE / IMMORTAL";
-        integrityEl.style.color = "#00ffcc";
-    }
-
-    // Hide the "Synchronize" button since it's auto-done
-    if(btn) {
-        btn.style.display = "none";
-        btn.textContent = "ENGRAM ACTIVE";
-    }
-
-    // If a manual override div exists, hide it
-    const manualDiv = document.getElementById('manual-connect-div');
-    if(manualDiv) manualDiv.style.display = "none";
-
-    if (typeof logMemory === 'function' && !window.hasLoggedEnrgram) {
-        logMemory(`eBank Immortality Engram Initialized. Sequence: ${seq.substring(0,10)}...`, "#00ffcc");
-        window.hasLoggedEnrgram = true;
-    }
-}
-
-// Allow users to manually overwrite if they want a custom signature
-function handleManualConnect() {
-    const val = document.getElementById("manual-wallet-input").value.trim();
-    if(val.length < 5) return alert("Enter a custom text or address.");
-    
-    const hash = ethers.keccak256(ethers.toUtf8Bytes(val));
-    const engramId = `0x${hash.substring(2, 8)}...${hash.substring(58, 64)}`;
-    const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
-    let seq = ""; const raw = hash.substring(2, 34);
-    for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
-    const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
-
-    const engramData = { id: engramId, seq: seq, prob: prob };
-    localStorage.setItem("ebank_immortality_engram", JSON.stringify(engramData));
-    renderEngramUI(engramId, seq, prob);
-}
-
-
-function startBackground() {
-    try {
-        const canvas = $("neural-canvas");
-        if (!canvas || typeof THREE === "undefined") return;
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 1000);
-        const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-        renderer.setSize(innerWidth, innerHeight);
-        renderer.setPixelRatio(devicePixelRatio);
-        camera.position.z = 15;
-        const silver = new THREE.LineBasicMaterial({color:0xc0c0c0, transparent:true, opacity:.15});
-        const hyper = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.BoxGeometry(8,8,8)), silver);
-        scene.add(hyper);
-        let t=0;
-        (function animate(){
-            requestAnimationFrame(animate);
-            t += .005;
-            hyper.rotation.x += .002; hyper.rotation.y += .003;
-            renderer.render(scene, camera);
-        })();
-        addEventListener("resize", () => { camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
-    } catch(e) {}
-}
-
+// ============ BOOT ============
 window.addEventListener("DOMContentLoaded", () => {
-    startBackground();
-    startSimulations();
+    generateAutoEngram();
     loadGrids();
     loadTokens();
     runSafety();
-    if($("upload-engram-btn")) $("upload-engram-btn").addEventListener("click", initializeSoulkiller);
-    if($("manual-connect-btn")) $("manual-connect-btn").addEventListener("click", handleManualConnect);
-});
-
-
-// ==========================================
-// FORCE AUTO-CONNECT ENGRAM ON LOAD
-// ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Check if we already have a saved engram
-    const stored = localStorage.getItem("mikoshi_engram");
-    
-    // 2. If not, auto-generate one using the PIDX token address as the default "System" identity
-    if (!stored) {
-        const defaultAddress = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c"; // PIDX Token
-        const hash = ethers.keccak256(ethers.toUtf8Bytes(defaultAddress));
-        const engramId = `${defaultAddress.slice(0,6)}...${defaultAddress.slice(-4)}`;
-        const baseMap = { '0':'A','1':'C','2':'G','3':'T','4':'A','5':'C','6':'G','7':'T','8':'A','9':'C','a':'G','b':'T','c':'A','d':'C','e':'G','f':'T' };
-        let seq = ""; const raw = hash.substring(2, 34);
-        for (let i = 0; i < raw.length; i++) { seq += baseMap[raw[i].toLowerCase()] || "X"; if (i < raw.length - 1) seq += "-"; }
-        const prob = (99.00 + (parseInt(hash.substring(2,6),16) / 65535) * 0.99).toFixed(2);
-
-        // Update the UI immediately
-        if(document.getElementById('engram-id')) document.getElementById('engram-id').textContent = engramId;
-        if(document.getElementById('longevity-seq')) document.getElementById('longevity-seq').textContent = seq;
-        if(document.getElementById('immortality-prob')) document.getElementById('immortality-prob').textContent = `${prob}%`;
-        if(document.getElementById('relic-integrity')) {
-            document.getElementById('relic-integrity').textContent = "STABLE / ONLINE (AUTO)";
-            document.getElementById('relic-integrity').style.color = "#00ffcc";
-        }
-        if(document.getElementById('mikoshi-status')) {
-            document.getElementById('mikoshi-status').textContent = "AUTO-ENGRAM ACTIVE";
-            document.getElementById('mikoshi-status').style.color = "#00ffcc";
-        }
-
-        // Hide the manual input and initialize buttons so it just looks active
-        if(document.getElementById('upload-engram-btn')) document.getElementById('upload-engram-btn').style.display = "none";
-        if(document.getElementById('manual-connect-div')) document.getElementById('manual-connect-div').style.display = "none";
-
-        // Save it
-        const engramData = { address: defaultAddress, engramId, longevitySeq: seq, immortalityProb: prob, timestamp: Date.now() };
-        const checksum = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(engramData))).substring(0, 16);
-        localStorage.setItem("mikoshi_engram", JSON.stringify({ data: engramData, checksum: checksum }));
-        
-        if (typeof logMemory === 'function') logMemory("System Auto-Engram generated successfully.", "#00ffcc");
-    }
 });
