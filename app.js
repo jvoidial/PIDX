@@ -501,20 +501,24 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
 // --- PROJECT MIKOSHI: IMMORTALITY ENGRAM PROTOCOL ---
 async function initializeSoulkiller() {
     const btn = document.getElementById('upload-engram-btn');
     if (!btn) return;
 
-    // Detect if standard mobile browser (No Web3 wallet)
+    // FIX: Explicitly check for window.ethereum and alert the user
     if (typeof window.ethereum === 'undefined') {
-        return alert("UPLINK FAILED: No Web3 wallet detected.\n\nIf you are on a mobile phone, you must open this website inside the MetaMask app browser or Coinbase Wallet app browser. Standard Chrome/Safari cannot sign transactions.");
+        return alert("UPLINK FAILED: No Web3 wallet detected.
+
+You are viewing this page in a standard browser. To initialize the Soulkiller, you must open this URL inside the MetaMask app browser or Coinbase Wallet app browser.");
     }
     
     btn.textContent = "CONNECTING WALLET...";
     btn.style.background = "#ffaa00";
 
     try {
+        // Force account connection to wake up MetaMask Mobile
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
         
@@ -544,7 +548,13 @@ async function initializeSoulkiller() {
         
         const nonce = Math.random().toString(36).substring(2, 15);
         const timestamp = Date.now();
-        const message = `MIKOSHI UPLINK REQUEST\nDomain: ${window.location.host}\nAddress: ${address}\nNonce: ${nonce}\nTimestamp: ${timestamp}\n\nSign this message to extract your digital engram. Zero gas required.`;
+        const message = `MIKOSHI UPLINK REQUEST
+Domain: ${window.location.host}
+Address: ${address}
+Nonce: ${nonce}
+Timestamp: ${timestamp}
+
+Sign this message to extract your digital engram. Zero gas required.`;
         
         const signature = await signer.signMessage(message);
         
