@@ -1,21 +1,23 @@
-
-const { ethers } = require("hardhat");
+require("dotenv").config();
+const { ethers } = require("ethers");
+const fs = require("fs");
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
-  console.log("Deploying contracts with the account:", deployer.address);
-
-  // PIDX Token Address on Base
-  const ASSET_ADDRESS = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c"; 
-
-  const Vault = await ethers.getContractFactory("SpiritVault");
-  const vault = await Vault.deploy(ASSET_ADDRESS, "Spirit PIDX Vault", "sPIDX");
-
-  await vault.waitForDeployment();
-  console.log("SpiritVault deployed to:", await vault.getAddress());
+    if (!process.env.PRIVATE_KEY || process.env.PRIVATE_KEY === "0x...") {
+        console.log("❌ Skipping deployment. Please edit .env and add your PRIVATE_KEY.");
+        return;
+    }
+    const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL || "https://mainnet.base.org");
+    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    const art = JSON.parse(fs.readFileSync("contracts/PIDXLocker.json", "utf8"));
+    
+    console.log("Deploying from:", wallet.address);
+    const factory = new ethers.ContractFactory(art.abi, art.bytecode, wallet);
+    const contract = await factory.deploy();
+    await contract.waitForDeployment();
+    
+    const addr = await contract.getAddress();
+    fs.writeFileSync("locker-address.txt", addr);
+    console.log("✅ LOCKER DEPLOYED:", addr);
 }
-
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main().catch(console.error);
