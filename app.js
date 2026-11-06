@@ -263,3 +263,83 @@ window.addEventListener("DOMContentLoaded", () => {
         } catch(e) {}
     }
 });
+// --- PIDX LOCKER WEB3 LOGIC (FIXED: Includes Approve Step) ---
+async function scanAndLockPositions() {
+    const btn = document.getElementById("scan-lock-btn");
+    const logEl = document.getElementById("locker-log");
+    const lockerAddr = document.getElementById("locker-addr").textContent.trim();
+
+    if (!connectedWallet) return alert("Please connect your wallet in the header first.");
+    if (lockerAddr === "Pending Deploy") return alert("Locker contract not deployed yet. Add your key to .env and run the script.");
+
+    btn.textContent = "Connecting...";
+    btn.style.background = "#333";
+    logEl.textContent = "";
+    
+    try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        
+        // Base Network Uniswap V3 NonfungiblePositionManager
+        const NPM_ADDR = "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1";
+        const NPM_ABI = [
+            "function balanceOf(address) view returns (uint256)",
+            "function tokenOfOwnerByIndex(address, uint256) view returns (uint256)",
+            "function approve(address to, uint256 tokenId) external"
+        ];
+        const LOCKER_ABI = ["function lockPosition(address nftContract, uint256 tokenId, uint256 lockDuration) external"];
+
+        const npm = new ethers.Contract(NPM_ADDR, NPM_ABI, signer);
+        const locker = new ethers.Contract(lockerAddr, LOCKER_ABI, signer);
+
+        const bal = await npm.balanceOf(connectedWallet);
+        if (bal === 0n) {
+            logEl.textContent = "No Uniswap V3 positions found.";
+            btn.textContent = "Scan Wallet & Lock Positions";
+            btn.style.background = "#8247e5";
+            return;
+        }
+
+        logEl.textContent = `Found ${bal} position(s). Preparing...`;
+        const ONE_YEAR = 365 * 24 * 60 * 60;
+        let lockedCount = 0;
+
+        for (let i = 0; i < Number(bal); i++) {
+            const tokenId = await npm.tokenOfOwnerByIndex(connectedWallet, i);
+            
+            try {
+                // STEP 1: APPROVE THE LOCKER CONTRACT
+                logEl.textContent = `Approving Locker for NFT #${tokenId}...`;
+                const approveTx = await npm.approve(lockerAddr, tokenId);
+                await approveTx.wait();
+
+                // STEP 2: LOCK THE POSITION
+                logEl.textContent = `Locking NFT #${tokenId} for 1 year...`;
+                const lockTx = await locker.lockPosition(NPM_ADDR, tokenId, ONE_YEAR);
+                await lockTx.wait();
+                
+                lockedCount++;
+            } catch(e) {
+                console.warn(`Could not lock ${tokenId}`, e);
+            }
+        }
+
+        logEl.textContent = `✅ Successfully locked ${lockedCount} position(s)!`;
+        btn.textContent = "Locked!";
+        btn.style.background = "#00ffcc";
+        btn.style.color = "#000";
+        
+        if (typeof logMemory === 'function') {
+            logMemory(`PIDX Locker: Locked ${lockedCount} Uniswap V3 positions.`, "#8247e5");
+        }
+
+    } catch (e) {
+        console.error(e);
+        logEl.textContent = "❌ Error scanning or locking positions.";
+        btn.textContent = "Scan Wallet & Lock Positions";
+        btn.style.background = "#8247e5";
+    }
+}
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("scan-lock-btn")?.addEventListener("click", scanAndLockPositions);
+});

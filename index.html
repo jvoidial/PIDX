@@ -68,6 +68,29 @@
     </div>
   </section>
 
+  <section class="grid-section" id="pidx-locker-section">
+    <h2>🔒 PIDX Locker · Lock Uniswap V3 Positions</h2>
+    <div class="mikoshi-container">
+      <div class="mikoshi-card" style="border-color: #8247e5; box-shadow: 0 0 20px rgba(130,71,229,0.2); max-width: 100%;">
+        <div class="mikoshi-header" style="border-bottom-color: #8247e5;">
+            <span class="mikoshi-title" style="color: #8247e5; text-shadow: 0 0 5px #8247e5;">LIQUIDITY LOCKER</span>
+            <span class="mikoshi-status" id="locker-status" style="color: #00ffcc;">ACTIVE</span>
+        </div>
+        <div style="font-family: monospace; font-size: 0.8rem; color: #8899a6; margin-bottom: 15px;">
+            <p>🔗 <strong>CONTRACT:</strong> <span id="locker-addr" style="color:#8247e5; word-break:break-all;">Pending Deploy</span></p>
+            <p>🛡️ <strong>SECURITY:</strong> Immutable UNCX-Style Vault</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
+            <p style="color: #fff; font-size: 0.9rem; margin-bottom: 10px;">Lock your Uniswap V3 NFTs (WETH/WBTC) to prove liquidity is safe.</p>
+            <button id="scan-lock-btn" class="btn-primary" style="width:100%; background:#8247e5; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">Scan Wallet & Lock Positions</button>
+            <p id="locker-log" style="color: #00ffcc; font-size: 0.75rem; margin-top: 10px; text-align: center;"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
   <section class="grid-section"><h2>🏦 Digital eBank · Auto-Immune Vault</h2><div class="ebank-container">
     <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(0,255,204,0.1);color:#00ffcc;border:1px solid #00ffcc;">AUTO-COMPOUNDING ACTIVE</span></div><div class="immunity-shield"><span style="font-size:0.75rem;color:var(--dim);">Auto-Immune Shield</span><span id="immunity-score" style="font-family:monospace;font-size:1.2rem;color:#00ffcc;font-weight:bold;">99.80%</span></div></div>
     <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Yield Accrued (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div><div class="ebank-stat"><span class="label">Total Protocol TVL</span><span class="value" id="ebank-tvl">$842,912.00</span></div></div>
@@ -105,6 +128,6 @@
   </section>
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=100030"></script>
+<script src="app.js?v=100105"></script>
 </body>
 </html>
