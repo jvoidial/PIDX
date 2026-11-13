@@ -390,11 +390,15 @@ function logMemory(msg, color) {
 }
 
 // ------------------------------------------------------------ simulations
+// Everything in this function is ANIMATED COSMETIC DATA, not a measurement.
+// It must never write to elements that display real chain state: in
+// particular #live-block is owned by the RPC health loop (setLiveBlock) and
+// must not be incremented here, or the dashboard would show a fake block
+// height next to a real RPC reading.
 function startSimulations() {
-  let block = 53318083, time = 0;
+  let time = 0;
   setInterval(() => {
-    time += 0.1; block++;
-    if ($("live-block")) $("live-block").textContent = block.toLocaleString();
+    time += 0.1;
     if ($("val-continuity")) $("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
     if ($("val-coherence")) $("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
     if ($("val-persistence")) $("val-persistence").textContent = (379 + Math.floor(time / 10)) + " blocks";
@@ -404,12 +408,13 @@ function startSimulations() {
     if ($("ebank-apy")) $("ebank-apy").textContent = (apy * 100).toFixed(2) + "%";
     if ($("immunity-score")) $("immunity-score").textContent = (99.8 - (1 - coh) * 10).toFixed(2) + "%";
   }, 1000);
+  // The veil is a decorative animation. It is NOT logged to the memory
+  // terminal: it carries no information and previously flooded the log.
   setInterval(() => {
     const phases = ["OPEN", "CLOSING", "VEILED"];
     const p = phases[Math.floor(Math.random() * phases.length)];
     const veil = $("v-veil");
     if (veil) { veil.textContent = p; veil.style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00"); }
-    logMemory("Veil shifted to " + p + ".", p === "VEILED" ? "#ff4444" : "#00ffcc");
   }, 15000);
 }
 
@@ -452,7 +457,9 @@ function renderEngramUI(id, seq, prob) {
   const status = $("mikoshi-status");
   if (status) { status.textContent = "ENGRAM ACTIVE"; status.style.color = "#00ffcc"; }
   const relic = $("relic-integrity");
-  if (relic) { relic.textContent = "STABLE / IMMORTAL"; relic.style.color = "#00ffcc"; }
+  // This is a locally generated novelty. It must not claim to be verified or
+  // "immortal" — nothing here touches the chain.
+  if (relic) { relic.textContent = "LOCAL ONLY"; relic.style.color = "#8899a6"; }
   const btn = $("upload-engram-btn"); if (btn) btn.style.display = "none";
 }
 
@@ -509,14 +516,17 @@ function initiateResonance() {
       const band = detectNetworkBand();
       if ($("resonance-freq")) $("resonance-freq").textContent = freq + " MHz";
       if ($("resonance-band")) { $("resonance-band").textContent = band; $("resonance-band").style.color = "#00ffcc"; }
-      if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL"; $("resonance-soul-status").style.color = "#00ffcc"; }
+      if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = isGuest ? "BOUND (GUEST)" : "BOUND"; $("resonance-soul-status").style.color = "#00ffcc"; }
       if ($("resonance-status")) { $("resonance-status").textContent = "PROTOCOL ACTIVE"; $("resonance-status").style.color = "#00ffcc"; }
       playResonanceSound();
       const startTime = Date.now(); startResonanceTimer(startTime);
       if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
       const input = $("resonance-human-id"); if (input) input.disabled = true;
       logMemory("Resonance Bound (" + (isGuest ? "Guest" : "Wallet") + "). Band: " + band + ". Freq: " + freq + " MHz.", "#00ffcc");
-      try { localStorage.setItem("ebank_resonance_data", JSON.stringify({ humanId: humanId, freq: freq, band: band, startTime: startTime, isGuest: isGuest })); } catch (_) {}
+      // Persist only a short non-reversible tag, never the raw input, so a
+      // real identifier can never be read back out of localStorage.
+      const tag = hash.substring(2, 8);
+      try { localStorage.setItem("ebank_resonance_data", JSON.stringify({ tag: tag, freq: freq, band: band, startTime: startTime, isGuest: isGuest })); } catch (_) {}
     } catch (_) {
       if (btn) { btn.textContent = "ERROR"; btn.style.background = "#ff4444"; }
     }
@@ -679,7 +689,7 @@ async function hydrateToken(t) {
         const warn = flags.some(f => ["high-tax", "owner-can-burn-balances", "unverified-source", "modifiable-tax"].includes(f));
         const label = critical ? "🚨 RISK: " + flags.slice(0, 2).join(", ")
                     : warn ? "⚠️ CAUTION: " + flags.slice(0, 2).join(", ")
-                    : "✅ Safe (no flags)";
+                    : "🛡️ No GoPlus flags";
         setSafeText(secEl, label);
         if (secEl) secEl.style.color = critical ? "#ff4444" : (warn ? "#ffaa00" : "#00ffcc");
         recordHealth(id, { sec: { level: critical ? "critical" : (warn ? "warn" : "safe"), flags: flags } });
@@ -801,7 +811,9 @@ function updateBotsUI() {
 function startBotsEngine() {
   updateBotsUI();
   setInterval(() => {
-    if (dcaActive) { dcaPnl += Math.random() * 2.5 - 0.5; dcaTrades += Math.floor(Math.random() * 3); dcaWin = 70 + Math.random() * 15; updateBotsUI(); logMemory("DCA Bot executed trade. PnL: $" + dcaPnl.toFixed(2), "#00ffcc"); }
+    // These are SIMULATED trades. The log says so, so nobody mistakes the
+    // PnL for real fills.
+    if (dcaActive) { dcaPnl += Math.random() * 2.5 - 0.5; dcaTrades += Math.floor(Math.random() * 3); dcaWin = 70 + Math.random() * 15; updateBotsUI(); logMemory("DCA Bot (simulated) tick. Fake PnL: $" + dcaPnl.toFixed(2), "#ffaa00"); }
     if (gridActive) { gridPnl += Math.random() * 1.5 - 0.3; gridTrades += Math.floor(Math.random() * 2); gridWin = 60 + Math.random() * 20; updateBotsUI(); }
   }, 3000);
 
@@ -1018,12 +1030,20 @@ function restoreResonance() {
   if (!savedRes) return;
   try {
     const data = JSON.parse(savedRes);
+    // Older builds stored the raw input verbatim. If that happened, drop it
+    // immediately and rewrite the record without the identifier.
+    if (data && data.humanId) {
+      delete data.humanId;
+      data.tag = data.tag || "purged";
+      try { localStorage.setItem("ebank_resonance_data", JSON.stringify(data)); } catch (_) {}
+    }
     if ($("resonance-freq")) $("resonance-freq").textContent = data.freq + " MHz";
     if ($("resonance-band")) { $("resonance-band").textContent = data.band; $("resonance-band").style.color = "#00ffcc"; }
-    if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = data.isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL"; $("resonance-soul-status").style.color = "#00ffcc"; }
+    if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = data.isGuest ? "BOUND (GUEST)" : "BOUND"; $("resonance-soul-status").style.color = "#00ffcc"; }
     if ($("resonance-status")) { $("resonance-status").textContent = "PROTOCOL ACTIVE"; $("resonance-status").style.color = "#00ffcc"; }
     const btn = $("resonance-initiate-btn"); if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
-    const input = $("resonance-human-id"); if (input) { input.value = data.humanId; input.disabled = true; }
+    const input = $("resonance-human-id");
+    if (input) { input.value = ""; input.placeholder = data.tag ? "saved (tag " + data.tag + ")" : "saved locally"; input.disabled = true; }
     if (data.startTime) startResonanceTimer(data.startTime);
   } catch (_) {}
 }
@@ -1273,5 +1293,6 @@ window.PIDX_APP = {
   updateBotGate: updateBotGate,
   fetchLockedPositions: fetchLockedPositions,
   refreshBurnCounter: refreshBurnCounter,
-  refreshRpcHealth: refreshRpcHealth
+  refreshRpcHealth: refreshRpcHealth,
+  setLiveBlock: setLiveBlock
 };
