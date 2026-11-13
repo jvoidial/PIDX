@@ -37,8 +37,10 @@ const LOCKER_ADDR = "0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD";
 const PIDX_ADDR    = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c";
 const BURN_ADDR    = "0x000000000000000000000000000000000000dEaD";
 const BASE_RPC     = "https://mainnet.base.org";
+const BASE_WS      = "wss://mainnet.base.org"; // WS-capable endpoint (falls back to polling)
 const RPC_FALLBACKS = ["https://mainnet.base.org", "https://base-rpc.publicnode.com"];
 const GECKO_API    = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
+const GECKO_TOKEN_POOLS = "https://api.geckoterminal.com/api/v2/networks/base/tokens/";
 const BOT_MIN_PIDX = 1000n * 10n ** 18n; // token gate: 1,000 PIDX (18 decimals)
 const LOG_WINDOW   = 2000;               // bounded eth_getLogs window (public RPCs reject big ranges)
 
@@ -60,7 +62,7 @@ const LOCKER_ABI = [
 // Fallback token list. Used ONLY if tokens.json cannot be read. Each field is
 // still passed through the sanitising renderer below.
 const FALLBACK_TOKENS = [
-  { id:"pidx",    symbol:"PIDX",    name:"Pennies Index",  freq:"0.618 Hz", address:"0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c", pool:"0xfa8f70efe22da989ec3e77fb25647d44cdb2248f" },
+  { id:"pidx",    symbol:"PIDX",    name:"Pennies Index",  freq:"0.618 Hz", address:"0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c", pool:"0xc4f9124ffe11279ea2cac53e8d95c30c1b26724369e265860eec9495bc7cb6a6" },
   { id:"sguide",  symbol:"SGUIDE",  name:"Spirit Guide",   freq:"1.618 Hz", address:"0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a", pool:"0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2" },
   { id:"vdoo",    symbol:"VDOO",    name:"VOUDOO Infinity",freq:"2.618 Hz", address:"0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", pool:"0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59" },
   { id:"pennies", symbol:"PENNIES", name:"Pennies CHEQ",   freq:"3.618 Hz", address:"0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", pool:"0x29a0ae1f10629f8855c87c911531ffb2c98d68c6" }
@@ -162,15 +164,39 @@ async function erc20BalanceOf(token, holder) {
   return BigInt(res || "0x0");
 }
 
-// GeckoTerminal pool reserve (USD) by pool address. Returns null on failure.
-async function geckoPoolReserve(poolAddress) {
-  if (!isAddress(poolAddress)) return null;
+// GeckoTerminal reserve (USD) by pool id. Accepts BOTH a 20-byte pool address
+// (0x + 40 hex) and a 32-byte pool id (0x + 64 hex): the token list mixes the
+// two, and the previous 40-hex-only gate silently rejected every 64-hex id, so
+// the fallback returned null for 3 of 4 tokens whenever DexScreener was down.
+const POOL_ID_RE = /^0x[a-fA-F0-9]{40}$|^0x[a-fA-F0-9]{64}$/;
+async function geckoPoolReserve(poolId) {
+  if (typeof poolId !== "string" || !POOL_ID_RE.test(poolId)) return null;
   try {
-    const r = await fetchWithTimeout(GECKO_API + poolAddress, API_TIMEOUT);
+    const r = await fetchWithTimeout(GECKO_API + poolId, API_TIMEOUT);
     if (!r.ok) return null;
     const j = await r.json();
     const usd = Number(j?.data?.attributes?.reserve_in_usd);
     return Number.isFinite(usd) ? usd : null;
+  } catch (_) { return null; }
+}
+
+// GeckoTerminal reserve (USD) for a token, discovered from its own pool list and
+// reduced to the deepest pool. Self-correcting: never trusts a hardcoded pool id
+// that goes stale when liquidity migrates to a new pool.
+async function geckoTokenReserve(tokenAddress) {
+  if (!isAddress(tokenAddress)) return null;
+  try {
+    const r = await fetchWithTimeout(GECKO_TOKEN_POOLS + tokenAddress + "/pools", API_TIMEOUT);
+    if (!r.ok) return null;
+    const j = await r.json();
+    const pools = j && j.data;
+    if (!Array.isArray(pools) || !pools.length) return null;
+    let best = null;
+    for (const p of pools) {
+      const usd = Number(p?.attributes?.reserve_in_usd);
+      if (Number.isFinite(usd) && (best === null || usd > best)) best = usd;
+    }
+    return best;
   } catch (_) { return null; }
 }
 
@@ -505,6 +531,14 @@ function setBadge(el, text, cls, color) {
   if (color) el.style.color = color;
 }
 
+// Per-token health recorded as each card resolves, so the global safety panel
+// can report real aggregates instead of hardcoded strings.
+const tokenHealth = new Map(); // id -> { liq:number|null, sec:{level:string,flags:string[]}|null }
+function recordHealth(id, patch) {
+  const cur = tokenHealth.get(id) || { liq: null, sec: null };
+  tokenHealth.set(id, Object.assign(cur, patch));
+}
+
 async function loadTokens() {
   let tokens = FALLBACK_TOKENS;
   try {
@@ -572,6 +606,9 @@ async function loadTokens() {
 
   // --- resolve each card's live data with deadlines + graceful failure ---
   await Promise.all(tokens.map(t => hydrateToken(t)));
+
+  // Now that every card has a real result (or a real failure), aggregate them.
+  runSafety();
 }
 
 async function hydrateToken(t) {
@@ -582,7 +619,7 @@ async function hydrateToken(t) {
   const addr  = isAddress(t.address) ? t.address : "";
 
   // --- DexScreener liquidity (with GeckoTerminal fallback) ---
-  if (!addr) { setBadge(tvlEl, "NO ADDRESS", "badge empty"); }
+  if (!addr) { setBadge(tvlEl, "NO ADDRESS", "badge empty"); recordHealth(id, { liq: null }); }
   else {
     try {
       const r = await fetchWithTimeout(DEX_API + addr, API_TIMEOUT);
@@ -595,20 +632,27 @@ async function hydrateToken(t) {
         }, pairs[0]);
         const usd = Number(best?.liquidity?.usd) || 0;
         setBadge(tvlEl, "$" + usd.toFixed(2), "badge tiny");
+        recordHealth(id, { liq: usd });
       } else {
-        // DexScreener returned nothing; try GeckoTerminal by pool id.
-        const pool = typeof t.pool === "string" ? t.pool : "";
-        const gecko = pool ? await geckoPoolReserve(pool) : null;
-        if (gecko != null) setBadge(tvlEl, "$" + gecko.toFixed(2), "badge tiny");
-        else setBadge(tvlEl, "LOW DATA", "badge empty");
+        // DexScreener returned nothing: discover the deepest pool from
+        // GeckoTerminal directly (no stale hardcoded pool id), then fall back to
+        // the pool id in the token list as a last resort.
+        let gecko = await geckoTokenReserve(addr);
+        if (gecko == null) {
+          const pool = typeof t.pool === "string" ? t.pool : "";
+          if (pool) gecko = await geckoPoolReserve(pool);
+        }
+        if (gecko != null) { setBadge(tvlEl, "$" + gecko.toFixed(2), "badge tiny"); recordHealth(id, { liq: gecko }); }
+        else { setBadge(tvlEl, "LOW DATA", "badge empty"); recordHealth(id, { liq: null }); }
       }
     } catch (e) {
       setBadge(tvlEl, (e && e.name === "AbortError") ? "TIMEOUT" : "API ERROR", "badge empty");
+      recordHealth(id, { liq: null });
     }
   }
 
   // --- GoPlus security ---
-  if (!addr) { setSafeText(secEl, "🛡️ Security: unknown token"); }
+  if (!addr) { setSafeText(secEl, "🛡️ Security: unknown token"); recordHealth(id, { sec: null }); }
   else {
     try {
       const r = await fetchWithTimeout(GOPLUS_API + addr, API_TIMEOUT);
@@ -618,24 +662,64 @@ async function hydrateToken(t) {
       if (!res) {
         setSafeText(secEl, "🛡️ Security: LOW DATA (not indexed)");
         if (secEl) secEl.style.color = "var(--dim)";
+        recordHealth(id, { sec: null });
       } else {
-        const honeypot = res.is_honeypot === "1" || res.cannot_sell_all === "1";
-        const highTax = (parseFloat(res.buy_tax) || 0) > 0.1 || (parseFloat(res.sell_tax) || 0) > 0.1;
-        setSafeText(secEl, honeypot ? "🚨 HONEYPOT" : (highTax ? "⚠️ HIGH TAX" : "✅ Safe"));
-        if (secEl) secEl.style.color = honeypot ? "#ff4444" : (highTax ? "#ffaa00" : "#00ffcc");
+        const flags = [];
+        if (res.is_honeypot === "1" || res.cannot_sell_all === "1") flags.push("honeypot");
+        if ((parseFloat(res.buy_tax) || 0) > 0.1 || (parseFloat(res.sell_tax) || 0) > 0.1) flags.push("high-tax");
+        if (res.hidden_owner === "1") flags.push("hidden-owner");
+        if (res.can_take_back_ownership === "1") flags.push("reclaim-ownership");
+        if (res.owner_change_balance === "1") flags.push("owner-can-burn-balances");
+        if (res.is_open_source === "0") flags.push("unverified-source");
+        const critical = flags.includes("honeypot") || flags.includes("hidden-owner") || flags.includes("reclaim-ownership");
+        const warn = flags.includes("high-tax") || flags.includes("owner-can-burn-balances") || flags.includes("unverified-source");
+        const label = critical ? "🚨 RISK: " + flags.slice(0, 2).join(", ")
+                    : warn ? "⚠️ CAUTION: " + flags.slice(0, 2).join(", ")
+                    : "✅ Safe (no flags)";
+        setSafeText(secEl, label);
+        if (secEl) secEl.style.color = critical ? "#ff4444" : (warn ? "#ffaa00" : "#00ffcc");
+        recordHealth(id, { sec: { level: critical ? "critical" : (warn ? "warn" : "safe"), flags: flags } });
       }
     } catch (e) {
       setSafeText(secEl, (e && e.name === "AbortError") ? "🛡️ Security: TIMEOUT" : "🛡️ Security: API ERROR");
       if (secEl) secEl.style.color = "#ffaa00";
+      recordHealth(id, { sec: null });
     }
   }
 }
 
+// Aggregate the per-token health recorded above into the two global badges.
+// Called AFTER hydration so the numbers reflect real API results, not guesses.
 function runSafety() {
-  const c = $("global-contract-status");
-  if (c) { c.textContent = "4/4 SECURE (WARNINGS)"; c.className = "status-badge pending"; }
-  const l = $("global-liquidity-status");
-  if (l) { l.textContent = "CRITICAL (< $1K)"; l.className = "status-badge danger"; }
+  const entries = [...tokenHealth.values()];
+  const scanned = entries.length;
+
+  // Contract security: count tokens whose GoPlus scan came back clean.
+  const sec = $("global-contract-status");
+  if (sec) {
+    const indexed = entries.filter(e => e.sec).length;
+    const critical = entries.filter(e => e.sec && e.sec.level === "critical").length;
+    const warn = entries.filter(e => e.sec && e.sec.level === "warn").length;
+    const clean = entries.filter(e => e.sec && e.sec.level === "safe").length;
+    if (!scanned) { sec.textContent = "AWAITING SCAN"; sec.className = "status-badge pending"; }
+    else if (critical) { sec.textContent = critical + " RISK / " + scanned; sec.className = "status-badge danger"; }
+    else if (warn) { sec.textContent = clean + " CLEAN · " + warn + " CAUTION"; sec.className = "status-badge pending"; }
+    else if (indexed) { sec.textContent = clean + "/" + scanned + " CLEAN"; sec.className = "status-badge verified"; }
+    else { sec.textContent = "LOW DATA (unindexed)"; sec.className = "status-badge pending"; }
+  }
+
+  // Liquidity health: bucket the deepest real pool across all tokens.
+  const liq = $("global-liquidity-status");
+  if (liq) {
+    const vals = entries.map(e => e.liq).filter(v => typeof v === "number" && Number.isFinite(v));
+    if (!vals.length) { liq.textContent = "NO DATA"; liq.className = "status-badge pending"; }
+    else {
+      const max = Math.max(...vals);
+      if (max < 1000) { liq.textContent = "CRITICAL (< $1K)"; liq.className = "status-badge danger"; }
+      else if (max < 50000) { liq.textContent = "THIN (< $50K)"; liq.className = "status-badge pending"; }
+      else { liq.textContent = "HEALTHY ($" + Math.round(max).toLocaleString() + ")"; liq.className = "status-badge verified"; }
+    }
+  }
 }
 
 // ---------------------------------------------------------------- grids
@@ -942,39 +1026,101 @@ function restoreResonance() {
 
 // ================================================== ECOSYSTEM UPGRADES
 
-// --- Upgrade: RPC / block health via 5s HTTP polling.
-// A static GitHub Pages site cannot hold a wss:// connection to Base's public
-// RPC (it returns HTTP 405), so we poll over HTTPS with fetchWithTimeout.
-// Block number refreshes every tick; the (heavier) eth_getLogs lock scan runs
-// on a slower cadence so we don't trip the public RPC's rate limit (429s).
+// --- Upgrade: block health. Try a live WebSocket first (eth_subscribe
+// newHeads) and fall back to a 5s HTTP polling loop via fetchWithTimeout if the
+// socket cannot open or drops. NOTE: Base's public endpoint currently rejects
+// WebSocket upgrades (HTTP 405), so on the default endpoint the polling
+// fallback is what actually runs. Point BASE_WS at a WS-capable provider to get
+// the live path. Either way the site stays up.
 const RPC_POLL_MS = 5000;
-const LOCK_SCAN_EVERY = 6; // every 6th tick = ~30s
-let rpcHealthTimer = null;
-let rpcTick = 0;
+const LOCK_SCAN_EVERY = 6;        // heavy eth_getLogs scan every ~30s
+const WS_MAX_RETRIES = 2;
+
+let blockPollTimer = null;        // HTTP polling loop (fallback)
+let lockScanTimer = null;         // always-on slow loop for logs + burn read
+let ws = null;                    // active WebSocket, if any
+let wsLive = false;               // true once the socket is open/authoritative
+let wsRetries = 0;
+
+function setRpcStatus(text, color) {
+  const el = $("rpc-status");
+  if (el) { el.textContent = text; el.style.color = color; }
+}
+function setLiveBlock(n) {
+  const liveBlock = $("live-block");
+  if (liveBlock && Number.isFinite(n)) liveBlock.textContent = n.toLocaleString();
+}
 
 async function refreshRpcHealth() {
-  const el = $("rpc-status");
   try {
     const hex = await jsonRpc("eth_blockNumber", []);
     const block = parseInt(hex, 16);
-    if (el) { el.textContent = "● RPC: LIVE (" + block.toLocaleString() + ")"; el.style.color = "#00ffcc"; }
-    const liveBlock = $("live-block");
-    if (liveBlock && Number.isFinite(block)) liveBlock.textContent = block.toLocaleString();
+    setLiveBlock(block);
+    if (!wsLive) setRpcStatus("● RPC: LIVE (" + block.toLocaleString() + ")", "#00ffcc");
   } catch (_) {
-    if (el) { el.textContent = "● RPC: OFFLINE (using fallback)"; el.style.color = "#ffaa00"; }
+    if (!wsLive) setRpcStatus("● RPC: OFFLINE (using fallback)", "#ffaa00");
   }
 }
 
-function startRpcHealth() {
+function startHttpBlockPolling() {
+  if (blockPollTimer) return;     // already polling
   refreshRpcHealth();
-  fetchLockedPositions(); // first lock scan immediately
-  refreshBurnCounter();   // first burn read immediately
-  if (rpcHealthTimer) clearInterval(rpcHealthTimer);
-  rpcHealthTimer = setInterval(() => {
-    rpcTick++;
-    refreshRpcHealth();
-    if (rpcTick % LOCK_SCAN_EVERY === 0) { fetchLockedPositions(); refreshBurnCounter(); }
-  }, RPC_POLL_MS);
+  blockPollTimer = setInterval(refreshRpcHealth, RPC_POLL_MS);
+}
+function stopHttpBlockPolling() {
+  if (blockPollTimer) { clearInterval(blockPollTimer); blockPollTimer = null; }
+}
+
+// Slow loop that runs regardless of transport: lock scan + burn read.
+function startLockScanLoop() {
+  fetchLockedPositions();
+  refreshBurnCounter();
+  if (lockScanTimer) clearInterval(lockScanTimer);
+  lockScanTimer = setInterval(() => {
+    fetchLockedPositions();
+    refreshBurnCounter();
+  }, RPC_POLL_MS * LOCK_SCAN_EVERY);
+}
+
+function startBlockFeed() {
+  // Baseline: start HTTP polling immediately so the dashboard is never blank.
+  startHttpBlockPolling();
+  if (typeof WebSocket === "undefined") return;
+  let socket;
+  try { socket = new WebSocket(BASE_WS); }
+  catch (_) { return; } // polling already running
+  ws = socket;
+
+  const fallback = () => {
+    if (ws !== socket) return;    // already superseded
+    ws = null;
+    wsLive = false;
+    try { socket.close(); } catch (_) {}
+    startHttpBlockPolling();      // ensure polling is running again
+    if (++wsRetries <= WS_MAX_RETRIES) setTimeout(startBlockFeed, 5000);
+  };
+
+  socket.onopen = () => {
+    wsRetries = 0;
+    wsLive = true;
+    stopHttpBlockPolling();       // WebSocket is authoritative now
+    setRpcStatus("● RPC: LIVE (WebSocket)", "#00ffcc");
+    try { socket.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_subscribe", params: ["newHeads"] })); } catch (_) {}
+  };
+  socket.onmessage = (ev) => {
+    try {
+      const msg = JSON.parse(ev.data);
+      const num = msg && msg.params && msg.params.result && msg.params.result.number;
+      if (num) { setLiveBlock(parseInt(num, 16)); setRpcStatus("● RPC: LIVE (WebSocket)", "#00ffcc"); }
+    } catch (_) {}
+  };
+  socket.onerror = fallback;
+  socket.onclose = fallback;
+}
+
+function startRpcHealth() {
+  startLockScanLoop();
+  startBlockFeed();
 }
 
 // --- Upgrade: token gate for the bots (requires >= 1,000 PIDX).
