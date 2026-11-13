@@ -23,6 +23,20 @@ module.exports = async function run() {
   s.ok("exactly one DOMContentLoaded listener", (app.match(/addEventListener\("DOMContentLoaded"/g) || []).length === 1);
   s.ok("no hardcoded private key literal", !/PRIVATE_KEY\s*[:=]\s*["']0x[0-9a-fA-F]{60,}/.test(app));
 
+  // ---- honest disclosure banner must be present and must not soften the risk ----
+  {
+    const banner = html.replace(/<!--[\s\S]*?-->/g, "");
+    s.ok("disclosure banner present", /id="disclosure-section"/.test(banner));
+    s.ok("banner states token is mintable", /is_mintable: 1/.test(banner));
+    s.ok("banner states owner can burn balances", /owner_change_balance: 1/.test(banner));
+    s.ok("banner names the vault address", /0xfAcb5905E1E592D69a2AE0aFf6F82330c07e4312/.test(banner));
+    s.ok("banner names the locker address", /0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD/.test(banner));
+    s.ok("banner discloses the treasury concentration", /0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C/.test(banner));
+    s.ok("banner notes setVault is one-shot", /vault already set/.test(banner));
+    s.ok("banner mentions the V2 migration", /V2 non-mintable token migration/i.test(banner));
+    s.ok("banner is above the EIP-7702 section", banner.indexOf("disclosure-section") < banner.indexOf("eip-defense-section"));
+  }
+
   // ---- XSS: sanitizeHtml neutralises script/iframe/handlers ----
   {
     const { w } = boot({ noBoot: true });

@@ -51,6 +51,30 @@
   <div class="status-bar" style="margin-top:15px;"><span>✦ Block <span id="live-block">53,318,083</span></span><span id="rpc-status" style="color:#ffaa00;">● RPC: Connecting...</span></div>
 </header>
 <main>
+  <!--
+    HONEST DISCLOSURE BANNER — every figure below was read directly from Base mainnet
+    and is independently reproducible (verified 2026-11-13):
+      token 0x95c7e2d5…  vault()          = 0xfAcb5905E1E592D69a2AE0aFf6F82330c07e4312
+      vault setVault()                     reverts "vault already set" (one-shot, permanent)
+      vault owner()                        = 0x3212D08f2ad637918bd90932829159874E39bE4c (EIP-7702 delegated EOA)
+      token owner()                        reverts — no owner()/renounceOwnership() exists
+      treasury 0x6f5c5B21…                 holds ~99.99% of all four tokens; owns the PIDXLocker
+      PIDXLocker holds 1 Uniswap V3 position NFT with liquidity = 0
+    Do NOT remove this banner until a non-mintable V2 migration is complete.
+  -->
+  <section class="grid-section" id="disclosure-section" role="alert" aria-label="Honest token disclosure">
+    <div style="background:linear-gradient(135deg,rgba(255,0,51,0.20) 0%,rgba(0,0,0,0.95) 100%);border:2px solid #ff0033;border-radius:12px;padding:18px 20px;box-shadow:0 0 25px rgba(255,0,51,0.35);">
+      <h2 style="border-left-color:#ff0033;color:#ff5c5c;margin-bottom:12px;letter-spacing:2px;">⚠️ HONEST DISCLOSURE · READ BEFORE BUYING</h2>
+      <ul style="list-style:none;font-family:monospace;font-size:0.78rem;color:#e7e9ea;line-height:1.75;">
+        <li style="margin-bottom:9px;">🚨 <strong style="color:#ff5c5c;">The PIDX token contract retains owner mint &amp; burn powers.</strong> GoPlus reports <code>is_mintable: 1</code> and <code>owner_change_balance: 1</code>: the vault can mint unlimited new PIDX (no supply cap) and can burn any holder's balance.</li>
+        <li style="margin-bottom:9px;">🔒 Those powers are gated to the vault contract <span data-address="0xfAcb5905E1E592D69a2AE0aFf6F82330c07e4312" style="color:#ffaa00;word-break:break-all;">0xfAcb5905E1E592D69a2AE0aFf6F82330c07e4312</span>, whose <code>setVault()</code> is one-shot — it now reverts <code>"vault already set"</code> and can never be redirected.</li>
+        <li style="margin-bottom:9px;">🧊 The contract is <strong>immutable</strong>. There is no <code>owner()</code> and no <code>renounceOwnership()</code>, so this <em>cannot</em> be patched in place. A <strong>V2 non-mintable token migration is being planned</strong> to resolve it.</li>
+        <li style="margin-bottom:9px;">💧 Locked liquidity locker (Uniswap V3): <span data-address="0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD" style="color:#00ffcc;word-break:break-all;">0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD</span> — currently holds 1 position NFT with <strong>0 liquidity</strong>.</li>
+        <li style="margin-bottom:9px;">🐋 <strong>Concentration risk:</strong> treasury <span data-address="0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C" style="color:#ffaa00;word-break:break-all;">0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C</span> holds ~99.99% of all four tokens.</li>
+        <li>🧪 <strong>This dashboard shows real, unfiltered data — including the bad parts.</strong> Do not buy more than you can afford to lose.</li>
+      </ul>
+    </div>
+  </section>
   <section class="grid-section" id="eip-defense-section">
     <h2>🛡️ EIP-7702 Defense Center</h2>
     <div style="background: linear-gradient(135deg, rgba(255,0,85,0.05) 0%, rgba(0,0,0,0.9) 100%); border: 1px solid #ff0055; border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
