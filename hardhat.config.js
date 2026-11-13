@@ -9,8 +9,15 @@ const BASE_RPC_URL = process.env.BASE_RPC_URL || "https://mainnet.base.org";
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    version: "0.8.20",
-    settings: { optimizer: { enabled: true, runs: 200 } },
+    // 0.8.28 is the floor for the installed @openzeppelin/contracts v5.6.0
+    // (its sources use the MCOPY opcode, which needs solc >= 0.8.25). All project contracts
+    // declare ^0.8.20 or ^0.8.24, both satisfied by 0.8.28.
+    version: "0.8.28",
+    settings: {
+      optimizer: { enabled: true, runs: 200 },
+      // Base mainnet is Cancun-compatible; OpenZeppelin v5.6 uses MCOPY.
+      evmVersion: "cancun",
+    },
   },
   networks: {
     base: {

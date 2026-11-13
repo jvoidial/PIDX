@@ -73,3 +73,8 @@ deploy*.log
 # compiled contracts/PIDXLocker.json that the frontend needs.
 # Instead we ignore only the json files that commonly hold keys
 # (listed above), and rely on never writing keys into json at all.
+
+# --- V2 migration artifacts (may embed holder lists / addresses) -------
+snapshot-*.json
+pidxv2-address.txt
+*.bundle
