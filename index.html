@@ -48,7 +48,7 @@
   <div style="text-align:center; margin-top: 8px;">
       <span id="eip7702-guard-status" style="font-family: monospace; font-size: 0.72rem; color: #8899a6;">🛡️ EIP-7702 Signature Guard: initializing…</span>
   </div>
-  <div class="status-bar" style="margin-top:15px;"><span>✦ Block <span id="live-block">53,318,083</span></span><span id="rpc-status" style="color:#ffaa00;">● RPC: Connecting...</span></div>
+  <div class="status-bar" style="margin-top:15px;"><span>✦ Block (live) <span id="live-block">53,318,083</span></span><span id="rpc-status" style="color:#ffaa00;">● RPC: Connecting...</span></div>
 </header>
 <main>
   <!--
@@ -86,14 +86,14 @@
     </div>
   </section>
   <section class="grid-section" id="mikoshi-section">
-    <h2>💾 Project Mikoshi · Immortality Engram</h2>
+    <h2>💾 Project Mikoshi · Immortality Engram <span style="font-size:0.65rem;color:#8899a6;text-transform:none;letter-spacing:0;">(off-chain novelty · no on-chain effect)</span></h2>
     <div class="mikoshi-container"><div class="mikoshi-card">
       <div class="mikoshi-header"><span class="mikoshi-title">IMMORTALITY PROTOCOL</span><span class="mikoshi-status" id="mikoshi-status">AWAITING UPLINK</span></div>
       <div class="mikoshi-body"><div class="dna-strand" id="dna-strand"><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span></div>
         <div class="mikoshi-data">
           <p><strong>ENGRAM ID:</strong> <span id="engram-id">Disconnected</span></p>
           <p><strong>LONGEVITY SEQ:</strong> <span id="longevity-seq" style="font-size:0.7rem;color:#ff0055;">Awaiting Sequence...</span></p>
-          <p><strong>IMMORTALITY PROB:</strong> <span id="immortality-prob">0.00%</span></p>
+          <p><strong>SIMULATED SCORE:</strong> <span id="immortality-prob">0.00%</span></p>
           <p><strong>RELIC INTEGRITY:</strong> <span id="relic-integrity" style="color:#ffaa00;">UNVERIFIED</span></p>
         </div>
       </div>
@@ -102,20 +102,21 @@
   </section>
 
   <section class="grid-section" id="resonance-section">
-    <h2>🧬 Soul Resonance &amp; Longevity Protocol</h2>
+    <h2>🧬 Soul Resonance &amp; Longevity Protocol <span style="font-size:0.65rem;color:#8899a6;text-transform:none;letter-spacing:0;">(simulation)</span></h2>
     <div class="mikoshi-container"><div class="mikoshi-card" style="border-color: #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.2);">
       <div class="mikoshi-header" style="border-bottom-color: #00ffcc;"><span class="mikoshi-title" style="color: #00ffcc; text-shadow: 0 0 5px #00ffcc;">RESONANCE PROTOCOL</span><span class="mikoshi-status" id="resonance-status" style="color: #ffaa00;">AWAITING INPUT</span></div>
       <div class="mikoshi-body">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-family: monospace;">
-          <div><p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">LONGEVITY TIME</p><p id="resonance-longevity" style="color: #ffaa00; font-size: 1.1rem; font-weight: bold;">00:00:00</p></div>
+          <div><p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">SESSION TIMER</p><p id="resonance-longevity" style="color: #ffaa00; font-size: 1.1rem; font-weight: bold;">00:00:00</p></div>
           <div><p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">FREQ RESONANCE</p><p id="resonance-freq" style="color: #00ffcc; font-size: 1.1rem; font-weight: bold;">0.000 MHz</p></div>
           <div><p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">NETWORK BAND</p><p id="resonance-band" style="color: #00ffcc; font-size: 1.1rem; font-weight: bold;">UNKNOWN</p></div>
           <div><p style="color: #8899a6; font-size: 0.7rem; margin-bottom: 5px;">SOUL STATUS</p><p id="resonance-soul-status" style="color: #ff0055; font-size: 1.1rem; font-weight: bold;">UNBOUND</p></div>
         </div>
       </div>
       <div id="resonance-input-div" style="margin-top:15px; border-top:1px dashed #00ffcc; padding-top:15px;">
-        <p style="color:#00ffcc; font-size:0.75rem; margin-bottom:8px;">🧬 HUMAN IDENTITY INPUT (NHS Barcode / Personal ID):</p>
-        <input type="text" id="resonance-human-id" placeholder="Enter your identity code..." style="width:100%; padding:10px; background:#000; border:1px solid #00ffcc; color:#00ffcc; font-family:monospace; margin-bottom:10px; border-radius:4px; box-sizing:border-box;">
+        <p style="color:#00ffcc; font-size:0.75rem; margin-bottom:8px;">🧬 PSEUDONYM INPUT (optional · any nickname — NOT your real ID):</p>
+        <input type="text" id="resonance-human-id" maxlength="64" autocomplete="off" placeholder="Pick a nickname (never a real ID)..." style="width:100%; padding:10px; background:#000; border:1px solid #00ffcc; color:#00ffcc; font-family:monospace; margin-bottom:10px; border-radius:4px; box-sizing:border-box;">
+        <p style="color:#8899a6; font-size:0.68rem; margin-bottom:10px;">Do not enter an NHS number, passport, or any real identifier. This value is hashed in your browser and only a made-up nickname is stored locally. This panel is a simulation and grants no real-world capability.</p>
         <button id="resonance-initiate-btn" class="btn-primary" style="width:100%; background:#00ffcc; color:#000; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">Initialize Resonance Protocol</button>
       </div>
     </div></div>
@@ -141,7 +142,7 @@
         </div>
         <div style="font-family: monospace; font-size: 0.8rem; color: #8899a6; margin-bottom: 15px;">
             <p>🔗 <strong>CONTRACT:</strong> <span id="locker-addr" data-address="0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD" style="color:#8247e5; word-break:break-all;">0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD</span></p>
-            <p>🛡️ <strong>SECURITY:</strong> Immutable UNCX-Style Vault · <a href="https://basescan.org/address/0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD#code" target="_blank" rel="noopener noreferrer" style="color:#00ffcc;">Verified on BaseScan ↗</a></p>
+            <p>🛡️ <strong>SECURITY:</strong> This locker is an <strong>Ownable</strong> contract, owner <span data-address="0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C" style="color:#ffaa00;word-break:break-all;">0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C</span> — it is <strong>not immutable</strong>. Its current Uniswap V3 position holds <strong>0 liquidity</strong>, so it is <em>not</em> proof of locked liquidity. <a href="https://basescan.org/address/0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD#code" target="_blank" rel="noopener noreferrer" style="color:#00ffcc;">View on BaseScan ↗</a></p>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
             <p style="color: #fff; font-size: 0.9rem; margin-bottom: 10px;">On-chain proof of lock — recent PositionLocked events read directly from the chain:</p>
@@ -160,13 +161,13 @@
   </section>
 
   <section class="grid-section"><h2>🏦 Digital eBank · Auto-Immune Vault</h2><div class="ebank-container">
-    <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(0,255,204,0.1);color:#00ffcc;border:1px solid #00ffcc;">AUTO-COMPOUNDING ACTIVE</span></div><div class="immunity-shield"><span style="font-size:0.75rem;color:var(--dim);">Auto-Immune Shield</span><span id="immunity-score" style="font-family:monospace;font-size:1.2rem;color:#00ffcc;font-weight:bold;">99.80%</span></div></div>
-    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Simulated Yield (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Burn Address Balance (Live · 0x000…dEaD)</span><span class="value" id="burn-counter" style="color:#ff0055;">— PIDX</span></div><div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div></div>
+    <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(0,255,204,0.1);color:#00ffcc;border:1px solid #00ffcc;">SIMULATION ONLY · NO REAL YIELD</span></div><div class="immunity-shield"><span style="font-size:0.75rem;color:var(--dim);">Simulated Shield</span><span id="immunity-score" style="font-family:monospace;font-size:1.2rem;color:#00ffcc;font-weight:bold;">99.80%</span></div></div>
+    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Simulated Yield (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Burn Address Balance (Live · 0x000…dEaD)</span><span class="value" id="burn-counter" style="color:#ff0055;">— PIDX</span></div><div class="ebank-stat"><span class="label">Simulated APY</span><span class="value" id="ebank-apy">18.42%</span></div></div>
   </div></section>
 
   <section class="grid-section"><h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2><div id="token-grid" class="token-grid"><p class="loading">SYNCING TELEMETRY...</p></div></section>
 
-  <section class="grid-section"><h2>🌱 Growth Engine &amp; Voxel Dynamics</h2><div class="engine-grid">
+  <section class="grid-section"><h2>🌱 Growth Engine &amp; Voxel Dynamics <span style="font-size:0.65rem;color:#8899a6;text-transform:none;letter-spacing:0;">(animated · not measured)</span></h2><div class="engine-grid">
     <div class="engine-card"><span class="label">Continuity</span><span class="value" id="val-continuity">1.000</span></div><div class="engine-card"><span class="label">Coherence</span><span class="value" id="val-coherence">0.9356</span></div><div class="engine-card"><span class="label">Persistence</span><span class="value" id="val-persistence">379 blocks</span></div><div class="engine-card"><span class="label">Active Voxels</span><span class="value" id="val-voxels">7</span></div><div class="engine-card"><span class="label">Energy Band</span><span class="value" id="val-energy">MID (42.8 GW)</span></div><div class="engine-card"><span class="label">Engine Status</span><span class="value success" id="val-engine">OPTIMAL</span></div>
   </div></section>
 

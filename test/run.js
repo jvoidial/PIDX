@@ -4,7 +4,8 @@
 const suites = [
   require("./security.test"),
   require("./locker.test"),
-  require("./upgrades.test")
+  require("./upgrades.test"),
+  require("./honesty.test")
 ];
 
 (async () => {
