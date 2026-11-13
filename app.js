@@ -118,15 +118,15 @@ const METRIC_REGISTRY = [
   { id: "ebank-principal",     state: "not-implemented" },
   { id: "ebank-yield",         state: "not-implemented" },
   { id: "ebank-apy",           state: "not-implemented" },
-  { id: "val-continuity",      state: "not-measured" },
-  { id: "val-coherence",       state: "not-measured" },
-  { id: "val-persistence",     state: "not-measured" },
-  { id: "val-voxels",          state: "not-measured" },
-  { id: "val-energy",          state: "not-measured" },
-  { id: "val-engine",          state: "not-measured" },
-  { id: "v-state",             state: "not-measured" },
-  { id: "v-stability",         state: "not-measured" },
-  { id: "v-resonance",         state: "not-measured" },
+  { id: "growth-continuity",  source: "derived", basis: "indexed tokens / tokens in list", note: "live from API scan results" },
+  { id: "growth-coherence",   source: "derived", basis: "clean GoPlus scans / indexed tokens", note: "live from API scan results" },
+  { id: "growth-persistence", source: "derived", basis: "blocks observed this session x 2s", note: "live from RPC block feed" },
+  { id: "growth-voxels",      source: "derived", basis: "4 token cards + 4 safety panels", note: "count of rendered elements" },
+  { id: "growth-energy",      source: "derived", basis: "deepest pool TVL, bucketed", note: "live from API liquidity" },
+  { id: "growth-engine",      source: "derived", basis: "RPC transport state", note: "live from RPC health" },
+  { id: "vitruvian-state",    source: "derived", basis: "continuity x coherence x stability", note: "composite of live metrics" },
+  { id: "vitruvian-stability",source: "derived", basis: "1 + (clean / tokens)", note: "live from API scan results" },
+  { id: "vitruvian-resonance",source: "derived", basis: "continuity x coherence", note: "composite of live metrics" },
   { id: "dca-pnl",             state: "not-implemented" },
   { id: "dca-win",             state: "not-implemented" },
   { id: "dca-trades",          state: "not-implemented" },
@@ -409,10 +409,20 @@ async function connectWallet() {
 }
 
 // ------------------------------------------------------------ memory log
+// Legacy builds wrote simulated events (e.g. "Veil shifted to …") into the
+// same localStorage key the real log uses. Those entries outlive the code that
+// created them and would keep showing as if real, so drop them on load.
+const LEGACY_FAKE_MEMORY = /Veil shifted|Simulated|Immortality Prob|Growth Engine|Active Voxels|APY|Auto-Compound/i;
+
 function loadMemory() {
   const log = $("memory-log"); if (!log) return;
   let mem = [];
   try { mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || []; } catch (_) { mem = []; }
+  const kept = mem.filter(e => !LEGACY_FAKE_MEMORY.test(String(e && e.msg || "")));
+  if (kept.length !== mem.length) {
+    mem = kept;
+    try { localStorage.setItem("vitruvian_memory", JSON.stringify(mem)); } catch (_) {}
+  }
   log.innerHTML = "";
   if (!mem.length) { log.innerHTML = '<div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>'; return; }
   mem.forEach(e => {
@@ -619,6 +629,8 @@ function recordHealth(id, patch) {
   tokenHealth.set(id, Object.assign(cur, patch));
 }
 
+let currentTokens = FALLBACK_TOKENS;
+
 async function loadTokens() {
   let tokens = FALLBACK_TOKENS;
   try {
@@ -686,11 +698,27 @@ async function loadTokens() {
     grid.appendChild(card);
   });
 
+  currentTokens = tokens;
+
   // --- resolve each card's live data with deadlines + graceful failure ---
   await Promise.all(tokens.map(t => hydrateToken(t)));
 
   // Now that every card has a real result (or a real failure), aggregate them.
   runSafety();
+}
+
+// Periodic re-read of TVL/security for the existing cards. Updates the badges
+// in place (no full re-render, so no flicker and no log spam); each hydrate call
+// keeps its own deadline, so a slow API never blocks the others.
+async function refreshTokenData() {
+  if (document.hidden) return;                 // don't burn API quota in a background tab
+  await Promise.all(currentTokens.map(t => hydrateToken(t)));
+  runSafety();
+}
+
+function startTokenRefreshLoop() {
+  if (tokenRefreshTimer) clearInterval(tokenRefreshTimer);
+  tokenRefreshTimer = setInterval(refreshTokenData, TOKEN_REFRESH_MS);
 }
 
 async function hydrateToken(t) {
@@ -806,6 +834,52 @@ function runSafety() {
       else { liq.textContent = "HEALTHY ($" + Math.round(max).toLocaleString() + ")"; liq.className = "status-badge verified"; }
     }
   }
+
+  deriveTelemetry(entries);
+}
+
+// Everything here is computed from data already fetched above: the API scan
+// results, the RPC block feed, and the count of rendered panels. Each formula
+// is printed next to its value in the UI so it can be checked by hand. Nothing
+// is invented, and nothing is drawn when there is no basis for it.
+function deriveTelemetry(entries) {
+  const scanned = entries.length;
+  const indexed = entries.filter(e => e.sec).length;
+  const clean   = entries.filter(e => e.sec && e.sec.level === "safe").length;
+
+  // Continuity: fraction of the token list the APIs actually answered for.
+  const continuity = scanned ? indexed / scanned : null;
+  // Coherence: of the indexed tokens, the fraction GoPlus found no flags on.
+  const coherence  = indexed ? clean / indexed : null;
+
+  const setV = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+
+  setV("growth-continuity",  continuity == null ? "—" : continuity.toFixed(4));
+  setV("growth-coherence",   coherence  == null ? "—" : coherence.toFixed(4));
+  setV("growth-persistence", blockDelta > 0 ? (blockDelta * 2) + " s" : "—");
+  setV("growth-voxels",      String(scanned + 4));
+
+  const vals = entries.map(e => e.liq).filter(v => typeof v === "number" && Number.isFinite(v));
+  const deepest = vals.length ? Math.max(...vals) : null;
+  setV("growth-energy", deepest == null ? "NO DATA"
+      : deepest < 1000 ? "CRITICAL (<$1K)"
+      : deepest < 50000 ? "THIN (<$50K)" : "HEALTHY (>$50K)");
+
+  setV("growth-engine", rpcTransport === "ws" ? "OPTIMAL (ws)"
+      : rpcTransport === "offline" ? "DEGRADED (offline)"
+      : (lastSeenBlock != null ? "OPTIMAL (poll)" : "STARTING"));
+
+  if (continuity == null || coherence == null) {
+    setV("vitruvian-state", "—");
+    setV("vitruvian-stability", "—");
+    setV("vitruvian-resonance", "—");
+    return;
+  }
+  const stability = 1 + coherence;
+  const resonance = continuity * coherence;
+  setV("vitruvian-state", continuity.toFixed(3) + " · " + coherence.toFixed(3) + " · " + stability.toFixed(3));
+  setV("vitruvian-stability", stability.toFixed(3));
+  setV("vitruvian-resonance", resonance.toFixed(3));
 }
 
 // ---------------------------------------------------------------- grids
@@ -1140,8 +1214,10 @@ function restoreResonance() {
 // the live path. Either way the site stays up.
 const RPC_POLL_MS = 5000;
 const LOCK_SCAN_EVERY = 6;        // heavy eth_getLogs scan every ~30s
+const TOKEN_REFRESH_MS = 60000;   // re-read DexScreener/GoPlus for token cards
 const WS_MAX_RETRIES = 2;
 
+let tokenRefreshTimer = null;
 let blockPollTimer = null;        // HTTP polling loop (fallback)
 let lockScanTimer = null;         // always-on slow loop for logs + burn read
 let ws = null;                    // active WebSocket, if any
@@ -1153,11 +1229,19 @@ function setRpcStatus(text, color) {
   if (el) { el.textContent = text; el.style.color = color; }
 }
 let lastLoggedBlock = 0, lastBlockLogAt = 0;
+let lastSeenBlock = null;
+let blockDelta = 0;
+let rpcTransport = "polling";
+
 function setLiveBlock(n) {
   const liveBlock = $("live-block");
   if (liveBlock && Number.isFinite(n)) liveBlock.textContent = n.toLocaleString();
   // Real event: the chain height moved. Throttled to once a minute so the
   // terminal stays readable (Base produces a block roughly every 2s).
+  if (Number.isFinite(n)) {
+    if (lastSeenBlock != null && n > lastSeenBlock) blockDelta += (n - lastSeenBlock);
+    lastSeenBlock = n;
+  }
   if (Number.isFinite(n) && n !== lastLoggedBlock) {
     lastLoggedBlock = n;
     if (Date.now() - lastBlockLogAt > 60000) {
@@ -1172,10 +1256,14 @@ async function refreshRpcHealth() {
     const hex = await jsonRpc("eth_blockNumber", []);
     const block = parseInt(hex, 16);
     setLiveBlock(block);
-    if (!wsLive) setRpcStatus("● RPC: LIVE (" + block.toLocaleString() + ")", "#00ffcc");
+    if (!wsLive) { rpcTransport = "polling"; setRpcStatus("● RPC: LIVE (" + block.toLocaleString() + ")", "#00ffcc"); }
   } catch (_) {
+    rpcTransport = "offline";
     if (!wsLive) setRpcStatus("● RPC: OFFLINE (using fallback)", "#ffaa00");
   }
+  // Recompute the derived panel so block-based metrics (persistence, engine
+  // status) advance on every poll, not only once at boot.
+  deriveTelemetry([...tokenHealth.values()]);
 }
 
 function startHttpBlockPolling() {
@@ -1214,6 +1302,7 @@ function startBlockFeed() {
     if (ws !== socket) return;    // already superseded
     ws = null;
     wsLive = false;
+    rpcTransport = "polling";
     try { socket.close(); } catch (_) {}
     startHttpBlockPolling();      // ensure polling is running again
     if (++wsRetries <= WS_MAX_RETRIES) setTimeout(startBlockFeed, 5000);
@@ -1222,6 +1311,7 @@ function startBlockFeed() {
   socket.onopen = () => {
     wsRetries = 0;
     wsLive = true;
+    rpcTransport = "ws";
     stopHttpBlockPolling();       // WebSocket is authoritative now
     setRpcStatus("● RPC: LIVE (WebSocket)", "#00ffcc");
     try { socket.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_subscribe", params: ["newHeads"] })); } catch (_) {}
@@ -1379,6 +1469,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Ecosystem upgrades.
   startRpcHealth();   // also kicks off the first lock scan + burn read
+  startTokenRefreshLoop();  // keep TVL/security cards fresh without a reload
   updateBotGate();
 });
 
@@ -1401,5 +1492,6 @@ window.PIDX_APP = {
   withdrawPosition: withdrawPosition,
   hydrateToken: hydrateToken,
   restoreResonance: restoreResonance,
+  deriveTelemetry: deriveTelemetry,
   METRIC_REGISTRY: METRIC_REGISTRY
 };

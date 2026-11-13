@@ -33,8 +33,17 @@ module.exports = async function run() {
 
   // ---- simulated sections are labelled ----
   s.ok("ebank labelled Not implemented", /Digital eBank · Not implemented/.test(htmlNoComments));
-  s.ok("growth engine states Not measured", /Not measured\. No telemetry source/.test(htmlNoComments));
-  s.ok("vitruvian states Not measured", /Vitruvian System States<\/h2><p[^>]*>Not measured/.test(htmlNoComments));
+  // Growth/Vitruvian panels are now DERIVED from live data, with the formula
+  // printed in the UI. They must not contain a fabricated static value.
+  s.ok("growth panel states its formula", /Self-powering:/.test(htmlNoComments));
+  s.ok("vitruvian panel states its formula", /State = \(continuity/.test(htmlNoComments));
+  s.ok("growth values start as placeholder not a fake number",
+       /id="growth-continuity">—</.test(htmlNoComments) && /id="growth-voxels">—</.test(htmlNoComments));
+  s.ok("vitruvian values start as placeholder not a fake number",
+       /id="vitruvian-state">—</.test(htmlNoComments));
+  // The derivation must be driven by real scan results, never Math.random().
+  s.ok("deriveTelemetry exists", /function deriveTelemetry/.test(app));
+  s.ok("deriveTelemetry has no random component", !/deriveTelemetry[\s\S]{0,1200}Math\.random/.test(app));
   s.ok("resonance labelled simulation", /\(simulation\)/.test(htmlNoComments));
   s.ok("mikoshi labelled off-chain novelty", /off-chain novelty/.test(htmlNoComments));
 
@@ -43,7 +52,8 @@ module.exports = async function run() {
   s.ok("only setLiveBlock writes the block height", (app.match(/liveBlock\.textContent/g) || []).length === 1);
 
   // ---- the decorative veil must not flood the memory log ----
-  s.ok("veil is not logged to memory", !/Veil shifted to/.test(app));
+  s.ok("veil is never passed to logMemory", !/logMemory\([^)]*Veil/i.test(app));
+  s.ok("legacy simulated memory entries are purged on load", /LEGACY_FAKE_MEMORY/.test(app));
 
   // ---- bots log that their PnL is simulated ----
   s.ok("no fabricated bot PnL remains", !/Math\.random\(\) \* 2\.5/.test(app));
