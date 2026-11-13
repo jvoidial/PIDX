@@ -671,8 +671,12 @@ async function hydrateToken(t) {
         if (res.can_take_back_ownership === "1") flags.push("reclaim-ownership");
         if (res.owner_change_balance === "1") flags.push("owner-can-burn-balances");
         if (res.is_open_source === "0") flags.push("unverified-source");
-        const critical = flags.includes("honeypot") || flags.includes("hidden-owner") || flags.includes("reclaim-ownership");
-        const warn = flags.includes("high-tax") || flags.includes("owner-can-burn-balances") || flags.includes("unverified-source");
+        if (res.is_mintable === "1") flags.push("mintable");
+        if (res.is_proxy === "1") flags.push("upgradeable-proxy");
+        if (res.transfer_pausable === "1") flags.push("transfer-pausable");
+        if (res.slippage_modifiable === "1") flags.push("modifiable-tax");
+        const critical = flags.some(f => ["honeypot", "hidden-owner", "reclaim-ownership", "mintable", "upgradeable-proxy", "transfer-pausable"].includes(f));
+        const warn = flags.some(f => ["high-tax", "owner-can-burn-balances", "unverified-source", "modifiable-tax"].includes(f));
         const label = critical ? "🚨 RISK: " + flags.slice(0, 2).join(", ")
                     : warn ? "⚠️ CAUTION: " + flags.slice(0, 2).join(", ")
                     : "✅ Safe (no flags)";

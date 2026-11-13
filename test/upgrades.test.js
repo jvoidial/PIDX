@@ -84,6 +84,23 @@ module.exports = async function run() {
     s.ok("honeypot flagged as RISK", sec && /RISK/.test(sec.textContent));
   }
 
+  // ---- is_mintable is critical (unlimited inflation risk) ----
+  {
+    const { w } = boot({
+      fetch: (url) => {
+        if (url.includes("dexscreener")) return { ok: true, status: 200, json: async () => ([{ liquidity: { usd: 20 } }]) };
+        if (url.includes("goplus")) return { ok: true, status: 200, json: async () => ({ result: {
+          "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c": { is_open_source: "1", is_mintable: "1", owner_change_balance: "1" }
+        } }) };
+        return { ok: true, status: 200, json: async () => ({}) };
+      }
+    });
+    await wait(250);
+    const sec = w.document.getElementById("sec-pidx");
+    s.ok("mintable token flagged as RISK", sec && /RISK/.test(sec.textContent));
+    s.ok("mintable appears in the label", sec && /mintable/.test(sec.textContent));
+  }
+
   // ---- RPC health: WebSocket fails -> 5s polling ----
   {
     const intervals = [];
