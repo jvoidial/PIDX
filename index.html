@@ -14,7 +14,7 @@
         so they are intentionally omitted. If you ever move off GitHub Pages, also send
         X-Frame-Options: DENY, X-Content-Type-Options: nosniff and frame-ancestors 'none' as HTTP headers.
 -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://mainnet.base.org https://base-rpc.publicnode.com; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://mainnet.base.org https://base-rpc.publicnode.com wss://mainnet.base.org; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>✧ THE COSMIC SCRIBE ✧</title>
 <link rel="stylesheet" href="style.css?v=100130">
@@ -101,8 +101,8 @@
     <h2>🛡️ Global Safety &amp; Network Compatibility</h2>
     <div class="safety-grid">
       <div class="safety-card"><span class="safety-icon">🔗</span><h4>Wallet Compatibility</h4><p>MetaMask, Coinbase, Trust, Rabby</p><span class="status-badge verified">EIP-1193 READY</span></div>
-      <div class="safety-card"><span class="safety-icon">🔒</span><h4>Contract Security</h4><p>GoPlus Honeypot &amp; Tax Scan</p><span id="global-contract-status" class="status-badge pending">SCANNING...</span></div>
-      <div class="safety-card"><span class="safety-icon">💧</span><h4>Liquidity Health</h4><p>Pool Depth &amp; Trading Risk</p><span id="global-liquidity-status" class="status-badge pending">CALCULATING...</span></div>
+      <div class="safety-card"><span class="safety-icon">🔒</span><h4>Contract Security</h4><p>GoPlus Honeypot &amp; Tax Scan</p><span id="global-contract-status" class="status-badge pending">AWAITING SCAN</span></div>
+      <div class="safety-card"><span class="safety-icon">💧</span><h4>Liquidity Health</h4><p>Pool Depth &amp; Trading Risk</p><span id="global-liquidity-status" class="status-badge pending">AWAITING DATA</span></div>
       <div class="safety-card"><span class="safety-icon">⚡</span><h4>Exchange Routing</h4><p>Uniswap V2/V3/V4 + Aggregators</p><span class="status-badge verified">ACTIVE</span></div>
     </div>
   </section>
