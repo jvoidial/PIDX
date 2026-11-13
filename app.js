@@ -435,10 +435,9 @@ function logMemory(msg, color) {
 // ------------------------------------------------------------ locker status
 // Read-only. The full locker panel was pulled until the on-chain V3 position
 // has non-zero liquidity; this reports the facts in one line instead. It does
-// not touch the lock/withdraw code paths.
-function pad32(hexNo0x) { return hexNo0x.padStart(64, "0"); }
-function shortAddr(a) { return a ? a.slice(0, 10) + "…" + a.slice(-4) : "unknown"; }
-
+// not touch the lock/withdraw code paths. pad32() and shortAddr() already
+// exist above; do not redefine them here (a second definition would silently
+// shadow the first, which is how the wallet display regressed once).
 async function refreshLockerStatus() {
   const el = $("locker-status");
   if (!el) return;
