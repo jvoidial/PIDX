@@ -25,6 +25,7 @@
 const DEX_API       = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GOPLUS_API    = "https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=";
 const BASE_CHAIN_ID = "0x2105"; // Base mainnet (8453)
+const BUILD_ID      = "100138";    // bump with the ?v= cache-buster
 const API_TIMEOUT   = 5000;     // DexScreener / GoPlus deadline (ms)
 const LOCAL_TIMEOUT = 8000;     // same-origin JSON deadline (ms)
 const MAX_UINT256   = (1n << 256n) - 1n;
@@ -1470,10 +1471,39 @@ window.addEventListener("DOMContentLoaded", () => {
   // Ecosystem upgrades.
   startRpcHealth();   // also kicks off the first lock scan + burn read
   startTokenRefreshLoop();  // keep TVL/security cards fresh without a reload
+  startVersionWatch();      // reload once when a newer build is deployed
   updateBotGate();
 });
 
 // Expose for the standalone guard test harness.
+// GitHub Pages serves index.html with Cache-Control: max-age=600, so a browser
+// can keep running a stale build for ten minutes with no visible signal. Poll a
+// tiny, uncached version file and reload once when it reports a newer build.
+// Pure decision so it can be tested without waiting on a timer. Reload only
+// when the deployed build is strictly newer and we have not already reloaded
+// this session; anything else (older, equal, garbage, already reloaded) is a no.
+function shouldReload(current, latest, alreadyReloaded) {
+  if (alreadyReloaded) return false;
+  const cur = parseInt(current, 10), nxt = parseInt(latest, 10);
+  if (!Number.isFinite(cur) || !Number.isFinite(nxt)) return false;
+  return nxt > cur;
+}
+
+function startVersionWatch() {
+  if (!/^https?:$/.test(location.protocol)) return;   // file:// in tests
+  setInterval(async () => {
+    try {
+      const r = await fetchWithTimeout("version.txt?t=" + Date.now(), API_TIMEOUT);
+      if (!r.ok) return;
+      const latest = (await r.text()).trim();
+      if (shouldReload(BUILD_ID, latest, !!sessionStorage.getItem("pIdxReloaded"))) {
+        sessionStorage.setItem("pIdxReloaded", "1");
+        location.reload();
+      }
+    } catch (_) { /* offline: keep the current build */ }
+  }, 120000);
+}
+
 window.PIDX_APP = {
   EIP7702Guard: EIP7702Guard,
   sanitizeHtml: sanitizeHtml,
@@ -1493,5 +1523,7 @@ window.PIDX_APP = {
   hydrateToken: hydrateToken,
   restoreResonance: restoreResonance,
   deriveTelemetry: deriveTelemetry,
+  BUILD_ID: BUILD_ID,
+  shouldReload: shouldReload,
   METRIC_REGISTRY: METRIC_REGISTRY
 };
