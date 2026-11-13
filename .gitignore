@@ -1,2 +1,75 @@
+# ============================================================
+#  PIDX — ignore rules (defence against committing secrets)
+# ============================================================
+
+# --- Secrets / environment -----------------------------------
 .env
+.env.*
+!.env.example
+*.env
+.env.local
+.env.development
+.env.production
+.env.test
+*.pem
+*.key
+*.p12
+*.keystore
+keystore/
+secrets.json
+secret.json
+credentials.json
+service-account*.json
+
+# --- Dependencies --------------------------------------------
 node_modules/
+bower_components/
+vendor/
+.pnp.*
+.yarn/cache/
+.yarn/install-state.gz
+
+# --- Build / compiler output ---------------------------------
+build/
+dist/
+out/
+cache/
+artifacts/
+typechain/
+typechain-types/
+coverage/
+coverage.json
+.nyc_output/
+
+# --- Hardhat -------------------------------------------------
+.hardhat/
+hardhat-cache/
+
+# --- Logs / temp ---------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# --- Editor / IDE --------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Generated secrets from tooling --------------------------
+locker-address.txt
+deploy*.log
+
+# --- NOTE on *.json ------------------------------------------
+# Do NOT blanket-ignore *.json: this repo ships real data files
+# (tokens.json, mining_pools.json, vaults_pools.json) and the
+# compiled contracts/PIDXLocker.json that the frontend needs.
+# Instead we ignore only the json files that commonly hold keys
+# (listed above), and rely on never writing keys into json at all.

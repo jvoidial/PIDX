@@ -1,21 +1,26 @@
-
 {
   "name": "pidx-spirit-vault",
   "version": "1.0.0",
-  "description": "",
+  "description": "PIDX / Spirit Guide — Base liquidity locker frontend and contracts",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "node scripts/compile.js",
+    "deploy": "node scripts/deploy.js",
+    "verify": "node scripts/verify.js",
+    "test": "echo \"No automated tests configured\" && exit 0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "hardhat": "^2.19.4"
+    "hardhat": "^2.19.4",
+    "solc": "^0.8.20"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.1",
-    "dotenv": "^16.4.1"
+    "dotenv": "^16.4.1",
+    "ethers": "^6.13.0",
+    "jsdom": "^24.1.3"
   }
 }

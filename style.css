@@ -81,3 +81,10 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
 .bot-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
 .bot-metrics .label{display:block;font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .bot-metrics .value{display:block;font-family:monospace;font-size:1rem;color:var(--white);font-weight:bold}
+
+/* --- Ecosystem upgrade elements --- */
+#eip-guard-badge{transition:all .3s}
+#eip-defense-section h3{letter-spacing:1px}
+#locked-positions-list div{padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.06)}
+#locked-positions-list div:last-child{border-bottom:none}
+.bot-btn:disabled{opacity:.85}

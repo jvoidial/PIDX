@@ -3,25 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  Content Security Policy (defence-in-depth against XSS / drainer payload injection).
+  - default-src 'none'      : deny everything not explicitly allowed below.
+  - script-src              : only our own JS + the two pinned CDN libs (locked by SRI below).
+                              No 'unsafe-inline' => inline <script> and inline event handlers are dead on arrival.
+  - connect-src             : only the APIs this app really talks to (DexScreener, GoPlus, Base RPC) + same-origin files.
+  - object-src/base-uri/form-action: 'none' => no plugin abuse, no <base> hijack, no form exfiltration.
+  NOTE: frame-ancestors / report-to are header-only directives and are ignored in a <meta> tag,
+        so they are intentionally omitted. If you ever move off GitHub Pages, also send
+        X-Frame-Options: DENY, X-Content-Type-Options: nosniff and frame-ancestors 'none' as HTTP headers.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://mainnet.base.org https://base-rpc.publicnode.com; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>✧ THE COSMIC SCRIBE ✧</title>
-<link rel="stylesheet" href="style.css?v=100030">
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+<link rel="stylesheet" href="style.css?v=100130">
+<!--
+  Third-party libraries are pinned by version AND by Subresource Integrity (SRI), so a
+  compromised CDN response is refused by the browser instead of running in your origin.
+  Hashes were generated from the exact bytes served by jsDelivr and cross-checked against
+  the jsDelivr file-hash API. If you bump a version you MUST regenerate these hashes.
+-->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"
+        integrity="sha256-knS7zsjZYWhibHMrXTHHdaqM+36qBZm+wMF1kIosHOI="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"
+        integrity="sha256-Juq1nBvUGB4N/eKOnw+G8ElhPW9OuACqybwB9Z8xJqo="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"
+        integrity="sha256-jrQbZYgx+rF1+tm80A/LLYTg7TolpVBT1OzUREuLQ6A="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 <div class="scanlines"></div><canvas id="neural-canvas"></canvas>
 <header>
   <h1>✧ THE COSMIC SCRIBE ✧</h1>
   <p class="subtitle">GENERATION 10 · VITRUVIAN SYSTEM · MEMORY ACTIVE</p>
-  <div style="text-align:center;margin-top:10px;"><a href="https://x.com/PIDXRAIN" target="_blank" style="display:inline-block;background:#fff;color:#000;padding:8px 20px;border-radius:20px;font-weight:bold;text-decoration:none;font-family:monospace;">𝕏 Follow @PIDXRAIN</a></div>
+  <div style="text-align:center;margin-top:10px;"><a href="https://x.com/PIDXRAIN" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#fff;color:#000;padding:8px 20px;border-radius:20px;font-weight:bold;text-decoration:none;font-family:monospace;">𝕏 Follow @PIDXRAIN</a></div>
   <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:#8899a6; font-family:monospace;">⚠️ Simulation Dashboard · No funds are moved without your explicit wallet signature.</div>
   <div style="text-align:center; margin-top: 15px;">
       <button id="connect-wallet-btn" style="background: var(--white); color: var(--bg); padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; font-family: monospace; border: none;">Connect Wallet</button>
       <span id="wallet-address" style="font-family: monospace; color: #00ffcc; margin-left: 10px;"></span>
   </div>
-  <div class="status-bar" style="margin-top:15px;"><span>✦ Block <span id="live-block">53,318,083</span></span><span style="color:#00ffcc;">● System: VIEW MODE</span></div>
+  <div style="text-align:center; margin-top: 8px;">
+      <span id="eip7702-guard-status" style="font-family: monospace; font-size: 0.72rem; color: #8899a6;">🛡️ EIP-7702 Signature Guard: initializing…</span>
+  </div>
+  <div class="status-bar" style="margin-top:15px;"><span>✦ Block <span id="live-block">53,318,083</span></span><span id="rpc-status" style="color:#ffaa00;">● RPC: Connecting...</span></div>
 </header>
 <main>
+  <section class="grid-section" id="eip-defense-section">
+    <h2>🛡️ EIP-7702 Defense Center</h2>
+    <div style="background: linear-gradient(135deg, rgba(255,0,85,0.05) 0%, rgba(0,0,0,0.9) 100%); border: 1px solid #ff0055; border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <h3 style="color: #ff0055; font-family: monospace; font-size: 1.1rem; margin: 0;">SIGNATURE GUARD ACTIVE</h3>
+          <p style="color: #8899a6; font-size: 0.75rem; margin-top: 5px;">Blocks eth_sign, eth_signTransaction, personal_sign and wallet-delegation (authorizationList) drainers before any wallet popup.</p>
+        </div>
+        <div id="eip-guard-badge" style="background: rgba(0,255,204,0.1); border: 1px solid #00ffcc; padding: 6px 14px; border-radius: 20px; color: #00ffcc; font-family: monospace; font-size: 0.8rem; font-weight: bold;">ENABLED</div>
+    </div>
+  </section>
   <section class="grid-section" id="mikoshi-section">
     <h2>💾 Project Mikoshi · Immortality Engram</h2>
     <div class="mikoshi-container"><div class="mikoshi-card">
@@ -39,7 +78,7 @@
   </section>
 
   <section class="grid-section" id="resonance-section">
-    <h2>🧬 Soul Resonance & Longevity Protocol</h2>
+    <h2>🧬 Soul Resonance &amp; Longevity Protocol</h2>
     <div class="mikoshi-container"><div class="mikoshi-card" style="border-color: #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.2);">
       <div class="mikoshi-header" style="border-bottom-color: #00ffcc;"><span class="mikoshi-title" style="color: #00ffcc; text-shadow: 0 0 5px #00ffcc;">RESONANCE PROTOCOL</span><span class="mikoshi-status" id="resonance-status" style="color: #ffaa00;">AWAITING INPUT</span></div>
       <div class="mikoshi-body">
@@ -59,11 +98,11 @@
   </section>
 
   <section class="grid-section" id="global-safety-section">
-    <h2>🛡️ Global Safety & Network Compatibility</h2>
+    <h2>🛡️ Global Safety &amp; Network Compatibility</h2>
     <div class="safety-grid">
       <div class="safety-card"><span class="safety-icon">🔗</span><h4>Wallet Compatibility</h4><p>MetaMask, Coinbase, Trust, Rabby</p><span class="status-badge verified">EIP-1193 READY</span></div>
-      <div class="safety-card"><span class="safety-icon">🔒</span><h4>Contract Security</h4><p>GoPlus Honeypot & Tax Scan</p><span id="global-contract-status" class="status-badge pending">SCANNING...</span></div>
-      <div class="safety-card"><span class="safety-icon">💧</span><h4>Liquidity Health</h4><p>Pool Depth & Trading Risk</p><span id="global-liquidity-status" class="status-badge pending">CALCULATING...</span></div>
+      <div class="safety-card"><span class="safety-icon">🔒</span><h4>Contract Security</h4><p>GoPlus Honeypot &amp; Tax Scan</p><span id="global-contract-status" class="status-badge pending">SCANNING...</span></div>
+      <div class="safety-card"><span class="safety-icon">💧</span><h4>Liquidity Health</h4><p>Pool Depth &amp; Trading Risk</p><span id="global-liquidity-status" class="status-badge pending">CALCULATING...</span></div>
       <div class="safety-card"><span class="safety-icon">⚡</span><h4>Exchange Routing</h4><p>Uniswap V2/V3/V4 + Aggregators</p><span class="status-badge verified">ACTIVE</span></div>
     </div>
   </section>
@@ -77,57 +116,62 @@
             <span class="mikoshi-status" id="locker-status" style="color: #00ffcc;">ACTIVE</span>
         </div>
         <div style="font-family: monospace; font-size: 0.8rem; color: #8899a6; margin-bottom: 15px;">
-            <p>🔗 <strong>CONTRACT:</strong> <span id="locker-addr" style="color:#8247e5; word-break:break-all;">0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD</span></p>
-            <p>🛡️ <strong>SECURITY:</strong> Immutable UNCX-Style Vault</p>
+            <p>🔗 <strong>CONTRACT:</strong> <span id="locker-addr" data-address="0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD" style="color:#8247e5; word-break:break-all;">0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD</span></p>
+            <p>🛡️ <strong>SECURITY:</strong> Immutable UNCX-Style Vault · <a href="https://basescan.org/address/0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD#code" target="_blank" rel="noopener noreferrer" style="color:#00ffcc;">Verified on BaseScan ↗</a></p>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
-            <p style="color: #fff; font-size: 0.9rem; margin-bottom: 10px;">Lock your Uniswap V3 NFTs (WETH/WBTC) to prove liquidity is safe.</p>
-            <button id="scan-lock-btn" class="btn-primary" style="width:100%; background:#8247e5; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">Scan Wallet & Lock Positions</button>
+            <p style="color: #fff; font-size: 0.9rem; margin-bottom: 10px;">On-chain proof of lock — recent PositionLocked events read directly from the chain:</p>
+            <div id="locked-positions-list" style="font-family: monospace; font-size: 0.8rem; color: #00ffcc; margin-bottom: 10px;">Scanning recent blocks for locks...</div>
+            <button id="scan-lock-btn" class="btn-primary" style="width:100%; background:#8247e5; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">Scan Wallet &amp; Lock Positions</button>
             <p id="locker-log" style="color: #00ffcc; font-size: 0.75rem; margin-top: 10px; text-align: center;"></p>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border: 1px solid #333;">
+            <p style="color: #fff; font-size: 0.85rem; margin-bottom: 8px;">Withdraw a position whose lock has expired.</p>
+            <input type="text" id="withdraw-token-id" inputmode="numeric" autocomplete="off" placeholder="Uniswap V3 Token ID (e.g. 123456)" style="width:100%; padding:9px; background:#000; border:1px solid #8247e5; color:#fff; font-family:monospace; margin-bottom:8px; border-radius:4px; box-sizing:border-box;">
+            <button id="withdraw-lock-btn" class="btn-primary" style="width:100%; background:#333; color:#00ffcc; border:1px solid #8247e5; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">Withdraw Unlocked Position</button>
+            <p id="withdraw-log" style="color: #00ffcc; font-size: 0.75rem; margin-top: 10px; text-align: center;"></p>
         </div>
       </div>
     </div>
   </section>
 
-
-
   <section class="grid-section"><h2>🏦 Digital eBank · Auto-Immune Vault</h2><div class="ebank-container">
     <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(0,255,204,0.1);color:#00ffcc;border:1px solid #00ffcc;">AUTO-COMPOUNDING ACTIVE</span></div><div class="immunity-shield"><span style="font-size:0.75rem;color:var(--dim);">Auto-Immune Shield</span><span id="immunity-score" style="font-family:monospace;font-size:1.2rem;color:#00ffcc;font-weight:bold;">99.80%</span></div></div>
-    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Yield Accrued (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div><div class="ebank-stat"><span class="label">Total Protocol TVL</span><span class="value" id="ebank-tvl">$842,912.00</span></div></div>
+    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Simulated Yield (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Burn Address Balance (Live · 0x000…dEaD)</span><span class="value" id="burn-counter" style="color:#ff0055;">— PIDX</span></div><div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div></div>
   </div></section>
 
   <section class="grid-section"><h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2><div id="token-grid" class="token-grid"><p class="loading">SYNCING TELEMETRY...</p></div></section>
 
-  <section class="grid-section"><h2>🌱 Growth Engine & Voxel Dynamics</h2><div class="engine-grid">
+  <section class="grid-section"><h2>🌱 Growth Engine &amp; Voxel Dynamics</h2><div class="engine-grid">
     <div class="engine-card"><span class="label">Continuity</span><span class="value" id="val-continuity">1.000</span></div><div class="engine-card"><span class="label">Coherence</span><span class="value" id="val-coherence">0.9356</span></div><div class="engine-card"><span class="label">Persistence</span><span class="value" id="val-persistence">379 blocks</span></div><div class="engine-card"><span class="label">Active Voxels</span><span class="value" id="val-voxels">7</span></div><div class="engine-card"><span class="label">Energy Band</span><span class="value" id="val-energy">MID (42.8 GW)</span></div><div class="engine-card"><span class="label">Engine Status</span><span class="value success" id="val-engine">OPTIMAL</span></div>
   </div></section>
 
   <section class="grid-section split"><div class="panel"><h2>🧬 Vitruvian System States</h2><ul><li><strong>Vitruvian State:</strong> <span id="v-state">1 · 0.936 · 0.392</span></li><li><strong>Stability:</strong> <span id="v-stability">1.112</span></li><li><strong>Resonance:</strong> <span id="v-resonance">0.533</span></li><li><strong>Veil Phase:</strong> <span id="v-veil" style="color:#00ffcc;">OPEN</span></li></ul></div><div class="panel"><h2>🧠 Memory Log</h2><div id="memory-log" class="memory-terminal"></div></div></section>
 
-  <section class="grid-section"><h2>🏦 Yield Vaults & Liquidity Pools</h2><div class="vault-grid" id="vault-grid"></div></section>
+  <section class="grid-section"><h2>🏦 Yield Vaults &amp; Liquidity Pools</h2><div class="vault-grid" id="vault-grid"></div></section>
   <section class="grid-section"><h2>⛏️ Mining Pools · Stratum Directory</h2><div class="mining-grid" id="mining-grid"></div></section>
-  
+
   <section class="grid-section" id="agi-brain-section"><h2>🧠 AGI Neural Topology · 5G 4D 3D</h2><div class="panel" style="padding: 15px; border-radius: 12px; background: #000; border: 1px solid var(--border);"><canvas id="agi-canvas" style="width: 100%; height: 350px; display: block;"></canvas></div></section>
 
   <section class="grid-section" id="bots-section">
-    <h2>🤖 Trading Bots · Automated Strategies</h2>
+    <h2>🤖 Trading Bots · Token-Gated Utility</h2>
     <div class="bots-grid">
       <div class="card bot-card">
-        <h4>DCA Bot <span class="badge tiny" id="dca-status" style="color:#ffaa00; border-color:#ffaa00;">PAUSED</span></h4>
-        <p style="color:var(--dim); font-size:0.8rem;">Dollar-Cost Averaging</p>
+        <h4>DCA Bot <span class="badge tiny" id="dca-status" style="color:#ffaa00; border-color:#ffaa00;">LOCKED</span></h4>
+        <p style="color:var(--dim); font-size:0.8rem;">Dollar-Cost Averaging · requires 1,000 PIDX</p>
         <div class="bot-metrics"><div><span class="label">PnL</span><span class="value" id="dca-pnl" style="color:#00ffcc;">+$0.00</span></div><div><span class="label">Win Rate</span><span class="value" id="dca-win">0%</span></div><div><span class="label">Trades/hr</span><span class="value" id="dca-trades">0</span></div><div><span class="label">Strategy</span><span class="value" id="dca-strategy">MOMENTUM</span></div></div>
-        <button class="bot-btn" id="dca-btn" style="background:#00ffcc; color:#000; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:pointer;">Start Bot</button>
+        <button class="bot-btn" id="dca-btn" disabled style="background:#333; color:#888; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:not-allowed;">Locked</button>
       </div>
       <div class="card bot-card">
-        <h4>Grid Bot <span class="badge tiny" id="grid-status" style="color:#ffaa00; border-color:#ffaa00;">PAUSED</span></h4>
-        <p style="color:var(--dim); font-size:0.8rem;">Grid Trading</p>
+        <h4>Grid Bot <span class="badge tiny" id="grid-status" style="color:#ffaa00; border-color:#ffaa00;">LOCKED</span></h4>
+        <p style="color:var(--dim); font-size:0.8rem;">Grid Trading · requires 1,000 PIDX</p>
         <div class="bot-metrics"><div><span class="label">PnL</span><span class="value" id="grid-pnl" style="color:#00ffcc;">+$0.00</span></div><div><span class="label">Win Rate</span><span class="value" id="grid-win">0%</span></div><div><span class="label">Trades/hr</span><span class="value" id="grid-trades">0</span></div><div><span class="label">Strategy</span><span class="value" id="grid-strategy">GRID</span></div></div>
-        <button class="bot-btn" id="grid-btn" style="background:#00ffcc; color:#000; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:pointer;">Start Bot</button>
+        <button class="bot-btn" id="grid-btn" disabled style="background:#333; color:#888; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:not-allowed;">Locked</button>
       </div>
     </div>
   </section>
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=100112"></script>
+<script src="app.js?v=100130"></script>
 </body>
 </html>
