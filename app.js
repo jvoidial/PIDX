@@ -53,6 +53,11 @@ const NPM_ABI = [
   "function approve(address to, uint256 tokenId)",
   "function ownerOf(uint256 tokenId) view returns (address)"
 ];
+// Selectors used by the read-only locker status line (no ABI objects needed).
+const SEL_OWNER = "0x8da5cb5b";       // owner()
+const SEL_BALANCE_OF = "0x70a08231";  // balanceOf(address)
+const SEL_TOKEN_OF_OWNER = "0x2f745c59"; // tokenOfOwnerByIndex(address,uint256)
+const SEL_POSITIONS = "0x99fbab88";   // positions(uint256)
 const LOCKER_ABI = [
   "function lockPosition(address nftContract, uint256 tokenId, uint256 lockDuration)",
   "function withdrawPosition(address nftContract, uint256 tokenId)",
@@ -91,6 +96,44 @@ const MINING_DATA = [
 
 // --------------------------------------------------------------- primitives
 function $(id) { return document.getElementById(id); }
+
+// ---------------------------------------------------------- metric registry
+// Declares EVERY numeric metric this dashboard can render, and where its value
+// comes from. A metric must be one of:
+//   source: "live"    - read from the chain/API at runtime (element exists)
+//   source: "derived" - a deterministic function of a declared input (basis)
+//   state:  "not-measured"    - no source exists; the element is NOT rendered
+//   state:  "not-implemented" - not built; the element renders an explicit dash
+// test/honesty.test.js walks this registry, so a new hard-coded number cannot
+// be added without declaring its provenance here.
+const METRIC_REGISTRY = [
+  { id: "live-block",          source: "live",    note: "Base RPC eth_blockNumber" },
+  { id: "burn-counter",        source: "live",    note: "PIDX balanceOf(0x…dEaD)" },
+  { id: "locker-status",       source: "live",    note: "locker owner() + NPM positions()" },
+  { id: "resonance-longevity", source: "live",    note: "elapsed time since resonance start" },
+  { id: "resonance-freq",      source: "derived", basis: "salted hash of the user's pseudonym", note: "cosmetic novelty readout" },
+  { id: "resonance-band",      source: "derived", basis: "navigator.connection / user agent",   note: "coarse network class" },
+  { id: "immortality-prob",    state: "not-measured" },
+  { id: "immunity-score",      state: "not-implemented" },
+  { id: "ebank-principal",     state: "not-implemented" },
+  { id: "ebank-yield",         state: "not-implemented" },
+  { id: "ebank-apy",           state: "not-implemented" },
+  { id: "val-continuity",      state: "not-measured" },
+  { id: "val-coherence",       state: "not-measured" },
+  { id: "val-persistence",     state: "not-measured" },
+  { id: "val-voxels",          state: "not-measured" },
+  { id: "val-energy",          state: "not-measured" },
+  { id: "val-engine",          state: "not-measured" },
+  { id: "v-state",             state: "not-measured" },
+  { id: "v-stability",         state: "not-measured" },
+  { id: "v-resonance",         state: "not-measured" },
+  { id: "dca-pnl",             state: "not-implemented" },
+  { id: "dca-win",             state: "not-implemented" },
+  { id: "dca-trades",          state: "not-implemented" },
+  { id: "grid-pnl",            state: "not-implemented" },
+  { id: "grid-win",            state: "not-implemented" },
+  { id: "grid-trades",         state: "not-implemented" }
+];
 
 const ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
 
@@ -389,48 +432,55 @@ function logMemory(msg, color) {
   loadMemory();
 }
 
-// ------------------------------------------------------------ simulations
-// Everything in this function is ANIMATED COSMETIC DATA, not a measurement.
-// It must never write to elements that display real chain state: in
-// particular #live-block is owned by the RPC health loop (setLiveBlock) and
-// must not be incremented here, or the dashboard would show a fake block
-// height next to a real RPC reading.
-function startSimulations() {
-  let time = 0;
-  setInterval(() => {
-    time += 0.1;
-    if ($("val-continuity")) $("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
-    if ($("val-coherence")) $("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
-    if ($("val-persistence")) $("val-persistence").textContent = (379 + Math.floor(time / 10)) + " blocks";
-    if ($("val-voxels")) $("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
-    const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
-    const apy = 0.15 + (coh * 0.05);
-    if ($("ebank-apy")) $("ebank-apy").textContent = (apy * 100).toFixed(2) + "%";
-    if ($("immunity-score")) $("immunity-score").textContent = (99.8 - (1 - coh) * 10).toFixed(2) + "%";
-  }, 1000);
-  // The veil is a decorative animation. It is NOT logged to the memory
-  // terminal: it carries no information and previously flooded the log.
-  setInterval(() => {
-    const phases = ["OPEN", "CLOSING", "VEILED"];
-    const p = phases[Math.floor(Math.random() * phases.length)];
-    const veil = $("v-veil");
-    if (veil) { veil.textContent = p; veil.style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00"); }
-  }, 15000);
+// ------------------------------------------------------------ locker status
+// Read-only. The full locker panel was pulled until the on-chain V3 position
+// has non-zero liquidity; this reports the facts in one line instead. It does
+// not touch the lock/withdraw code paths.
+function pad32(hexNo0x) { return hexNo0x.padStart(64, "0"); }
+function shortAddr(a) { return a ? a.slice(0, 10) + "…" + a.slice(-4) : "unknown"; }
+
+async function refreshLockerStatus() {
+  const el = $("locker-status");
+  if (!el) return;
+  let owner = null, liquidity = null, isOwnable = false;
+  try {
+    const ownerHex = await jsonRpc("eth_call", [{ to: LOCKER_ADDR, data: SEL_OWNER }, "latest"], API_TIMEOUT);
+    if (typeof ownerHex === "string" && ownerHex.length >= 42) {
+      owner = "0x" + ownerHex.slice(-40);
+      isOwnable = true;
+    }
+  } catch (_) { /* not Ownable, or RPC refused */ }
+  try {
+    const bal = await jsonRpc("eth_call", [{ to: NPM_ADDR, data: SEL_BALANCE_OF + pad32(LOCKER_ADDR.slice(2).toLowerCase()) }, "latest"], API_TIMEOUT);
+    const count = bal && bal !== "0x" ? BigInt(bal) : 0n;
+    if (count === 0n) {
+      liquidity = "0";
+    } else {
+      const tid = await jsonRpc("eth_call", [{ to: NPM_ADDR, data: SEL_TOKEN_OF_OWNER + pad32(LOCKER_ADDR.slice(2).toLowerCase()) + pad32("0") }, "latest"], API_TIMEOUT);
+      const tokenId = BigInt(tid);
+      const pos = await jsonRpc("eth_call", [{ to: NPM_ADDR, data: SEL_POSITIONS + pad32(tokenId.toString(16)) }, "latest"], API_TIMEOUT);
+      // positions() returns 12 static 32-byte words; each word is 64 HEX chars.
+      // liquidity is word index 7, i.e. hex chars [2+7*64, 2+8*64).
+      if (typeof pos === "string" && pos.length >= 2 + 64 * 8) {
+        liquidity = BigInt("0x" + pos.slice(2 + 64 * 7, 2 + 64 * 8)).toString();
+      }
+    }
+  } catch (_) { liquidity = null; }
+
+  const ownPart = isOwnable ? "Ownable, owner " + shortAddr(owner) : "ownership not exposed";
+  const liqPart = liquidity === null ? "position liquidity unknown" : "position liquidity " + liquidity;
+  el.textContent = "Locker: " + ownPart + ", " + liqPart;
+  el.style.color = (liquidity === "0") ? "#ffaa00" : "#8899a6";
 }
 
-// -------------------------------------------------------------- eBank
-let ebankPrincipal = 1000.00, ebankYield = 0.0;
-function startEbankEngine() {
-  setInterval(() => {
-    const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
-    const apy = 0.15 + (coh * 0.05);
-    const perSec = Math.pow(1 + apy, 1 / 31536000) - 1;
-    const earned = ebankPrincipal * perSec;
-    ebankYield += earned; ebankPrincipal += earned;
-    if ($("ebank-principal")) $("ebank-principal").textContent = ebankPrincipal.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 }) + " PIDX";
-    if ($("ebank-yield")) $("ebank-yield").textContent = "+ " + ebankYield.toLocaleString(undefined, { minimumFractionDigits: 8, maximumFractionDigits: 8 }) + " PIDX";
-  }, 1000);
-}
+// ------------------------------------------------------------ simulated data
+// Every animated metric has been removed rather than captioned. There is no
+// real telemetry source for these values, so rendering numbers for them at all
+// would be a claim we cannot support. The section headers in index.html say
+// "Not measured" / "Not implemented" instead.
+//
+// The loops that remain are backed by real chain data only: the RPC block
+// feed, the lock scan, and the burn counter.
 
 // ------------------------------------------------------------ Mikoshi
 function generateAutoEngram() {
@@ -453,7 +503,8 @@ function generateAutoEngram() {
 function renderEngramUI(id, seq, prob) {
   setSafeText($("engram-id"), id);
   setSafeText($("longevity-seq"), seq);
-  setSafeText($("immortality-prob"), prob + "%");
+  // No probability is rendered: the number was a hash fragment, not a
+  // measurement. The element no longer exists in index.html.
   const status = $("mikoshi-status");
   if (status) { status.textContent = "ENGRAM ACTIVE"; status.style.color = "#00ffcc"; }
   const relic = $("relic-integrity");
@@ -465,6 +516,27 @@ function renderEngramUI(id, seq, prob) {
 
 // ------------------------------------------------------------ Resonance
 let resonanceTimerInterval = null;
+// Per-session random salt, regenerated on every page load and never persisted.
+// An unsalted hash of a short code is reversible by lookup; the salt prevents
+// that and makes identical input produce a different tag each session.
+const RESONANCE_SALT = (typeof crypto !== "undefined" && crypto.getRandomValues)
+  ? Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, "0")).join("")
+  : Math.random().toString(36).slice(2) + Date.now().toString(36);
+function resonanceTag(input) {
+  const material = RESONANCE_SALT + "|" + input;
+  try {
+    if (typeof ethers !== "undefined" && ethers.keccak256) {
+      return ethers.keccak256(ethers.toUtf8Bytes(material)).substring(2, 10);
+    }
+  } catch (_) {}
+  // Pure-JS FNV-1a fallback so the tag is still salted without ethers.
+  let h = 0x811c9dc5;
+  for (let i = 0; i < material.length; i++) {
+    h ^= material.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8, "0");
+}
 function playResonanceSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -523,9 +595,8 @@ function initiateResonance() {
       if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
       const input = $("resonance-human-id"); if (input) input.disabled = true;
       logMemory("Resonance Bound (" + (isGuest ? "Guest" : "Wallet") + "). Band: " + band + ". Freq: " + freq + " MHz.", "#00ffcc");
-      // Persist only a short non-reversible tag, never the raw input, so a
-      // real identifier can never be read back out of localStorage.
-      const tag = hash.substring(2, 8);
+      // Persist only a short salted tag, never the raw input.
+      const tag = resonanceTag(humanId);
       try { localStorage.setItem("ebank_resonance_data", JSON.stringify({ tag: tag, freq: freq, band: band, startTime: startTime, isGuest: isGuest })); } catch (_) {}
     } catch (_) {
       if (btn) { btn.textContent = "ERROR"; btn.style.background = "#ff4444"; }
@@ -562,6 +633,8 @@ async function loadTokens() {
   const grid = $("token-grid");
   if (!grid) return;
   grid.innerHTML = "";
+  // Real event: cards were (re)rendered from tokens.json / fallback list.
+  logMemory("Token cards refreshed (" + tokens.length + " tokens)", "#8899a6");
 
   // --- render each card from validated primitives (no raw interpolation) ---
   tokens.forEach(t => {
@@ -795,27 +868,24 @@ function updateBotsUI() {
   if (ds) { ds.textContent = dcaActive ? "ACTIVE" : "PAUSED"; ds.style.color = dcaActive ? "#00ffcc" : "#ffaa00"; ds.style.borderColor = dcaActive ? "#00ffcc" : "#ffaa00"; }
   const db = $("dca-btn");
   if (db) { db.textContent = dcaActive ? "Stop Bot" : "Start Bot"; db.style.background = dcaActive ? "#ff4444" : "#00ffcc"; db.style.color = dcaActive ? "#fff" : "#000"; }
-  if ($("dca-pnl")) $("dca-pnl").textContent = "+$" + dcaPnl.toFixed(2);
-  if ($("dca-trades")) $("dca-trades").textContent = dcaTrades;
-  if ($("dca-win")) $("dca-win").textContent = dcaWin.toFixed(1) + "%";
+  // No live PnL feed exists, so these stay an explicit non-value.
+  if ($("dca-pnl")) $("dca-pnl").textContent = "—";
+  if ($("dca-trades")) $("dca-trades").textContent = "—";
+  if ($("dca-win")) $("dca-win").textContent = "—";
 
   const gs = $("grid-status");
   if (gs) { gs.textContent = gridActive ? "ACTIVE" : "PAUSED"; gs.style.color = gridActive ? "#00ffcc" : "#ffaa00"; gs.style.borderColor = gridActive ? "#00ffcc" : "#ffaa00"; }
   const gb = $("grid-btn");
   if (gb) { gb.textContent = gridActive ? "Stop Bot" : "Start Bot"; gb.style.background = gridActive ? "#ff4444" : "#00ffcc"; gb.style.color = gridActive ? "#fff" : "#000"; }
-  if ($("grid-pnl")) $("grid-pnl").textContent = "+$" + gridPnl.toFixed(2);
-  if ($("grid-trades")) $("grid-trades").textContent = gridTrades;
-  if ($("grid-win")) $("grid-win").textContent = gridWin.toFixed(1) + "%";
+  if ($("grid-pnl")) $("grid-pnl").textContent = "—";
+  if ($("grid-trades")) $("grid-trades").textContent = "—";
+  if ($("grid-win")) $("grid-win").textContent = "—";
 }
 
 function startBotsEngine() {
   updateBotsUI();
-  setInterval(() => {
-    // These are SIMULATED trades. The log says so, so nobody mistakes the
-    // PnL for real fills.
-    if (dcaActive) { dcaPnl += Math.random() * 2.5 - 0.5; dcaTrades += Math.floor(Math.random() * 3); dcaWin = 70 + Math.random() * 15; updateBotsUI(); logMemory("DCA Bot (simulated) tick. Fake PnL: $" + dcaPnl.toFixed(2), "#ffaa00"); }
-    if (gridActive) { gridPnl += Math.random() * 1.5 - 0.3; gridTrades += Math.floor(Math.random() * 2); gridWin = 60 + Math.random() * 20; updateBotsUI(); }
-  }, 3000);
+  // No simulated PnL ticks: with no real fill source the honest value is a
+  // dash, so there is nothing for a timer to update.
 
   if (!botsListenersBound) {
     botsListenersBound = true;
@@ -1028,12 +1098,23 @@ async function withdrawPosition() {
 function restoreResonance() {
   const savedRes = localStorage.getItem("ebank_resonance_data");
   if (!savedRes) return;
+  let data;
   try {
-    const data = JSON.parse(savedRes);
-    // Older builds stored the raw input verbatim. If that happened, drop it
-    // immediately and rewrite the record without the identifier.
-    if (data && data.humanId) {
-      delete data.humanId;
+    data = JSON.parse(savedRes);
+  } catch (_) {
+    // Malformed JSON: drop the key entirely rather than keep unknown bytes.
+    try { localStorage.removeItem("ebank_resonance_data"); } catch (_) {}
+    return;
+  }
+  try {
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      try { localStorage.removeItem("ebank_resonance_data"); } catch (_) {}
+      return;
+    }
+    // Older builds stored the raw input verbatim under one of several keys.
+    // If any identifying field is present, strip it and rewrite the record.
+    if ("humanId" in data || "human_id" in data || "identity" in data || "id" in data) {
+      delete data.humanId; delete data.human_id; delete data.identity; delete data.id;
       data.tag = data.tag || "purged";
       try { localStorage.setItem("ebank_resonance_data", JSON.stringify(data)); } catch (_) {}
     }
@@ -1070,9 +1151,19 @@ function setRpcStatus(text, color) {
   const el = $("rpc-status");
   if (el) { el.textContent = text; el.style.color = color; }
 }
+let lastLoggedBlock = 0, lastBlockLogAt = 0;
 function setLiveBlock(n) {
   const liveBlock = $("live-block");
   if (liveBlock && Number.isFinite(n)) liveBlock.textContent = n.toLocaleString();
+  // Real event: the chain height moved. Throttled to once a minute so the
+  // terminal stays readable (Base produces a block roughly every 2s).
+  if (Number.isFinite(n) && n !== lastLoggedBlock) {
+    lastLoggedBlock = n;
+    if (Date.now() - lastBlockLogAt > 60000) {
+      lastBlockLogAt = Date.now();
+      logMemory("Chain height " + n.toLocaleString() + " (live RPC)", "#00ffcc");
+    }
+  }
 }
 
 async function refreshRpcHealth() {
@@ -1097,12 +1188,15 @@ function stopHttpBlockPolling() {
 
 // Slow loop that runs regardless of transport: lock scan + burn read.
 function startLockScanLoop() {
-  fetchLockedPositions();
+  // fetchLockedPositions() is intentionally NOT called: its output element
+  // (the locker panel) is pulled until the position has non-zero liquidity.
+  // The function is retained for when the panel returns.
   refreshBurnCounter();
+  refreshLockerStatus();
   if (lockScanTimer) clearInterval(lockScanTimer);
   lockScanTimer = setInterval(() => {
-    fetchLockedPositions();
     refreshBurnCounter();
+    refreshLockerStatus();
   }, RPC_POLL_MS * LOCK_SCAN_EVERY);
 }
 
@@ -1247,9 +1341,16 @@ async function refreshBurnCounter() {
     }
     const whole = raw / (10n ** BigInt(burnDecimals === null ? 18 : burnDecimals));
     el.textContent = whole.toLocaleString() + " PIDX";
+    // Real event: log the live burn balance only when it actually changes.
+    const stamp = whole.toString();
+    if (stamp !== lastBurnLogged) {
+      lastBurnLogged = stamp;
+      logMemory("Burn balance " + stamp + " PIDX (live)", "#ff0055");
+    }
   } catch (_) { el.textContent = "unavailable"; }
 }
 
+let lastBurnLogged = null;
 let booted = false;
 window.addEventListener("DOMContentLoaded", () => {
   if (booted) return;
@@ -1267,8 +1368,6 @@ window.addEventListener("DOMContentLoaded", () => {
   $("scan-lock-btn")?.addEventListener("click", scanAndLockPositions);
   $("withdraw-lock-btn")?.addEventListener("click", withdrawPosition);
 
-  startSimulations();
-  startEbankEngine();
   generateAutoEngram();
   loadGrids();
   loadTokens();
@@ -1294,5 +1393,12 @@ window.PIDX_APP = {
   fetchLockedPositions: fetchLockedPositions,
   refreshBurnCounter: refreshBurnCounter,
   refreshRpcHealth: refreshRpcHealth,
-  setLiveBlock: setLiveBlock
+  setLiveBlock: setLiveBlock,
+  refreshLockerStatus: refreshLockerStatus,
+  resonanceTag: resonanceTag,
+  scanAndLockPositions: scanAndLockPositions,
+  withdrawPosition: withdrawPosition,
+  hydrateToken: hydrateToken,
+  restoreResonance: restoreResonance,
+  METRIC_REGISTRY: METRIC_REGISTRY
 };

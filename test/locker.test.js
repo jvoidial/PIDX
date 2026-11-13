@@ -67,7 +67,7 @@ module.exports = async function run() {
     // `connectedWallet` directly from the test scope).
     w.document.getElementById("connect-wallet-btn").click();
     await wait(50);
-    w.document.getElementById("scan-lock-btn").click();
+    await w.PIDX_APP.scanAndLockPositions();
     await wait(250);
 
     const iApprove = order.indexOf("approve");
