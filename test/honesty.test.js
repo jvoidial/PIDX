@@ -219,6 +219,33 @@ module.exports = async function run() {
     s.ok("#live-block default is not a fake block number", !!m && !/[0-9]{3}/.test(m[1]));
   }
 
+  // (7c) Build id must match the cache-buster and version.txt, or the
+  //      self-update watcher reloads in a loop or never fires.
+  {
+    const fs = require("fs");
+    const path = require("path");
+    const bust = (htmlNoComments.match(/app\.js\?v=(\d+)/) || [])[1];
+    const buildId = (app.match(/BUILD_ID\s*=\s*"(\d+)"/) || [])[1];
+    let vfile = "";
+    try { vfile = fs.readFileSync(path.join(__dirname, "..", "version.txt"), "utf8").trim(); } catch (_) {}
+    s.ok("cache-buster present", !!bust);
+    s.ok("BUILD_ID present", !!buildId);
+    s.ok("version.txt present", !!vfile);
+    s.ok("cache-buster matches BUILD_ID", bust === buildId);
+    s.ok("version.txt matches BUILD_ID", vfile === buildId);
+    s.ok("version watcher uses the tested decision fn", /shouldReload\(BUILD_ID/.test(app));
+    // behaviour: exercise the real decision function from the loaded app
+    const { w } = boot({});
+    const sr = w.PIDX_APP.shouldReload;
+    s.ok("shouldReload exported", typeof sr === "function");
+    s.ok("reloads when a newer build is deployed", sr("100", "101", false) === true);
+    s.ok("does not reload for the same build", sr("100", "100", false) === false);
+    s.ok("does not reload for an older build", sr("100", "99", false) === false);
+    s.ok("does not reload twice in one session", sr("100", "101", true) === false);
+    s.ok("ignores a garbage version string", sr("100", "not-a-number", false) === false);
+    s.ok("ignores an empty version string", sr("100", "", false) === false);
+  }
+
   // (6) Memory terminal is seeded from real events, not decorative fillers
   {
     const { w } = boot({ noBoot: true });
