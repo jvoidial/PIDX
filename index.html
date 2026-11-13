@@ -17,7 +17,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://mainnet.base.org https://base-rpc.publicnode.com wss://mainnet.base.org; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>✧ THE COSMIC SCRIBE ✧</title>
-<link rel="stylesheet" href="style.css?v=100135">
+<link rel="stylesheet" href="style.css?v=100137">
 <!--
   Third-party libraries are pinned by version AND by Subresource Integrity (SRI), so a
   compromised CDN response is refused by the browser instead of running in your origin.
@@ -153,9 +153,24 @@
 
   <section class="grid-section"><h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2><div id="token-grid" class="token-grid"><p class="loading">SYNCING TELEMETRY...</p></div></section>
 
-  <section class="grid-section"><h2>🌱 Growth Engine &amp; Voxel Dynamics</h2><p style="color:var(--dim); font-size:0.78rem; margin:0;">Not measured. No telemetry source exists for these values.</p></section>
+  <section class="grid-section"><h2>🌱 Growth Engine &amp; Voxel Dynamics</h2>
+  <p style="color:var(--dim); font-size:0.72rem; margin:0 0 10px;">Self-powering: every value below is computed live from Base RPC + the token APIs. The formula is shown next to each metric so you can check it. No fabricated telemetry.</p>
+  <div class="vault-grid" id="growth-grid">
+    <div class="card small"><h4>Continuity <span class="badge tiny" style="color:#00ffcc;">LIVE</span></h4><p style="font-size:1.2rem;color:#00ffcc;" id="growth-continuity">—</p><p style="color:var(--dim);font-size:0.7rem;">= indexed tokens ÷ tokens in list</p></div>
+    <div class="card small"><h4>Coherence <span class="badge tiny" style="color:#00ffcc;">LIVE</span></h4><p style="font-size:1.2rem;color:#00ffcc;" id="growth-coherence">—</p><p style="color:var(--dim);font-size:0.7rem;">= clean GoPlus scans ÷ indexed tokens</p></div>
+    <div class="card small"><h4>Persistence <span class="badge tiny" style="color:#00ffcc;">LIVE</span></h4><p style="font-size:1.2rem;color:#00ffcc;" id="growth-persistence">—</p><p style="color:var(--dim);font-size:0.7rem;">= blocks observed this session × 2s</p></div>
+    <div class="card small"><h4>Active Voxels <span class="badge tiny" style="color:#00ffcc;">LIVE</span></h4><p style="font-size:1.2rem;color:#00ffcc;" id="growth-voxels">—</p><p style="color:var(--dim);font-size:0.7rem;">= 4 token cards + 4 safety panels</p></div>
+    <div class="card small"><h4>Energy Band <span class="badge tiny" style="color:#00ffcc;">LIVE</span></h4><p style="font-size:1.2rem;color:#00ffcc;" id="growth-energy">—</p><p style="color:var(--dim);font-size:0.7rem;">= deepest pool TVL, bucketed</p></div>
+    <div class="card small"><h4>Engine Status <span class="badge tiny" style="color:#00ffcc;">LIVE</span></h4><p style="font-size:1.2rem;color:#00ffcc;" id="growth-engine">—</p><p style="color:var(--dim);font-size:0.7rem;">= RPC transport state</p></div>
+  </div></section>
 
-  <section class="grid-section split"><div class="panel"><h2>🧬 Vitruvian System States</h2><p style="color:var(--dim); font-size:0.78rem; margin:0;">Not measured.</p></div><div class="panel"><h2>🧠 Memory Log</h2><div id="memory-log" class="memory-terminal"></div></div></section>
+  <section class="grid-section split"><div class="panel"><h2>🧬 Vitruvian System States</h2>
+    <p style="color:var(--dim); font-size:0.72rem; margin:0 0 10px;">Derived live from the same chain + API data. Formula shown for each.</p>
+    <div class="vitals-row"><span class="vitals-k">Vitruvian State</span><span class="vitals-v" id="vitruvian-state">—</span></div>
+    <div class="vitals-row"><span class="vitals-k">Stability</span><span class="vitals-v" id="vitruvian-stability">—</span></div>
+    <div class="vitals-row"><span class="vitals-k">Resonance</span><span class="vitals-v" id="vitruvian-resonance">—</span></div>
+    <p style="color:var(--dim);font-size:0.7rem;margin-top:8px;">State = (continuity · coherence · stability) · Stability = 1 + (clean ÷ tokens) · Resonance = continuity × coherence</p>
+  </div><div class="panel"><h2>🧠 Memory Log</h2><div id="memory-log" class="memory-terminal"></div></div></section>
 
   <section class="grid-section"><h2>🏦 Yield Vaults &amp; Liquidity Pools</h2><p style="color:var(--dim);font-size:0.72rem;margin:0 0 10px;">Reference snapshot, not live rates. APY and TVL are copied from each protocol at build time — check the protocol before depositing.</p><div class="vault-grid" id="vault-grid"></div></section>
   <section class="grid-section"><h2>⛏️ Mining Pools · Stratum Directory</h2><p style="color:var(--dim);font-size:0.72rem;margin:0 0 10px;">Directory listing only. Pool reachability is not checked from the browser.</p><div class="mining-grid" id="mining-grid"></div></section>
@@ -181,6 +196,6 @@
   </section>
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=100135"></script>
+<script src="app.js?v=100137"></script>
 </body>
 </html>
