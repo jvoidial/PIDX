@@ -202,6 +202,13 @@ module.exports = async function run() {
     s.ok("pad32 is defined exactly once", fns.filter(n => n === "pad32").length === 1);
   }
 
+  // (7b) The header block height must not ship a plausible fake default: it
+  //      renders a placeholder until the RPC supplies a real height.
+  {
+    const m = htmlNoComments.match(/id="live-block"[^>]*>([^<]*)</);
+    s.ok("#live-block default is not a fake block number", !!m && !/[0-9]{3}/.test(m[1]));
+  }
+
   // (6) Memory terminal is seeded from real events, not decorative fillers
   {
     const { w } = boot({ noBoot: true });

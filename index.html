@@ -17,7 +17,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://mainnet.base.org https://base-rpc.publicnode.com wss://mainnet.base.org; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>✧ THE COSMIC SCRIBE ✧</title>
-<link rel="stylesheet" href="style.css?v=100134">
+<link rel="stylesheet" href="style.css?v=100135">
 <!--
   Third-party libraries are pinned by version AND by Subresource Integrity (SRI), so a
   compromised CDN response is refused by the browser instead of running in your origin.
@@ -48,7 +48,7 @@
   <div style="text-align:center; margin-top: 8px;">
       <span id="eip7702-guard-status" style="font-family: monospace; font-size: 0.72rem; color: #8899a6;">🛡️ EIP-7702 Signature Guard: initializing…</span>
   </div>
-  <div class="status-bar" style="margin-top:15px;"><span>✦ Block (live) <span id="live-block">53,318,083</span></span><span id="rpc-status" style="color:#ffaa00;">● RPC: Connecting...</span></div>
+  <div class="status-bar" style="margin-top:15px;"><span>✦ Block (live) <span id="live-block">—</span></span><span id="rpc-status" style="color:#ffaa00;">● RPC: Connecting...</span></div>
 </header>
 <main>
   <!--
@@ -157,8 +157,8 @@
 
   <section class="grid-section split"><div class="panel"><h2>🧬 Vitruvian System States</h2><p style="color:var(--dim); font-size:0.78rem; margin:0;">Not measured.</p></div><div class="panel"><h2>🧠 Memory Log</h2><div id="memory-log" class="memory-terminal"></div></div></section>
 
-  <section class="grid-section"><h2>🏦 Yield Vaults &amp; Liquidity Pools</h2><div class="vault-grid" id="vault-grid"></div></section>
-  <section class="grid-section"><h2>⛏️ Mining Pools · Stratum Directory</h2><div class="mining-grid" id="mining-grid"></div></section>
+  <section class="grid-section"><h2>🏦 Yield Vaults &amp; Liquidity Pools</h2><p style="color:var(--dim);font-size:0.72rem;margin:0 0 10px;">Reference snapshot, not live rates. APY and TVL are copied from each protocol at build time — check the protocol before depositing.</p><div class="vault-grid" id="vault-grid"></div></section>
+  <section class="grid-section"><h2>⛏️ Mining Pools · Stratum Directory</h2><p style="color:var(--dim);font-size:0.72rem;margin:0 0 10px;">Directory listing only. Pool reachability is not checked from the browser.</p><div class="mining-grid" id="mining-grid"></div></section>
 
   <section class="grid-section" id="agi-brain-section"><h2>🧠 AGI Neural Topology · 5G 4D 3D</h2><div class="panel" style="padding: 15px; border-radius: 12px; background: #000; border: 1px solid var(--border);"><canvas id="agi-canvas" style="width: 100%; height: 350px; display: block;"></canvas></div></section>
 
@@ -181,6 +181,6 @@
   </section>
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=100134"></script>
+<script src="app.js?v=100135"></script>
 </body>
 </html>

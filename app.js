@@ -845,7 +845,9 @@ function loadGrids() {
 
       const h4 = document.createElement("h4");
       h4.appendChild(document.createTextNode(String(p.name) + " "));
-      const badge = document.createElement("span"); badge.className = "badge tiny"; badge.textContent = "ONLINE";
+      // "ONLINE" would be an unverified uptime claim: the browser cannot open a
+      // stratum TCP socket, so nothing here checks reachability. Say LISTED.
+      const badge = document.createElement("span"); badge.className = "badge tiny"; badge.textContent = "LISTED";
       h4.appendChild(badge);
 
       const fee = document.createElement("p"); fee.style.cssText = "font-size:0.8rem;color:var(--dim);"; fee.textContent = String(p.fee) + " | " + String(p.coin);
