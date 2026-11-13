@@ -189,6 +189,19 @@ module.exports = async function run() {
     }
   }
 
+  // (7) No duplicate top-level definitions: a second `function foo` silently
+  //     shadows the first, which previously regressed the wallet display.
+  {
+    const fns = (app.match(/^function ([A-Za-z0-9_]+)/gm) || []).map(x => x.replace("function ", "").trim());
+    const dupeFn = fns.filter((n, i) => fns.indexOf(n) !== i);
+    s.ok("no duplicate top-level function definitions", dupeFn.length === 0);
+    const decls = (app.match(/^(?:const|let|var) ([A-Za-z0-9_]+)/gm) || []).map(x => x.split(" ")[1]);
+    const dupeDecl = decls.filter((n, i) => decls.indexOf(n) !== i);
+    s.ok("no duplicate top-level declarations", dupeDecl.length === 0);
+    s.ok("shortAddr is defined exactly once", fns.filter(n => n === "shortAddr").length === 1);
+    s.ok("pad32 is defined exactly once", fns.filter(n => n === "pad32").length === 1);
+  }
+
   // (6) Memory terminal is seeded from real events, not decorative fillers
   {
     const { w } = boot({ noBoot: true });
