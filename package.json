@@ -1,13 +1,16 @@
 {
   "name": "pidx-spirit-vault",
   "version": "1.0.0",
-  "description": "PIDX / Spirit Guide — Base liquidity locker frontend and contracts",
+  "description": "PIDX / Spirit Guide \u2014 Base liquidity locker frontend and contracts",
   "main": "index.js",
   "scripts": {
     "compile": "node scripts/compile.js",
     "deploy": "node scripts/deploy.js",
     "verify": "node scripts/verify.js",
-    "test": "node test/run.js"
+    "test": "node test/run.js",
+    "test:contracts": "hardhat test test/contract/*.test.js",
+    "snapshot": "node scripts/snapshot-holders.js",
+    "deploy:v2": "node scripts/deploy-v2.js"
   },
   "keywords": [],
   "author": "",
