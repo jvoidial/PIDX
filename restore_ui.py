@@ -1,0 +1,182 @@
+import os, subprocess, sys
+
+# We are already inside the cloned repo folder
+REPO_DIR = os.getcwd()
+
+HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://api.llama.fi; img-src 'self' data:;">
+<title>✧ THE COSMIC SCRIBE ✧</title>
+<link rel="stylesheet" href="style.css?v=20000">
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+<div class="scanlines"></div>
+<canvas id="neural-canvas"></canvas>
+
+<header>
+  <h1>✧ THE COSMIC SCRIBE ✧</h1>
+  <p class="subtitle">GENERATION 10 · VITRUVIAN SYSTEM · MEMORY ACTIVE</p>
+  <div style="text-align:center;margin-top:10px;"><a href="https://x.com/PIDXRAIN" target="_blank" style="display:inline-block;background:#fff;color:#000;padding:8px 20px;border-radius:20px;font-weight:bold;text-decoration:none;font-family:monospace;">𝕏 Follow @PIDXRAIN</a></div>
+  <div class="status-bar" style="margin-top:15px;"><span>✦ Block <span id="live-block">53,318,083</span></span><span style="color:#00ffcc;">● System: VIEW MODE</span></div>
+</header>
+
+<main>
+  <section class="grid-section" id="mikoshi-section">
+    <h2>💾 Project Mikoshi · Immortality Engram</h2>
+    <div class="mikoshi-container"><div class="mikoshi-card">
+      <div class="mikoshi-header"><span class="mikoshi-title">IMMORTALITY PROTOCOL</span><span class="mikoshi-status" id="mikoshi-status">AWAITING UPLINK</span></div>
+      <div class="mikoshi-body"><div class="dna-strand" id="dna-strand"><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span><span>■</span></div>
+        <div class="mikoshi-data">
+          <p><strong>ENGRAM ID:</strong> <span id="engram-id">Disconnected</span></p>
+          <p><strong>LONGEVITY SEQ:</strong> <span id="longevity-seq" style="font-size:0.7rem;color:#ff0055;">Awaiting Sequence...</span></p>
+          <p><strong>IMMORTALITY PROB:</strong> <span id="immortality-prob">0.00%</span></p>
+          <p><strong>RELIC INTEGRITY:</strong> <span id="relic-integrity" style="color:#ffaa00;">UNVERIFIED</span></p>
+        </div>
+      </div>
+      <div id="manual-connect-div" style="display:none;margin-top:15px;border-top:1px dashed #333;padding-top:15px;">
+        <p style="color:#ff0055;font-size:0.75rem;margin-bottom:8px;">⚠️ Custom Signature Override:</p>
+        <input type="text" id="manual-wallet-input" placeholder="Paste 0x address..." style="width:100%;padding:10px;background:#000;border:1px solid #ff0055;color:#00ffcc;font-family:monospace;margin-bottom:10px;">
+        <button id="manual-connect-btn" class="btn-primary" style="width:100%;background:#ff0055;color:#fff;border:none;">Simulate Uplink</button>
+      </div>
+      <div class="mikoshi-footer"><button id="upload-engram-btn" class="btn-primary" style="background:#ff0055;color:#fff;border:none;">Synchronize Engram</button></div>
+    </div></div>
+  </section>
+
+  <section class="grid-section" id="global-safety-section">
+    <h2>🛡️ Global Safety & Network Compatibility</h2>
+    <div class="safety-grid">
+      <div class="safety-card"><span class="safety-icon">🔗</span><h4>Wallet Compatibility</h4><p>MetaMask, Coinbase, Trust, Rabby</p><span class="status-badge verified">EIP-1193 READY</span></div>
+      <div class="safety-card"><span class="safety-icon">🔒</span><h4>Contract Security</h4><p>GoPlus Honeypot & Tax Scan</p><span id="global-contract-status" class="status-badge pending">SCANNING...</span></div>
+      <div class="safety-card"><span class="safety-icon">💧</span><h4>Liquidity Health</h4><p>Pool Depth & Trading Risk</p><span id="global-liquidity-status" class="status-badge pending">CALCULATING...</span></div>
+      <div class="safety-card"><span class="safety-icon">⚡</span><h4>Exchange Routing</h4><p>Uniswap V2/V3/V4 + Aggregators</p><span class="status-badge verified">ACTIVE</span></div>
+    </div>
+  </section>
+
+  <section class="grid-section"><h2>🏦 Digital eBank · Auto-Immune Vault</h2><div class="ebank-container">
+    <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(0,255,204,0.1);color:#00ffcc;border:1px solid #00ffcc;">AUTO-COMPOUNDING ACTIVE</span></div><div class="immunity-shield"><span style="font-size:0.75rem;color:var(--dim);">Auto-Immune Shield</span><span id="immunity-score" style="font-family:monospace;font-size:1.2rem;color:#00ffcc;font-weight:bold;">99.80%</span></div></div>
+    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Simulated Principal</span><span class="value" id="ebank-principal">1,000.0000 PIDX</span></div><div class="ebank-stat"><span class="label">Yield Accrued (Auto)</span><span class="value" id="ebank-yield" style="color:#00ffcc;">+ 0.00000000 PIDX</span></div><div class="ebank-stat"><span class="label">Dynamic APY</span><span class="value" id="ebank-apy">18.42%</span></div><div class="ebank-stat"><span class="label">Total Protocol TVL</span><span class="value" id="ebank-tvl">$842,912.00</span></div></div>
+  </div></section>
+
+  <section class="grid-section"><h2>💰 FOUR SPIRITS · LIVE FROM BASE</h2><div id="token-grid" class="token-grid"><p class="loading">SYNCING TELEMETRY...</p></div></section>
+
+  <section class="grid-section"><h2>🌱 Growth Engine & Voxel Dynamics</h2><div class="engine-grid">
+    <div class="engine-card"><span class="label">Continuity</span><span class="value" id="val-continuity">1.000</span></div><div class="engine-card"><span class="label">Coherence</span><span class="value" id="val-coherence">0.9356</span></div><div class="engine-card"><span class="label">Persistence</span><span class="value" id="val-persistence">379 blocks</span></div><div class="engine-card"><span class="label">Active Voxels</span><span class="value" id="val-voxels">7</span></div><div class="engine-card"><span class="label">Energy Band</span><span class="value" id="val-energy">MID (42.8 GW)</span></div><div class="engine-card"><span class="label">Engine Status</span><span class="value success" id="val-engine">OPTIMAL</span></div>
+  </div></section>
+
+  <section class="grid-section split"><div class="panel"><h2>🧬 Vitruvian System States</h2><ul><li><strong>Vitruvian State:</strong> <span id="v-state">1 · 0.936 · 0.392</span></li><li><strong>Stability:</strong> <span id="v-stability">1.112</span></li><li><strong>Resonance:</strong> <span id="v-resonance">0.533</span></li><li><strong>Veil Phase:</strong> <span id="v-veil" style="color:#00ffcc;">OPEN</span></li></ul></div><div class="panel"><h2>🧠 Memory Log</h2><div id="memory-log" class="memory-terminal"></div></div></section>
+
+  <section class="grid-section"><h2>🏦 Yield Vaults & Liquidity Pools</h2><div class="vault-grid" id="vault-grid"></div></section>
+  <section class="grid-section"><h2>⛏️ Mining Pools · Stratum Directory</h2><div class="mining-grid" id="mining-grid"></div></section>
+</main>
+
+<footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
+<script src="app.js?v=20000"></script>
+</body>
+</html>"""
+
+CSS = r"""
+:root{--bg:#000;--panel:rgba(22,24,28,.7);--border:#2f3336;--text:#e7e9ea;--dim:#71767b;--silver:#c0c0c0;--white:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;overflow-x:hidden}
+#neural-canvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none}
+.scanlines{position:fixed;inset:0;background:linear-gradient(to bottom,transparent,transparent 50%,rgba(0,0,0,.2) 50%,rgba(0,0,0,.2));background-size:100% 4px;pointer-events:none;z-index:999;opacity:.2}
+header{text-align:center;padding:60px 20px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.5);backdrop-filter:blur(12px);position:relative;z-index:10}
+h1{font-size:2.5rem;letter-spacing:2px;color:var(--white);text-shadow:0 0 20px rgba(255,255,255,.4),0 0 40px rgba(192,192,192,.2);animation:fadeIn 2s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.subtitle{color:var(--silver);font-size:.85rem;margin-top:10px;letter-spacing:1px;max-width:800px;margin-left:auto;margin-right:auto}
+.status-bar{display:flex;justify-content:center;flex-wrap:wrap;gap:20px;margin-top:25px;font-size:.85rem;color:var(--silver);font-family:monospace}
+main{padding:40px 20px;max-width:1000px;margin:0 auto;position:relative;z-index:10}
+.grid-section{margin-bottom:40px;animation:slideUp 1s ease-out}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+h2{font-size:1.1rem;margin-bottom:20px;color:var(--white);border-left:3px solid var(--silver);padding-left:10px;text-transform:uppercase;letter-spacing:2px}
+.token-grid,.vault-grid,.mining-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+.loading{color:var(--dim);font-family:monospace;animation:blink 1.5s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;backdrop-filter:blur(10px);transition:all .4s cubic-bezier(.25,.8,.25,1);overflow:hidden}
+.card:hover{background:rgba(40,40,40,.8);border-color:var(--silver);transform:translateY(-5px);box-shadow:0 10px 30px rgba(192,192,192,.1)}
+h3,h4{color:var(--white);display:flex;justify-content:space-between;font-size:1.1rem;margin-bottom:10px}
+.freq{font-size:.8rem;color:var(--silver);font-family:monospace}
+.name{color:var(--dim);font-size:.9rem;margin-bottom:10px}
+.addr{font-size:.75rem;word-break:break-all;color:#8899a6;margin-bottom:15px;font-family:monospace}
+.tvl{font-size:.85rem;margin-bottom:15px;color:var(--text)}
+.badge{padding:4px 8px;border-radius:6px;font-weight:bold;font-size:.75rem;display:inline-block;margin-top:5px}
+.badge.empty{background:rgba(255,255,255,.1);color:var(--white)}
+.badge.tiny{background:rgba(192,192,192,.2);color:var(--white)}
+.badge.loading{background:rgba(192,192,192,.1);color:var(--dim)}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.links a{color:var(--text);text-decoration:none;font-size:.75rem;background:rgba(255,255,255,.05);border:1px solid var(--border);padding:6px 12px;border-radius:20px;transition:all .2s}
+.links a:hover,.swap-btn:hover{background:var(--silver);color:var(--bg)}
+.swap-btn{background:var(--white);color:var(--bg);border-color:var(--white);font-weight:bold}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:768px){.split{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);padding:20px;border-radius:12px;backdrop-filter:blur(10px)}
+.panel ul{list-style:none}
+.panel li{margin-bottom:12px;font-size:.85rem;color:var(--dim);display:flex;justify-content:space-between;border-bottom:1px dashed rgba(255,255,255,.05);padding-bottom:8px}
+.panel li strong{color:var(--white)}
+.panel li span{color:var(--silver);font-family:monospace;font-size:.8rem}
+.mono{font-family:monospace;font-size:.8rem;color:var(--white);word-break:break-all;background:rgba(0,0,0,.5);padding:8px;border-radius:6px;border:1px solid var(--border);margin-top:5px}
+.memory-terminal{background:rgba(0,0,0,.6);border:1px solid var(--border);padding:10px;border-radius:8px;height:120px;overflow-y:auto;font-family:monospace;font-size:.75rem;color:var(--text)}
+.mikoshi-container{display:flex;justify-content:center}
+.mikoshi-card{background:rgba(5,5,5,.95);border:1px solid #ff0055;border-radius:4px;padding:20px;width:100%;max-width:600px;box-shadow:0 0 20px rgba(255,0,85,.2);position:relative;overflow:hidden;font-family:'Courier New',monospace}
+.mikoshi-glitch{position:absolute;inset:0;background:linear-gradient(rgba(255,0,85,.05) 50%,transparent 50%);background-size:100% 4px;pointer-events:none;z-index:1;animation:glitch-flicker .1s infinite}
+@keyframes glitch-flicker{0%{opacity:.1}50%{opacity:.2}100%{opacity:.1}}
+.mikoshi-header{display:flex;justify-content:space-between;border-bottom:1px solid #ff0055;padding-bottom:10px;margin-bottom:15px;position:relative;z-index:2}
+.mikoshi-title{color:#ff0055;font-weight:bold;letter-spacing:2px;text-shadow:0 0 5px #ff0055}
+.mikoshi-status{color:#ff0055;font-size:.75rem;font-weight:bold;animation:blink 1s step-end infinite}
+.mikoshi-body{display:flex;flex-direction:column;gap:15px;position:relative;z-index:2}
+.dna-strand{display:flex;gap:5px;font-size:1.5rem;color:#00ffcc;justify-content:center;margin-bottom:10px}
+.dna-strand span{animation:dna-pulse 1.5s infinite alternate}
+.dna-strand span:nth-child(even){color:#ff0055;animation-delay:.5s}
+@keyframes dna-pulse{from{opacity:.3;transform:scale(.8)}to{opacity:1;transform:scale(1.2);text-shadow:0 0 10px currentColor}}
+.mikoshi-data p{margin-bottom:8px;font-size:.85rem;color:#8899a6}
+.mikoshi-data strong{color:#fff}
+.mikoshi-data span{color:#00ffcc;font-family:monospace}
+.mikoshi-footer{margin-top:20px;text-align:right;border-top:1px dashed #333;padding-top:15px;position:relative;z-index:2}
+.btn-primary{padding:10px 16px;border-radius:4px;font-weight:bold;cursor:pointer;transition:all .2s}
+.safety-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+.safety-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:15px;text-align:center;backdrop-filter:blur(10px)}
+.safety-icon{font-size:1.5rem;margin-bottom:10px;display:block}
+.safety-card h4{color:var(--white);font-size:.9rem;margin-bottom:5px;justify-content:center}
+.safety-card p{color:var(--dim);font-size:.75rem;margin-bottom:10px}
+.status-badge{display:inline-block;padding:4px 8px;border-radius:4px;font-size:.7rem;font-weight:bold;font-family:monospace}
+.status-badge.verified{background:rgba(0,255,204,.1);color:#00ffcc;border:1px solid #00ffcc}
+.status-badge.danger{background:rgba(255,68,68,.1);color:#ff4444;border:1px solid #ff4444}
+.status-badge.pending{background:rgba(255,255,255,.1);color:var(--dim);border:1px solid var(--border)}
+.ebank-container{background:linear-gradient(180deg,rgba(22,24,28,.9) 0%,rgba(10,12,15,.9) 100%);border:1px solid var(--silver);border-radius:16px;padding:25px;box-shadow:0 0 30px rgba(192,192,192,.08);backdrop-filter:blur(12px)}
+.ebank-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:25px;border-bottom:1px solid var(--border);padding-bottom:20px}
+.immunity-shield{text-align:right;display:flex;flex-direction:column;background:rgba(0,255,204,.05);padding:8px 15px;border-radius:8px;border:1px solid rgba(0,255,204,.2)}
+.ebank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.ebank-stat{display:flex;flex-direction:column}
+.ebank-stat .label{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.ebank-stat .value{font-size:1.3rem;font-family:monospace;color:var(--white);font-weight:bold}
+.engine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px}
+.engine-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:15px;text-align:center;backdrop-filter:blur(10px);transition:all .3s}
+.engine-card:hover{border-color:var(--silver);transform:scale(1.02)}
+.engine-card .label{display:block;font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.engine-card .value{display:block;font-family:monospace;font-size:1.2rem;color:var(--white);font-weight:bold}
+.engine-card .value.success{color:#00ffcc;text-shadow:0 0 10px rgba(0,255,204,.4)}
+footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);color:var(--dim);font-size:.8rem;background:rgba(0,0,0,.5);backdrop-filter:blur(10px)}
+"""
+
+def main():
+    print("🔧 RESTORING FULL UI & CSS...")
+    with open(os.path.join(REPO_DIR, "index.html"), "w", encoding="utf-8") as f: f.write(HTML)
+    with open(os.path.join(REPO_DIR, "style.css"), "w", encoding="utf-8") as f: f.write(CSS)
+
+    subprocess.run("git add index.html style.css", shell=True, check=True)
+    subprocess.run('git commit -m "RESTORE: Full UI, CSS, and layout with working Memory Log"', shell=True, check=True)
+    
+    print("\n🔑 Authentication: Username = jvoidial, Password = your GitHub PAT\n")
+    subprocess.run("git push origin main", shell=True)
+    print("\n✅ Done. Wait 2 minutes, then open in INCOGNITO mode:")
+    print("👉 https://jvoidial.github.io/PIDX/")
+
+if __name__ == "__main__":
+    main()

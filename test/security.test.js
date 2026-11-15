@@ -51,7 +51,7 @@ module.exports = async function run() {
     s.eq("safeUrl blocks protocol-relative", A.safeUrl('//evil.example/x', ["uniswap.org"]), "#");
     s.ok("safeUrl allows listed host", A.safeUrl('https://app.uniswap.org/swap', ["uniswap.org"]) === 'https://app.uniswap.org/swap');
 
-    s.ok("isAddress accepts 20-byte", A.isAddress('0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c'));
+    s.ok("isAddress accepts 20-byte", A.isAddress('0x172B97517c42f9491f6100333b9ea2e42a6D3181'));
     s.ok("isAddress rejects 32-byte", !A.isAddress('0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2'));
   }
 

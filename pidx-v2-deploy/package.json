@@ -1,0 +1,16 @@
+{
+  "name": "pidx-v2-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "ethers": "^6.17.0",
+    "solc": "^0.8.38"
+  }
+}

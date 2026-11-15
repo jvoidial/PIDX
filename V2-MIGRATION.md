@@ -68,7 +68,7 @@ and **cannot be changed afterwards.**
 ## 3. Snapshot holders (only if you chose Option B)
 
 ```bash
-node scripts/snapshot-holders.js 0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c
+node scripts/snapshot-holders.js 0x172B97517c42f9491f6100333b9ea2e42a6D3181
 ```
 
 The script walks Transfer logs in bounded windows and **tells you whether it

@@ -34,7 +34,7 @@ const NPM_ADDR    = "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1";
 const LOCKER_ADDR = "0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD";
 
 // Upgrade constants.
-const PIDX_ADDR    = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c";
+const PIDX_ADDR    = "0x172B97517c42f9491f6100333b9ea2e42a6D3181";
 const BURN_ADDR    = "0x000000000000000000000000000000000000dEaD";
 const BASE_RPC     = "https://mainnet.base.org";
 const BASE_WS      = "wss://mainnet.base.org"; // WS-capable endpoint (falls back to polling)
@@ -62,7 +62,7 @@ const LOCKER_ABI = [
 // Fallback token list. Used ONLY if tokens.json cannot be read. Each field is
 // still passed through the sanitising renderer below.
 const FALLBACK_TOKENS = [
-  { id:"pidx",    symbol:"PIDX",    name:"Pennies Index",  freq:"0.618 Hz", address:"0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c", pool:"0xc4f9124ffe11279ea2cac53e8d95c30c1b26724369e265860eec9495bc7cb6a6" },
+  { id:"pidx",    symbol:"PIDX",    name:"Pennies Index",  freq:"0.618 Hz", address:"0x172B97517c42f9491f6100333b9ea2e42a6D3181", pool:"0xc4f9124ffe11279ea2cac53e8d95c30c1b26724369e265860eec9495bc7cb6a6" },
   { id:"sguide",  symbol:"SGUIDE",  name:"Spirit Guide",   freq:"1.618 Hz", address:"0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a", pool:"0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2" },
   { id:"vdoo",    symbol:"VDOO",    name:"VOUDOO Infinity",freq:"2.618 Hz", address:"0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", pool:"0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59" },
   { id:"pennies", symbol:"PENNIES", name:"Pennies CHEQ",   freq:"3.618 Hz", address:"0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", pool:"0x29a0ae1f10629f8855c87c911531ffb2c98d68c6" }

@@ -55,7 +55,7 @@ module.exports = async function run() {
       fetch: (url) => {
         if (url.includes("dexscreener")) return { ok: true, status: 200, json: async () => ([{ liquidity: { usd: 20.2 } }]) };
         if (url.includes("goplus")) return { ok: true, status: 200, json: async () => ({ result: {
-          "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c": { is_honeypot: "0", buy_tax: "0", sell_tax: "0", is_open_source: "1", owner_change_balance: "1" }
+          "0x172B97517c42f9491f6100333b9ea2e42a6D3181": { is_honeypot: "0", buy_tax: "0", sell_tax: "0", is_open_source: "1", owner_change_balance: "1" }
         } }) };
         return { ok: true, status: 200, json: async () => ({}) };
       }
@@ -74,7 +74,7 @@ module.exports = async function run() {
       fetch: (url) => {
         if (url.includes("dexscreener")) return { ok: true, status: 200, json: async () => ([{ liquidity: { usd: 5 } }]) };
         if (url.includes("goplus")) return { ok: true, status: 200, json: async () => ({ result: {
-          "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c": { is_honeypot: "1", is_open_source: "1" }
+          "0x172B97517c42f9491f6100333b9ea2e42a6D3181": { is_honeypot: "1", is_open_source: "1" }
         } }) };
         return { ok: true, status: 200, json: async () => ({}) };
       }
@@ -90,7 +90,7 @@ module.exports = async function run() {
       fetch: (url) => {
         if (url.includes("dexscreener")) return { ok: true, status: 200, json: async () => ([{ liquidity: { usd: 20 } }]) };
         if (url.includes("goplus")) return { ok: true, status: 200, json: async () => ({ result: {
-          "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c": { is_open_source: "1", is_mintable: "1", owner_change_balance: "1" }
+          "0x172B97517c42f9491f6100333b9ea2e42a6D3181": { is_open_source: "1", is_mintable: "1", owner_change_balance: "1" }
         } }) };
         return { ok: true, status: 200, json: async () => ({}) };
       }
