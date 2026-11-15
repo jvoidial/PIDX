@@ -25,6 +25,7 @@
 const DEX_API       = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GOPLUS_API    = "https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=";
 const BASE_CHAIN_ID = "0x2105"; // Base mainnet (8453)
+const BUILD_ID      = "100138";    // bump with the ?v= cache-buster
 const API_TIMEOUT   = 5000;     // DexScreener / GoPlus deadline (ms)
 const LOCAL_TIMEOUT = 8000;     // same-origin JSON deadline (ms)
 const MAX_UINT256   = (1n << 256n) - 1n;
@@ -53,6 +54,11 @@ const NPM_ABI = [
   "function approve(address to, uint256 tokenId)",
   "function ownerOf(uint256 tokenId) view returns (address)"
 ];
+// Selectors used by the read-only locker status line (no ABI objects needed).
+const SEL_OWNER = "0x8da5cb5b";       // owner()
+const SEL_BALANCE_OF = "0x70a08231";  // balanceOf(address)
+const SEL_TOKEN_OF_OWNER = "0x2f745c59"; // tokenOfOwnerByIndex(address,uint256)
+const SEL_POSITIONS = "0x99fbab88";   // positions(uint256)
 const LOCKER_ABI = [
   "function lockPosition(address nftContract, uint256 tokenId, uint256 lockDuration)",
   "function withdrawPosition(address nftContract, uint256 tokenId)",
@@ -91,6 +97,44 @@ const MINING_DATA = [
 
 // --------------------------------------------------------------- primitives
 function $(id) { return document.getElementById(id); }
+
+// ---------------------------------------------------------- metric registry
+// Declares EVERY numeric metric this dashboard can render, and where its value
+// comes from. A metric must be one of:
+//   source: "live"    - read from the chain/API at runtime (element exists)
+//   source: "derived" - a deterministic function of a declared input (basis)
+//   state:  "not-measured"    - no source exists; the element is NOT rendered
+//   state:  "not-implemented" - not built; the element renders an explicit dash
+// test/honesty.test.js walks this registry, so a new hard-coded number cannot
+// be added without declaring its provenance here.
+const METRIC_REGISTRY = [
+  { id: "live-block",          source: "live",    note: "Base RPC eth_blockNumber" },
+  { id: "burn-counter",        source: "live",    note: "PIDX balanceOf(0x…dEaD)" },
+  { id: "locker-status",       source: "live",    note: "locker owner() + NPM positions()" },
+  { id: "resonance-longevity", source: "live",    note: "elapsed time since resonance start" },
+  { id: "resonance-freq",      source: "derived", basis: "salted hash of the user's pseudonym", note: "cosmetic novelty readout" },
+  { id: "resonance-band",      source: "derived", basis: "navigator.connection / user agent",   note: "coarse network class" },
+  { id: "immortality-prob",    state: "not-measured" },
+  { id: "immunity-score",      state: "not-implemented" },
+  { id: "ebank-principal",     state: "not-implemented" },
+  { id: "ebank-yield",         state: "not-implemented" },
+  { id: "ebank-apy",           state: "not-implemented" },
+  { id: "growth-continuity",  source: "derived", basis: "indexed tokens / tokens in list", note: "live from API scan results" },
+  { id: "growth-coherence",   source: "derived", basis: "clean GoPlus scans / indexed tokens", note: "live from API scan results" },
+  { id: "growth-persistence", source: "derived", basis: "blocks observed this session x 2s", note: "live from RPC block feed" },
+  { id: "growth-voxels",      source: "derived", basis: "4 token cards + 4 safety panels", note: "count of rendered elements" },
+  { id: "growth-energy",      source: "derived", basis: "deepest pool TVL, bucketed", note: "live from API liquidity" },
+  { id: "growth-engine",      source: "derived", basis: "RPC transport state", note: "live from RPC health" },
+  { id: "vitruvian-state",    source: "derived", basis: "continuity x coherence x stability", note: "composite of live metrics" },
+  { id: "vitruvian-stability",source: "derived", basis: "1 + (clean / tokens)", note: "live from API scan results" },
+  { id: "vitruvian-resonance",source: "derived", basis: "continuity x coherence", note: "composite of live metrics" },
+  { id: "dca-pnl",             state: "not-implemented" },
+  { id: "dca-win",             state: "not-implemented" },
+  { id: "dca-trades",          state: "not-implemented" },
+  { id: "grid-pnl",            state: "not-implemented" },
+  { id: "grid-win",            state: "not-implemented" },
+  { id: "grid-trades",         state: "not-implemented" }
+];
 
 const ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
 
@@ -366,10 +410,20 @@ async function connectWallet() {
 }
 
 // ------------------------------------------------------------ memory log
+// Legacy builds wrote simulated events (e.g. "Veil shifted to …") into the
+// same localStorage key the real log uses. Those entries outlive the code that
+// created them and would keep showing as if real, so drop them on load.
+const LEGACY_FAKE_MEMORY = /Veil shifted|Simulated|Immortality Prob|Growth Engine|Active Voxels|APY|Auto-Compound/i;
+
 function loadMemory() {
   const log = $("memory-log"); if (!log) return;
   let mem = [];
   try { mem = JSON.parse(localStorage.getItem("vitruvian_memory")) || []; } catch (_) { mem = []; }
+  const kept = mem.filter(e => !LEGACY_FAKE_MEMORY.test(String(e && e.msg || "")));
+  if (kept.length !== mem.length) {
+    mem = kept;
+    try { localStorage.setItem("vitruvian_memory", JSON.stringify(mem)); } catch (_) {}
+  }
   log.innerHTML = "";
   if (!mem.length) { log.innerHTML = '<div style="color:var(--dim);">[SYSTEM INIT] Memory bank loaded...</div>'; return; }
   mem.forEach(e => {
@@ -389,43 +443,54 @@ function logMemory(msg, color) {
   loadMemory();
 }
 
-// ------------------------------------------------------------ simulations
-function startSimulations() {
-  let block = 53318083, time = 0;
-  setInterval(() => {
-    time += 0.1; block++;
-    if ($("live-block")) $("live-block").textContent = block.toLocaleString();
-    if ($("val-continuity")) $("val-continuity").textContent = (0.999 + Math.sin(time) * 0.001).toFixed(4);
-    if ($("val-coherence")) $("val-coherence").textContent = (0.9356 + Math.sin(time * 0.8) * 0.002).toFixed(4);
-    if ($("val-persistence")) $("val-persistence").textContent = (379 + Math.floor(time / 10)) + " blocks";
-    if ($("val-voxels")) $("val-voxels").textContent = 7 + Math.round(Math.sin(time * 0.5));
-    const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
-    const apy = 0.15 + (coh * 0.05);
-    if ($("ebank-apy")) $("ebank-apy").textContent = (apy * 100).toFixed(2) + "%";
-    if ($("immunity-score")) $("immunity-score").textContent = (99.8 - (1 - coh) * 10).toFixed(2) + "%";
-  }, 1000);
-  setInterval(() => {
-    const phases = ["OPEN", "CLOSING", "VEILED"];
-    const p = phases[Math.floor(Math.random() * phases.length)];
-    const veil = $("v-veil");
-    if (veil) { veil.textContent = p; veil.style.color = p === "OPEN" ? "#00ffcc" : (p === "VEILED" ? "#ff4444" : "#ffaa00"); }
-    logMemory("Veil shifted to " + p + ".", p === "VEILED" ? "#ff4444" : "#00ffcc");
-  }, 15000);
+// ------------------------------------------------------------ locker status
+// Read-only. The full locker panel was pulled until the on-chain V3 position
+// has non-zero liquidity; this reports the facts in one line instead. It does
+// not touch the lock/withdraw code paths. pad32() and shortAddr() already
+// exist above; do not redefine them here (a second definition would silently
+// shadow the first, which is how the wallet display regressed once).
+async function refreshLockerStatus() {
+  const el = $("locker-status");
+  if (!el) return;
+  let owner = null, liquidity = null, isOwnable = false;
+  try {
+    const ownerHex = await jsonRpc("eth_call", [{ to: LOCKER_ADDR, data: SEL_OWNER }, "latest"], API_TIMEOUT);
+    if (typeof ownerHex === "string" && ownerHex.length >= 42) {
+      owner = "0x" + ownerHex.slice(-40);
+      isOwnable = true;
+    }
+  } catch (_) { /* not Ownable, or RPC refused */ }
+  try {
+    const bal = await jsonRpc("eth_call", [{ to: NPM_ADDR, data: SEL_BALANCE_OF + pad32(LOCKER_ADDR.slice(2).toLowerCase()) }, "latest"], API_TIMEOUT);
+    const count = bal && bal !== "0x" ? BigInt(bal) : 0n;
+    if (count === 0n) {
+      liquidity = "0";
+    } else {
+      const tid = await jsonRpc("eth_call", [{ to: NPM_ADDR, data: SEL_TOKEN_OF_OWNER + pad32(LOCKER_ADDR.slice(2).toLowerCase()) + pad32("0") }, "latest"], API_TIMEOUT);
+      const tokenId = BigInt(tid);
+      const pos = await jsonRpc("eth_call", [{ to: NPM_ADDR, data: SEL_POSITIONS + pad32(tokenId.toString(16)) }, "latest"], API_TIMEOUT);
+      // positions() returns 12 static 32-byte words; each word is 64 HEX chars.
+      // liquidity is word index 7, i.e. hex chars [2+7*64, 2+8*64).
+      if (typeof pos === "string" && pos.length >= 2 + 64 * 8) {
+        liquidity = BigInt("0x" + pos.slice(2 + 64 * 7, 2 + 64 * 8)).toString();
+      }
+    }
+  } catch (_) { liquidity = null; }
+
+  const ownPart = isOwnable ? "Ownable, owner " + shortAddr(owner) : "ownership not exposed";
+  const liqPart = liquidity === null ? "position liquidity unknown" : "position liquidity " + liquidity;
+  el.textContent = "Locker: " + ownPart + ", " + liqPart;
+  el.style.color = (liquidity === "0") ? "#ffaa00" : "#8899a6";
 }
 
-// -------------------------------------------------------------- eBank
-let ebankPrincipal = 1000.00, ebankYield = 0.0;
-function startEbankEngine() {
-  setInterval(() => {
-    const coh = parseFloat($("val-coherence")?.textContent) || 0.9356;
-    const apy = 0.15 + (coh * 0.05);
-    const perSec = Math.pow(1 + apy, 1 / 31536000) - 1;
-    const earned = ebankPrincipal * perSec;
-    ebankYield += earned; ebankPrincipal += earned;
-    if ($("ebank-principal")) $("ebank-principal").textContent = ebankPrincipal.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 }) + " PIDX";
-    if ($("ebank-yield")) $("ebank-yield").textContent = "+ " + ebankYield.toLocaleString(undefined, { minimumFractionDigits: 8, maximumFractionDigits: 8 }) + " PIDX";
-  }, 1000);
-}
+// ------------------------------------------------------------ simulated data
+// Every animated metric has been removed rather than captioned. There is no
+// real telemetry source for these values, so rendering numbers for them at all
+// would be a claim we cannot support. The section headers in index.html say
+// "Not measured" / "Not implemented" instead.
+//
+// The loops that remain are backed by real chain data only: the RPC block
+// feed, the lock scan, and the burn counter.
 
 // ------------------------------------------------------------ Mikoshi
 function generateAutoEngram() {
@@ -448,16 +513,40 @@ function generateAutoEngram() {
 function renderEngramUI(id, seq, prob) {
   setSafeText($("engram-id"), id);
   setSafeText($("longevity-seq"), seq);
-  setSafeText($("immortality-prob"), prob + "%");
+  // No probability is rendered: the number was a hash fragment, not a
+  // measurement. The element no longer exists in index.html.
   const status = $("mikoshi-status");
   if (status) { status.textContent = "ENGRAM ACTIVE"; status.style.color = "#00ffcc"; }
   const relic = $("relic-integrity");
-  if (relic) { relic.textContent = "STABLE / IMMORTAL"; relic.style.color = "#00ffcc"; }
+  // This is a locally generated novelty. It must not claim to be verified or
+  // "immortal" — nothing here touches the chain.
+  if (relic) { relic.textContent = "LOCAL ONLY"; relic.style.color = "#8899a6"; }
   const btn = $("upload-engram-btn"); if (btn) btn.style.display = "none";
 }
 
 // ------------------------------------------------------------ Resonance
 let resonanceTimerInterval = null;
+// Per-session random salt, regenerated on every page load and never persisted.
+// An unsalted hash of a short code is reversible by lookup; the salt prevents
+// that and makes identical input produce a different tag each session.
+const RESONANCE_SALT = (typeof crypto !== "undefined" && crypto.getRandomValues)
+  ? Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, "0")).join("")
+  : Math.random().toString(36).slice(2) + Date.now().toString(36);
+function resonanceTag(input) {
+  const material = RESONANCE_SALT + "|" + input;
+  try {
+    if (typeof ethers !== "undefined" && ethers.keccak256) {
+      return ethers.keccak256(ethers.toUtf8Bytes(material)).substring(2, 10);
+    }
+  } catch (_) {}
+  // Pure-JS FNV-1a fallback so the tag is still salted without ethers.
+  let h = 0x811c9dc5;
+  for (let i = 0; i < material.length; i++) {
+    h ^= material.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8, "0");
+}
 function playResonanceSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -509,14 +598,16 @@ function initiateResonance() {
       const band = detectNetworkBand();
       if ($("resonance-freq")) $("resonance-freq").textContent = freq + " MHz";
       if ($("resonance-band")) { $("resonance-band").textContent = band; $("resonance-band").style.color = "#00ffcc"; }
-      if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL"; $("resonance-soul-status").style.color = "#00ffcc"; }
+      if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = isGuest ? "BOUND (GUEST)" : "BOUND"; $("resonance-soul-status").style.color = "#00ffcc"; }
       if ($("resonance-status")) { $("resonance-status").textContent = "PROTOCOL ACTIVE"; $("resonance-status").style.color = "#00ffcc"; }
       playResonanceSound();
       const startTime = Date.now(); startResonanceTimer(startTime);
       if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
       const input = $("resonance-human-id"); if (input) input.disabled = true;
       logMemory("Resonance Bound (" + (isGuest ? "Guest" : "Wallet") + "). Band: " + band + ". Freq: " + freq + " MHz.", "#00ffcc");
-      try { localStorage.setItem("ebank_resonance_data", JSON.stringify({ humanId: humanId, freq: freq, band: band, startTime: startTime, isGuest: isGuest })); } catch (_) {}
+      // Persist only a short salted tag, never the raw input.
+      const tag = resonanceTag(humanId);
+      try { localStorage.setItem("ebank_resonance_data", JSON.stringify({ tag: tag, freq: freq, band: band, startTime: startTime, isGuest: isGuest })); } catch (_) {}
     } catch (_) {
       if (btn) { btn.textContent = "ERROR"; btn.style.background = "#ff4444"; }
     }
@@ -539,6 +630,8 @@ function recordHealth(id, patch) {
   tokenHealth.set(id, Object.assign(cur, patch));
 }
 
+let currentTokens = FALLBACK_TOKENS;
+
 async function loadTokens() {
   let tokens = FALLBACK_TOKENS;
   try {
@@ -552,6 +645,8 @@ async function loadTokens() {
   const grid = $("token-grid");
   if (!grid) return;
   grid.innerHTML = "";
+  // Real event: cards were (re)rendered from tokens.json / fallback list.
+  logMemory("Token cards refreshed (" + tokens.length + " tokens)", "#8899a6");
 
   // --- render each card from validated primitives (no raw interpolation) ---
   tokens.forEach(t => {
@@ -604,11 +699,27 @@ async function loadTokens() {
     grid.appendChild(card);
   });
 
+  currentTokens = tokens;
+
   // --- resolve each card's live data with deadlines + graceful failure ---
   await Promise.all(tokens.map(t => hydrateToken(t)));
 
   // Now that every card has a real result (or a real failure), aggregate them.
   runSafety();
+}
+
+// Periodic re-read of TVL/security for the existing cards. Updates the badges
+// in place (no full re-render, so no flicker and no log spam); each hydrate call
+// keeps its own deadline, so a slow API never blocks the others.
+async function refreshTokenData() {
+  if (document.hidden) return;                 // don't burn API quota in a background tab
+  await Promise.all(currentTokens.map(t => hydrateToken(t)));
+  runSafety();
+}
+
+function startTokenRefreshLoop() {
+  if (tokenRefreshTimer) clearInterval(tokenRefreshTimer);
+  tokenRefreshTimer = setInterval(refreshTokenData, TOKEN_REFRESH_MS);
 }
 
 async function hydrateToken(t) {
@@ -679,7 +790,7 @@ async function hydrateToken(t) {
         const warn = flags.some(f => ["high-tax", "owner-can-burn-balances", "unverified-source", "modifiable-tax"].includes(f));
         const label = critical ? "🚨 RISK: " + flags.slice(0, 2).join(", ")
                     : warn ? "⚠️ CAUTION: " + flags.slice(0, 2).join(", ")
-                    : "✅ Safe (no flags)";
+                    : "🛡️ No GoPlus flags";
         setSafeText(secEl, label);
         if (secEl) secEl.style.color = critical ? "#ff4444" : (warn ? "#ffaa00" : "#00ffcc");
         recordHealth(id, { sec: { level: critical ? "critical" : (warn ? "warn" : "safe"), flags: flags } });
@@ -724,6 +835,52 @@ function runSafety() {
       else { liq.textContent = "HEALTHY ($" + Math.round(max).toLocaleString() + ")"; liq.className = "status-badge verified"; }
     }
   }
+
+  deriveTelemetry(entries);
+}
+
+// Everything here is computed from data already fetched above: the API scan
+// results, the RPC block feed, and the count of rendered panels. Each formula
+// is printed next to its value in the UI so it can be checked by hand. Nothing
+// is invented, and nothing is drawn when there is no basis for it.
+function deriveTelemetry(entries) {
+  const scanned = entries.length;
+  const indexed = entries.filter(e => e.sec).length;
+  const clean   = entries.filter(e => e.sec && e.sec.level === "safe").length;
+
+  // Continuity: fraction of the token list the APIs actually answered for.
+  const continuity = scanned ? indexed / scanned : null;
+  // Coherence: of the indexed tokens, the fraction GoPlus found no flags on.
+  const coherence  = indexed ? clean / indexed : null;
+
+  const setV = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+
+  setV("growth-continuity",  continuity == null ? "—" : continuity.toFixed(4));
+  setV("growth-coherence",   coherence  == null ? "—" : coherence.toFixed(4));
+  setV("growth-persistence", blockDelta > 0 ? (blockDelta * 2) + " s" : "—");
+  setV("growth-voxels",      String(scanned + 4));
+
+  const vals = entries.map(e => e.liq).filter(v => typeof v === "number" && Number.isFinite(v));
+  const deepest = vals.length ? Math.max(...vals) : null;
+  setV("growth-energy", deepest == null ? "NO DATA"
+      : deepest < 1000 ? "CRITICAL (<$1K)"
+      : deepest < 50000 ? "THIN (<$50K)" : "HEALTHY (>$50K)");
+
+  setV("growth-engine", rpcTransport === "ws" ? "OPTIMAL (ws)"
+      : rpcTransport === "offline" ? "DEGRADED (offline)"
+      : (lastSeenBlock != null ? "OPTIMAL (poll)" : "STARTING"));
+
+  if (continuity == null || coherence == null) {
+    setV("vitruvian-state", "—");
+    setV("vitruvian-stability", "—");
+    setV("vitruvian-resonance", "—");
+    return;
+  }
+  const stability = 1 + coherence;
+  const resonance = continuity * coherence;
+  setV("vitruvian-state", continuity.toFixed(3) + " · " + coherence.toFixed(3) + " · " + stability.toFixed(3));
+  setV("vitruvian-stability", stability.toFixed(3));
+  setV("vitruvian-resonance", resonance.toFixed(3));
 }
 
 // ---------------------------------------------------------------- grids
@@ -763,7 +920,9 @@ function loadGrids() {
 
       const h4 = document.createElement("h4");
       h4.appendChild(document.createTextNode(String(p.name) + " "));
-      const badge = document.createElement("span"); badge.className = "badge tiny"; badge.textContent = "ONLINE";
+      // "ONLINE" would be an unverified uptime claim: the browser cannot open a
+      // stratum TCP socket, so nothing here checks reachability. Say LISTED.
+      const badge = document.createElement("span"); badge.className = "badge tiny"; badge.textContent = "LISTED";
       h4.appendChild(badge);
 
       const fee = document.createElement("p"); fee.style.cssText = "font-size:0.8rem;color:var(--dim);"; fee.textContent = String(p.fee) + " | " + String(p.coin);
@@ -785,25 +944,24 @@ function updateBotsUI() {
   if (ds) { ds.textContent = dcaActive ? "ACTIVE" : "PAUSED"; ds.style.color = dcaActive ? "#00ffcc" : "#ffaa00"; ds.style.borderColor = dcaActive ? "#00ffcc" : "#ffaa00"; }
   const db = $("dca-btn");
   if (db) { db.textContent = dcaActive ? "Stop Bot" : "Start Bot"; db.style.background = dcaActive ? "#ff4444" : "#00ffcc"; db.style.color = dcaActive ? "#fff" : "#000"; }
-  if ($("dca-pnl")) $("dca-pnl").textContent = "+$" + dcaPnl.toFixed(2);
-  if ($("dca-trades")) $("dca-trades").textContent = dcaTrades;
-  if ($("dca-win")) $("dca-win").textContent = dcaWin.toFixed(1) + "%";
+  // No live PnL feed exists, so these stay an explicit non-value.
+  if ($("dca-pnl")) $("dca-pnl").textContent = "—";
+  if ($("dca-trades")) $("dca-trades").textContent = "—";
+  if ($("dca-win")) $("dca-win").textContent = "—";
 
   const gs = $("grid-status");
   if (gs) { gs.textContent = gridActive ? "ACTIVE" : "PAUSED"; gs.style.color = gridActive ? "#00ffcc" : "#ffaa00"; gs.style.borderColor = gridActive ? "#00ffcc" : "#ffaa00"; }
   const gb = $("grid-btn");
   if (gb) { gb.textContent = gridActive ? "Stop Bot" : "Start Bot"; gb.style.background = gridActive ? "#ff4444" : "#00ffcc"; gb.style.color = gridActive ? "#fff" : "#000"; }
-  if ($("grid-pnl")) $("grid-pnl").textContent = "+$" + gridPnl.toFixed(2);
-  if ($("grid-trades")) $("grid-trades").textContent = gridTrades;
-  if ($("grid-win")) $("grid-win").textContent = gridWin.toFixed(1) + "%";
+  if ($("grid-pnl")) $("grid-pnl").textContent = "—";
+  if ($("grid-trades")) $("grid-trades").textContent = "—";
+  if ($("grid-win")) $("grid-win").textContent = "—";
 }
 
 function startBotsEngine() {
   updateBotsUI();
-  setInterval(() => {
-    if (dcaActive) { dcaPnl += Math.random() * 2.5 - 0.5; dcaTrades += Math.floor(Math.random() * 3); dcaWin = 70 + Math.random() * 15; updateBotsUI(); logMemory("DCA Bot executed trade. PnL: $" + dcaPnl.toFixed(2), "#00ffcc"); }
-    if (gridActive) { gridPnl += Math.random() * 1.5 - 0.3; gridTrades += Math.floor(Math.random() * 2); gridWin = 60 + Math.random() * 20; updateBotsUI(); }
-  }, 3000);
+  // No simulated PnL ticks: with no real fill source the honest value is a
+  // dash, so there is nothing for a timer to update.
 
   if (!botsListenersBound) {
     botsListenersBound = true;
@@ -1016,14 +1174,33 @@ async function withdrawPosition() {
 function restoreResonance() {
   const savedRes = localStorage.getItem("ebank_resonance_data");
   if (!savedRes) return;
+  let data;
   try {
-    const data = JSON.parse(savedRes);
+    data = JSON.parse(savedRes);
+  } catch (_) {
+    // Malformed JSON: drop the key entirely rather than keep unknown bytes.
+    try { localStorage.removeItem("ebank_resonance_data"); } catch (_) {}
+    return;
+  }
+  try {
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      try { localStorage.removeItem("ebank_resonance_data"); } catch (_) {}
+      return;
+    }
+    // Older builds stored the raw input verbatim under one of several keys.
+    // If any identifying field is present, strip it and rewrite the record.
+    if ("humanId" in data || "human_id" in data || "identity" in data || "id" in data) {
+      delete data.humanId; delete data.human_id; delete data.identity; delete data.id;
+      data.tag = data.tag || "purged";
+      try { localStorage.setItem("ebank_resonance_data", JSON.stringify(data)); } catch (_) {}
+    }
     if ($("resonance-freq")) $("resonance-freq").textContent = data.freq + " MHz";
     if ($("resonance-band")) { $("resonance-band").textContent = data.band; $("resonance-band").style.color = "#00ffcc"; }
-    if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = data.isGuest ? "IMMORTAL (GUEST)" : "IMMORTAL"; $("resonance-soul-status").style.color = "#00ffcc"; }
+    if ($("resonance-soul-status")) { $("resonance-soul-status").textContent = data.isGuest ? "BOUND (GUEST)" : "BOUND"; $("resonance-soul-status").style.color = "#00ffcc"; }
     if ($("resonance-status")) { $("resonance-status").textContent = "PROTOCOL ACTIVE"; $("resonance-status").style.color = "#00ffcc"; }
     const btn = $("resonance-initiate-btn"); if (btn) { btn.textContent = "IMMORTALITY ACTIVE"; btn.style.background = "#333"; btn.style.color = "#00ffcc"; btn.disabled = true; }
-    const input = $("resonance-human-id"); if (input) { input.value = data.humanId; input.disabled = true; }
+    const input = $("resonance-human-id");
+    if (input) { input.value = ""; input.placeholder = data.tag ? "saved (tag " + data.tag + ")" : "saved locally"; input.disabled = true; }
     if (data.startTime) startResonanceTimer(data.startTime);
   } catch (_) {}
 }
@@ -1038,8 +1215,10 @@ function restoreResonance() {
 // the live path. Either way the site stays up.
 const RPC_POLL_MS = 5000;
 const LOCK_SCAN_EVERY = 6;        // heavy eth_getLogs scan every ~30s
+const TOKEN_REFRESH_MS = 60000;   // re-read DexScreener/GoPlus for token cards
 const WS_MAX_RETRIES = 2;
 
+let tokenRefreshTimer = null;
 let blockPollTimer = null;        // HTTP polling loop (fallback)
 let lockScanTimer = null;         // always-on slow loop for logs + burn read
 let ws = null;                    // active WebSocket, if any
@@ -1050,9 +1229,27 @@ function setRpcStatus(text, color) {
   const el = $("rpc-status");
   if (el) { el.textContent = text; el.style.color = color; }
 }
+let lastLoggedBlock = 0, lastBlockLogAt = 0;
+let lastSeenBlock = null;
+let blockDelta = 0;
+let rpcTransport = "polling";
+
 function setLiveBlock(n) {
   const liveBlock = $("live-block");
   if (liveBlock && Number.isFinite(n)) liveBlock.textContent = n.toLocaleString();
+  // Real event: the chain height moved. Throttled to once a minute so the
+  // terminal stays readable (Base produces a block roughly every 2s).
+  if (Number.isFinite(n)) {
+    if (lastSeenBlock != null && n > lastSeenBlock) blockDelta += (n - lastSeenBlock);
+    lastSeenBlock = n;
+  }
+  if (Number.isFinite(n) && n !== lastLoggedBlock) {
+    lastLoggedBlock = n;
+    if (Date.now() - lastBlockLogAt > 60000) {
+      lastBlockLogAt = Date.now();
+      logMemory("Chain height " + n.toLocaleString() + " (live RPC)", "#00ffcc");
+    }
+  }
 }
 
 async function refreshRpcHealth() {
@@ -1060,10 +1257,14 @@ async function refreshRpcHealth() {
     const hex = await jsonRpc("eth_blockNumber", []);
     const block = parseInt(hex, 16);
     setLiveBlock(block);
-    if (!wsLive) setRpcStatus("● RPC: LIVE (" + block.toLocaleString() + ")", "#00ffcc");
+    if (!wsLive) { rpcTransport = "polling"; setRpcStatus("● RPC: LIVE (" + block.toLocaleString() + ")", "#00ffcc"); }
   } catch (_) {
+    rpcTransport = "offline";
     if (!wsLive) setRpcStatus("● RPC: OFFLINE (using fallback)", "#ffaa00");
   }
+  // Recompute the derived panel so block-based metrics (persistence, engine
+  // status) advance on every poll, not only once at boot.
+  deriveTelemetry([...tokenHealth.values()]);
 }
 
 function startHttpBlockPolling() {
@@ -1077,12 +1278,15 @@ function stopHttpBlockPolling() {
 
 // Slow loop that runs regardless of transport: lock scan + burn read.
 function startLockScanLoop() {
-  fetchLockedPositions();
+  // fetchLockedPositions() is intentionally NOT called: its output element
+  // (the locker panel) is pulled until the position has non-zero liquidity.
+  // The function is retained for when the panel returns.
   refreshBurnCounter();
+  refreshLockerStatus();
   if (lockScanTimer) clearInterval(lockScanTimer);
   lockScanTimer = setInterval(() => {
-    fetchLockedPositions();
     refreshBurnCounter();
+    refreshLockerStatus();
   }, RPC_POLL_MS * LOCK_SCAN_EVERY);
 }
 
@@ -1099,6 +1303,7 @@ function startBlockFeed() {
     if (ws !== socket) return;    // already superseded
     ws = null;
     wsLive = false;
+    rpcTransport = "polling";
     try { socket.close(); } catch (_) {}
     startHttpBlockPolling();      // ensure polling is running again
     if (++wsRetries <= WS_MAX_RETRIES) setTimeout(startBlockFeed, 5000);
@@ -1107,6 +1312,7 @@ function startBlockFeed() {
   socket.onopen = () => {
     wsRetries = 0;
     wsLive = true;
+    rpcTransport = "ws";
     stopHttpBlockPolling();       // WebSocket is authoritative now
     setRpcStatus("● RPC: LIVE (WebSocket)", "#00ffcc");
     try { socket.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_subscribe", params: ["newHeads"] })); } catch (_) {}
@@ -1227,9 +1433,16 @@ async function refreshBurnCounter() {
     }
     const whole = raw / (10n ** BigInt(burnDecimals === null ? 18 : burnDecimals));
     el.textContent = whole.toLocaleString() + " PIDX";
+    // Real event: log the live burn balance only when it actually changes.
+    const stamp = whole.toString();
+    if (stamp !== lastBurnLogged) {
+      lastBurnLogged = stamp;
+      logMemory("Burn balance " + stamp + " PIDX (live)", "#ff0055");
+    }
   } catch (_) { el.textContent = "unavailable"; }
 }
 
+let lastBurnLogged = null;
 let booted = false;
 window.addEventListener("DOMContentLoaded", () => {
   if (booted) return;
@@ -1247,8 +1460,6 @@ window.addEventListener("DOMContentLoaded", () => {
   $("scan-lock-btn")?.addEventListener("click", scanAndLockPositions);
   $("withdraw-lock-btn")?.addEventListener("click", withdrawPosition);
 
-  startSimulations();
-  startEbankEngine();
   generateAutoEngram();
   loadGrids();
   loadTokens();
@@ -1259,10 +1470,40 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Ecosystem upgrades.
   startRpcHealth();   // also kicks off the first lock scan + burn read
+  startTokenRefreshLoop();  // keep TVL/security cards fresh without a reload
+  startVersionWatch();      // reload once when a newer build is deployed
   updateBotGate();
 });
 
 // Expose for the standalone guard test harness.
+// GitHub Pages serves index.html with Cache-Control: max-age=600, so a browser
+// can keep running a stale build for ten minutes with no visible signal. Poll a
+// tiny, uncached version file and reload once when it reports a newer build.
+// Pure decision so it can be tested without waiting on a timer. Reload only
+// when the deployed build is strictly newer and we have not already reloaded
+// this session; anything else (older, equal, garbage, already reloaded) is a no.
+function shouldReload(current, latest, alreadyReloaded) {
+  if (alreadyReloaded) return false;
+  const cur = parseInt(current, 10), nxt = parseInt(latest, 10);
+  if (!Number.isFinite(cur) || !Number.isFinite(nxt)) return false;
+  return nxt > cur;
+}
+
+function startVersionWatch() {
+  if (!/^https?:$/.test(location.protocol)) return;   // file:// in tests
+  setInterval(async () => {
+    try {
+      const r = await fetchWithTimeout("version.txt?t=" + Date.now(), API_TIMEOUT);
+      if (!r.ok) return;
+      const latest = (await r.text()).trim();
+      if (shouldReload(BUILD_ID, latest, !!sessionStorage.getItem("pIdxReloaded"))) {
+        sessionStorage.setItem("pIdxReloaded", "1");
+        location.reload();
+      }
+    } catch (_) { /* offline: keep the current build */ }
+  }, 120000);
+}
+
 window.PIDX_APP = {
   EIP7702Guard: EIP7702Guard,
   sanitizeHtml: sanitizeHtml,
@@ -1273,5 +1514,16 @@ window.PIDX_APP = {
   updateBotGate: updateBotGate,
   fetchLockedPositions: fetchLockedPositions,
   refreshBurnCounter: refreshBurnCounter,
-  refreshRpcHealth: refreshRpcHealth
+  refreshRpcHealth: refreshRpcHealth,
+  setLiveBlock: setLiveBlock,
+  refreshLockerStatus: refreshLockerStatus,
+  resonanceTag: resonanceTag,
+  scanAndLockPositions: scanAndLockPositions,
+  withdrawPosition: withdrawPosition,
+  hydrateToken: hydrateToken,
+  restoreResonance: restoreResonance,
+  deriveTelemetry: deriveTelemetry,
+  BUILD_ID: BUILD_ID,
+  shouldReload: shouldReload,
+  METRIC_REGISTRY: METRIC_REGISTRY
 };
