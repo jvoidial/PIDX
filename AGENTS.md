@@ -5,7 +5,7 @@ frontend; `index.html` loads `app.js` and `style.css` directly.
 
 ## Tests
 
-- Frontend (jsdom): `node test/run.js` — 192 assertions across security,
+- Frontend (jsdom): `node test/run.js` — 195 assertions across security,
   locker, upgrades, honesty suites.
 - Contracts (Hardhat): `npx hardhat test test/contract/*.test.js` — 21 passing.
 
