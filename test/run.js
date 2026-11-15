@@ -5,6 +5,7 @@ const suites = [
   require("./security.test"),
   require("./locker.test"),
   require("./upgrades.test"),
+  require("./gate.test"),
   require("./honesty.test")
 ];
 

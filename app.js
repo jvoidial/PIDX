@@ -25,7 +25,7 @@
 const DEX_API       = "https://api.dexscreener.com/token-pairs/v1/base/";
 const GOPLUS_API    = "https://api.gopluslabs.io/api/v1/token_security/8453?contract_addresses=";
 const BASE_CHAIN_ID = "0x2105"; // Base mainnet (8453)
-const BUILD_ID      = "100138";    // bump with the ?v= cache-buster
+const BUILD_ID      = "100140";    // bump with the ?v= cache-buster
 const API_TIMEOUT   = 5000;     // DexScreener / GoPlus deadline (ms)
 const LOCAL_TIMEOUT = 8000;     // same-origin JSON deadline (ms)
 const MAX_UINT256   = (1n << 256n) - 1n;
@@ -35,14 +35,38 @@ const NPM_ADDR    = "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1";
 const LOCKER_ADDR = "0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD";
 
 // Upgrade constants.
-const PIDX_ADDR    = "0x172B97517c42f9491f6100333b9ea2e42a6D3181";
+//
+// PIDX_ADDR is the token the live dashboard reads (burn counter, gate, etc.).
+// It now points at V2, which has no mint, no burn and no owner in its bytecode.
+// The V1 token is kept below for the disclosure block only — it is the
+// compromised contract and must never be the app's primary token again.
+const PIDX_ADDR    = "0x172B97517c42f9491f6100333b9ea2e42a6D3181"; // PIDX V2
+const PIDX_V1_ADDR = "0x95c7e2d53f4b615a50d4468dfd5aff850dc17f0c"; // compromised, do not use
 const BURN_ADDR    = "0x000000000000000000000000000000000000dEaD";
 const BASE_RPC     = "https://mainnet.base.org";
 const BASE_WS      = "wss://mainnet.base.org"; // WS-capable endpoint (falls back to polling)
 const RPC_FALLBACKS = ["https://mainnet.base.org", "https://base-rpc.publicnode.com"];
 const GECKO_API    = "https://api.geckoterminal.com/api/v2/networks/base/pools/";
 const GECKO_TOKEN_POOLS = "https://api.geckoterminal.com/api/v2/networks/base/tokens/";
-const BOT_MIN_PIDX = 1000n * 10n ** 18n; // token gate: 1,000 PIDX (18 decimals)
+const PIDX_UNIT    = 10n ** 18n;        // one PIDX (18 decimals; confirmed on-chain)
+const BOT_MIN_PIDX = 1000n * PIDX_UNIT;  // the gate threshold: 1,000 PIDX
+// Live Integrity panel targets. All three are read from Base at runtime.
+const TREASURY_ADDR = "0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C"; // 1-of-2 Coinbase Smart Wallet
+const PIDX_POOL_ADDR = "0x35f5f94F095202380bcCfcd9321fA40f5E5F8720"; // Uniswap V2 pair (unlocked)
+// Deployed V2 runtime function selectors. A selector being ABSENT is the check;
+// this list is the set of "dangerous" entry points a fixed-supply token must not have.
+const INTEGRITY_SELECTORS = {
+  mint:            ["0x40c10f19", "0xa0712d68"],
+  burn:            ["0x42966c68", "0x9dc29fac"],
+  burnFrom:        ["0x79cc6790"],
+  owner:           ["0x8da5cb5b"],
+  transferOwnership:["0xf2fde38b"]
+};
+// PIDXHoldingsGate function selectors (computed with ethers, not guessed):
+//   holdingsOf(address)      -> 0x03995b2d
+//   meetsThreshold(address)  -> 0xb04f81f0
+const SEL_HOLDINGS_OF     = "0x03995b2d";
+const SEL_MEETS_THRESHOLD = "0xb04f81f0";
 const LOG_WINDOW   = 2000;               // bounded eth_getLogs window (public RPCs reject big ranges)
 
 // Minimal, exact-type ABIs. `lockPosition(address,uint256,uint256)` and
@@ -68,7 +92,7 @@ const LOCKER_ABI = [
 // Fallback token list. Used ONLY if tokens.json cannot be read. Each field is
 // still passed through the sanitising renderer below.
 const FALLBACK_TOKENS = [
-  { id:"pidx",    symbol:"PIDX",    name:"Pennies Index",  freq:"0.618 Hz", address:"0x172B97517c42f9491f6100333b9ea2e42a6D3181", pool:"0xc4f9124ffe11279ea2cac53e8d95c30c1b26724369e265860eec9495bc7cb6a6" },
+  { id:"pidx",    symbol:"PIDX",    name:"PIDX V2",        freq:"0.618 Hz", address:"0x172B97517c42f9491f6100333b9ea2e42a6D3181", pool:"0x35f5f94F095202380bcCfcd9321fA40f5E5F8720" },
   { id:"sguide",  symbol:"SGUIDE",  name:"Spirit Guide",   freq:"1.618 Hz", address:"0xb50DCEb0570557B9B7FE43D8cBDc9B3457D3dc5a", pool:"0x55a4a9360aa7bd9a4babf7a163c56f530ac1b5318fef77edfe9834ac9ab696a2" },
   { id:"vdoo",    symbol:"VDOO",    name:"VOUDOO Infinity",freq:"2.618 Hz", address:"0x38e4f08D08b4D772A7B75669C356b4749dd2d30b", pool:"0xc5b15edcee5ce1702256f30edced421688545fdc1a0170cb2c48da259802ec59" },
   { id:"pennies", symbol:"PENNIES", name:"Pennies CHEQ",   freq:"3.618 Hz", address:"0x2a92CAA3b01E64634e2E95AA533a5570a76c19A7", pool:"0x29a0ae1f10629f8855c87c911531ffb2c98d68c6" }
@@ -109,7 +133,7 @@ function $(id) { return document.getElementById(id); }
 // be added without declaring its provenance here.
 const METRIC_REGISTRY = [
   { id: "live-block",          source: "live",    note: "Base RPC eth_blockNumber" },
-  { id: "burn-counter",        source: "live",    note: "PIDX balanceOf(0x…dEaD)" },
+  { id: "burn-counter",        source: "live",    note: "PIDX V2 balanceOf(0x…dEaD); a dead-address send does not reduce totalSupply" },
   { id: "locker-status",       source: "live",    note: "locker owner() + NPM positions()" },
   { id: "resonance-longevity", source: "live",    note: "elapsed time since resonance start" },
   { id: "resonance-freq",      source: "derived", basis: "salted hash of the user's pseudonym", note: "cosmetic novelty readout" },
@@ -128,12 +152,22 @@ const METRIC_REGISTRY = [
   { id: "vitruvian-state",    source: "derived", basis: "continuity x coherence x stability", note: "composite of live metrics" },
   { id: "vitruvian-stability",source: "derived", basis: "1 + (clean / tokens)", note: "live from API scan results" },
   { id: "vitruvian-resonance",source: "derived", basis: "continuity x coherence", note: "composite of live metrics" },
-  { id: "dca-pnl",             state: "not-implemented" },
-  { id: "dca-win",             state: "not-implemented" },
-  { id: "dca-trades",          state: "not-implemented" },
-  { id: "grid-pnl",            state: "not-implemented" },
-  { id: "grid-win",            state: "not-implemented" },
-  { id: "grid-trades",         state: "not-implemented" }
+  // The bots are not built, so there is no PnL / win-rate / trade-count metric
+  // to declare (the rows were deleted outright, not rendered as an em-dash).
+  // The only dynamic bot element is the read-only eligibility gate.
+  { id: "dca-gate",            source: "live", note: "PIDXHoldingsGate.meetsThreshold(wallet)" },
+  { id: "grid-gate",           source: "live", note: "PIDXHoldingsGate.meetsThreshold(wallet)" },
+  // Live Integrity panel: every value is a Base mainnet read performed in the
+  // browser. The four verdict rows are selector/registry checks; the three value
+  // rows are eth_call results. A failed read renders UNKNOWN, never a pass.
+  { id: "integrity-no-mint",   source: "live", note: "eth_getCode(V2): mint selectors 0x40c10f19/0xa0712d68 absent" },
+  { id: "integrity-no-burn",   source: "live", note: "eth_getCode(V2): burn/burnFrom selectors absent" },
+  { id: "integrity-no-owner",  source: "live", note: "eth_getCode(V2): owner/transferOwnership selectors absent" },
+  { id: "integrity-source",    source: "live", note: "Sourcify v2 check-by-address; PASS only on exact match" },
+  { id: "integrity-supply",    source: "live", note: "V2 totalSupply() via eth_call" },
+  { id: "integrity-treasury",  source: "live", note: "V2 balanceOf(treasury) via eth_call" },
+  { id: "integrity-liquidity", source: "live", note: "V2/WETH pair getReserves() + LP balanceOf(treasury); unlocked" },
+  { id: "genetics-migration",  source: "derived", basis: "V1->V2 Transfer history analysed off-chain (reproducible; see AGENTS.md)", note: "static statement of a verified finding: 5 exact 1:1, one anomaly, not all holders reached" }
 ];
 
 const ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
@@ -391,7 +425,7 @@ async function connectWallet() {
     if (addrEl) { addrEl.textContent = shortAddr(connectedWallet); addrEl.title = connectedWallet; }
     logMemory("Wallet connected: " + shortAddr(connectedWallet), "#00ffcc");
 
-    // Token gate: unlock the bots only if the wallet holds >= 1,000 PIDX.
+    // Path B gate: read-only eligibility check against the holdings gate.
     updateBotGate().catch(() => {});
 
     if (!walletListenersBound && typeof window.ethereum.on === "function") {
@@ -935,39 +969,20 @@ function loadGrids() {
 }
 
 // ----------------------------------------------------------------- bots
-let dcaActive = false, gridActive = false, dcaPnl = 0, gridPnl = 0, dcaTrades = 0, gridTrades = 0, dcaWin = 0, gridWin = 0;
-let botsListenersBound = false;
-
-function updateBotsUI() {
-  if (!botGateUnlocked) return; // gate owns the locked styling
-  const ds = $("dca-status");
-  if (ds) { ds.textContent = dcaActive ? "ACTIVE" : "PAUSED"; ds.style.color = dcaActive ? "#00ffcc" : "#ffaa00"; ds.style.borderColor = dcaActive ? "#00ffcc" : "#ffaa00"; }
-  const db = $("dca-btn");
-  if (db) { db.textContent = dcaActive ? "Stop Bot" : "Start Bot"; db.style.background = dcaActive ? "#ff4444" : "#00ffcc"; db.style.color = dcaActive ? "#fff" : "#000"; }
-  // No live PnL feed exists, so these stay an explicit non-value.
-  if ($("dca-pnl")) $("dca-pnl").textContent = "—";
-  if ($("dca-trades")) $("dca-trades").textContent = "—";
-  if ($("dca-win")) $("dca-win").textContent = "—";
-
-  const gs = $("grid-status");
-  if (gs) { gs.textContent = gridActive ? "ACTIVE" : "PAUSED"; gs.style.color = gridActive ? "#00ffcc" : "#ffaa00"; gs.style.borderColor = gridActive ? "#00ffcc" : "#ffaa00"; }
-  const gb = $("grid-btn");
-  if (gb) { gb.textContent = gridActive ? "Stop Bot" : "Start Bot"; gb.style.background = gridActive ? "#ff4444" : "#00ffcc"; gb.style.color = gridActive ? "#fff" : "#000"; }
-  if ($("grid-pnl")) $("grid-pnl").textContent = "—";
-  if ($("grid-trades")) $("grid-trades").textContent = "—";
-  if ($("grid-win")) $("grid-win").textContent = "—";
+// Path A: the bots are NOT built. There is no fill feed, no PnL, no win rate
+// and no trade count, so no performance row is rendered at all — not even an
+// em-dash, which would still imply the metric exists. The only dynamic line is
+// the read-only eligibility gate (Path B).
+function renderGateLine(el, text, kind) {
+  if (!el) return;
+  el.textContent = text;
+  el.className = "bot-gate" + (kind ? " is-" + kind : "");
 }
 
 function startBotsEngine() {
-  updateBotsUI();
-  // No simulated PnL ticks: with no real fill source the honest value is a
-  // dash, so there is nothing for a timer to update.
-
-  if (!botsListenersBound) {
-    botsListenersBound = true;
-    $("dca-btn")?.addEventListener("click", () => { if (!connectedWallet) { alert("Connect wallet first."); return; } if (!botGateUnlocked) { alert("Hold at least 1,000 PIDX to unlock the bots."); return; } dcaActive = !dcaActive; updateBotsUI(); logMemory("DCA Bot " + (dcaActive ? "Started" : "Stopped") + ".", dcaActive ? "#00ffcc" : "#ff4444"); });
-    $("grid-btn")?.addEventListener("click", () => { if (!connectedWallet) { alert("Connect wallet first."); return; } if (!botGateUnlocked) { alert("Hold at least 1,000 PIDX to unlock the bots."); return; } gridActive = !gridActive; updateBotsUI(); logMemory("Grid Bot " + (gridActive ? "Started" : "Stopped") + ".", gridActive ? "#00ffcc" : "#ff4444"); });
-  }
+  // Static descriptors only. Nothing to start, so no listeners are bound.
+  renderGateLine($("dca-gate"), "Connect wallet to check eligibility");
+  renderGateLine($("grid-gate"), "Connect wallet to check eligibility");
 }
 
 // ------------------------------------------------------------ AGI brain
@@ -1221,6 +1236,7 @@ const WS_MAX_RETRIES = 2;
 let tokenRefreshTimer = null;
 let blockPollTimer = null;        // HTTP polling loop (fallback)
 let lockScanTimer = null;         // always-on slow loop for logs + burn read
+let integrityTimer = null;        // slow loop for the Live Integrity panel
 let ws = null;                    // active WebSocket, if any
 let wsLive = false;               // true once the socket is open/authoritative
 let wsRetries = 0;
@@ -1333,31 +1349,66 @@ function startRpcHealth() {
   startBlockFeed();
 }
 
-// --- Upgrade: token gate for the bots (requires >= 1,000 PIDX).
-let botGateUnlocked = false;
+// Path B: read-only eligibility gate. Asks the deployed PIDXHoldingsGate
+// whether the connected wallet meets the threshold. It never moves funds and
+// never decides the answer itself — a failure is reported as a failure, never
+// silently downgraded to "locked".
+function gateAddress() {
+  const el = $("gate-addr");
+  const raw = (el && el.dataset ? el.dataset.address : "") || "";
+  const v = String(raw).trim();
+  return /^0x[a-fA-F0-9]{40}$/.test(v) ? v : "";
+}
+
+async function readGate(wallet) {
+  const addr = gateAddress();
+  if (!addr) return { state: "unavailable" };
+  try {
+    const data = SEL_MEETS_THRESHOLD + addressArg(wallet);
+    const res = await jsonRpc("eth_call", [{ to: addr, data: data }, "latest"], API_TIMEOUT);
+    if (typeof res !== "string" || !/^0x[0-9a-fA-F]{64}$/.test(res)) return { state: "error" };
+    return { state: "ok", meets: BigInt(res) !== 0n };
+  } catch (_) {
+    return { state: "error" };
+  }
+}
+
 async function updateBotGate() {
-  const dcaBtn = $("dca-btn"), gridBtn = $("grid-btn");
-  const dcaStatus = $("dca-status"), gridStatus = $("grid-status");
-  if (!connectedWallet) {
-    botGateUnlocked = false;
-    [dcaBtn, gridBtn].forEach(b => { if (b) { b.disabled = true; b.textContent = "Locked"; b.style.background = "#333"; b.style.color = "#888"; b.style.cursor = "not-allowed"; } });
-    [dcaStatus, gridStatus].forEach(s => { if (s) { s.textContent = "LOCKED"; s.style.color = "#ffaa00"; s.style.borderColor = "#ffaa00"; } });
+  const lines = [$("dca-gate"), $("grid-gate")];
+  const set = (text, kind) => lines.forEach(el => renderGateLine(el, text, kind));
+
+  if (!connectedWallet) { set("Connect wallet to check eligibility"); return; }
+
+  const addr = gateAddress();
+  if (!addr) {
+    console.error("[PIDX] holdings gate address is unset or a placeholder; cannot check eligibility.");
+    set("Eligibility check unavailable", "error");
     return;
   }
-  let bal = 0n;
-  try { bal = await erc20BalanceOf(PIDX_ADDR, connectedWallet); }
-  catch (e) { logMemory("Token gate: could not read PIDX balance.", "#ffaa00"); return; }
 
-  botGateUnlocked = bal >= BOT_MIN_PIDX;
-  if (botGateUnlocked) {
-    [dcaBtn, gridBtn].forEach(b => { if (b) { b.disabled = false; b.style.background = "#00ffcc"; b.style.color = "#000"; b.style.cursor = "pointer"; } });
-    updateBotsUI(); // now owns the label: PAUSED (ready) / ACTIVE (running)
-    logMemory("Bots unlocked: wallet holds ≥ 1,000 PIDX.", "#00ffcc");
+  const r = await readGate(connectedWallet);
+  if (r.state === "unavailable") { set("Eligibility check unavailable", "error"); return; }
+  if (r.state === "error") { set("Eligibility check failed", "error"); return; }
+
+  if (r.meets) {
+    set("Unlocked · trading not yet available", "unlocked");
   } else {
-    [dcaBtn, gridBtn].forEach(b => { if (b) { b.disabled = true; b.textContent = "Locked"; b.style.background = "#333"; b.style.color = "#888"; b.style.cursor = "not-allowed"; } });
-    [dcaStatus, gridStatus].forEach(s => { if (s) { s.textContent = "LOCKED"; s.style.color = "#ffaa00"; s.style.borderColor = "#ffaa00"; } });
-    logMemory("Bots locked: need ≥ 1,000 PIDX.", "#ffaa00");
+    let held = null;
+    try { held = await erc20BalanceOf(PIDX_ADDR, connectedWallet); } catch (_) { held = null; }
+    const heldTxt = held == null ? "" : " (you hold " + formatPidx(held) + ")";
+    set("Locked · requires 1,000 PIDX" + heldTxt, "locked");
   }
+}
+
+// Whole-token formatting for the gate line; never a raw 18-decimal integer.
+function formatPidx(raw) {
+  try {
+    const whole = raw / PIDX_UNIT;
+    const rem = raw % PIDX_UNIT;
+    if (rem === 0n) return whole.toString();
+    const frac = (rem / (10n ** 14n)).toString().padStart(4, "0").replace(/0+$/, ""); // up to 4 decimals
+    return frac ? whole.toString() + "." + frac : whole.toString();
+  } catch (_) { return "—"; }
 }
 
 // --- Upgrade: on-chain proof of lock (bounded, RPC-fallback aware).
@@ -1444,6 +1495,138 @@ async function refreshBurnCounter() {
 
 let lastBurnLogged = null;
 let booted = false;
+
+// ------------------------------------------------------- live integrity panel
+// Every row here is a real Base mainnet read. The rule is the same one the gate
+// follows: if the chain did not answer, the row says UNKNOWN — it is never
+// downgraded to a PASS. A selector "PASS" means the 4-byte selector is absent
+// from the deployed runtime bytecode, not that the contract was audited.
+
+// Split a hex data blob into 32-byte words (hex, no 0x).
+function hexWords(hex) {
+  const h = String(hex || "").replace(/^0x/, "");
+  const out = [];
+  for (let i = 0; i + 64 <= h.length; i += 64) out.push(h.slice(i, i + 64));
+  return out;
+}
+function wordToBigInt(word) { return word ? BigInt("0x" + word) : 0n; }
+
+// Format a base-unit BigInt to a readable decimal string without ethers.
+function fmtUnits(raw, decimals) {
+  const d = BigInt(decimals == null ? 18 : decimals);
+  const unit = 10n ** d;
+  const whole = raw / unit;
+  const rem = raw % unit;
+  if (rem === 0n) return whole.toLocaleString();
+  const frac = rem.toString().padStart(Number(d), "0").replace(/0+$/, "").slice(0, 6);
+  return whole.toLocaleString() + "." + frac;
+}
+
+function setIntegrityRow(id, verdict, cls) {
+  const el = $(id);
+  if (!el) return;
+  el.textContent = verdict;
+  el.className = "status-badge " + (cls || "pending");
+}
+function setIntegrityValue(id, text) {
+  const el = $(id);
+  if (el) el.textContent = text;
+}
+
+// Read a plain eth_call and return the first 32-byte word as a BigInt.
+async function callWord(to, selector) {
+  const res = await jsonRpc("eth_call", [{ to: to, data: selector }, "latest"], API_TIMEOUT);
+  if (typeof res !== "string" || !/^0x[0-9a-fA-F]*$/.test(res)) throw new Error("bad eth_call result");
+  return wordToBigInt(hexWords(res)[0]);
+}
+
+async function refreshIntegrityPanel() {
+  // 1) Dangerous selectors must be absent from the deployed runtime code.
+  let code = null;
+  try {
+    const res = await jsonRpc("eth_getCode", [PIDX_ADDR, "latest"], API_TIMEOUT);
+    if (typeof res === "string" && res.startsWith("0x") && res.length > 2) code = res.toLowerCase();
+  } catch (_) { code = null; }
+
+  const absent = (names) => code != null && names.every(n => !code.includes(n));
+  if (code == null) {
+    setIntegrityRow("integrity-no-mint", "UNKNOWN (RPC)", "pending");
+    setIntegrityRow("integrity-no-burn", "UNKNOWN (RPC)", "pending");
+    setIntegrityRow("integrity-no-owner", "UNKNOWN (RPC)", "pending");
+  } else {
+    setIntegrityRow("integrity-no-mint",
+      absent(INTEGRITY_SELECTORS.mint) ? "PASS" : "FAIL (mint present)",
+      absent(INTEGRITY_SELECTORS.mint) ? "verified" : "danger");
+    setIntegrityRow("integrity-no-burn",
+      absent(INTEGRITY_SELECTORS.burn) && absent(INTEGRITY_SELECTORS.burnFrom) ? "PASS" : "FAIL (burn present)",
+      absent(INTEGRITY_SELECTORS.burn) && absent(INTEGRITY_SELECTORS.burnFrom) ? "verified" : "danger");
+    setIntegrityRow("integrity-no-owner",
+      absent(INTEGRITY_SELECTORS.owner) && absent(INTEGRITY_SELECTORS.transferOwnership) ? "PASS" : "FAIL (owner present)",
+      absent(INTEGRITY_SELECTORS.owner) && absent(INTEGRITY_SELECTORS.transferOwnership) ? "verified" : "danger");
+  }
+
+  // 2) Source verification. BaseScan and Sourcify are separate registries; we
+  //    can only query Sourcify from the browser (BaseScan needs a key), so a
+  //    Sourcify hit is a PASS and anything else is UNKNOWN — never a FAIL, and
+  //    never a PASS we cannot back. A 404 means "reachable, but this contract is
+  //    not in Sourcify", which is not the same as an unreachable registry.
+  try {
+    const r = await fetchWithTimeout("https://sourcify.dev/server/v2/contract/8453/" + PIDX_ADDR, API_TIMEOUT);
+    let match = null;
+    try { const j = await r.json(); match = j && (j.match || j.runtimeMatch); } catch (_) {}
+    const ok = match === "exact_match" || match === "match";
+    if (ok) setIntegrityRow("integrity-source", "PASS (Sourcify exact match)", "verified");
+    else setIntegrityRow("integrity-source", "UNKNOWN (not in Sourcify)", "pending");
+  } catch (_) {
+    setIntegrityRow("integrity-source", "UNKNOWN (registry unreachable)", "pending");
+  }
+
+  // 3) Supply + treasury concentration (totalSupply / balanceOf).
+  try {
+    const supply = await callWord(PIDX_ADDR, "0x18160ddd"); // totalSupply()
+    const treBal = await callWord(PIDX_ADDR, "0x70a08231" + addressArg(TREASURY_ADDR)); // balanceOf(treasury)
+    setIntegrityValue("integrity-supply", fmtUnits(supply, 18) + " PIDX");
+    const pct = supply > 0n ? Number((treBal * 1000000n) / supply) / 10000 : null;
+    setIntegrityValue("integrity-treasury",
+      fmtUnits(treBal, 18) + " PIDX" + (pct == null ? "" : " (" + pct.toFixed(4) + "% of supply)"));
+  } catch (_) {
+    setIntegrityValue("integrity-supply", "UNKNOWN");
+    setIntegrityValue("integrity-treasury", "UNKNOWN");
+  }
+
+  // 4) Liquidity: the Uniswap V2 pair reserves and who owns the LP tokens.
+  //    This is the row that carries the "unlocked & treasury-owned" warning.
+  try {
+    const reserves = await jsonRpc("eth_call", [{ to: PIDX_POOL_ADDR, data: "0x0902f1ac" }, "latest"], API_TIMEOUT); // getReserves()
+    const w = hexWords(reserves);
+    const r0 = wordToBigInt(w[0]), r1 = wordToBigInt(w[1]);
+    const token0 = (await jsonRpc("eth_call", [{ to: PIDX_POOL_ADDR, data: "0x0dfe1681" }, "latest"], API_TIMEOUT) || "").toLowerCase(); // token0()
+    const pidxIsToken0 = token0.endsWith(PIDX_ADDR.slice(2).toLowerCase());
+    const pidxReserve = pidxIsToken0 ? r0 : r1;
+    const wethReserve = pidxIsToken0 ? r1 : r0;
+    const lpTotal = await callWord(PIDX_POOL_ADDR, "0x18160ddd"); // LP totalSupply()
+    const lpTre = await callWord(PIDX_POOL_ADDR, "0x70a08231" + addressArg(TREASURY_ADDR));
+    const lpPct = lpTotal > 0n ? Number((lpTre * 1000000n) / lpTotal) / 10000 : null;
+    setIntegrityValue("integrity-liquidity",
+      fmtUnits(pidxReserve, 18) + " PIDX / " + fmtUnits(wethReserve, 18) + " WETH" +
+      (lpPct == null ? "" : " · LP " + lpPct.toFixed(2) + "% treasury"));
+    const warn = $("integrity-liquidity-warning");
+    if (warn && lpPct != null && lpPct >= 99) {
+      warn.textContent = "⚠️ The V2/WETH LP is UNLOCKED and " + lpPct.toFixed(2) +
+        "% treasury-owned. The treasury can withdraw it at any time — this is a live risk, not a lock.";
+    }
+  } catch (_) {
+    setIntegrityValue("integrity-liquidity", "UNKNOWN");
+  }
+}
+
+// The airdrop line states only what the transfer history supports: a partial
+// 1:1 migration. It never claims every V1 holder was reached.
+function renderMigrationLine() {
+  const el = $("genetics-migration");
+  if (el) el.textContent = "5 verified holders received exact 1:1 airdrops. One anomaly exists. Not all holders are confirmed reached.";
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   if (booted) return;
   booted = true;
@@ -1473,6 +1656,12 @@ window.addEventListener("DOMContentLoaded", () => {
   startTokenRefreshLoop();  // keep TVL/security cards fresh without a reload
   startVersionWatch();      // reload once when a newer build is deployed
   updateBotGate();
+
+  // Live Integrity + the lore migration line.
+  renderMigrationLine();
+  refreshIntegrityPanel();
+  if (integrityTimer) clearInterval(integrityTimer);
+  integrityTimer = setInterval(refreshIntegrityPanel, RPC_POLL_MS * LOCK_SCAN_EVERY);
 });
 
 // Expose for the standalone guard test harness.
@@ -1512,6 +1701,9 @@ window.PIDX_APP = {
   jsonRpc: jsonRpc,
   erc20BalanceOf: erc20BalanceOf,
   updateBotGate: updateBotGate,
+  readGate: readGate,
+  gateAddress: gateAddress,
+  formatPidx: formatPidx,
   fetchLockedPositions: fetchLockedPositions,
   refreshBurnCounter: refreshBurnCounter,
   refreshRpcHealth: refreshRpcHealth,
@@ -1523,6 +1715,9 @@ window.PIDX_APP = {
   hydrateToken: hydrateToken,
   restoreResonance: restoreResonance,
   deriveTelemetry: deriveTelemetry,
+  refreshIntegrityPanel: refreshIntegrityPanel,
+  hexWords: hexWords,
+  fmtUnits: fmtUnits,
   BUILD_ID: BUILD_ID,
   shouldReload: shouldReload,
   METRIC_REGISTRY: METRIC_REGISTRY

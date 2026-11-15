@@ -10,7 +10,8 @@
     "test": "node test/run.js",
     "test:contracts": "hardhat test test/contract/*.test.js",
     "snapshot": "node scripts/snapshot-holders.js",
-    "deploy:v2": "node scripts/deploy-v2.js"
+    "deploy:v2": "node scripts/deploy-v2.js",
+    "deploy:gate": "node scripts/deploy-gate.js"
   },
   "keywords": [],
   "author": "",

@@ -95,3 +95,10 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);co
 .vitals-row:last-of-type { border-bottom:none; }
 .vitals-k { color:var(--dim); }
 .vitals-v { color:#00ffcc; font-family:monospace; text-align:right; }
+
+/* Bot gate status line */
+.bot-gate { margin:10px 0 0; padding:7px 9px; border-radius:6px; font-family:monospace;
+  font-size:0.76rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.10); color:var(--dim); }
+.bot-gate.is-unlocked { color:#00ffcc; border-color:rgba(0,255,204,0.35); }
+.bot-gate.is-locked { color:#ffaa00; border-color:rgba(255,170,0,0.35); }
+.bot-gate.is-error { color:#ff4444; border-color:rgba(255,68,68,0.35); }

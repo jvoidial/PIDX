@@ -1,0 +1,191 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "pidxToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "initialThreshold",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "oldThreshold",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newThreshold",
+          "type": "uint256"
+        }
+      ],
+      "name": "ThresholdChanged",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "holdingsOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "meetsThreshold",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pidx",
+      "outputs": [
+        {
+          "internalType": "contract IERC20Balance",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newThreshold",
+          "type": "uint256"
+        }
+      ],
+      "name": "setThreshold",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "threshold",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "60a060405234801561000f575f5ffd5b5060405161063938038061063983398101604081905261002e916101ae565b338061005457604051631e4fbdf760e01b81525f60048201526024015b60405180910390fd5b61005d8161015f565b506001600160a01b0382166100b45760405162461bcd60e51b815260206004820152601a60248201527f7069647820746f6b656e206973207a65726f2061646472657373000000000000604482015260640161004b565b5f826001600160a01b03163b1161010d5760405162461bcd60e51b815260206004820152601660248201527f7069647820746f6b656e20686173206e6f20636f646500000000000000000000604482015260640161004b565b6001600160a01b0382166080526001819055604080515f8152602081018390527f3164947cf0f49f08dd0cd80e671535b1e11590d347c55dcaa97ba3c24a96b33a910160405180910390a150506101e5565b5f80546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b5f5f604083850312156101bf575f5ffd5b82516001600160a01b03811681146101d5575f5ffd5b6020939093015192949293505050565b60805161042e61020b5f395f818161012101528181610177015261026d015261042e5ff3fe608060405234801561000f575f5ffd5b5060043610610085575f3560e01c8063960bfe0411610058578063960bfe04146100e6578063b04f81f0146100f9578063cb0d49e01461011c578063f2fde38b14610143575f5ffd5b806303995b2d1461008957806342cde4e8146100af578063715018a6146100b85780638da5cb5b146100c2575b5f5ffd5b61009c61009736600461039d565b610156565b6040519081526020015b60405180910390f35b61009c60015481565b6100c06101e8565b005b5f546001600160a01b03165b6040516001600160a01b0390911681526020016100a6565b6100c06100f43660046103ca565b6101fb565b61010c61010736600461039d565b610248565b60405190151581526020016100a6565b6100ce7f000000000000000000000000000000000000000000000000000000000000000081565b6100c061015136600461039d565b6102e0565b6040516370a0823160e01b81526001600160a01b0382811660048301525f917f0000000000000000000000000000000000000000000000000000000000000000909116906370a0823190602401602060405180830381865afa1580156101be573d5f5f3e3d5ffd5b505050506040513d601f19601f820116820180604052508101906101e291906103e1565b92915050565b6101f0610322565b6101f95f61034e565b565b610203610322565b600180549082905560408051828152602081018490527f3164947cf0f49f08dd0cd80e671535b1e11590d347c55dcaa97ba3c24a96b33a910160405180910390a15050565b6001546040516370a0823160e01b81526001600160a01b0383811660048301525f92917f0000000000000000000000000000000000000000000000000000000000000000909116906370a0823190602401602060405180830381865afa1580156102b4573d5f5f3e3d5ffd5b505050506040513d601f19601f820116820180604052508101906102d891906103e1565b101592915050565b6102e8610322565b6001600160a01b03811661031657604051631e4fbdf760e01b81525f60048201526024015b60405180910390fd5b61031f8161034e565b50565b5f546001600160a01b031633146101f95760405163118cdaa760e01b815233600482015260240161030d565b5f80546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b5f602082840312156103ad575f5ffd5b81356001600160a01b03811681146103c3575f5ffd5b9392505050565b5f602082840312156103da575f5ffd5b5035919050565b5f602082840312156103f1575f5ffd5b505191905056fea26469706673582212202b3e25ba14835f1177668440a7e2b8688d0e9f2a68cf875018cc9c35235cf4ee64736f6c63430008260033"
+}

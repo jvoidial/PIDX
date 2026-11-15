@@ -65,6 +65,7 @@ Thumbs.db
 
 # --- Generated secrets from tooling --------------------------
 locker-address.txt
+gate-address.txt
 deploy*.log
 
 # --- NOTE on *.json ------------------------------------------

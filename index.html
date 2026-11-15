@@ -14,10 +14,10 @@
         so they are intentionally omitted. If you ever move off GitHub Pages, also send
         X-Frame-Options: DENY, X-Content-Type-Options: nosniff and frame-ancestors 'none' as HTTP headers.
 -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://mainnet.base.org https://base-rpc.publicnode.com wss://mainnet.base.org; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.dexscreener.com https://api.geckoterminal.com https://api.gopluslabs.io https://sourcify.dev https://mainnet.base.org https://base-rpc.publicnode.com wss://mainnet.base.org; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>✧ THE COSMIC SCRIBE ✧</title>
-<link rel="stylesheet" href="style.css?v=100138">
+<link rel="stylesheet" href="style.css?v=100140">
 <!--
   Third-party libraries are pinned by version AND by Subresource Integrity (SRI), so a
   compromised CDN response is refused by the browser instead of running in your origin.
@@ -52,18 +52,6 @@
 </header>
 <main>
 
-    <!-- PIDX V2 BANNER -->
-    <div id="disclosure-section" style="background-color: #ff0033; color: white; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 900px; font-family: monospace; border: 2px solid #fff; box-shadow: 0 0 10px #ff0033; text-align: left;">
-        <h2 style="margin-top: 0; text-transform: uppercase; font-weight: bold;">🚨 HONEST DISCLOSURE: PIDX V2 IS LIVE 🚨</h2>
-        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
-            The old <strong>v1 contract</strong> is permanently deprecated and its treasury supply has been burned. 
-            <strong>V2 is a safe, fixed-supply token (No mint, no burn, no owner).</strong>
-        </p>
-        <p style="font-size: 18px; font-weight: bold; background: #000; padding: 10px; display: inline-block; border-radius: 5px; margin: 0;">
-            V2 Contract: 0x172B97517c42f9491f6100333b9ea2e42a6D3181
-        </p>
-    </div>
-
   <!--
     PERSISTENT HONESTY BANNER (Task 2). Must stay the first element in <main>
     and must remain ABOVE #disclosure-section, which itself stays above
@@ -90,9 +78,10 @@
       <ul style="list-style:none;font-family:monospace;font-size:0.78rem;color:#e7e9ea;line-height:1.75;">
         <li style="margin-bottom:9px;">🚨 <strong style="color:#ff5c5c;">The PIDX token contract retains owner mint &amp; burn powers.</strong> GoPlus reports <code>is_mintable: 1</code> and <code>owner_change_balance: 1</code>: the vault can mint unlimited new PIDX (no supply cap) and can burn any holder's balance.</li>
         <li style="margin-bottom:9px;">🔒 Those powers are gated to the vault contract <span data-address="0xfAcb5905E1E592D69a2AE0aFf6F82330c07e4312" style="color:#ffaa00;word-break:break-all;">0xfAcb5905E1E592D69a2AE0aFf6F82330c07e4312</span>, whose <code>setVault()</code> is one-shot — it now reverts <code>"vault already set"</code> and can never be redirected.</li>
-        <li style="margin-bottom:9px;">🧊 The contract is <strong>immutable</strong>. There is no <code>owner()</code> and no <code>renounceOwnership()</code>, so this <em>cannot</em> be patched in place. A <strong>V2 non-mintable token migration is being planned</strong> to resolve it.</li>
+        <li style="margin-bottom:9px;">🧊 The V1 contract is <strong>immutable</strong>. There is no <code>owner()</code> and no <code>renounceOwnership()</code>, so this <em>cannot</em> be patched in place. A <strong>V2 non-mintable token migration</strong> is the resolution; the V2 token is live at <span data-address="0x172B97517c42f9491f6100333b9ea2e42a6D3181" style="color:#ffaa00;word-break:break-all;">0x172B97517c42f9491f6100333b9ea2e42a6D3181</span>, its source is <strong>verified on BaseScan (Exact Match)</strong>, and its liquidity is still minimal — see the note below.</li>
         <li style="margin-bottom:9px;">💧 Locked liquidity locker (Uniswap V3): <span data-address="0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD" style="color:#00ffcc;word-break:break-all;">0x06A958fF5d896Ba28411215d0CD56a2a5A1b35aD</span> — currently holds 1 position NFT with <strong>0 liquidity</strong>.</li>
         <li style="margin-bottom:9px;">🐋 <strong>Concentration risk:</strong> treasury <span data-address="0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C" style="color:#ffaa00;word-break:break-all;">0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C</span> holds ~99.99% of all four tokens.</li>
+        <li style="margin-bottom:9px;">🆕 <strong>V2 liquidity is minimal.</strong> The V2/WETH Uniswap V2 pool <span data-address="0x35f5f94F095202380bcCfcd9321fA40f5E5F8720" style="color:#ffaa00;word-break:break-all;">0x35f5f94F095202380bcCfcd9321fA40f5E5F8720</span> holds ≈ $0.04 of WETH and the treasury owns 99.99% of the LP tokens, unlocked. A pool this small cannot support a real trade — expect a swap to fail or slip almost completely.</li>
         <li>🧪 <strong>This dashboard shows real, unfiltered data — including the bad parts.</strong> Do not buy more than you can afford to lose.</li>
       </ul>
     </div>
@@ -107,6 +96,57 @@
         <div id="eip-guard-badge" style="background: rgba(0,255,204,0.1); border: 1px solid #00ffcc; padding: 6px 14px; border-radius: 20px; color: #00ffcc; font-family: monospace; font-size: 0.8rem; font-weight: bold;">ENABLED</div>
     </div>
   </section>
+
+  <!--
+    REGENERATIVE ARCHITECTURE — explicitly LABELLED as project lore. This is a
+    narrative section, not a security claim. It must never assert that the
+    ecosystem is "proven safe"; the Live Integrity panel below carries the
+    checkable facts. A liquidity-lock compound was deliberately NOT used as a
+    serum ingredient: the V2 LP is unlocked and treasury-owned, so calling it
+    locked is false.
+  -->
+  <section class="grid-section" id="genetics-section">
+    <h2>🧬 Regenerative Architecture <span style="font-size:0.65rem;color:#8899a6;text-transform:none;letter-spacing:0;">(Project Lore · narrative, not a security claim)</span></h2>
+    <div class="panel">
+      <p style="color:var(--dim);font-size:0.78rem;line-height:1.6;margin:0 0 14px;">
+        The story this project tells about itself. Nothing here is a safety
+        guarantee — the facts it refers to are checked, live, in the panel below.
+      </p>
+      <ul style="list-style:none;font-family:monospace;font-size:0.78rem;line-height:1.7;">
+        <li style="margin-bottom:10px;">🩹 <strong style="color:#ff5c5c;">V1 · the wound.</strong> The original contract (<span data-address="0x95c7E2d53F4B615A50d4468Dfd5aFF850dc17F0C">0x95c7E2d5…</span>) shipped with owner mint and burn powers. It is immutable, so it could not be patched in place, and it is treated as compromised. It survives in the code only as a labelled disclosure constant.</li>
+        <li style="margin-bottom:10px;">🌱 <strong style="color:#00ffcc;">V2 · the blueprint.</strong> A minimal replacement (<span data-address="0x172B97517c42f9491f6100333b9ea2e42a6D3181">0x172B9751…</span>) with no mint, no burn and no owner in its bytecode. It is a fresh contract, not a fork of V1 — the backdoor was not "removed", it was never written.</li>
+        <li style="margin-bottom:10px;">🔗 <strong>Airdrop.</strong> <span id="genetics-migration">Checking on-chain transfer history…</span></li>
+        <li style="margin-bottom:10px;">🏦 <strong style="color:#ffaa00;">Treasury: 1-of-2 Smart Wallet, Unrelinquished (Known Risk).</strong> <span data-address="0x6f5c5B2117c22c1cB07244bE032Bd4CdE966432C">0x6f5c5B21…</span> holds ≈99.9999% of V2 and has no signing threshold — any single owner can move it.</li>
+        <li style="margin-bottom:10px;">💧 <strong style="color:#ffaa00;">Liquidity: Unlocked &amp; Treasury-Owned (Current Risk).</strong> The V2/WETH pair is <strong>not</strong> locked. The treasury holds 100% of the LP and can withdraw it at any time.</li>
+        <li style="margin-bottom:0;">⚗️ <strong>Removed ingredient.</strong> An earlier draft listed a liquidity-lock compound as a stability feature. No such lock exists, so it was replaced with the two risk lines above.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!--
+    LIVE INTEGRITY PANEL — every row is a read of Base mainnet performed in the
+    browser. Rows render PASS/FAIL only when the chain actually answered; a
+    failed read renders "UNKNOWN", never a pass. The liquidity row warns that
+    the LP is unlocked and treasury-owned.
+  -->
+  <section class="grid-section" id="integrity-section">
+    <h2>🔬 Live Integrity <span style="font-size:0.65rem;color:#8899a6;text-transform:none;letter-spacing:0;">(read live from Base · V2 token)</span></h2>
+    <div class="panel">
+      <ul style="list-style:none;font-family:monospace;font-size:0.78rem;">
+        <li><strong>No Mint</strong><span id="integrity-no-mint" class="status-badge pending">CHECKING…</span></li>
+        <li><strong>No Burn</strong><span id="integrity-no-burn" class="status-badge pending">CHECKING…</span></li>
+        <li><strong>No Owner</strong><span id="integrity-no-owner" class="status-badge pending">CHECKING…</span></li>
+        <li><strong>Source Verified</strong><span id="integrity-source" class="status-badge pending">CHECKING…</span></li>
+        <li><strong>Total Supply</strong><span id="integrity-supply">—</span></li>
+        <li><strong>Treasury Holdings</strong><span id="integrity-treasury">—</span></li>
+        <li><strong>Liquidity</strong><span id="integrity-liquidity">—</span></li>
+      </ul>
+      <p id="integrity-liquidity-warning" style="color:#ffaa00;font-size:0.72rem;line-height:1.5;margin:12px 0 0;">⚠️ The V2/WETH LP is unlocked and treasury-owned. The treasury can withdraw it at any time — this is a live risk, not a lock.</p>
+      <p id="integrity-treasury-warning" style="color:#ffaa00;font-size:0.72rem;line-height:1.5;margin:6px 0 0;">⚠️ The treasury is a 1-of-2 smart wallet (no threshold): any single owner can move the supply. Not relinquished.</p>
+      <p style="color:var(--dim);font-size:0.7rem;line-height:1.5;margin:10px 0 0;">Selectors are scanned in the deployed runtime bytecode: <code>mint</code> 0x40c10f19 / 0xa0712d68, <code>burn</code> 0x42966c68 / 0x9dc29fac, <code>burnFrom</code> 0x79cc6790, <code>owner</code> 0x8da5cb5b, <code>transferOwnership</code> 0xf2fde38b. A PASS means the selector is absent, not that the contract was audited.</p>
+    </div>
+  </section>
+
   <section class="grid-section" id="mikoshi-section">
     <h2>💾 Project Mikoshi · Immortality Engram <span style="font-size:0.65rem;color:#8899a6;text-transform:none;letter-spacing:0;">(off-chain novelty · no on-chain effect)</span></h2>
     <div class="mikoshi-container"><div class="mikoshi-card">
@@ -160,7 +200,7 @@
 
   <section class="grid-section"><h2>🏦 Digital eBank · Not implemented</h2><div class="ebank-container">
     <div class="ebank-header"><div><h3 style="color:var(--white);font-size:1.2rem;margin-bottom:5px;">SPIRIT eBANK (PIDX)</h3><span class="badge tiny" style="background:rgba(255,170,0,0.1);color:#ffaa00;border:1px solid #ffaa00;">SIMULATION ONLY · NO REAL YIELD</span></div></div>
-    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Burn Address Balance (Live · 0x000…dEaD)</span><span class="value" id="burn-counter" style="color:#ff0055;">— PIDX</span></div></div>
+    <div class="ebank-grid"><div class="ebank-stat"><span class="label">Dead-Address Balance (Live · 0x000…dEaD · not a supply burn)</span><span class="value" id="burn-counter" style="color:#ff0055;">— PIDX</span></div></div>
     <p style="color:var(--dim); font-size:0.72rem; margin-top:10px;">Principal, yield, APY and the shield score are not implemented. Nothing here accrues value or touches your wallet.</p>
   </div></section>
 
@@ -192,23 +232,25 @@
 
   <section class="grid-section" id="bots-section">
     <h2>🤖 Trading Bots · Token-Gated Utility</h2>
+    <p style="color:var(--dim); font-size:0.72rem; margin:0 0 10px;">The bots are not built. Nothing below trades, and there are no performance figures to show. The gate is a read-only on-chain check of who holds 1,000 PIDX; it moves no funds.</p>
+    <span id="gate-addr" data-address="" hidden></span>
     <div class="bots-grid">
       <div class="card bot-card">
-        <h4>DCA Bot <span class="badge tiny" id="dca-status" style="color:#ffaa00; border-color:#ffaa00;">LOCKED</span></h4>
+        <h4>DCA Bot <span class="badge tiny" id="dca-status" style="color:#ffaa00; border-color:#ffaa00;">NOT DEPLOYED</span></h4>
         <p style="color:var(--dim); font-size:0.8rem;">Dollar-Cost Averaging · requires 1,000 PIDX</p>
-        <div class="bot-metrics"><div><span class="label">PnL</span><span class="value" id="dca-pnl" style="color:var(--dim);">—</span></div><div><span class="label">Win Rate</span><span class="value" id="dca-win">—</span></div><div><span class="label">Trades/hr</span><span class="value" id="dca-trades">—</span></div><div><span class="label">Strategy</span><span class="value" id="dca-strategy">MOMENTUM</span></div></div>
-        <button class="bot-btn" id="dca-btn" disabled style="background:#333; color:#888; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:not-allowed;">Locked</button>
+        <div class="bot-metrics"><div><span class="label">Strategy</span><span class="value" id="dca-strategy">MOMENTUM</span></div></div>
+        <p id="dca-gate" class="bot-gate">Connect wallet to check eligibility</p>
       </div>
       <div class="card bot-card">
-        <h4>Grid Bot <span class="badge tiny" id="grid-status" style="color:#ffaa00; border-color:#ffaa00;">LOCKED</span></h4>
+        <h4>Grid Bot <span class="badge tiny" id="grid-status" style="color:#ffaa00; border-color:#ffaa00;">NOT DEPLOYED</span></h4>
         <p style="color:var(--dim); font-size:0.8rem;">Grid Trading · requires 1,000 PIDX</p>
-        <div class="bot-metrics"><div><span class="label">PnL</span><span class="value" id="grid-pnl" style="color:var(--dim);">—</span></div><div><span class="label">Win Rate</span><span class="value" id="grid-win">—</span></div><div><span class="label">Trades/hr</span><span class="value" id="grid-trades">—</span></div><div><span class="label">Strategy</span><span class="value" id="grid-strategy">GRID</span></div></div>
-        <button class="bot-btn" id="grid-btn" disabled style="background:#333; color:#888; border:none; width:100%; padding:8px; border-radius:6px; margin-top:12px; font-family:monospace; cursor:not-allowed;">Locked</button>
+        <div class="bot-metrics"><div><span class="label">Strategy</span><span class="value" id="grid-strategy">GRID</span></div></div>
+        <p id="grid-gate" class="bot-gate">Connect wallet to check eligibility</p>
       </div>
     </div>
   </section>
 </main>
 <footer><p>✧ SPIRIT GUIDE · GENERATION 10 · MEMORY ✧</p></footer>
-<script src="app.js?v=100138"></script>
+<script src="app.js?v=100140"></script>
 </body>
 </html>
